@@ -1,4 +1,0 @@
-default:
-	gcc -o surface surface.c -lwayland-client -lwayland-egl
-	g++ -o libblusher.so -fPIC -shared src/application.cpp -lwayland-client -lwayland-egl -Iinclude
-	g++ -o main main.cpp libblusher.so -Iinclude
