@@ -1,0 +1,2 @@
+module Blusher.DesktopEnvironment
+singleton DesktopEnvironment 0.1 DesktopEnvironment.qml

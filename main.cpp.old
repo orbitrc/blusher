@@ -1,0 +1,8 @@
+#include <blusher/application.h>
+
+int main()
+{
+    bl::Application app = bl::Application();
+
+    return 0;
+}

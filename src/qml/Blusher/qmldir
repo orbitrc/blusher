@@ -1,0 +1,6 @@
+module Blusher
+TestItem 0.1 TestItem.qml
+MyWindow 0.1 MyWindow.qml
+Button 0.1 Button.qml
+Menu 0.1 Menu.qml
+MenuItem 0.1 MenuItem.qml
