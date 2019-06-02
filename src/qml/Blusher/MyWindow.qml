@@ -28,6 +28,13 @@ Window {
       Layout.minimumHeight: 30
       Layout.fillWidth: true
       Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+
+      MouseArea {
+        anchors.fill: parent
+        onClicked: {
+          (root.menu) ? root.menu.focusedItemIndex = -1 : null
+        }
+      }
     }
 
     // Toolbar

@@ -1,7 +1,4 @@
 import QtQuick 2.0
-import QtQuick.Window 2.0
-import QtQuick.Controls 2.0 as Controls
-import QtQml.Models 2.12
 
 import Blusher 0.1
 import Blusher.DesktopEnvironment 0.1
@@ -50,6 +47,9 @@ MyWindow {
       onClick: {
         console.log(DesktopEnvironment.msg)
       }
+    }
+    TestItem {
+      y: 100
     }
   }
 }
