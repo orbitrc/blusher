@@ -19,6 +19,7 @@ Rectangle {
 
       spacing: 0
       Repeater {
+        model: root.menu
         id: menuItemViewList
         MenuItemView {
           menuItem: root.menu.items[index] // root.menu.get(index)
@@ -34,10 +35,9 @@ Rectangle {
           Component.onCompleted: {
             Layout.minimumWidth = 20
             bindMenuItem(this.menuItem, index)
+            print('[MenuItemView, "' + root.menu.title + '"] preferredWidth: ' + Layout.preferredWidth)
+            print('[MenuItemView, "' + root.menu.title + '"] implicitWidth: ' + this.implicitWidth)
           }
-        }
-
-        onModelChanged: {
         }
       }
 
@@ -81,6 +81,18 @@ Rectangle {
     }
   }
 
+  //=========
+  // Debug
+  //=========
+  /*
+  MouseArea {
+    anchors.fill: parent
+    onClicked: {
+      print('DEBUG [MenuView.MouseArea] clicked')
+    }
+  }
+  */
+
   Loader {
     id: menuLoader
   }
@@ -91,7 +103,6 @@ Rectangle {
   Component.onCompleted: {
     if (root.menu.type === Menu.MenuType.MenuBarMenu) {
       menuLoader.sourceComponent = menuBarMenu
-      menuLoader.item.menuItemViewList.model = root.menu
       print('[MenuView, "' + root.menu.title + '" - onCompleted] menu.count: ' + root.menu.count)
     } else {
       menuLoader.sourceComponent = floatingMenu

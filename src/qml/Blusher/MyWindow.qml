@@ -40,9 +40,6 @@ Window {
       MenuView {
         menu: root.menu
         anchors.fill: parent
-        Component.onCompleted: {
-          print('[Window] menuView.height: ' + this.height)
-        }
       }
     }
 

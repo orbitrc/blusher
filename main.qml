@@ -65,6 +65,7 @@ MyWindow {
       }
     }
     TestItem {
+      testProp: testMenu
       y: 100
     }
   }

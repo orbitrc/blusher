@@ -4,11 +4,13 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.5
 import QtQml.Models 2.12
 
-Item {
+Rectangle {
   id: root
 
   width: 100
   height: 100
+  color: "blue"
+  clip: true
 
   /*
   Repeater {
@@ -18,35 +20,47 @@ Item {
     }
   }
   */
+  property var testProp
 
   ListModel {
     id: listModel
 
-
     ListElement {
-      property string msg: "blah"
+      property string title: "blah"
       name: "hello"
       cost: 1
       action: function() {
         print("action!!")
       }
     }
+    ListElement {
+      property string title: "haha"
+      name: "world"
+      cost: 2
+      action: function() {
+        print("action2!")
+      }
+    }
   }
 
-  ListView {
-    model: listModel
-    delegate: Rectangle {
-      width: 100
-      height: 50
-      Text {
-        text: name
-      }
-      MouseArea {
-        anchors.fill: parent
-        onClicked: {
-          action()
-          print('cost is ' + cost)
-          print('parent is ' + parent)
+  RowLayout {
+    Repeater {
+      model: listModel
+      delegate: Rectangle {
+        implicitWidth: _text.implicitWidth
+        height: 40
+        color: "lightgreen"
+        Text {
+          id: _text
+          text: name
+        }
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            action()
+            print('cost is ' + cost)
+            print('parent is ' + parent)
+          }
         }
       }
     }

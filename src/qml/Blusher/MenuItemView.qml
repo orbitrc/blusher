@@ -2,11 +2,12 @@ import QtQuick 2.12
 
 Item {
   id: root
+  clip: true
 
   //====================
   // Public Properties
   //====================
-  property QtObject menuItem: null
+  property MenuItem menuItem: null
   property string text: ""
 
   //====================
@@ -16,6 +17,7 @@ Item {
   signal focusedOut()
 
   implicitWidth: _text.implicitWidth
+//  width: 20 // For avoiding implicitWidth bug...
   height: 30
 
   Rectangle {
