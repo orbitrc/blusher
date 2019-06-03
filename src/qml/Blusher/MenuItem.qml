@@ -1,6 +1,7 @@
 import QtQuick 2.12
+import QtQml.Models 2.12
 
-Item {
+ListElement {
   id: root
 
   //=========================
@@ -15,7 +16,6 @@ Item {
   // Public Properties (Read-only for external)
   //=========================
   property bool submenuOpened: false
-  property alias mouseArea: mouseArea
 
   //=========================
   // Binding properties
@@ -25,52 +25,8 @@ Item {
   //=========================
   property bool focused: false
 
-  signal focusedIn()
-  signal focusedOut()
-
-  implicitWidth: _text.implicitWidth
-  height: 30
-
-  Rectangle {
-    id: _styler
-    visible: (root.focused)
-    anchors.fill: parent
-    anchors.margins: 2
-    border.width: 0
-    color: "#bbb4b1"
-    radius: 3
-  }
-
-  Text {
-    id: _text
-    text: parent.title
-    anchors.verticalCenter: parent.verticalCenter
-    rightPadding: 7.0   // 5.0 + styler's margin
-    leftPadding: 7.0    // 5.0 + styler's margin
-  }
-
-  MouseArea {
-    id: mouseArea
-
-    anchors.fill: parent
-    hoverEnabled: true
-
-    onClicked: {
-      (!root.focused) ? root.focusedIn() : root.focusedOut()
-    }
-    onEntered: {
-      if (!root.isMenuBarMenuItem()) {
-        root.focusedIn()
-      } else {
-        (root.parentMenu.focusedItemIndex > -1) ? root.focusedIn() : null
-      }
-    }
-    onExited: {
-      if (!root.isMenuBarMenuItem()) {
-        root.focusedOut()
-      }
-    }
-  }
+//  signal focusedIn()
+//  signal focusedOut()
 
   //=======================
   // Created
@@ -78,7 +34,7 @@ Item {
   Component.onCompleted: {
     // Set submenu's parent this.
     if (root.submenu !== null) {
-      root.submenu.parent = root
+//      root.submenu.parent = root
     }
   }
 
@@ -100,6 +56,7 @@ Item {
   // Property changed
   //=======================
   onFocusedChanged: {
+    print('[MenuItem, "' + root.title + '" - MenuItem.onFocusedChanged] focused: ' + root.focused)
     if (root.focused) {
       (root.hasSubmenu()) ? root.submenu.open() : null
     } else {

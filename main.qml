@@ -21,13 +21,24 @@ MyWindow {
         type: Menu.MenuType.Submenu
         title: "File"
         MenuItem {
-          title: "New Text File"
-          onFocusedIn: {
-            print("hello!")
+          title: "Create New"
+          submenu: Menu {
+            type: Menu.MenuType.Submenu
+            title: "Create New"
+            MenuItem {
+              title: "New Text File"
+            }
+            MenuItem {
+              title: "New Folder"
+            }
           }
         }
+
         MenuItem {
-          title: "New Folder"
+          title: "-----"
+        }
+        MenuItem {
+          title: "Quit"
         }
       }
     }
@@ -39,6 +50,10 @@ MyWindow {
     }
   }
 
+  toolbar: Rectangle {
+    color: "red"
+  }
+
   body: Rectangle {
     Button {
       width: 100
@@ -46,10 +61,15 @@ MyWindow {
       text: "Click"
       onClick: {
         console.log(DesktopEnvironment.msg)
+        DesktopEnvironment.setMsg("Hello")
       }
     }
     TestItem {
       y: 100
     }
+  }
+
+  Component.onCompleted: {
+    print(this)
   }
 }

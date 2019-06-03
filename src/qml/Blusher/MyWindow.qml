@@ -24,6 +24,7 @@ Window {
     // Menu bar
     Item {
       id: _menuArea
+      visible: false
       Layout.preferredHeight: 30
       Layout.minimumHeight: 30
       Layout.fillWidth: true
@@ -35,11 +36,20 @@ Window {
           (root.menu) ? root.menu.focusedItemIndex = -1 : null
         }
       }
+
+      MenuView {
+        menu: root.menu
+        anchors.fill: parent
+        Component.onCompleted: {
+          print('[Window] menuView.height: ' + this.height)
+        }
+      }
     }
 
     // Toolbar
     Item {
       id: _toolbarArea
+      visible: false
       Layout.preferredHeight: 50
       Layout.fillWidth: true
       Layout.alignment: Qt.AlignTop
@@ -74,12 +84,13 @@ Window {
   //=======================
   Component.onCompleted: {
     if (root.menu) {
-      root.menu.parent = _menuArea
-      root.menu.anchors.fill = _menuArea
+//      root.menu.parent = _menuArea
+//      root.menu.anchors.fill = _menuArea
       _menuArea.visible = true
     }
     if (root.toolbar) {
       root.toolbar.parent = _toolbarArea
+      root.toolbar.anchors.fill = _toolbarArea
       _toolbarArea.visible = true
     }
 

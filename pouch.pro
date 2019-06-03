@@ -44,6 +44,8 @@ DISTFILES += \
     src/qml/Blusher/DesktopEnvironment/qmldir \
     src/qml/Blusher/Menu.qml \
     src/qml/Blusher/MenuItem.qml \
+    src/qml/Blusher/MenuItemView.qml \
+    src/qml/Blusher/MenuView.qml \
     src/qml/Blusher/MyWindow.qml \
     src/qml/Blusher/TestItem.qml \
     src/qml/Blusher/qmldir

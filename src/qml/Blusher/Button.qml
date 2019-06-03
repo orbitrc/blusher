@@ -37,7 +37,7 @@ Rectangle {
   Rectangle {
     id: _styler
     anchors.fill: parent
-    color: "grey"
+    color: "#808080"
     anchors.rightMargin: 2
     anchors.leftMargin: 2
     anchors.bottomMargin: 2
