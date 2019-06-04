@@ -13,8 +13,9 @@ Item {
   //====================
   // Signals
   //====================
-  signal focusedIn()
-  signal focusedOut()
+  signal clicked()
+  signal entered()
+  signal exited()
 
   implicitWidth: _text.implicitWidth
 //  width: 20 // For avoiding implicitWidth bug...
@@ -45,23 +46,13 @@ Item {
     hoverEnabled: true
 
     onClicked: {
-      (!root.menuItem.focused) ? root.focusedIn() : root.focusedOut()
+      root.clicked()
     }
     onEntered: {
-      if (!root.menuItem.isMenuBarMenuItem()) {
-        root.focusedIn()
-      } else {
-        (root.menuItem.parentMenu.focusedItemIndex > -1) ? root.focusedIn() : null
-      }
+      root.entered()
     }
     onExited: {
-      if (root.menuItem.isMenuBarMenuItem()) {
-        return
-      }
-      if (root.hasSubmenu()) {
-      }
-
-      root.focusedOut()
+      root.exited()
     }
   }
 

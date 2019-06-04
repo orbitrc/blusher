@@ -1,8 +1,6 @@
 import QtQuick 2.12
 import QtQml.Models 2.12
 
-import Blusher.DesktopEnvironment 0.1
-
 ListModel {
   id: root
   enum MenuType {
@@ -36,18 +34,21 @@ ListModel {
   //==============
   // Methods
   //==============
-  function open() {
+  /// \brief  Open menu.
+  /// \param  view
+  ///         Visual item parent that menu view should be belowed.
+  function open(view) {
     if (root.type === Menu.MenuType.MenuBarMenu) {
       return
     }
-    print('[Menu, "' + root.title + '" - Menu.open()] window: ' + String(MyWindow.window))
-//    DesktopEnvironment.menuOpened(MyWindow.window.contentItem, root)
   }
 
+  /// \brief  Close menu.
   function close() {
     if (root.type === Menu.MenuType.MenuBarMenu) {
       return
     }
+    root.focusedItemIndex = -1
   }
 
   function addItem(menuItem) {
@@ -60,9 +61,5 @@ ListModel {
   // Debug
   //=========
   onFocusedItemIndexChanged: {
-    print("[Menu, \"" + root.title + "\"] now focusing: " + root.focusedItemIndex)
-//    if (root.items[root.focusedItemIndex].hasSubmenu()) {
-//      print('has submenu')
-//    }
   }
 }

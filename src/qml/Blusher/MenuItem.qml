@@ -25,9 +25,6 @@ ListElement {
   //=========================
   property bool focused: false
 
-//  signal focusedIn()
-//  signal focusedOut()
-
   //=======================
   // Created
   //=======================
@@ -50,17 +47,5 @@ ListElement {
 
   function hasSubmenu() {
     return (root.submenu !== null)
-  }
-
-  //=======================
-  // Property changed
-  //=======================
-  onFocusedChanged: {
-    print('[MenuItem, "' + root.title + '" - MenuItem.onFocusedChanged] focused: ' + root.focused)
-    if (root.focused) {
-      (root.hasSubmenu()) ? root.submenu.open() : null
-    } else {
-      (root.hasSubmenu()) ? root.submenu.close() : null
-    }
   }
 }

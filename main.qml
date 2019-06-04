@@ -13,7 +13,7 @@ MyWindow {
   menu: Menu {
     id: testMenu
     type: Menu.MenuType.MenuBarMenu
-    title: "TestMenu"
+    title: "MainMenu"
 
     MenuItem {
       title: "File"
@@ -44,6 +44,16 @@ MyWindow {
     }
     MenuItem {
       title: "Edit"
+      submenu: Menu {
+        type: Menu.MenuType.Submenu
+        title: "Edit"
+        MenuItem {
+          title: "Copy"
+        }
+        MenuItem {
+          title: "Paste"
+        }
+      }
     }
     MenuItem {
       title: "Help"

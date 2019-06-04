@@ -46,22 +46,62 @@ Rectangle {
   RowLayout {
     Repeater {
       model: listModel
-      delegate: Rectangle {
-        implicitWidth: _text.implicitWidth
-        height: 40
-        color: "lightgreen"
-        Text {
-          id: _text
-          text: name
-        }
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            action()
-            print('cost is ' + cost)
-            print('parent is ' + parent)
+      delegate: FocusScope {
+        id: scope
+        focus: true
+        width: rectangle.width
+        height: rectangle.height
+        x: rectangle.x
+        y: rectangle.y
+        Rectangle {
+          id: rectangle
+          implicitWidth: _text.implicitWidth
+          height: 40
+          color: "lightgreen"
+          Keys.onReturnPressed: {
+            print('enter!' + _text.text)
+            rectangle.focus = false
+          }
+
+          Text {
+            id: _text
+            text: name
+            font.bold: rectangle.activeFocus
+          }
+          MouseArea {
+            anchors.fill: parent
+            onClicked: {
+              action()
+              print('cost is ' + cost)
+              scope.focus = true
+              rectangle.focus = true
+              print(parent.parent)
+            }
           }
         }
+      }
+    }
+  }
+
+  FocusScope {
+    id: scope2
+    focus: false
+    Rectangle {
+      id: rect
+      y: 50
+      width: 20
+      height: 20
+      color: "orange";
+      MouseArea {
+        anchors.fill: parent
+        onClicked: {
+          scope2.focus = true
+          rect.focus = true
+        }
+      }
+      Text {
+        text: "another focus scope"
+        font.bold: rect.activeFocus
       }
     }
   }
