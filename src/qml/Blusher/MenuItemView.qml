@@ -34,7 +34,6 @@ Item {
   signal exited()
 
   implicitWidth: _text.implicitWidth
-//  width: 20 // For avoiding implicitWidth bug...
   height: 30
 
   //===================
@@ -48,6 +47,17 @@ Item {
     border.width: 0
     color: "#bbb4b1"
     radius: 3
+  }
+
+  Rectangle {
+    id: _separator
+    visible: false
+    height: 3
+    border.width: 0
+    color: "#d3d3d3"
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
   }
 
   Text {
@@ -88,6 +98,16 @@ Item {
       }
 
       root.exited()
+    }
+  }
+
+  //==================
+  // Created
+  //==================
+  Component.onCompleted: {
+    if (root.menuItem.separator) {
+      root.height = 10
+      _separator.visible = true
     }
   }
 

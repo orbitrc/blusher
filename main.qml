@@ -35,7 +35,7 @@ MyWindow {
         }
 
         MenuItem {
-          title: "-----"
+          separator: true
         }
         MenuItem {
           title: "Quit"

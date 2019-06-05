@@ -129,6 +129,8 @@ Rectangle {
   // Methods
   //==============
   function bindMenuItem(item, index) {
+    if (item.separator) { return }
+
     item.focused = Qt.binding(() => (index === root.menu.focusedItemIndex))
   }
 
