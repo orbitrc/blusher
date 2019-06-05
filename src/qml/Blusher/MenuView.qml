@@ -55,6 +55,8 @@ Rectangle {
         menuItem: root.menu.items[index] // root.menu.get(index)
         text: title
 
+        Layout.fillWidth: true
+
         onClicked: {
           // If menu bar menu.
           if (root.menu.type === Menu.MenuType.MenuBarMenu) {
