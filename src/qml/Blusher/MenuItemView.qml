@@ -10,6 +10,22 @@ Item {
   property MenuItem menuItem: null
   property string text: ""
 
+  //=========================
+  // Private Properties
+  //=========================
+  property QtObject _private: QtObject {
+    id: _private
+    property bool focused: (root.menuItem.focused)
+    onFocusedChanged: {
+      if (_private.focused === false) {
+        // Close submenu if has and opened.
+        if (root.hasSubmenu() && root.menuItem.submenu.opened) {
+          root.menuItem.submenu.close()
+        }
+      }
+    }
+  }
+
   //====================
   // Signals
   //====================
@@ -26,7 +42,7 @@ Item {
   //===================
   Rectangle {
     id: _styler
-    visible: (root.menuItem.focused)
+    visible: _private.focused
     anchors.fill: parent
     anchors.margins: 2
     border.width: 0
@@ -40,6 +56,7 @@ Item {
     anchors.verticalCenter: parent.verticalCenter
     rightPadding: 7.0   // 5.0 + styler's margin
     leftPadding: 7.0    // 5.0 + styler's margin
+    font.bold: root.menuItem.isMenuBarMenuItem()
   }
 
   MouseArea {
@@ -61,6 +78,15 @@ Item {
       }
     }
     onExited: {
+      // Prevent menu bar menu losing focus.
+      if (root.menuItem.isMenuBarMenuItem()) {
+        return
+      }
+      // If submenu is opened, don't take focus of this item.
+      if (root.hasSubmenu() && root.menuItem.submenu.opened) {
+        return
+      }
+
       root.exited()
     }
   }

@@ -41,6 +41,12 @@ Item {
           this.x = root.parent.MyWindow.window.x + (index * 100)
           this.y = root.parent.MyWindow.window.y + 30
         }
+
+        onVisibleChanged: {
+          if (this.visible === false) {
+            root._popMenu()
+          }
+        }
       }
     }
   }
@@ -146,5 +152,14 @@ Item {
 
   function _openSubmenu(menu) {
     const prevMenu = overlayLoader.menus[overlayLoader.menus.length -1]
+  }
+
+  function _popMenu() {
+    print('[DesktopEnvironment._popMenu] pop: ' + overlayLoader.menus[overlayLoader.menus.length - 1].title)
+    let newMenus = []
+    for (let i = 0; i < overlayLoader.menus.length - 1; ++i) {
+      newMenus.push(overlayLoader.menus[i])
+    }
+    overlayLoader.menus = newMenus
   }
 }

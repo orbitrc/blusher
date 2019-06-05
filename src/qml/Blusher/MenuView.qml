@@ -11,6 +11,19 @@ Rectangle {
   //===================
   property Menu menu: null
 
+  //=========================
+  // Private Properties
+  //=========================
+  property QtObject _private: QtObject {
+    id: _private
+    property bool opened: (root.menu.opened)
+    onOpenedChanged: {
+      if (_private.opened === false) {
+        root.visible = false
+      }
+    }
+  }
+
   //================
   // Style
   //================
@@ -76,7 +89,9 @@ Rectangle {
             root.menu.focusedItemIndex = index
           }
         }
+        // This can be stop by MenuItemView itself.
         onExited: {
+          root.menu.focusedItemIndex = -1
         }
 
         Component.onCompleted: {

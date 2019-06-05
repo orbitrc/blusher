@@ -59,7 +59,6 @@ ListModel {
 
   /// \brief  Close menu.
   function close() {
-//    DesktopEnvironment.menuClosed()
     if (root.type === Menu.MenuType.MenuBarMenu) {
       return
     }
