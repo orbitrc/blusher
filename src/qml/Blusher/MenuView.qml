@@ -11,103 +11,79 @@ Rectangle {
   //===================
   property Menu menu: null
 
-  visible: false
-
   //================
   // Style
   //================
   color: "#eeedeb"
   border.width: 0
 
-  Component {
-    id: component
-    GridLayout {
-      id: itemsView
-      property alias menuItemViewList: menuItemViewList
-
-      rows: (root.menu.type === Menu.MenuType.MenuBarMenu) ? 1 : -1
-      columns: (root.menu.type !== Menu.MenuType.MenuBarMenu) ? 1 : -1
-      rowSpacing: 0
-      columnSpacing: 0
-      Repeater {
-        model: root.menu
-        id: menuItemViewList
-        MenuItemView {
-          menuItem: root.menu.items[index] // root.menu.get(index)
-          text: title
-
-          onClicked: {
-            // If menu bar menu.
-            if (root.menu.type === Menu.MenuType.MenuBarMenu) {
-              if (root.menu.focusedItemIndex > -1) {
-                // Menu bar menu already activated.
-                root.menu.focusedItemIndex = -1
-                focusScope.focus = false
-              } else {
-                // Menu bar menu not activated before.
-                root.menu.focusedItemIndex = index
-                focusScope.focus = true
-                this.focus = true
-                if (this.hasSubmenu()) {
-                  this.menuItem.submenu.open(MyWindow.window.contentItem)
-                  DesktopEnvironment.menuOpened(MyWindow.window.contentItem, this.menuItem.submenu)
-                }
-              }
-            }
-            // If regular menu.
-            if (root.menu.type !== Menu.MenuType.MenuBarMenu) {
-              if (!this.hasSubmenu()) {
-                print('MenuItem.action')
-              }
-            }
-          }
-          onEntered: {
-            // If menu bar menu.
-            if (root.menu.type === Menu.MenuType.MenuBarMenu) {
-              if (root.menu.focusedItemIndex > -1) {
-                // Menu bar menu already activated.
-                root.menu.focusedItemIndex = index
-                focusScope.focus = true
-                this.focus = true
-              }
-            }
-            // If regular menu.
-            if (root.menu.type !== Menu.MenuType.MenuBarMenu) {
-              root.menu.focusedItemIndex = index
-              focusScope.focus = true
-              this.focus = true
-            }
-          }
-          onExited: {
-          }
-
-          Component.onCompleted: {
-            Layout.minimumWidth = 20
-            bindMenuItem(this.menuItem, index)
-          }
-        }
-      }
-
-      Component.onCompleted: {
-        root.visible = true
-      }
-    }
-  }
+  implicitHeight: itemsView.implicitHeight
+  implicitWidth: itemsView.implicitWidth
 
   MouseArea {
     anchors.fill: parent
     onClicked: {
       root.menu.focusedItemIndex = -1
-      focusScope.focus = false
     }
   }
 
-  FocusScope {
-    id: focusScope
-    focus: true
-    Loader {
-      id: menuLoader
-      focus: focusScope.focus
+  GridLayout {
+    id: itemsView
+    property alias menuItemViewList: menuItemViewList
+
+    rows: (root.menu.type === Menu.MenuType.MenuBarMenu) ? 1 : -1
+    columns: (root.menu.type !== Menu.MenuType.MenuBarMenu) ? 1 : -1
+    rowSpacing: 0
+    columnSpacing: 0
+    Repeater {
+      model: root.menu
+      id: menuItemViewList
+      MenuItemView {
+        menuItem: root.menu.items[index] // root.menu.get(index)
+        text: title
+
+        onClicked: {
+          // If menu bar menu.
+          if (root.menu.type === Menu.MenuType.MenuBarMenu) {
+            if (root.menu.focusedItemIndex > -1) {
+              // Menu bar menu already activated.
+              root.menu.focusedItemIndex = -1
+            } else {
+              // Menu bar menu not activated before.
+              root.menu.focusedItemIndex = index
+              if (this.hasSubmenu()) {
+                this.menuItem.submenu.open(MyWindow.window.contentItem)
+              }
+            }
+          }
+          // If regular menu.
+          if (root.menu.type !== Menu.MenuType.MenuBarMenu) {
+            if (!this.hasSubmenu()) {
+              print('MenuItem.action')
+            }
+          }
+        }
+        onEntered: {
+          // If menu bar menu.
+          if (root.menu.type === Menu.MenuType.MenuBarMenu) {
+            if (root.menu.focusedItemIndex > -1) {
+              // Menu bar menu already activated.
+              root.menu.focusedItemIndex = index
+            }
+          }
+          // If regular menu.
+          if (root.menu.type !== Menu.MenuType.MenuBarMenu) {
+            root.menu.focusedItemIndex = index
+          }
+        }
+        onExited: {
+        }
+
+        Component.onCompleted: {
+          Layout.minimumWidth = 20
+          bindMenuItem(this.menuItem, index)
+        }
+      }
     }
   }
 
@@ -115,17 +91,13 @@ Rectangle {
   // Created
   //============
   Component.onCompleted: {
-    print('menu created: ' + root.menu.title)
-    // Load component with loader.
-    menuLoader.sourceComponent = component
-
-    // Connect to signal `menuClosed` in DesktopEnvironment.
+    print('[MenuView, "' + root.menu.title + '"] created')
     if (root.menu.type !== Menu.MenuType.MenuBarMenu) {
       return
     }
+    // Connect to signal `menuClosed` in DesktopEnvironment.
     DesktopEnvironment.menuClosed.connect(function() {
       root.menu.focusedItemIndex = -1
-      focusScope.focus = false
     })
   }
 
@@ -133,7 +105,7 @@ Rectangle {
   // Destructed
   //==============
   Component.onDestruction: {
-    menuLoader.sourceComponent = undefined  // Is this needed?
+    print('[MenuView, "' + root.menu.title + '"] destructing...')
   }
 
   //==============
@@ -147,16 +119,14 @@ Rectangle {
   // Property changed
   //=======================
   onMenuChanged: {
-    if (root.menu) {
-      print('[MenuView, "' + root.menu.title + '" - onMenuChanged] menu: ' + root.menu)
-    }
   }
 
   //=========
   // Debug
   //=========
   Text {
-    text: root.menu.title + ": " + String(root.menu.focusedItemIndex) + "/" + String(root.menu.items.length)
+//    text: root.menu.title + ": " + String(root.menu.focusedItemIndex) + "/" + String(root.menu.items.length)
+    text: (root.activeFocus) ? "activeFocused" : "inactive";
     anchors.right: parent.right
   }
 }

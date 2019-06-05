@@ -81,6 +81,5 @@ MyWindow {
   }
 
   Component.onCompleted: {
-    print(this)
   }
 }

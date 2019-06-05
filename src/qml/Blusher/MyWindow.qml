@@ -2,6 +2,8 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Layouts 1.0
 
+import Blusher.DesktopEnvironment 0.1
+
 Window {
   id: root
   enum WindowType {
@@ -60,13 +62,36 @@ Window {
 
     Button {
       id: _testButton
+      text: "activeFocus: " + _testButton.activeFocus
       onClick: {
-//        _menuArea.visible = false
-        print("---_menyArea---")
-        print(_menuArea.width)
-        print(_menuArea.height)
+        print('Window._testButton')
       }
     }
+  }
+
+  FocusScope {
+    id: focusScope
+    focus: true
+
+    Keys.onPressed: {
+      print('main onPressed: ' + event.key)
+      switch (event.key) {
+      case Qt.Key_Escape:
+        if (DesktopEnvironment.menuOpen) {
+          root.menu.close()
+          DesktopEnvironment.menuClosed()
+        }
+
+        break;
+
+      case Qt.Key_Right:
+        break;
+
+      default:
+        break;
+      }
+    }
+
   }
 
   //=======================
@@ -74,8 +99,6 @@ Window {
   //=======================
   Component.onCompleted: {
     if (root.menu) {
-//      root.menu.parent = _menuArea
-//      root.menu.anchors.fill = _menuArea
       _menuArea.visible = true
     }
     if (root.toolbar) {
@@ -86,4 +109,15 @@ Window {
 
     root.body.parent = _bodyArea
   }
+
+  //================
+  // Methods
+  //================
+  function giveGlobalFocus() {
+    focusScope.focus = true
+  }
+
+  //================
+  // Debug
+  //================
 }

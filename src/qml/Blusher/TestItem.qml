@@ -83,28 +83,7 @@ Rectangle {
     }
   }
 
-  FocusScope {
-    id: scope2
-    focus: false
-    Rectangle {
-      id: rect
-      y: 50
-      width: 20
-      height: 20
-      color: "orange";
-      MouseArea {
-        anchors.fill: parent
-        onClicked: {
-          scope2.focus = true
-          rect.focus = true
-        }
-      }
-      Text {
-        text: "another focus scope"
-        font.bold: rect.activeFocus
-      }
-    }
-  }
+
 
 
   Component.onCompleted: {

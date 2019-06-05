@@ -21,6 +21,9 @@ Item {
 //  width: 20 // For avoiding implicitWidth bug...
   height: 30
 
+  //===================
+  // Items
+  //===================
   Rectangle {
     id: _styler
     visible: (root.menuItem.focused)
@@ -50,6 +53,12 @@ Item {
     }
     onEntered: {
       root.entered()
+      if (root.menuItem.isMenuBarMenuItem()) {
+        return
+      }
+      if (root.menuItem.hasSubmenu() && !root.menuItem.submenu.opened) {
+        root.menuItem.submenu.open(parent)
+      }
     }
     onExited: {
       root.exited()

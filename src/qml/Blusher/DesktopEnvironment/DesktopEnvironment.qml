@@ -8,10 +8,15 @@ Item {
   id: root
 
   property string name: "standalone"
+
   readonly property alias menuOpen: internal.menuOpen
   readonly property alias msg: internal.msg
 
+  property alias overlay: overlayLoader.item
+
+  /// \brief  Sould emitted when the menu is opening.
   signal menuOpened(Item parent, ListModel menu)
+  /// \brief  Should emitted when all menus are completely closed.
   signal menuClosed()
 
   QtObject {
@@ -27,10 +32,16 @@ Item {
   // MenuView component
   Component {
     id: menuViewComponent
-    MenuView {
-      menu: overlayLoader.menu
-      width: 200
-      height: 200
+    Repeater {
+      model: overlayLoader.menus.length
+      MenuView {
+        menu: overlayLoader.menus[index]
+
+        Component.onCompleted: {
+          this.x = root.parent.MyWindow.window.x + (index * 100)
+          this.y = root.parent.MyWindow.window.y + 30
+        }
+      }
     }
   }
 
@@ -67,18 +78,16 @@ Item {
 
   Loader {
     id: overlayLoader
-    property Menu menu: null
+    property list<Menu> menus
 
-    onMenuChanged: {
-      const overlayItemLoader = overlayLoader.item.overlayItemLoader
+    onMenusChanged: {
+      const overlayItemLoader = root.overlay.overlayItemLoader
 
-      if (overlayLoader.menu) {
-        overlayItemLoader.sourceComponent = undefined
-        overlayItemLoader.sourceComponent = menuViewComponent
+      overlayItemLoader.sourceComponent = undefined
+      overlayItemLoader.sourceComponent = menuViewComponent
 
-        overlayItemLoader.item.x = root.parent.MyWindow.window.x
-        overlayItemLoader.item.y = root.parent.MyWindow.window.y + 30
-      }
+      overlayItemLoader.item.x = root.parent.MyWindow.window.x
+      overlayItemLoader.item.y = root.parent.MyWindow.window.y + 30
     }
   }
 
@@ -86,19 +95,36 @@ Item {
   onMenuOpened: {
     if (!this.menuOpen) {
       print('[DesktopEnvironment] open menu. menu: ' + menu.title)
+      // Set singleton item child of root window.
+      // It is important to refer the geometry of root window such as x and y.
       root.parent = parent
-      // Not loaded yet.
+      // Load if not loaded yet.
       if (!overlayLoader.sourceComponent) {
         overlayLoader.sourceComponent = overlayComponent
       }
-      overlayLoader.item.visible = true
-      overlayLoader.menu = menu
+      overlayLoader.menus.push(menu)
+      root.overlay.visible = true
+
+      // Give global focus to the root window.
+      root.parent.MyWindow.window.giveGlobalFocus()
 
       internal.menuOpen = true
+    } else {
+      if (menu.type === Menu.MenuType.Submenu) {
+        overlayLoader.menus.push(menu)
+      } else {
+        overlayLoader.menus = []
+        overlayLoader.menus.push(menu)
+      }
     }
   }
   onMenuClosed: {
-    overlayLoader.item.visible = false
+    for (let i = overlayLoader.menus.length - 1; i >= 0; --i) {
+      print('[DesktopEnvironment] closing menu: ' + overlayLoader.menus[i].title)
+      overlayLoader.menus[i].close()
+    }
+    overlayLoader.menus = []
+    root.overlay.visible = false
     internal.menuOpen = false
   }
 
@@ -116,5 +142,9 @@ Item {
   //=============
   function setMsg(text) {
     internal.msg = text
+  }
+
+  function _openSubmenu(menu) {
+    const prevMenu = overlayLoader.menus[overlayLoader.menus.length -1]
   }
 }
