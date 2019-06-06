@@ -27,7 +27,7 @@ Rectangle {
   //================
   // Style
   //================
-  color: "#eeedeb"
+  color: "#d6d2d0"
   border.width: 0
 
   implicitHeight: itemsView.implicitHeight

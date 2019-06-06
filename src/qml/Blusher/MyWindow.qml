@@ -18,6 +18,8 @@ Window {
   property Item toolbar: null
   property Rectangle body
 
+  color: "#d6d2d0"
+
   ColumnLayout {
     id: columnLayout
     anchors.fill: parent
