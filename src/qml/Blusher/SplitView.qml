@@ -6,10 +6,22 @@ Item {
 
   default property list<Item> views
 
+  //=========================
+  // Public Properties
+  //=========================
   property int orientation: Qt.Horizontal
+
+  //=========================
+  // Private Properties
+  //=========================
+  property QtObject _private: QtObject {
+    id: _private
+    property bool test: false
+  }
 
   anchors.fill: parent
 
+  // Views
   GridLayout {
     id: layout
 
@@ -24,12 +36,46 @@ Item {
     }
   }
 
+  // Dividers
+  Repeater {
+    model: root.views.length - 1
+    Rectangle {
+      id: _divider
+
+      visible: root.views[index].visible
+
+      width: 1
+      height: 1
+      x: root.views[index].width
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+
+      color: "black"
+      MouseArea {
+        width: 5
+        height: 5
+        anchors.top: _divider.top
+        anchors.bottom: _divider.bottom
+        anchors.horizontalCenter: _divider.horizontalCenter
+        cursorShape: Qt.SplitHCursor
+
+        onPositionChanged: {
+          root.views[index].Layout.preferredWidth += mouse.x
+        }
+      }
+    }
+  }
+
   //==============
   // Created
   //==============
   Component.onCompleted: {
     for (let i = 0; i < root.views.length; ++i) {
-      root.views[i].parent = layout
+      const view = root.views[i]
+      view.parent = layout
+      if (view.width > 0) {
+        view.Layout.preferredWidth = view.width
+      }
     }
   }
 

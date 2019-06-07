@@ -62,27 +62,29 @@ MyWindow {
 
   toolbar: Toolbar {
     ToolbarItem {
-      label: "hello"
+      label: "Show"
       Button {
         width: 50
         height: 20
         text: "first"
+        onClicked: {
+          sidebar.visible = true
+        }
       }
     }
   }
 
   body: SplitView {
     Rectangle {
+      id: sidebar
       color: "red"
       width: 200
-      height: 200
       Button {
         width: 100
         height: 50
-        text: "Click"
+        text: "Hide"
         onClicked: {
-          console.log(DesktopEnvironment.msg)
-          DesktopEnvironment.setMsg("Hello")
+          parent.visible = false
         }
       }
       TestItem {
@@ -91,8 +93,6 @@ MyWindow {
       }
     }
     Rectangle {
-      width: 200
-      height: 200
       color: "green"
     }
 
