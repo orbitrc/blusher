@@ -59,7 +59,7 @@ Window {
     Button {
       id: _testButton
       text: "activeFocus: " + _testButton.activeFocus
-      onClick: {
+      onClicked: {
         print('Window._testButton')
       }
     }

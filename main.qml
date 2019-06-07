@@ -80,7 +80,7 @@ MyWindow {
         width: 100
         height: 50
         text: "Click"
-        onClick: {
+        onClicked: {
           console.log(DesktopEnvironment.msg)
           DesktopEnvironment.setMsg("Hello")
         }

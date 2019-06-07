@@ -8,7 +8,7 @@ Rectangle {
   }
 
   property string text: ""
-  signal click(var mouse)
+  signal clicked(var mouse)
   //==============
   // State
   //==============
@@ -30,7 +30,7 @@ Rectangle {
       root.active = false
     }
     onClicked: {
-      root.click(mouse)
+      root.clicked(mouse)
     }
   }
 
