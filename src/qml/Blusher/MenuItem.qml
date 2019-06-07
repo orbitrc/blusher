@@ -29,10 +29,6 @@ ListElement {
   // Created
   //=======================
   Component.onCompleted: {
-    // Set submenu's parent this.
-    if (root.submenu !== null) {
-//      root.submenu.parent = root
-    }
   }
 
   //=======================

@@ -4,3 +4,5 @@ MyWindow 0.1 MyWindow.qml
 Button 0.1 Button.qml
 Menu 0.1 Menu.qml
 MenuItem 0.1 MenuItem.qml
+Toolbar 0.1 Toolbar.qml
+ToolbarItem 0.1 ToolbarItem.qml

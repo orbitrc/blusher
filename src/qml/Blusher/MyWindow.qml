@@ -47,12 +47,6 @@ Window {
       Layout.preferredHeight: 50
       Layout.fillWidth: true
       Layout.alignment: Qt.AlignTop
-
-      Rectangle {
-        id: _rect
-        anchors.fill: parent
-        color: "grey"
-      }
     }
 
     // Window body

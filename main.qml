@@ -60,8 +60,15 @@ MyWindow {
     }
   }
 
-  toolbar: Rectangle {
-    color: "red"
+  toolbar: Toolbar {
+    ToolbarItem {
+      label: "hello"
+      Button {
+        width: 50
+        height: 20
+        text: "first"
+      }
+    }
   }
 
   body: Rectangle {
