@@ -15,8 +15,8 @@ Window {
   }
 
   property Menu menu: null
-  property Item toolbar: null
-  property Rectangle body
+  property Toolbar toolbar: null
+  property Item body
 
   color: "#d6d2d0"
 

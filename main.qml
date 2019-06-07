@@ -71,19 +71,35 @@ MyWindow {
     }
   }
 
-  body: Rectangle {
-    Button {
-      width: 100
-      height: 50
-      text: "Click"
-      onClick: {
-        console.log(DesktopEnvironment.msg)
-        DesktopEnvironment.setMsg("Hello")
+  body: SplitView {
+    Rectangle {
+      color: "red"
+      width: 200
+      height: 200
+      Button {
+        width: 100
+        height: 50
+        text: "Click"
+        onClick: {
+          console.log(DesktopEnvironment.msg)
+          DesktopEnvironment.setMsg("Hello")
+        }
+      }
+      TestItem {
+        testProp: testMenu
+        y: 100
       }
     }
-    TestItem {
-      testProp: testMenu
-      y: 100
+    Rectangle {
+      width: 200
+      height: 200
+      color: "green"
+    }
+
+    Component.onCompleted: {
+      this.setViewFillHeight(0, true)
+      this.setViewFillHeight(1, true)
+      this.setViewFillWidth(1, true)
     }
   }
 
