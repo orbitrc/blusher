@@ -100,6 +100,8 @@ MyWindow {
       this.setViewFillHeight(0, true)
       this.setViewFillHeight(1, true)
       this.setViewFillWidth(1, true)
+
+      this.setViewMinimumWidth(0, 100)
     }
   }
 

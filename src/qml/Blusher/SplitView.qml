@@ -16,7 +16,10 @@ Item {
   //=========================
   property QtObject _private: QtObject {
     id: _private
-    property bool test: false
+    property bool resizing: false
+    property int resizingViewIndex: -1
+    property real resizingViewMinimumWidth: 0
+    property real dividerOffset: 0
   }
 
   anchors.fill: parent
@@ -59,8 +62,18 @@ Item {
         anchors.horizontalCenter: _divider.horizontalCenter
         cursorShape: Qt.SplitHCursor
 
+        onPressed: {
+          _private.dividerOffset = mouse.x
+          _private.resizing = true
+        }
+
+        onReleased: {
+          _private.resizing = false
+        }
+
         onPositionChanged: {
-          root.views[index].Layout.preferredWidth += mouse.x
+          print(_private.dividerOffset)
+          root.views[index].Layout.preferredWidth += (mouse.x - _private.dividerOffset)
         }
       }
     }
@@ -88,5 +101,13 @@ Item {
 
   function setViewFillHeight(index, value) {
     root.views[index].Layout.fillHeight = value
+  }
+
+  function getViewMinimumWidth(index) {
+    return root.views[index].Layout.minimumWidth
+  }
+
+  function setViewMinimumWidth(index, width) {
+    root.views[index].Layout.minimumWidth = width
   }
 }
