@@ -59,21 +59,30 @@ Item {
         height: 5
         anchors.top: _divider.top
         anchors.bottom: _divider.bottom
+        anchors.left: undefined
+        anchors.right: undefined
         anchors.horizontalCenter: _divider.horizontalCenter
+        anchors.verticalCenter: undefined // _divider.verticalCenter
         cursorShape: Qt.SplitHCursor
 
         onPressed: {
+          _private.resizingViewMinimumWidth = root.getViewMinimumWidth(index)
           _private.dividerOffset = mouse.x
           _private.resizing = true
         }
 
         onReleased: {
+          _private.resizingViewMinimumWidth = 0
           _private.resizing = false
         }
 
         onPositionChanged: {
-          print(_private.dividerOffset)
-          root.views[index].Layout.preferredWidth += (mouse.x - _private.dividerOffset)
+          const view = root.views[index]
+          view.Layout.preferredWidth += (mouse.x - _private.dividerOffset)
+          // Minimun width
+          if (view.Layout.preferredWidth < _private.resizingViewMinimumWidth) {
+            view.Layout.preferredWidth = _private.resizingViewMinimumWidth
+          }
         }
       }
     }
