@@ -47,6 +47,8 @@ DISTFILES += \
     src/qml/Blusher/MenuItemView.qml \
     src/qml/Blusher/MenuView.qml \
     src/qml/Blusher/MyWindow.qml \
+    src/qml/Blusher/Segment.qml \
+    src/qml/Blusher/SegmentedControl.qml \
     src/qml/Blusher/SplitView.qml \
     src/qml/Blusher/TestItem.qml \
     src/qml/Blusher/Toolbar.qml \

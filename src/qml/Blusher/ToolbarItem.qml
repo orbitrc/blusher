@@ -1,12 +1,16 @@
 import QtQuick 2.12
 
-Item {
+Rectangle {
   id: root
 
   property string label: ""
-  anchors.fill: parent
+
+  color: "lightgreen"
+
+  implicitWidth: _label.implicitWidth
 
   Text {
+    id: _label
     text: root.label
     visible: (root.parent.displayMode !== Toolbar.DisplayMode.IconOnly)
     anchors.bottom: parent.bottom

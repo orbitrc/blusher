@@ -72,6 +72,18 @@ MyWindow {
         }
       }
     }
+    ToolbarItem {
+      label: "Back/Forward"
+      SegmentedControl {
+        Segment {
+          label: "back"
+        }
+        Segment {
+          label: "forward"
+        }
+      }
+    }
+
   }
 
   body: SplitView {
