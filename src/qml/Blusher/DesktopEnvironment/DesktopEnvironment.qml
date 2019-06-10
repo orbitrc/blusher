@@ -71,6 +71,17 @@ Item {
         }
       }
 
+      MouseArea {
+        id: _menuBarArea
+        hoverEnabled: true
+        propagateComposedEvents: true
+        height: 30
+
+        onEntered: {
+          print('menu bar')
+        }
+      }
+
       Loader {
         id: overlayItemLoader
       }
@@ -78,6 +89,10 @@ Item {
       Component.onCompleted: {
         this.width = QtQuickWindow.Screen.width
         this.height = QtQuickWindow.Screen.height
+
+        _menuBarArea.x = root.parent.MyWindow.window.x
+        _menuBarArea.y = root.parent.MyWindow.window.y
+        _menuBarArea.width = root.parent.MyWindow.window.width
       }
     }
   }

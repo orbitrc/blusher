@@ -84,6 +84,9 @@ Rectangle {
             if (root.menu.focusedItemIndex > -1) {
               // Menu bar menu already activated.
               root.menu.focusedItemIndex = index
+              if (this.hasSubmenu()) {
+                this.menuItem.submenu.open(MyWindow.window.contentItem)
+              }
             }
           }
           // If regular menu.
