@@ -38,13 +38,24 @@ Item {
       Rectangle {
         width: 50
         height: 28
-        color: "blue"
+        color: (root.selectedSegmentIndex !== index) ? "grey" : "blue"
         border.color: "black"
 
         Text {
           text: root.segments[index].label
         }
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            root.selected(index)
+          }
+        }
       }
     }
+  }
+
+  onSelected: {
+    root.selectedSegmentIndex = index
   }
 }
