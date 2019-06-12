@@ -30,7 +30,7 @@ QML2_IMPORT_PATH +=
 QML_DESIGNER_IMPORT_PATH =
 
 DEFINES += TEST_VALUE=\\\"test\\\" \
-        BLUSHER_PATH=\\\"$$PWD/src/qml\\\"
+        BLUSHER_PATH=\\\"$$PWD/lib/blusher/qml\\\"
         # BLUSHER_PATH=\\\"/usr/lib/blusher/qml\\\"
 
 # Default rules for deployment.
@@ -39,18 +39,18 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    src/qml/Blusher/Button.qml \
-    src/qml/Blusher/DesktopEnvironment/DesktopEnvironment.qml \
-    src/qml/Blusher/DesktopEnvironment/qmldir \
-    src/qml/Blusher/Menu.qml \
-    src/qml/Blusher/MenuItem.qml \
-    src/qml/Blusher/MenuItemView.qml \
-    src/qml/Blusher/MenuView.qml \
-    src/qml/Blusher/MyWindow.qml \
-    src/qml/Blusher/Segment.qml \
-    src/qml/Blusher/SegmentedControl.qml \
-    src/qml/Blusher/SplitView.qml \
-    src/qml/Blusher/TestItem.qml \
-    src/qml/Blusher/Toolbar.qml \
-    src/qml/Blusher/ToolbarItem.qml \
-    src/qml/Blusher/qmldir
+    lib/blusher/qml/Blusher/Button.qml \
+    lib/blusher/qml/Blusher/DesktopEnvironment/DesktopEnvironment.qml \
+    lib/blusher/qml/Blusher/DesktopEnvironment/qmldir \
+    lib/blusher/qml/Blusher/Menu.qml \
+    lib/blusher/qml/Blusher/MenuItem.qml \
+    lib/blusher/qml/Blusher/MenuItemView.qml \
+    lib/blusher/qml/Blusher/MenuView.qml \
+    lib/blusher/qml/Blusher/MyWindow.qml \
+    lib/blusher/qml/Blusher/Segment.qml \
+    lib/blusher/qml/Blusher/SegmentedControl.qml \
+    lib/blusher/qml/Blusher/SplitView.qml \
+    lib/blusher/qml/Blusher/TestItem.qml \
+    lib/blusher/qml/Blusher/Toolbar.qml \
+    lib/blusher/qml/Blusher/ToolbarItem.qml \
+    lib/blusher/qml/Blusher/qmldir

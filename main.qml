@@ -5,7 +5,7 @@ import Blusher.DesktopEnvironment 0.1
 
 MyWindow {
   visible: true
-//  flags: Qt.FramelessWindowHint
+//  flags: Qt.Popup | Qt.WA_X11NetWmWindowTypeMenu
   width: 300
   height: 300
   title: "Pouch"
@@ -77,9 +77,11 @@ MyWindow {
       SegmentedControl {
         Segment {
           label: "back"
+          image: DesktopEnvironment.icons.goPrevious
         }
         Segment {
           label: "forward"
+          image: DesktopEnvironment.icons.goNext
         }
       }
     }

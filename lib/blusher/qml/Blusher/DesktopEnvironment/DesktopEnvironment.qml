@@ -7,6 +7,9 @@ import ".."
 Item {
   id: root
 
+  //===================
+  // Properties
+  //===================
   property string name: "standalone"
 
   readonly property alias menuOpen: internal.menuOpen
@@ -14,16 +17,38 @@ Item {
 
   property alias overlay: overlayLoader.item
 
-  /// \brief  Sould emitted when the menu is opening.
-  signal menuOpened(Item parent, ListModel menu)
-  /// \brief  Should emitted when all menus are completely closed.
-  signal menuClosed()
-
+  //====================
+  // Private Properties
+  //====================
   QtObject {
     id: internal
     property string msg: "Hi!"
     property bool menuOpen: false
   }
+
+  //===================
+  // Constants
+  //===================
+  property alias icons: _icons
+  QtObject {
+    id: _icons
+    property string theme: "standalone"
+    property Image goPrevious: Image {
+      source: "../../../icons/standalone/scalable/actions/go-previous.svg"
+    }
+    property Image goNext: Image {
+      source: "../../../icons/standalone/scalable/actions/go-next.svg"
+    }
+  }
+
+  //==================
+  // Signals
+  //==================
+
+  /// \brief  Sould emitted when the menu is opening.
+  signal menuOpened(Item parent, ListModel menu)
+  /// \brief  Should emitted when all menus are completely closed.
+  signal menuClosed()
 
   //===================
   // Components
