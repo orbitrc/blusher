@@ -75,6 +75,7 @@ MyWindow {
     ToolbarItem {
       label: "Back/Forward"
       SegmentedControl {
+        trackingMode: SegmentedControl.TrackingMode.Momentary
         Segment {
           label: "back"
           image: DesktopEnvironment.icons.goPrevious
@@ -85,13 +86,12 @@ MyWindow {
         }
       }
     }
-
   }
 
   body: SplitView {
     Rectangle {
       id: sidebar
-      color: "red"
+      color: "#ff8080"
       width: 200
       Button {
         width: 100

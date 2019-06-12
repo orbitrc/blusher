@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.12
 Item {
   id: root
 
-  enum SwitchTracking {
+  enum TrackingMode {
     SelectOne,
     SelectAny,
     Momentary
@@ -15,7 +15,7 @@ Item {
   //===================
   // Public properties
   //===================
-  property int trackingMode: SegmentedControl.SwitchTracking.SelectOne
+  property int trackingMode: SegmentedControl.TrackingMode.SelectOne
   property bool separated: false
   property int selectedSegmentIndex: -1
 
@@ -36,11 +36,36 @@ Item {
     Repeater {
       model: root.segments.length
       Rectangle {
+        id: _segment
+
         width: 50
         height: 28
         clip: true
-        color: (root.selectedSegmentIndex !== index) ? "grey" : "blue"
+        color: "#e0e0e0"
         border.color: "black"
+
+        property bool active: false
+
+        state: "NotSelectedAndNotActive"
+        states: [
+          State {
+            name: "NotSelectedAndNotActive"
+            PropertyChanges { target: _segment; color: "#e0e0e0" }
+          },
+          State {
+            name: "NotSelectedAndActive"
+            PropertyChanges { target: _segment; color: "cyan" }
+          },
+          State {
+            name: "SelectedAndNotActive"
+            PropertyChanges { target: _segment; color: "#3e3e3e" }
+          },
+          State {
+            name: "SelectedAndActive"
+            PropertyChanges { target: _segment; color: "#3e3e3e" }
+          }
+
+        ]
 
         Text {
           text: root.segments[index].label
@@ -59,8 +84,24 @@ Item {
 
         MouseArea {
           anchors.fill: parent
+          onPressed: {
+            _segment.active = true
+            if (_segment.state === "NotSelectedAndNotActive") {
+              _segment.state = "NotSelectedAndActive"
+            }
+          }
+          onReleased: {
+            _segment.active = false
+            if (_segment.state === "NotSelectedAndActive") {
+              _segment.state = "NotSelectedAndNotActive"
+            }
+          }
+
           onClicked: {
-            root.selected(index)
+            if (root.trackingMode !== SegmentedControl.TrackingMode.Momentary) {
+              root.selected(index)
+              _segment.state = "SelectedAndNotActive"
+            }
           }
         }
       }

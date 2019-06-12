@@ -29,6 +29,14 @@ Rectangle {
     onReleased: {
       root.active = false
     }
+    onEntered: {
+      root.active = true
+    }
+
+    onExited: {
+      root.active = false
+    }
+
     onClicked: {
       root.clicked(mouse)
     }
@@ -47,7 +55,7 @@ Rectangle {
     LinearGradient {
       anchors.fill: parent
       gradient: Gradient {
-        GradientStop { position: 0.0; color: "black" }
+        GradientStop { position: 0.0; color: "darkgrey" }
         GradientStop { position: 1.0; color: "white" }
       }
       source: parent
