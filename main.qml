@@ -76,6 +76,7 @@ MyWindow {
       label: "Back/Forward"
       SegmentedControl {
         trackingMode: SegmentedControl.TrackingMode.Momentary
+        separated: true
         Segment {
           label: "back"
           image: DesktopEnvironment.icons.goPrevious
@@ -83,6 +84,14 @@ MyWindow {
         Segment {
           label: "forward"
           image: DesktopEnvironment.icons.goNext
+        }
+
+        onSelected: {
+          if (index === 0) {
+            print('back')
+          } else {
+            print('forward')
+          }
         }
       }
     }
@@ -107,7 +116,38 @@ MyWindow {
       }
     }
     Rectangle {
-      color: "green"
+      color: "white"
+      Rectangle {
+        border.color: "black"
+        width: 200
+        height: 30
+        Text {
+          id: _lorem
+          text: "Lorem ipsum"
+//          font.pixelSize: 1
+        }
+      }
+      Text {
+        y: 30
+        text: _lorem.font.pointSize + "pt, (" + _lorem.font.pixelSize + "px)"
+      }
+
+      Button {
+        y: 50
+        id: _testButtonZoomOut
+        text: "zoom out"
+        onClicked: {
+          _lorem.font.pointSize -= 1
+        }
+      }
+      Button {
+        y: 100
+        id: _testButtonZoomIn
+        text: "zoom in"
+        onClicked: {
+          _lorem.font.pointSize += 1
+        }
+      }
     }
 
     Component.onCompleted: {

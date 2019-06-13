@@ -32,7 +32,7 @@ Item {
   // Items
   //===============
   RowLayout {
-    spacing: 0
+    spacing: (!root.separated) ? 0 : 2
     Repeater {
       model: root.segments.length
       Rectangle {
@@ -98,8 +98,8 @@ Item {
           }
 
           onClicked: {
+            root.selected(index)
             if (root.trackingMode !== SegmentedControl.TrackingMode.Momentary) {
-              root.selected(index)
               _segment.state = "SelectedAndNotActive"
             }
           }
@@ -109,6 +109,10 @@ Item {
   }
 
   onSelected: {
+    if (root.trackingMode === SegmentedControl.TrackingMode.Momentary) {
+      return
+    }
+
     root.selectedSegmentIndex = index
   }
 }

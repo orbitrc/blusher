@@ -55,14 +55,6 @@ Window {
       Layout.fillWidth: true
       Layout.fillHeight: true
     }
-
-    Button {
-      id: _testButton
-      text: "activeFocus: " + _testButton.activeFocus
-      onClicked: {
-        print('Window._testButton')
-      }
-    }
   }
 
   FocusScope {

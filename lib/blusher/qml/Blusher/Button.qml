@@ -15,7 +15,7 @@ Rectangle {
   property bool active: false
   property bool hover: false
 
-  width: 150
+  width: 120
   height: 34
   color: "transparent"
   border.width: 0
