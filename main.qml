@@ -66,7 +66,7 @@ MyWindow {
       Button {
         width: 50
         height: 20
-        text: "first"
+        title: "first"
         onClicked: {
           sidebar.visible = true
         }
@@ -105,7 +105,7 @@ MyWindow {
       Button {
         width: 100
         height: 50
-        text: "Hide"
+        title: "Hide"
         onClicked: {
           parent.visible = false
         }
@@ -123,19 +123,20 @@ MyWindow {
         height: 30
         Text {
           id: _lorem
-          text: "Lorem ipsum"
+          text: "Lorem ipsum (" + _lorem.font.family + ")"
 //          font.pixelSize: 1
         }
       }
       Text {
         y: 30
+        font.pixelSize: 10
         text: _lorem.font.pointSize + "pt, (" + _lorem.font.pixelSize + "px)"
       }
 
       Button {
         y: 50
         id: _testButtonZoomOut
-        text: "zoom out"
+        title: "zoom out"
         onClicked: {
           _lorem.font.pointSize -= 1
         }
@@ -143,7 +144,7 @@ MyWindow {
       Button {
         y: 100
         id: _testButtonZoomIn
-        text: "zoom in"
+        title: "zoom in"
         onClicked: {
           _lorem.font.pointSize += 1
         }

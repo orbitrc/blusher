@@ -14,6 +14,7 @@ Item {
 
   readonly property alias menuOpen: internal.menuOpen
   readonly property alias msg: internal.msg
+  readonly property alias pixelsPerDt: internal.pixelsPerDt
 
   property alias overlay: overlayLoader.item
 
@@ -24,12 +25,14 @@ Item {
     id: internal
     property string msg: "Hi!"
     property bool menuOpen: false
+    property real pixelsPerDt: 1
   }
 
   //===================
   // Constants
   //===================
   property alias icons: _icons
+  property alias fonts: _fonts
   QtObject {
     id: _icons
     property string theme: "standalone"
@@ -39,6 +42,10 @@ Item {
     property Image goNext: Image {
       source: "../../../icons/standalone/scalable/actions/go-next.svg"
     }
+  }
+  QtObject {
+    id: _fonts
+    property int x11DotsPerInch: 72   // Used only on X Window System.
   }
 
   //==================

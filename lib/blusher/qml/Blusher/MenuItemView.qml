@@ -1,5 +1,7 @@
 import QtQuick 2.12
 
+import "DesktopEnvironment"
+
 Item {
   id: root
   clip: true
@@ -66,6 +68,7 @@ Item {
     anchors.verticalCenter: parent.verticalCenter
     rightPadding: 7.0   // 5.0 + styler's margin
     leftPadding: 7.0    // 5.0 + styler's margin
+    font.pointSize: 14 * DesktopEnvironment.pixelsPerDt
     font.bold: root.menuItem.isMenuBarMenuItem()
   }
 

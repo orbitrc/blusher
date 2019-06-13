@@ -1,13 +1,15 @@
 import QtQuick 2.12
 import QtGraphicalEffects 1.0
 
+import "DesktopEnvironment"
+
 Rectangle {
   id: root
   enum ButtonType {
     PushButton
   }
 
-  property string text: ""
+  property string title: ""
   signal clicked(var mouse)
   //==============
   // State
@@ -73,7 +75,8 @@ Rectangle {
 
   Text {
     id: _text
-    text: root.text
+    text: root.title
+    font.pointSize: 13 * DesktopEnvironment.pixelsPerDt
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.verticalCenter: parent.verticalCenter
   }
