@@ -6,7 +6,7 @@ import Blusher.DesktopEnvironment 0.1
 MyWindow {
   visible: true
 //  flags: Qt.Popup | Qt.WA_X11NetWmWindowTypeMenu
-  width: 300
+  width: 400
   height: 300
   title: "Pouch"
 
@@ -101,7 +101,7 @@ MyWindow {
     Rectangle {
       id: sidebar
       color: "#ff8080"
-      width: 200
+      width: 160
       Button {
         width: 100
         height: 50
@@ -149,6 +149,14 @@ MyWindow {
           _lorem.font.pointSize += 1
         }
       }
+      Button {
+        y: 150
+        id: _testButtonAlert
+        title: "Alert"
+        onClicked: {
+          alert.visible = true
+        }
+      }
     }
 
     Component.onCompleted: {
@@ -157,6 +165,18 @@ MyWindow {
       this.setViewFillWidth(1, true)
 
       this.setViewMinimumWidth(0, 100)
+    }
+  }
+
+  MyWindow {
+    id: alert
+    title: "-"
+    type: MyWindow.WindowType.Alert
+    flags: Qt.Dialog
+    modality: Qt.WindowModal //Qt.ApplicationModal
+    body: Rectangle {
+      width: 100
+      height: 100
     }
   }
 

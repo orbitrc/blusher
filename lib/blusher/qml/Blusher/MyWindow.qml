@@ -1,10 +1,10 @@
 import QtQuick 2.12
-import QtQuick.Window 2.12
+import QtQuick.Window 2.12 as QtQuickWindow
 import QtQuick.Layouts 1.0
 
-import Blusher.DesktopEnvironment 0.1
+import "DesktopEnvironment"
 
-Window {
+QtQuickWindow.Window {
   id: root
   enum WindowType {
     DocumentWindow,
@@ -13,6 +13,8 @@ Window {
     Dialog,
     Alert
   }
+
+  property int type
 
   property Menu menu: null
   property Toolbar toolbar: null
@@ -34,9 +36,16 @@ Window {
       Layout.fillWidth: true
       Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 
-      MenuView {
-        menu: root.menu
+//      MenuView {
+//        menu: root.menu
+//        anchors.fill: parent
+//      }
+      Loader {
+        id: menuViewLoader
         anchors.fill: parent
+        onLoaded: {
+          print('loaded')
+        }
       }
     }
 
@@ -87,6 +96,8 @@ Window {
   //=======================
   Component.onCompleted: {
     if (root.menu) {
+      menuViewLoader.source = "MenuView.qml"
+      menuViewLoader.item.menu = root.menu
       _menuArea.visible = true
     }
     if (root.toolbar) {

@@ -6,7 +6,8 @@ import "DesktopEnvironment"
 Rectangle {
   id: root
   enum ButtonType {
-    PushButton
+    PushButton,
+    RadioButton
   }
 
   property string title: ""

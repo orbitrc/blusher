@@ -111,14 +111,6 @@ Rectangle {
   // Created
   //============
   Component.onCompleted: {
-    print('[MenuView, "' + root.menu.title + '"] created')
-    if (root.menu.type !== Menu.MenuType.MenuBarMenu) {
-      return
-    }
-    // Connect to signal `menuClosed` in DesktopEnvironment.
-    DesktopEnvironment.menuClosed.connect(function() {
-      root.menu.focusedItemIndex = -1
-    })
   }
 
   //==============
@@ -141,6 +133,18 @@ Rectangle {
   // Property changed
   //=======================
   onMenuChanged: {
+    if (root.menu === null) {
+      return
+    }
+
+    print('[MenuView, "' + root.menu.title + '"] created')
+    if (root.menu.type !== Menu.MenuType.MenuBarMenu) {
+      return
+    }
+    // Connect to signal `menuClosed` in DesktopEnvironment.
+    DesktopEnvironment.menuClosed.connect(function() {
+      root.menu.focusedItemIndex = -1
+    })
   }
 
   //=========
