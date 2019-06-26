@@ -33,6 +33,7 @@ Item {
   //===================
   property alias icons: _icons
   property alias fonts: _fonts
+  property alias menus: _menus
   QtObject {
     id: _icons
     property string theme: "standalone"
@@ -46,6 +47,17 @@ Item {
   QtObject {
     id: _fonts
     property int x11DotsPerInch: 72   // Used only on X Window System.
+  }
+  QtObject {
+    id: _menus
+    property Menu applicationMenu: Menu {
+      type: Menu.MenuType.Submenu
+      title: "Application"
+      MenuItem {
+        title: "Quit"
+        action: root.quit
+      }
+    }
   }
 
   //==================
@@ -193,10 +205,17 @@ Item {
   //=============
   // Methods
   //=============
+
+  // Public methods
   function setMsg(text) {
     internal.msg = text
   }
 
+  function quit() {
+    Qt.exit(0)
+  }
+
+  // Private methods
   function _openSubmenu(menu) {
     const prevMenu = overlayLoader.menus[overlayLoader.menus.length -1]
   }

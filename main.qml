@@ -16,6 +16,10 @@ MyWindow {
     title: "MainMenu"
 
     MenuItem {
+      title: DesktopEnvironment.menus.applicationMenu.title
+      submenu: DesktopEnvironment.menus.applicationMenu
+    }
+    MenuItem {
       title: "File"
       submenu: Menu {
         type: Menu.MenuType.Submenu

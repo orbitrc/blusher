@@ -80,6 +80,9 @@ Item {
 
     onClicked: {
       root.clicked()
+      if (root.menuItem.action !== null) {
+        root.menuItem.action();
+      }
     }
     onEntered: {
       root.entered()

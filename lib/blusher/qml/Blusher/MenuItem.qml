@@ -11,6 +11,7 @@ ListElement {
   property bool separator: false
   property Menu submenu: null
   property Menu parentMenu: null
+  property var action: null
 
   //=========================
   // Public Properties (Read-only for external)
