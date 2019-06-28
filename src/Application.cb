@@ -1,0 +1,14 @@
+#include <blusher/Application.h>
+
+namespace bl {
+
+Application::constructor()
+{
+}
+
+int Application::exec()
+{
+    return 0;
+}
+
+}
