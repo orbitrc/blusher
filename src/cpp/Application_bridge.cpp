@@ -1,41 +1,55 @@
 #include "../Application_bridge.h"
 
-extern "C" {
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
 
-struct _ptrs {
-    QGuiApplication *app;
-    QQmlApplicationEngine *engine;
+namespace bl {
+
+class Application : public QGuiApplication {
+public:
+    QQmlApplicationEngine engine;
+
+    Application(int argc, char *argv[])
+        : QGuiApplication(argc, argv), engine()
+    {
+        const QUrl url(QStringLiteral("qrc:/main.qml"));
+        QObject::connect(
+            &(this->engine),
+            &QQmlApplicationEngine::objectCreated,
+            this,
+            [url](QObject *obj, const QUrl &objUrl) {
+                if (!obj && url == objUrl) {
+                    QCoreApplication::exit(-1);
+                }
+            },
+            Qt::QueuedConnection
+        );
+
+        this->engine.addImportPath("/usr/lib/blusher/qml");
+
+        this->engine.load(url);
+    }
 };
 
-void* blusher_qt_init()
+} // namespace bl
+
+extern "C" {
+
+void* blusher_qt_init(int argc, char *argv[])
 {
-    struct _ptrs *self = new struct _ptrs;
-    self->app = new QGuiApplication(argc, argv);
+    bl::Application *app = new bl::Application(argc, argv);
 
-    self->engine;
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
-    QObject::connect(
-        self->engine,
-        &QQmlApplicationEngine::objectCreated,
-        self->app,
-        [url](QObject *obj, const QUrl &objUrl) {
-            if (!obj && url == objUrl) {
-                QCoreApplication::exit(-1);
-            }
-        },
-        Qt::QueuedConnection
-    );
+    return (void*)app;
+}
 
-    self->engine.addImportPath("/usr/lib/blusher/qml");
-
-    self->engine.load(url);
-
-    return (void*)self;
+int blusher_qt_exec(void *self)
+{
+    return ((bl::Application*)self)->exec();
 }
 
 void blusher_qt_destroy(void *self)
 {
-    delete self->engine;
-    delete self->app;
-    delete self;
+    delete (bl::Application*)self;
 }
+
+} // extern "C"

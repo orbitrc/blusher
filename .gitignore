@@ -1,3 +1,5 @@
+*.o
 debug/
 build/
 *.pro.user
+lib/*.so*

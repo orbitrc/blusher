@@ -5,8 +5,9 @@
 extern "C" {
 #endif
 
-void* blusher_qt_init();
-void blusher_qt_destroy(void *instance);
+void* blusher_qt_init(int argc, char *argv[]);
+int blusher_qt_exec(void *qml_app);
+void blusher_qt_destroy(void *qml_app);
 
 #ifdef __cplusplus
 }

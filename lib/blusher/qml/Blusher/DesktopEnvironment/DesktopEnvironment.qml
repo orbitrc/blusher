@@ -7,6 +7,13 @@ import ".."
 Item {
   id: root
 
+  enum Cursor {
+    Auto,
+    Arrow,
+    Pointer,
+    Text
+  }
+
   //===================
   // Properties
   //===================

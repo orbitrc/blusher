@@ -2,8 +2,9 @@
 
 namespace bl {
 
-Application::constructor()
+Application::constructor(const list<string> argv)
 {
+    void* this._qt = blusher_qt_init(argv.count, argv);
 }
 
 int Application::exec()

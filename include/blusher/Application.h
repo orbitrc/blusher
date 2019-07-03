@@ -14,7 +14,7 @@
 namespace bl {
 
 class Application {
-    constructor();
+    constructor(list<string> argv);
     int exec();
 };
 
@@ -36,7 +36,7 @@ typedef struct object bl_Application;
 
 extern const type __type__bl_Application;
 
-bl_Application bl_Application_constructor();
+bl_Application bl_Application_constructor(const list_string* argv);
 
 integer bl_Application_exec(const bl_Application *self);
 
