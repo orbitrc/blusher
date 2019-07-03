@@ -22,7 +22,7 @@ RESOURCES += qml.qrc
 # If not updated:
 # https://forum.qt.io/topic/92025/unknown-component-m300-for-custom-qml-class/3
 QML_IMPORT_PATH += \
-        ./lib/blusher/qml
+        ../lib/blusher/qml
 
 QML2_IMPORT_PATH +=
 
@@ -30,7 +30,7 @@ QML2_IMPORT_PATH +=
 QML_DESIGNER_IMPORT_PATH =
 
 DEFINES += TEST_VALUE=\\\"test\\\" \
-        BLUSHER_PATH=\\\"$$PWD/lib/blusher/qml\\\"
+        BLUSHER_PATH=\\\"$$PWD/../lib/blusher/qml\\\"
         # BLUSHER_PATH=\\\"/usr/lib/blusher/qml\\\"
 
 # Default rules for deployment.
@@ -39,18 +39,18 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    lib/blusher/qml/Blusher/Button.qml \
-    lib/blusher/qml/Blusher/DesktopEnvironment/DesktopEnvironment.qml \
-    lib/blusher/qml/Blusher/DesktopEnvironment/qmldir \
-    lib/blusher/qml/Blusher/Menu.qml \
-    lib/blusher/qml/Blusher/MenuItem.qml \
-    lib/blusher/qml/Blusher/MenuItemView.qml \
-    lib/blusher/qml/Blusher/MenuView.qml \
-    lib/blusher/qml/Blusher/MyWindow.qml \
-    lib/blusher/qml/Blusher/Segment.qml \
-    lib/blusher/qml/Blusher/SegmentedControl.qml \
-    lib/blusher/qml/Blusher/SplitView.qml \
-    lib/blusher/qml/Blusher/TestItem.qml \
-    lib/blusher/qml/Blusher/Toolbar.qml \
-    lib/blusher/qml/Blusher/ToolbarItem.qml \
-    lib/blusher/qml/Blusher/qmldir
+    ../lib/blusher/qml/Blusher/Button.qml \
+    ../lib/blusher/qml/Blusher/DesktopEnvironment/DesktopEnvironment.qml \
+    ../lib/blusher/qml/Blusher/DesktopEnvironment/qmldir \
+    ../lib/blusher/qml/Blusher/Menu.qml \
+    ../lib/blusher/qml/Blusher/MenuItem.qml \
+    ../lib/blusher/qml/Blusher/MenuItemView.qml \
+    ../lib/blusher/qml/Blusher/MenuView.qml \
+    ../lib/blusher/qml/Blusher/MyWindow.qml \
+    ../lib/blusher/qml/Blusher/Segment.qml \
+    ../lib/blusher/qml/Blusher/SegmentedControl.qml \
+    ../lib/blusher/qml/Blusher/SplitView.qml \
+    ../lib/blusher/qml/Blusher/TestItem.qml \
+    ../lib/blusher/qml/Blusher/Toolbar.qml \
+    ../lib/blusher/qml/Blusher/ToolbarItem.qml \
+    ../lib/blusher/qml/Blusher/qmldir
