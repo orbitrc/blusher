@@ -6,6 +6,7 @@ SegmentedControl 0.1 SegmentedControl.qml
 Segment 0.1 Segment.qml
 Menu 0.1 Menu.qml
 MenuItem 0.1 MenuItem.qml
+TextField 0.1 TextField.qml
 Toolbar 0.1 Toolbar.qml
 ToolbarItem 0.1 ToolbarItem.qml
 SplitView 0.1 SplitView.qml

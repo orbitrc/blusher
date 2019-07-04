@@ -51,6 +51,7 @@ DISTFILES += \
     ../lib/blusher/qml/Blusher/SegmentedControl.qml \
     ../lib/blusher/qml/Blusher/SplitView.qml \
     ../lib/blusher/qml/Blusher/TestItem.qml \
+    ../lib/blusher/qml/Blusher/TextField.qml \
     ../lib/blusher/qml/Blusher/Toolbar.qml \
     ../lib/blusher/qml/Blusher/ToolbarItem.qml \
     ../lib/blusher/qml/Blusher/qmldir

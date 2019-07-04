@@ -121,15 +121,12 @@ MyWindow {
     }
     Rectangle {
       color: "white"
-      Rectangle {
-        border.color: "black"
+
+      TextField {
+        id: _lorem
         width: 200
         height: 30
-        Text {
-          id: _lorem
-          text: "Lorem ipsum (" + _lorem.font.family + ")"
-//          font.pixelSize: 1
-        }
+        text: "Lorem ipsum (" + _lorem.font.family + ")"
       }
       Text {
         y: 30
@@ -142,7 +139,7 @@ MyWindow {
         id: _testButtonZoomOut
         title: "zoom out"
         onClicked: {
-          _lorem.font.pointSize -= 1
+          _lorem.font.size -= 1
         }
       }
       Button {
@@ -150,7 +147,7 @@ MyWindow {
         id: _testButtonZoomIn
         title: "zoom in"
         onClicked: {
-          _lorem.font.pointSize += 1
+          _lorem.font.size += 1
         }
       }
       Button {

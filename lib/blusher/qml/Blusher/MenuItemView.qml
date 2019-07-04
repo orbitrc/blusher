@@ -68,7 +68,7 @@ Item {
     anchors.verticalCenter: parent.verticalCenter
     rightPadding: 7.0   // 5.0 + styler's margin
     leftPadding: 7.0    // 5.0 + styler's margin
-    font.pointSize: 14 * DesktopEnvironment.pixelsPerDt
+    font.pointSize: 14 * DesktopEnvironment.pixelsPerDp
     font.bold: root.menuItem.isMenuBarMenuItem()
   }
 

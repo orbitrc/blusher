@@ -21,7 +21,7 @@ Item {
 
   readonly property alias menuOpen: internal.menuOpen
   readonly property alias msg: internal.msg
-  readonly property alias pixelsPerDt: internal.pixelsPerDt
+  readonly property alias pixelsPerDp: internal.pixelsPerDp
 
   property alias overlay: overlayLoader.item
 
@@ -32,7 +32,7 @@ Item {
     id: internal
     property string msg: "Hi!"
     property bool menuOpen: false
-    property real pixelsPerDt: 1
+    property real pixelsPerDp: 1
   }
 
   //===================

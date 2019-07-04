@@ -12,3 +12,4 @@ SOURCES += src/cpp/Application_bridge.cpp
 HEADERS += src/Application_bridge.h
 
 TARGET = blusher
+
