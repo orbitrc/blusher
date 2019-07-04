@@ -44,7 +44,6 @@ QtQuickWindow.Window {
         id: menuViewLoader
         anchors.fill: parent
         onLoaded: {
-          print('loaded')
         }
       }
     }

@@ -89,8 +89,8 @@ Item {
         menu: overlayLoader.menus[index]
 
         Component.onCompleted: {
-          this.x = root.parent.MyWindow.window.x + (index * 100)
-          this.y = root.parent.MyWindow.window.y + 30
+          this.x = root.parent.Window.window.x + (index * 100)
+          this.y = root.parent.Window.window.y + 30
         }
 
         onVisibleChanged: {
@@ -141,9 +141,9 @@ Item {
         this.width = QtQuickWindow.Screen.width
         this.height = QtQuickWindow.Screen.height
 
-        _menuBarArea.x = root.parent.MyWindow.window.x
-        _menuBarArea.y = root.parent.MyWindow.window.y
-        _menuBarArea.width = root.parent.MyWindow.window.width
+        _menuBarArea.x = root.parent.Window.window.x
+        _menuBarArea.y = root.parent.Window.window.y
+        _menuBarArea.width = root.parent.Window.window.width
       }
     }
   }
@@ -158,8 +158,8 @@ Item {
       overlayItemLoader.sourceComponent = undefined
       overlayItemLoader.sourceComponent = menuViewComponent
 
-      overlayItemLoader.item.x = root.parent.MyWindow.window.x
-      overlayItemLoader.item.y = root.parent.MyWindow.window.y + 30
+      overlayItemLoader.item.x = root.parent.Window.window.x
+      overlayItemLoader.item.y = root.parent.Window.window.y + 30
     }
   }
 
@@ -178,7 +178,7 @@ Item {
       root.overlay.visible = true
 
       // Give global focus to the root window.
-      root.parent.MyWindow.window.giveGlobalFocus()
+      root.parent.Window.window.giveGlobalFocus()
 
       internal.menuOpen = true
     } else {

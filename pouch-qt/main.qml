@@ -3,7 +3,7 @@ import QtQuick 2.0
 import Blusher 0.1
 import Blusher.DesktopEnvironment 0.1
 
-MyWindow {
+Window {
   visible: true
 //  flags: Qt.Popup | Qt.WA_X11NetWmWindowTypeMenu
   width: 400
@@ -169,15 +169,29 @@ MyWindow {
     }
   }
 
-  MyWindow {
+  Window {
     id: alert
-    title: "-"
-    type: MyWindow.WindowType.Alert
+    title: " "
+    type: Window.WindowType.Alert
     flags: Qt.Dialog
     modality: Qt.WindowModal //Qt.ApplicationModal
-    body: Rectangle {
+
+    minimumHeight: 200
+    maximumHeight: 200
+    minimumWidth: 300
+    maximumWidth: 300
+
+    body: Item {
       width: 100
       height: 100
+
+      Button {
+        title: "resize"
+        onClicked: {
+          alert.minimumHeight -= 50
+          alert.maximumHeight -= 50
+        }
+      }
     }
   }
 

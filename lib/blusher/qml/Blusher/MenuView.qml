@@ -67,7 +67,7 @@ Rectangle {
               // Menu bar menu not activated before.
               root.menu.focusedItemIndex = index
               if (this.hasSubmenu()) {
-                this.menuItem.submenu.open(MyWindow.window.contentItem)
+                this.menuItem.submenu.open(Window.window.contentItem)
               }
             }
           }
@@ -85,7 +85,7 @@ Rectangle {
               // Menu bar menu already activated.
               root.menu.focusedItemIndex = index
               if (this.hasSubmenu()) {
-                this.menuItem.submenu.open(MyWindow.window.contentItem)
+                this.menuItem.submenu.open(Window.window.contentItem)
               }
             }
           }

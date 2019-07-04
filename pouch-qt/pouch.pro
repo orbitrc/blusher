@@ -1,5 +1,5 @@
 QT = gui quick
-CONFIG += c++11 console
+CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -46,7 +46,6 @@ DISTFILES += \
     ../lib/blusher/qml/Blusher/MenuItem.qml \
     ../lib/blusher/qml/Blusher/MenuItemView.qml \
     ../lib/blusher/qml/Blusher/MenuView.qml \
-    ../lib/blusher/qml/Blusher/MyWindow.qml \
     ../lib/blusher/qml/Blusher/Segment.qml \
     ../lib/blusher/qml/Blusher/SegmentedControl.qml \
     ../lib/blusher/qml/Blusher/SplitView.qml \
@@ -54,4 +53,5 @@ DISTFILES += \
     ../lib/blusher/qml/Blusher/TextField.qml \
     ../lib/blusher/qml/Blusher/Toolbar.qml \
     ../lib/blusher/qml/Blusher/ToolbarItem.qml \
+    ../lib/blusher/qml/Blusher/Window.qml \
     ../lib/blusher/qml/Blusher/qmldir

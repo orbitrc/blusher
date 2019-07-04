@@ -1,6 +1,6 @@
 module Blusher
 TestItem 0.1 TestItem.qml
-MyWindow 0.1 MyWindow.qml
+Window 0.1 Window.qml
 Button 0.1 Button.qml
 SegmentedControl 0.1 SegmentedControl.qml
 Segment 0.1 Segment.qml
