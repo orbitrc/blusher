@@ -77,7 +77,7 @@ Rectangle {
   Text {
     id: _text
     text: root.title
-    font.pointSize: 13 * DesktopEnvironment.pixelsPerDt
+    font.pointSize: 13 * DesktopEnvironment.pixelsPerDp
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.verticalCenter: parent.verticalCenter
   }

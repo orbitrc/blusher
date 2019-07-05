@@ -20,7 +20,6 @@ Item {
   property string name: "standalone"
 
   readonly property alias menuOpen: internal.menuOpen
-  readonly property alias msg: internal.msg
   readonly property alias pixelsPerDp: internal.pixelsPerDp
 
   property alias overlay: overlayLoader.item
@@ -129,7 +128,7 @@ Item {
         height: 30
 
         onEntered: {
-          print('menu bar')
+          print('[DesktopEnvironment] _menuBarArea onEntered')
         }
       }
 

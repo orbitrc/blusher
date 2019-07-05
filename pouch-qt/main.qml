@@ -166,6 +166,7 @@ Window {
       this.setViewFillWidth(1, true)
 
       this.setViewMinimumWidth(0, 100)
+      this.setViewMinimumWidth(1, 100)
     }
   }
 
