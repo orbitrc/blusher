@@ -33,6 +33,19 @@ ListElement {
   }
 
   //=======================
+  // Property changed
+  //=======================
+  onParentMenuChanged: {
+    if (root.parentMenu === null) {
+      return;
+    }
+
+    if (root.hasSubmenu()) {
+      root.submenu.supermenu = root.parentMenu;
+    }
+  }
+
+  //=======================
   // Methods
   //=======================
   function isMenuBarMenuItem() {

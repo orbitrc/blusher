@@ -36,6 +36,7 @@ typedef struct object bl_Application;
 
 extern const type __type__bl_Application;
 
+typedef list_1 list_string;
 bl_Application bl_Application_constructor(const list_string* argv);
 
 integer bl_Application_exec(const bl_Application *self);

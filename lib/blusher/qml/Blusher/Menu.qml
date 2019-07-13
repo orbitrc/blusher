@@ -18,6 +18,7 @@ ListModel {
   //=========================
   property int type
   property string title: ""
+  property var supermenu: null
 
   //=========================
   // Public Properties (Read-only for external)
@@ -51,7 +52,7 @@ ListModel {
   ///         Visual item parent that menu view should be belowed.
   function open(view) {
     if (root.type === Menu.MenuType.MenuBarMenu) {
-      return
+      return;
     }
     _private.opened = true
     DesktopEnvironment.menuOpened(view, root)
@@ -60,9 +61,9 @@ ListModel {
   /// \brief  Close menu.
   function close() {
     if (root.type === Menu.MenuType.MenuBarMenu) {
-      return
+      return;
     }
-    root.focusedItemIndex = -1
+    root.focusItem(-1);
     _private.opened = false
   }
 
@@ -74,10 +75,16 @@ ListModel {
     menuItem.parentMenu = root
   }
 
+  function focusItem(index) {
+    if (root.focusedItemIndex > -1) {
+      root.items[root.focusedItemIndex].focused = false;
+    }
 
-  //=========
-  // Debug
-  //=========
-  onFocusedItemIndexChanged: {
+    root.focusedItemIndex = index;
+
+    if (index > -1) {
+      root.items[root.focusedItemIndex].focused = true;
+    }
   }
+
 }

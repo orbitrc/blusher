@@ -1,6 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 
+import "DesktopEnvironment"
+
 Item {
   id: root
 
@@ -69,11 +71,13 @@ Item {
           _private.resizingViewMinimumWidth = root.getViewMinimumWidth(index)
           _private.dividerOffset = mouse.x
           _private.resizing = true
+          DesktopEnvironment.app.cursor = DesktopEnvironment.Cursor.ResizeLeftRight;
         }
 
         onReleased: {
           _private.resizingViewMinimumWidth = 0
           _private.resizing = false
+          DesktopEnvironment.app.cursor = DesktopEnvironment.Cursor.Auto;
         }
 
         onPositionChanged: {

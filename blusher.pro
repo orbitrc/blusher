@@ -9,7 +9,8 @@ VERSION = 0.1.0
 
 SOURCES += src/cpp/Application_bridge.cpp
 
-HEADERS += src/Application_bridge.h
+HEADERS += src/Application_bridge.h \
+    include/blusher/blusher-qt.h
 
 TARGET = blusher
 

@@ -63,6 +63,7 @@ Rectangle {
             if (root.menu.focusedItemIndex > -1) {
               // Menu bar menu already activated.
               root.menu.focusedItemIndex = -1
+              DesktopEnvironment.menuClosed()
             } else {
               // Menu bar menu not activated before.
               root.menu.focusedItemIndex = index
@@ -81,7 +82,7 @@ Rectangle {
         onEntered: {
           // If menu bar menu.
           if (root.menu.type === Menu.MenuType.MenuBarMenu) {
-            if (root.menu.focusedItemIndex > -1) {
+            if (root.menu.focusedItemIndex > -1 && root.menu.focusedItemIndex !== index) {
               // Menu bar menu already activated.
               root.menu.focusedItemIndex = index
               if (this.hasSubmenu()) {
@@ -107,18 +108,6 @@ Rectangle {
     }
   }
 
-  //============
-  // Created
-  //============
-  Component.onCompleted: {
-  }
-
-  //==============
-  // Destructed
-  //==============
-  Component.onDestruction: {
-    print('[MenuView, "' + root.menu.title + '"] destructing...')
-  }
 
   //==============
   // Methods
@@ -147,12 +136,4 @@ Rectangle {
     })
   }
 
-  //=========
-  // Debug
-  //=========
-  Text {
-//    text: root.menu.title + ": " + String(root.menu.focusedItemIndex) + "/" + String(root.menu.items.length)
-    text: (root.activeFocus) ? "activeFocused" : "inactive";
-    anchors.right: parent.right
-  }
 }

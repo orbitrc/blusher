@@ -36,10 +36,6 @@ QtQuickWindow.Window {
       Layout.fillWidth: true
       Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 
-//      MenuView {
-//        menu: root.menu
-//        anchors.fill: parent
-//      }
       Loader {
         id: menuViewLoader
         anchors.fill: parent
@@ -95,7 +91,7 @@ QtQuickWindow.Window {
   //=======================
   Component.onCompleted: {
     if (root.menu) {
-      menuViewLoader.source = "MenuView.qml"
+      menuViewLoader.sourceComponent = DesktopEnvironment.menuDelegate
       menuViewLoader.item.menu = root.menu
       _menuArea.visible = true
     }

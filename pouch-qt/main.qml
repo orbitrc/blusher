@@ -5,7 +5,6 @@ import Blusher.DesktopEnvironment 0.1
 
 Window {
   visible: true
-//  flags: Qt.Popup | Qt.WA_X11NetWmWindowTypeMenu
   width: 400
   height: 300
   title: "Pouch"
@@ -197,5 +196,14 @@ Window {
   }
 
   Component.onCompleted: {
+    print(Process.env.BLUSHER_PLATFORM)
+    print(Process.app)
   }
+
+//  Connections {
+//    target: Process.app
+//    onObjectNameChanged: {
+//      print("changed!");
+//    }
+//  }
 }
