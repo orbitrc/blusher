@@ -29,6 +29,7 @@ Item {
   // States
   readonly property alias menuOpen: internal.menuOpen
 
+  // References
   property alias overlay: overlayLoader.item
 
   //====================
@@ -47,6 +48,8 @@ Item {
 
     property string appName: ""
     property string appVersion: ""
+
+    property var onAppCursorChanged: function(cursor) {}
     property var app: QtObject {
       readonly property alias name: internal.appName
       property string displayName: ""
@@ -57,7 +60,7 @@ Item {
       function quit() { Qt.exit(0); }
 
       onCursorChanged: {
-        Process.app.objectName = "BLUSHER_CURSOR_RESIZE_LEFT_RIGHT"
+        internal.onAppCursorChanged(this.cursor);
       }
     }
   }
@@ -77,6 +80,16 @@ Item {
     property Image goNext: Image {
       source: "../../../icons/standalone/scalable/actions/go-next.svg"
     }
+
+    property Image goHome: Image {
+      source: "../../../icons/standalone/scalable/actions/go-home.svg"
+    }
+    property Image emblemDocuments: Image {
+      source: "../../../icons/standalone/scalable/emblems/emblem-documents.svg"
+    }
+    property Image emblemDownloads: Image {
+      source: "../../../icons/standalone/scalable/emblems/emblem-downloads.svg"
+    }
   }
   QtObject {
     id: _fonts
@@ -86,7 +99,7 @@ Item {
     id: _menus
     property Menu applicationMenu: Menu {
       type: Menu.MenuType.Submenu
-      title: "Application"
+      title: DesktopEnvironment.app.name;
       MenuItem {
         title: "Quit"
         action: DesktopEnvironment.app.quit
@@ -295,6 +308,13 @@ Item {
     }
 
     internal.menuDelegate = deModule.menuDelegate;
+
+    // Setup signal handlers.
+    internal.onAppCursorChanged = deModule.onAppCursorChanged;
+
+    // Setup app object.
+    internal.appName = Process.env.BLUSHER_APP_NAME;
+    internal.appVersion = Process.env.BLUSHER_APP_VERSION;
   }
 
   //================================

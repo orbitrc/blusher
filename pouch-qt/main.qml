@@ -1,7 +1,10 @@
 import QtQuick 2.0
+import QtQuick.Layouts 1.12
 
 import Blusher 0.1
 import Blusher.DesktopEnvironment 0.1
+
+import "src/components"
 
 Window {
   visible: true
@@ -105,17 +108,23 @@ Window {
       id: sidebar
       color: "#ff8080"
       width: 160
-      Button {
-        width: 100
-        height: 50
-        title: "Hide"
-        onClicked: {
-          parent.visible = false
+
+      ColumnLayout {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        spacing: 0
+        SidebarItem {
+          title: "Home"
+          icon: DesktopEnvironment.icons.goHome
         }
-      }
-      TestItem {
-        testProp: testMenu
-        y: 100
+        SidebarItem {
+          title: "Documents"
+          icon: DesktopEnvironment.icons.emblemDocuments
+        }
+        SidebarItem {
+          title: "Downloads"
+          icon: DesktopEnvironment.icons.emblemDownloads
+        }
       }
     }
     Rectangle {
@@ -157,6 +166,15 @@ Window {
           alert.visible = true
         }
       }
+      Button {
+        width: 100
+        height: 50
+        x: 200
+        title: "Hide"
+        onClicked: {
+          sidebar.visible = false
+        }
+      }
     }
 
     Component.onCompleted: {
@@ -196,14 +214,5 @@ Window {
   }
 
   Component.onCompleted: {
-    print(Process.env.BLUSHER_PLATFORM)
-    print(Process.app)
   }
-
-//  Connections {
-//    target: Process.app
-//    onObjectNameChanged: {
-//      print("changed!");
-//    }
-//  }
 }

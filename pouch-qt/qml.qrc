@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>main.cpp</file>
+        <file>src/components/SidebarItem.qml</file>
     </qresource>
 </RCC>

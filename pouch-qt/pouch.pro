@@ -34,6 +34,7 @@ QML2_IMPORT_PATH +=
 QML_DESIGNER_IMPORT_PATH =
 
 DEFINES += BLUSHER_APP_VERSION=\\\"$$VERSION\\\" \
+        BLUSHER_APP_NAME=\\\"Pouch\\\" \
         BLUSHER_PATH=\\\"$$PWD/../lib/blusher/qml\\\"
         # BLUSHER_PATH=\\\"/usr/lib/blusher/qml\\\"
 
