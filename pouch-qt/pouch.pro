@@ -35,7 +35,8 @@ QML_DESIGNER_IMPORT_PATH =
 
 DEFINES += BLUSHER_APP_VERSION=\\\"$$VERSION\\\" \
         BLUSHER_APP_NAME=\\\"Pouch\\\" \
-        BLUSHER_PATH=\\\"$$PWD/../lib/blusher/qml\\\"
+        BLUSHER_PATH=\\\"$$PWD/../lib/blusher/qml\\\" \
+        BLUSHER_DEBUG
         # BLUSHER_PATH=\\\"/usr/lib/blusher/qml\\\"
 
 # Default rules for deployment.
@@ -46,7 +47,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     ../lib/blusher/qml/Blusher/Button.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/DesktopEnvironment.qml \
+    ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/MenuItemStyler.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/qmldir \
+    ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/MenuBarMenuDelegate.qml \
+    ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/PopUpMenuDelegate.qml \
+    ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/MenuItemDelegate.qml \
     ../lib/blusher/qml/Blusher/Menu.qml \
     ../lib/blusher/qml/Blusher/MenuItem.qml \
     ../lib/blusher/qml/Blusher/MenuItemView.qml \

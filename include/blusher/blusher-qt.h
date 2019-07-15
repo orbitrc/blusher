@@ -40,6 +40,9 @@ public:
         process_env.insert("BLUSHER_DE_MODULE_PATH", "");
         process_env.insert("BLUSHER_APP_NAME", BLUSHER_APP_NAME);
         process_env.insert("BLUSHER_APP_VERSION", BLUSHER_APP_VERSION);
+#ifdef BLUSHER_DEBUG
+        process_env.insert("BLUSHER_DEBUG", true);
+#endif
         process.insert("env", process_env);
         process.insert("app", QVariant::fromValue(this));
 

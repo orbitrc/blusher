@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.12
 
 import ".."
+import "Standalone" as Standalone
 
 Item {
   id: root
@@ -100,6 +101,10 @@ Item {
     property Menu applicationMenu: Menu {
       type: Menu.MenuType.Submenu
       title: DesktopEnvironment.app.name;
+      MenuItem {
+        title: "Preferences..."
+      }
+
       MenuItem {
         title: "Quit"
         action: DesktopEnvironment.app.quit
@@ -199,6 +204,42 @@ Item {
     }
   }
 
+  // Debug panel component
+  Component {
+    id: debugPanelComponent
+    QtQuickWindow.Window {
+      id: _debugPanel
+      flags: Qt.Popup
+
+      width: 300
+      height: 300
+      visible: true
+
+      color: "#000000"
+      Repeater {
+        model: [
+          'menuOpen: ' + root.menuOpen,
+          'menuBarMenu: ' + overlayLoader.menuBarMenu,
+          '  - focusedItemIndex: ' + (overlayLoader.menuBarMenu ? overlayLoader.menuBarMenu.focusedItemIndex : 'none'),
+          'overlayLoader.menus: ' + overlayLoader.menus,
+          '  - length: ' + overlayLoader.menus.length,
+          '  - last menu: ' + ((overlayLoader.menus.length > 0) ? overlayLoader.menus[overlayLoader.menus.length - 1].title : 'none'),
+          'applicationMenu',
+          '  - opened: ' + root.menus.applicationMenu.opened
+        ]
+        Text {
+          y: index * 16
+          text: modelData
+          color: "white"
+        }
+      }
+    }
+  }
+
+  //================
+  // Items
+  //================
+
   Loader {
     id: overlayLoader
     property list<Menu> menus
@@ -215,6 +256,13 @@ Item {
     }
   }
 
+  Loader {
+    id: debugPanelLoader
+  }
+
+  //==========================
+  // Signal handlers
+  //==========================
 
   onMenuOpened: {
     if (!this.menuOpen) {
@@ -230,10 +278,15 @@ Item {
       // Give global focus to the root window.
       root.parent.Window.window.giveGlobalFocus()
     } else {
-      const lastOpenedMenu = overlayLoader.menus[overlayLoader.menus.length - 1];
-      if (menu.supermenu === lastOpenedMenu) {
-      } else if (root._isMenuDescendantOf(lastOpenedMenu, menu.supermenu)) {
-        root._popMenu();
+      if (menu === DesktopEnvironment.menus.applicationMenu ||
+        menu.supermenu.type === Menu.MenuType.MenuBarMenu) {
+        overlayLoader.menus = [];
+      } else {
+        const lastOpenedMenu = overlayLoader.menus[overlayLoader.menus.length - 1];
+        if (menu.supermenu === lastOpenedMenu) {
+        } else if (root._isMenuDescendantOf(lastOpenedMenu, menu.supermenu)) {
+          root._popMenu();
+        }
       }
     }
     overlayLoader.menus.push(menu);
@@ -255,6 +308,11 @@ Item {
   Component.onCompleted: {
     print('[DesktopEnvironment.onCompleted]')
     root._initDesktopEnvironmentModule();
+
+    if (Process.env.BLUSHER_DEBUG === true) {
+      print('[DesktopEnvironment.onCompleted] BLUSHER_DEBUG on.');
+      debugPanelLoader.sourceComponent = debugPanelComponent;
+    }
   }
 
   Component.onDestruction: {
@@ -348,7 +406,7 @@ Item {
   // Standalone menu delegate component.
   Component {
     id: standaloneMenuDelegate
-    Rectangle {
+    Item {
       id: root
 
       //===================
@@ -356,190 +414,15 @@ Item {
       //===================
       property Menu menu: null
 
-      //================
-      // Style
-      //================
-      implicitHeight: itemsView.implicitHeight
-      implicitWidth: itemsView.implicitWidth
-      width: this.implicitWidth
-
-      Rectangle {
-        id: _menuStyler
-        anchors.fill: parent
-        color: "#d6d2d0"
-        border.width: root.menu.type === Menu.MenuType.MenuBarMenu ? 0 : 1
-        border.color: "#ddffffff"
-        radius: root.menu.type === Menu.MenuType.MenuBarMenu ? 0 : 3
-      }
-      DropShadow {
-        visible: root.menu.type !== Menu.MenuType.MenuBarMenu
-        anchors.fill: _menuStyler
-        verticalOffset: 0
-        radius: 7.0
-        color: "#000000"
-        source: _menuStyler
+      Loader {
+        id: _loader
       }
 
-      GridLayout {
-        id: itemsView
-        property alias menuItemViewList: menuItemViewList
-
-        rows: (root.menu.type === Menu.MenuType.MenuBarMenu) ? 1 : -1
-        columns: (root.menu.type !== Menu.MenuType.MenuBarMenu) ? 1 : -1
-        rowSpacing: 0
-        columnSpacing: 0
-        // Menu items
-        Repeater {
-          model: root.menu
-          id: menuItemViewList
-          Item {
-            implicitWidth: _text.implicitWidth
-            height: 30
-
-            Layout.fillWidth: true  // Fill when pop-up menu item.
-            MouseArea {
-              anchors.fill: parent
-              hoverEnabled: true
-              Rectangle {
-                id: _menuItemStyler
-                visible: root.menu.items[index].focused
-                anchors.fill: parent
-                anchors.margins: 2
-                border.width: 0
-                color: "#bbb4b1"
-                radius: 3
-              }
-              Text {
-                id: _text
-                text: root.menu.items[index].title
-                anchors.verticalCenter: parent.verticalCenter
-                rightPadding: 7.0   // 5.0 + styler's margin
-                leftPadding: 7.0    // 5.0 + styler's margin
-                font.pointSize: 14 * DesktopEnvironment.pixelsPerDp
-              }
-              Item {
-                id: _separator
-                visible: false
-                height: 2
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                Rectangle {
-                  height: 1
-                  anchors.left: parent.left; anchors.right: parent.right;
-                  anchors.top: parent.top
-                  border.width: 0
-                  gradient: Gradient {
-                    orientation: Gradient.Horizontal
-                    GradientStop { position: 0.0; color: "#00000000"; }
-                    GradientStop { position: 0.5; color: "grey"; }
-                    GradientStop { position: 1.0; color: "#00000000"; }
-                  }
-                }
-                Rectangle {
-                  height: 1
-                  anchors.left: parent.left; anchors.right: parent.right;
-                  anchors.bottom: parent.bottom
-                  border.width: 0
-                  gradient: Gradient {
-                    orientation: Gradient.Horizontal
-                    GradientStop { position: 0.0; color: "#00000000"; }
-                    GradientStop { position: 0.5; color: "#ffffff"; }
-                    GradientStop { position: 1.0; color: "#00000000"; }
-                  }
-                }
-              }
-
-              onClicked: {
-                const menuItem = root.menu.items[index];
-
-                // If menu bar menu.
-                if (root.menu.type === Menu.MenuType.MenuBarMenu) {
-                  if (root.menu.focusedItemIndex > -1) {
-                    // Menu bar menu already activated.
-                    root.menu.focusItem(-1);
-                    DesktopEnvironment.menuClosed()
-                  } else {
-                    // Menu bar menu not activated before.
-                    root.menu.focusItem(index);
-                    if (menuItem.hasSubmenu()) {
-                      menuItem.submenu.open(Window.window.contentItem)
-                    }
-                  }
-                }
-                // If regular menu.
-                if (root.menu.type !== Menu.MenuType.MenuBarMenu) {
-                  if (!menuItem.hasSubmenu()) {
-                    print('MenuItem.action')
-                  }
-                  if (menuItem.action !== null) {
-                    menuItem.action();
-                  }
-                }
-              }
-
-              onEntered: {
-                const menuItem = root.menu.items[index];
-
-                if (menuItem.isMenuBarMenuItem()) {
-                  root._menuBarMenuItemEntered(index);
-                } else {
-                  if (menuItem.separator) {
-                    root.menu.focusItem(-1);
-                  } else {
-                    root.menu.focusItem(index);
-                  }
-                  if (menuItem.hasSubmenu() && !menuItem.submenu.opened) {
-                    menuItem.submenu.open(parent)
-                  }
-                }
-              }
-              onExited: {
-                const menuItem = root.menu.items[index];
-
-                if (menuItem.isMenuBarMenuItem()) {
-                  root._menuBarMenuItemExited();
-                } else {
-                  // If submenu is opened, don't take focus of this item.
-                  if (menuItem.hasSubmenu() && menuItem.submenu.opened) {
-                    return;
-                  }
-                  root.menu.focusItem(-1);
-                }
-              }
-            } // MouseArea
-
-            Component.onCompleted: {
-              const menuItem = root.menu.items[index];
-
-              if (menuItem.separator) {
-                this.Layout.maximumHeight = 10;
-                _separator.visible = true
-              }
-            }
-          }
-        }
-      }
-
-
-      function _menuBarMenuItemEntered(index) {
-        const menuItem = root.menu.items[index];
-
-        // Menu bar menu already activated.
-        if (root.menu.focusedItemIndex > -1 && root.menu.focusedItemIndex !== index) {
-          root.menu.focusItem(index);
-          if (menuItem.hasSubmenu()) {
-            menuItem.submenu.open(Window.window.contentItem)
-          }
-        }
-      }
-
-      function _menuBarMenuItemExited(index) {
-        const menuItem = root.menu.items[index];
-
-        // Prevent menu bar menu losing focus.
-        if (root.menu.focusedItemIndex > -1) {
-          return;
+      onMenuChanged: {
+        if (root.menu.type === Menu.MenuType.MenuBarMenu) {
+          _loader.setSource('Standalone/MenuBarMenuDelegate.qml', { 'menu': root.menu });
+        } else {
+          _loader.setSource('Standalone/PopUpMenuDelegate.qml', { 'menu': root.menu });
         }
       }
     }

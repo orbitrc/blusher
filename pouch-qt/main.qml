@@ -17,10 +17,10 @@ Window {
     type: Menu.MenuType.MenuBarMenu
     title: "MainMenu"
 
-    MenuItem {
-      title: DesktopEnvironment.menus.applicationMenu.title
-      submenu: DesktopEnvironment.menus.applicationMenu
-    }
+//    MenuItem {
+//      title: DesktopEnvironment.menus.applicationMenu.title
+//      submenu: DesktopEnvironment.menus.applicationMenu
+//    }
     MenuItem {
       title: "File"
       submenu: Menu {
