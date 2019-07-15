@@ -8,10 +8,13 @@ ListElement {
   // Public Properties
   //=========================
   property string title: ""
+  property Image image: null
   property bool separator: false
   property Menu submenu: null
   property Menu parentMenu: null
   property var action: null
+  property int shortcut: 0
+  property bool checked: false
 
   //=========================
   // Public Properties (Read-only for external)

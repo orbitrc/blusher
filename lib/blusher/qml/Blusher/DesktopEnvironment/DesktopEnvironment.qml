@@ -19,6 +19,14 @@ Item {
     ResizeUpDown
   }
 
+  enum KeyModifier {
+    None    = 0x00000000, // 00000000 00000000 00000000 00000000
+    Shift   = 0x01000000, // 00000001 00000000 00000000 00000000
+    Control = 0x02000000, // 00000010 00000000 00000000 00000000
+    Alt     = 0x04000000, // 00000100 00000000 00000000 00000000
+    Super   = 0x08000000  // 00001000 00000000 00000000 00000000
+  }
+
   //===================
   // Properties
   //===================
@@ -38,7 +46,6 @@ Item {
   //====================
   QtObject {
     id: internal
-    property string msg: "Hi!"
     property bool menuOpen: false
     property real pixelsPerDp: 1
 
@@ -91,6 +98,11 @@ Item {
     property Image emblemDownloads: Image {
       source: "../../../icons/standalone/scalable/emblems/emblem-downloads.svg"
     }
+
+    // Non-standard icons.
+    property Image checked: Image {
+      source: "../../../icons/standalone/scalable/status/checked.svg"
+    }
   }
   QtObject {
     id: _fonts
@@ -100,7 +112,7 @@ Item {
     id: _menus
     property Menu applicationMenu: Menu {
       type: Menu.MenuType.Submenu
-      title: DesktopEnvironment.app.name;
+      title: "Application"
       MenuItem {
         title: "Preferences..."
       }
@@ -108,6 +120,7 @@ Item {
       MenuItem {
         title: "Quit"
         action: DesktopEnvironment.app.quit
+        shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_Q
       }
     }
   }
@@ -310,7 +323,7 @@ Item {
     root._initDesktopEnvironmentModule();
 
     if (Process.env.BLUSHER_DEBUG === true) {
-      print('[DesktopEnvironment.onCompleted] BLUSHER_DEBUG on.');
+      print('[DesktopEnvironment] BLUSHER_DEBUG is on.');
       debugPanelLoader.sourceComponent = debugPanelComponent;
     }
   }
@@ -325,10 +338,99 @@ Item {
   //=============
 
   // Public methods
-  function setMsg(text) {
-    internal.msg = text
-  }
+  function shortcutToString(shortcut) {
+    let text = '';
+    const modifiers = shortcut & 0xff000000;
+    const key = shortcut & 0x00ffffff;
 
+    if (modifiers === DesktopEnvironment.KeyModifier.Shift) {
+      text += 'Shift';
+    } else if (modifiers === DesktopEnvironment.KeyModifier.Control) {
+      text += 'Ctrl';
+    }
+
+    switch (key) {
+    case Qt.Key_A:
+      text += '+A';
+      break;
+    case Qt.Key_B:
+      text += '+B';
+      break;
+    case Qt.Key_C:
+      text += '+C';
+      break;
+    case Qt.Key_D:
+      text += '+D';
+      break;
+    case Qt.Key_E:
+      text += '+E';
+      break;
+    case Qt.Key_F:
+      text += '+F';
+      break;
+    case Qt.Key_G:
+      text += '+G';
+      break;
+    case Qt.Key_H:
+      text += '+H';
+      break;
+    case Qt.Key_I:
+      text += '+I';
+      break;
+    case Qt.Key_J:
+      text += '+J';
+      break;
+    case Qt.Key_K:
+      text += '+K';
+      break;
+    case Qt.Key_L:
+      text += '+L';
+      break;
+    case Qt.Key_M:
+      text += '+M';
+      break;
+    case Qt.Key_N:
+      text += '+N';
+      break;
+    case Qt.Key_O:
+      text += '+O';
+      break;
+    case Qt.Key_P:
+      text += '+P';
+      break;
+    case Qt.Key_Q:
+      text += '+Q';
+      break;
+    case Qt.Key_R:
+      text += '+R';
+      break;
+    case Qt.Key_S:
+      text += '+S';
+      break;
+    case Qt.Key_T:
+      text += '+T';
+      break;
+    case Qt.Key_U:
+      text += '+U';
+      break;
+    case Qt.Key_W:
+      text += '+W';
+      break;
+    case Qt.Key_X:
+      text += '+X';
+      break;
+    case Qt.Key_Y:
+      text += '+Y';
+      break;
+    case Qt.Key_Z:
+      text += '+Z';
+      break;
+    default:
+      break;
+    }
+
+    return text;
+  }
 
   // Private methods
   function _openSubmenu(menu) {

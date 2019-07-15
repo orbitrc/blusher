@@ -9,7 +9,9 @@ Item {
 
   property MenuItem menuItem: null
 
-  implicitWidth: _text.implicitWidth
+  implicitWidth: ((!root.menuItem.isMenuBarMenuItem() ? _checked.width : 0)
+                  + _text.implicitWidth
+                  + (!root.menuItem.isMenuBarMenuItem() ? _shortcutText.implicitWidth : 0))
   height: 30
 
   Layout.fillWidth: true  // Fill when pop-up menu item.
@@ -22,14 +24,30 @@ Item {
       anchors.fill: parent
       visible: root.menuItem.focused
     }
+    Image {
+      id: _checked
+      anchors.verticalCenter: parent.verticalCenter
+      source: (root.menuItem.checked) ? DesktopEnvironment.icons.checked.source : ''
+      height: 24
+      width: 24
+    }
     Text {
       id: _text
       text: root.menuItem.title
       anchors.verticalCenter: parent.verticalCenter
-      rightPadding: 7.0   // 5.0 + styler's margin
-      leftPadding: 7.0    // 5.0 + styler's margin
+      rightPadding: 7.0       // 5.0 + styler's margin
+      leftPadding: (root.menuItem.isMenuBarMenuItem()) ? 7.0 : 7.0 + 24   // 5.0 + styler's margin + checked-image width
       font.pointSize: 14 * DesktopEnvironment.pixelsPerDp
     }
+    Text {
+      id: _shortcutText
+      text: DesktopEnvironment.shortcutToString(root.menuItem.shortcut)
+      anchors.verticalCenter: parent.verticalCenter
+      anchors.right: parent.right
+      rightPadding: 7.0
+      font.pointSize: 14 * DesktopEnvironment.pixelsPerDp
+    }
+
     Item {
       id: _separator
       visible: false
