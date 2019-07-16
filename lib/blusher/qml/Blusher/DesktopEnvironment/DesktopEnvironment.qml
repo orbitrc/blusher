@@ -123,6 +123,16 @@ Item {
         shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_Q
       }
     }
+    property Menu textEditMenu: Menu {
+      type: Menu.MenuType.ContextualMenu
+      title: "Text"
+      MenuItem {
+        title: "Copy"
+      }
+      MenuItem {
+        title: "Paste"
+      }
+    }
   }
 
   //==================
@@ -412,6 +422,9 @@ Item {
       break;
     case Qt.Key_U:
       text += '+U';
+      break;
+    case Qt.Key_V:
+      text += '+V';
       break;
     case Qt.Key_W:
       text += '+W';

@@ -17,10 +17,6 @@ Window {
     type: Menu.MenuType.MenuBarMenu
     title: "MainMenu"
 
-//    MenuItem {
-//      title: DesktopEnvironment.menus.applicationMenu.title
-//      submenu: DesktopEnvironment.menus.applicationMenu
-//    }
     MenuItem {
       title: "File"
       submenu: Menu {
@@ -55,9 +51,11 @@ Window {
         title: "Edit"
         MenuItem {
           title: "Copy"
+          shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_C
         }
         MenuItem {
           title: "Paste"
+          shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_V
         }
       }
     }
