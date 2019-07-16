@@ -37,7 +37,7 @@ Item {
       anchors.verticalCenter: parent.verticalCenter
       rightPadding: 7.0       // 5.0 + styler's margin
       leftPadding: (root.menuItem.isMenuBarMenuItem()) ? 7.0 : 7.0 + 24   // 5.0 + styler's margin + checked-image width
-      font.pointSize: 14 * DesktopEnvironment.pixelsPerDp
+      font.pixelSize: 14 * DesktopEnvironment.pixelsPerDp
     }
     Text {
       id: _shortcutText
@@ -45,7 +45,7 @@ Item {
       anchors.verticalCenter: parent.verticalCenter
       anchors.right: parent.right
       rightPadding: 7.0
-      font.pointSize: 14 * DesktopEnvironment.pixelsPerDp
+      font.pixelSize: 14 * DesktopEnvironment.pixelsPerDp
     }
 
     Item {
