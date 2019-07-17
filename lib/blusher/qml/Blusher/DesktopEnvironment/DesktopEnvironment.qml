@@ -153,19 +153,23 @@ Item {
     id: menuViewComponent
     Repeater {
       model: overlayLoader.menus.length
-      Loader {
-        sourceComponent: root.menuDelegate
+      delegate: Standalone.PopUpMenuDelegate {
+        menu: overlayLoader.menus[index]
+      }
 
-        Component.onCompleted: {
-          this.item.menu = overlayLoader.menus[index]
-          this.x = root.parent.Window.window.x + (index * 100)
-          this.y = root.parent.Window.window.y + 30
-        }
-
-        onVisibleChanged: {
-          if (this.visible === false) {
-            root._popMenu()
-          }
+      onItemAdded: {
+        if (item.menu.supermenu === null &&
+            item.menu.type === Menu.MenuType.ContextualMenu) {
+          item.x = root.overlay.mouseX + 1;
+          item.y = root.overlay.mouseY;
+        } else if (item.menu === DesktopEnvironment.menus.applicationMenu ||
+            item.menu.supermenu.type === Menu.MenuType.MenuBarMenu) {
+          item.x = root.parent.Window.window.x;
+          item.y = root.parent.Window.window.y + 30;
+        } else {
+          const parentMenuDelegate = this.itemAt(index - 1);
+          item.x = parentMenuDelegate.x + parentMenuDelegate.width + 1;
+          item.y = parentMenuDelegate.y;
         }
       }
     }
@@ -179,15 +183,28 @@ Item {
 
       property alias overlayItemLoader: overlayItemLoader
 
+      property int mouseX: 0
+      property int mouseY: 0
+
       visible: true
       flags: Qt.Popup
       color: "#11330000" // "#00000000"
 
       MouseArea {
+        id: _mouseArea
+
         anchors.fill: parent
+        hoverEnabled: true
 
         onClicked: {
           root.menuClosed()
+        }
+        onEntered: {
+          _window.mouseX = this.mouseX;
+          _window.mouseY = this.mouseY;
+          if (overlayLoader.menus.length > 0) {
+            root.overlay.renderMenus();
+          }
         }
 
         MouseArea {
@@ -211,6 +228,7 @@ Item {
       }
 
       Component.onCompleted: {
+        // Make overlay cover whole screen.
         this.width = QtQuickWindow.Screen.width
         this.height = QtQuickWindow.Screen.height
 
@@ -223,6 +241,12 @@ Item {
         }
         _menuBarLoader.sourceComponent = root.menuDelegate;
         _menuBarLoader.item.menu = overlayLoader.menuBarMenu;
+      }
+
+      function renderMenus() {
+        print('renderMenus');
+        overlayItemLoader.sourceComponent = undefined;
+        overlayItemLoader.sourceComponent = menuViewComponent;
       }
     }
   }
@@ -239,21 +263,61 @@ Item {
       visible: true
 
       color: "#000000"
-      Repeater {
-        model: [
-          'menuOpen: ' + root.menuOpen,
-          'menuBarMenu: ' + overlayLoader.menuBarMenu,
-          '  - focusedItemIndex: ' + (overlayLoader.menuBarMenu ? overlayLoader.menuBarMenu.focusedItemIndex : 'none'),
-          'overlayLoader.menus: ' + overlayLoader.menus,
-          '  - length: ' + overlayLoader.menus.length,
-          '  - last menu: ' + ((overlayLoader.menus.length > 0) ? overlayLoader.menus[overlayLoader.menus.length - 1].title : 'none'),
-          'applicationMenu',
-          '  - opened: ' + root.menus.applicationMenu.opened
-        ]
-        Text {
-          y: index * 16
-          text: modelData
-          color: "white"
+      opacity: 0.8
+      Rectangle {
+        id: _debugDesktopEnvironment
+        width: parent.width
+        height: 150
+        anchors.top: parent.top
+        anchors.left: parent.left; anchors.right: parent.right
+        anchors.margins: 2
+        border.color: "white"
+        color: "transparent"
+        Repeater {
+          model: [
+            'menuOpen: ' + root.menuOpen,
+            'menuBarMenu: ' + overlayLoader.menuBarMenu,
+            '  - focusedItemIndex: ' + (overlayLoader.menuBarMenu ? overlayLoader.menuBarMenu.focusedItemIndex : 'none'),
+            'overlayLoader.menus: ' + overlayLoader.menus,
+            '  - length: ' + overlayLoader.menus.length,
+            '  - last menu: ' + ((overlayLoader.menus.length > 0) ? overlayLoader.menus[overlayLoader.menus.length - 1].title : 'none'),
+            'applicationMenu',
+            '  - opened: ' + root.menus.applicationMenu.opened
+          ]
+          Text {
+            y: index * 16
+            text: modelData
+            color: "white"
+          }
+        }
+      }
+      Rectangle {
+        id: _debugOverlay
+        width: parent.width
+        height: 150
+        anchors.top: _debugDesktopEnvironment.bottom
+        anchors.left: parent.left; anchors.right: parent.right
+        anchors.margins: 2
+        border.color: "red"
+        color: "transparent"
+        Repeater {
+          model: [
+            'overlay.visible: ' + (root.overlay ? root.overlay.visible : ''),
+            'overlay item: ' + (root.overlay ? root.overlay.overlayItemLoader.item : '')
+          ]
+          Text {
+            y: index * 16
+            text: modelData
+            color: "white"
+          }
+        }
+        Repeater {
+          model: (root.menuOpen && root.overlay.overlayItemLoader.item ? root.overlay.overlayItemLoader.item.count : 0)
+          Text {
+            y: (50) + (index * 16)
+            text: root.overlay.overlayItemLoader.item.itemAt(index).menu.title
+            color: "white"
+          }
         }
       }
     }
@@ -267,16 +331,6 @@ Item {
     id: overlayLoader
     property list<Menu> menus
     property Menu menuBarMenu
-
-    onMenusChanged: {
-      const overlayItemLoader = root.overlay.overlayItemLoader
-
-      overlayItemLoader.sourceComponent = undefined
-      overlayItemLoader.sourceComponent = menuViewComponent
-
-      overlayItemLoader.item.x = root.parent.Window.window.x
-      overlayItemLoader.item.y = root.parent.Window.window.y + 30
-    }
   }
 
   Loader {
@@ -452,6 +506,7 @@ Item {
 
   function _popMenu() {
     let newMenus = []
+    overlayLoader.menus[overlayLoader.menus.length - 1].close();
     for (let i = 0; i < overlayLoader.menus.length - 1; ++i) {
       newMenus.push(overlayLoader.menus[i])
     }
