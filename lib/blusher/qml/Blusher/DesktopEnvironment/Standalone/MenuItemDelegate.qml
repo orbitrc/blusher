@@ -11,7 +11,7 @@ Item {
 
   implicitWidth: ((!root.menuItem.isMenuBarMenuItem() ? _checked.width : 0)
                   + _text.implicitWidth
-                  + (!root.menuItem.isMenuBarMenuItem() ? _shortcutText.implicitWidth : 0))
+                  + (!root.menuItem.isMenuBarMenuItem() ? _info.width : 0))
   height: 30
 
   Layout.fillWidth: true  // Fill when pop-up menu item.
@@ -24,12 +24,24 @@ Item {
       anchors.fill: parent
       visible: root.menuItem.focused
     }
-    Image {
+    Item {
       id: _checked
+
+      visible: (root.menuItem.checked)
       anchors.verticalCenter: parent.verticalCenter
-      source: (root.menuItem.checked) ? DesktopEnvironment.icons.checked.source : ''
+      anchors.left: parent.left
+      anchors.leftMargin: 3
       height: 24
       width: 24
+      children: [
+        DesktopEnvironment.icons.checked,
+        this.graphicalDebugRect
+      ]
+      property Rectangle graphicalDebugRect: Rectangle {
+        visible: false
+        anchors.fill: parent
+        color: "#44ff0000"
+      }
     }
     Text {
       id: _text
@@ -39,13 +51,38 @@ Item {
       leftPadding: (root.menuItem.isMenuBarMenuItem()) ? 7.0 : 7.0 + 24   // 5.0 + styler's margin + checked-image width
       font.pixelSize: 14 * DesktopEnvironment.pixelsPerDp
     }
-    Text {
-      id: _shortcutText
-      text: DesktopEnvironment.shortcutToString(root.menuItem.shortcut)
+    Item {
+      id: _info
+
+      visible: (!root.menuItem.isMenuBarMenuItem()
+                && (root.menuItem.hasSubmenu() || this.shortcutText.text !== ''))
+      width: (this.shortcutText.text !== '' ? this.shortcutText.implicitWidth : 24)
+      height: 24 * DesktopEnvironment.pixelsPerDp
       anchors.verticalCenter: parent.verticalCenter
       anchors.right: parent.right
-      rightPadding: 7.0
-      font.pixelSize: 14 * DesktopEnvironment.pixelsPerDp
+      anchors.rightMargin: 3
+      Rectangle {
+        visible: false
+        anchors.fill: parent
+        color: "#44ff0000"
+      }
+
+      Component.onCompleted: {
+        if (root.menuItem.isMenuBarMenuItem()) {
+          return;
+        }
+
+        if (this.shortcutText.text !== '') {
+          this.children.push(this.shortcutText);
+        }
+        if (root.menuItem.hasSubmenu()) {
+          this.children.push(DesktopEnvironment.icons.goNext);
+        }
+      }
+      property Text shortcutText: Text {
+        text: DesktopEnvironment.shortcutToString(root.menuItem.shortcut)
+        font.pixelSize: 14 * DesktopEnvironment.pixelsPerDp
+      }
     }
 
     Item {

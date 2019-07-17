@@ -60,6 +60,21 @@ Window {
       }
     }
     MenuItem {
+      title: "View"
+      submenu: Menu {
+        type: Menu.MenuType.Submenu
+        title: "View"
+        MenuItem {
+          title: "Sidebar"
+          checked: true
+          action: function() {
+            this.checked = !this.checked;
+          }
+        }
+      }
+    }
+
+    MenuItem {
       title: "Help"
     }
   }
