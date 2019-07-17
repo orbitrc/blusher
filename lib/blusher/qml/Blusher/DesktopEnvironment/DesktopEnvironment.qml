@@ -201,9 +201,6 @@ Item {
         overlayLoader.setSource('./Standalone/Overlay.qml');
       }
       root.overlay.visible = true
-
-      // Give global focus to the root window.
-      root.parent.Window.window.giveGlobalFocus()
     } else {
       if (menu === DesktopEnvironment.menus.applicationMenu ||
         menu.supermenu.type === Menu.MenuType.MenuBarMenu) {

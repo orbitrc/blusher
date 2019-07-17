@@ -85,6 +85,50 @@ ListModel {
     if (index > -1) {
       root.items[root.focusedItemIndex].focused = true;
     }
+
+    if (index > -1 && root.items[index].separator) {
+      print('[Menu] WARNING: Focused item is separator!');
+    }
+  }
+
+  function focusFirstItem() {
+    root.focusItem(0);
+  }
+
+  function focusNextItem() {
+    if (root.focusedItemIndex === -1) {
+      return;
+    }
+    let idx = root.focusedItemIndex;
+    if ((idx + 1) >= root.items.length) {
+      return;
+    }
+
+    do {
+      ++idx;
+    } while (root.items[idx].separator)
+
+    root.focusItem(idx);
+  }
+
+  function focusPreviousItem() {
+    if (root.focusedItemIndex === -1) {
+      return;
+    }
+    let idx = root.focusedItemIndex;
+    if (idx === 0) {
+      return;
+    }
+
+    do {
+      --idx;
+    } while (root.items[idx].separator)
+
+    root.focusItem(idx);
+  }
+
+  function focusLastItem() {
+    root.focusItem(root.items.length - 1);
   }
 
 }

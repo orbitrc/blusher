@@ -17,7 +17,7 @@ QtQuickWindow.Window {
 
   visible: true
   flags: Qt.Popup
-  color: "#11330000" // "#00000000"
+  color: "#00000000" // "#00000000"
 
   MouseArea {
     id: _mouseArea
@@ -54,9 +54,55 @@ QtQuickWindow.Window {
     Loader {
       id: overlayItemLoader
     }
+
+    FocusScope {
+      focus: true
+
+      Keys.onPressed: {
+        let lastMenu = null;
+
+        switch (event.key) {
+        case Qt.Key_Escape:
+          if (DesktopEnvironment.menuOpen) {
+            DesktopEnvironment.menuClosed();
+          }
+          break;
+
+        case Qt.Key_Down:
+          if (DesktopEnvironment.menuOpen) {
+            lastMenu = root.menus[root.menus.length - 1];
+            if (lastMenu.focusedItemIndex === -1) {
+              lastMenu.focusFirstItem();
+            } else {
+              lastMenu.focusNextItem();
+            }
+          }
+          break;
+
+        case Qt.Key_Up:
+          if (DesktopEnvironment.menuOpen) {
+            lastMenu = root.menus[root.menus.length - 1];
+            if (lastMenu.focusedItemIndex === -1) {
+              lastMenu.focusLastItem();
+            } else {
+              lastMenu.focusPreviousItem();
+            }
+          }
+          break;
+
+        case Qt.Key_Right:
+          break;
+
+        default:
+          break;
+        }
+      }
+    }
   }
 
   Component.onCompleted: {
+    root.requestActivate();
+
     // Make overlay cover whole screen.
     this.width = QtQuickWindow.Screen.width
     this.height = QtQuickWindow.Screen.height

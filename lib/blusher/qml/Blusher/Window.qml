@@ -83,7 +83,6 @@ QtQuickWindow.Window {
         break;
       }
     }
-
   }
 
   //=======================
