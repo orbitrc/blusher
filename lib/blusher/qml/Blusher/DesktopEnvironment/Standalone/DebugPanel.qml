@@ -4,7 +4,7 @@ import QtQuick.Window 2.12
 import ".."       // Blusher.DesktopEnvironment
 
 Window {
-  id: _debugPanel
+  id: root
   flags: Qt.Popup
 
   width: 300
@@ -13,6 +13,7 @@ Window {
 
   color: "#000000"
   opacity: 0.8
+
   Rectangle {
     id: _debugDesktopEnvironment
     width: parent.width
@@ -25,11 +26,11 @@ Window {
     Repeater {
       model: [
         'menuOpen: ' + DesktopEnvironment.menuOpen,
-        'menuBarMenu: ' + overlayLoader.menuBarMenu,
-        '  - focusedItemIndex: ' + (overlayLoader.menuBarMenu ? overlayLoader.menuBarMenu.focusedItemIndex : 'none'),
-        'overlayLoader.menus: ' + overlayLoader.menus,
-        '  - length: ' + overlayLoader.menus.length,
-        '  - last menu: ' + ((overlayLoader.menus.length > 0) ? overlayLoader.menus[overlayLoader.menus.length - 1].title : 'none'),
+        'menuBarMenu: ' + root.getMenuBarMenu(),
+        '  - focusedItemIndex: ' + (root.getMenuBarMenu() ? root.getMenuBarMenu().focusedItemIndex : 'none'),
+        'overlay.menus: ' + root.getMenus(),
+        '  - length: ' + root.getMenusLength(),
+        '  - last menu: ' + ((root.getMenus() && root.getMenus().length > 0) ? root.getMenus()[root.getMenusLength() - 1].title : 'none'),
         'applicationMenu',
         '  - opened: ' + DesktopEnvironment.menus.applicationMenu.opened
       ]
@@ -70,5 +71,16 @@ Window {
         color: "white"
       }
     }
+  }
+
+  function getMenus() {
+    return (DesktopEnvironment.overlay ? DesktopEnvironment.overlay.menus : null);
+  }
+  function getMenusLength() {
+    const menus = root.getMenus();
+    return (menus ? menus.length : null);
+  }
+  function getMenuBarMenu() {
+    return (DesktopEnvironment.overlay ? DesktopEnvironment.overlay.menuBarMenu : null);
   }
 }
