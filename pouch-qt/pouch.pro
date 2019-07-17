@@ -47,6 +47,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     ../lib/blusher/qml/Blusher/Button.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/DesktopEnvironment.qml \
+    ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/DebugPanel.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/MenuItemStyler.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/qmldir \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/MenuBarMenuDelegate.qml \
