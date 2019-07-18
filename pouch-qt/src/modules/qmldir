@@ -1,0 +1,2 @@
+module Pouch
+singleton Pouch 0.1 Pouch.qml

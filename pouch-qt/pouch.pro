@@ -26,7 +26,8 @@ RESOURCES += qml.qrc
 # If not updated:
 # https://forum.qt.io/topic/92025/unknown-component-m300-for-custom-qml-class/3
 QML_IMPORT_PATH += \
-        ../lib/blusher/qml
+        ../lib/blusher/qml \
+        ./src/modules
 
 QML2_IMPORT_PATH +=
 

@@ -8,7 +8,7 @@ Window {
   flags: Qt.Popup
 
   width: 300
-  height: 300
+  height: 600
   visible: true
 
   color: "#000000"
@@ -17,7 +17,7 @@ Window {
   Rectangle {
     id: _debugDesktopEnvironment
     width: parent.width
-    height: 150
+    height: 200
     anchors.top: parent.top
     anchors.left: parent.left; anchors.right: parent.right
     anchors.margins: 2
@@ -59,6 +59,7 @@ Window {
         y: index * 16
         text: modelData
         color: "white"
+        font.pixelSize: 12
       }
     }
     Repeater {
@@ -67,8 +68,12 @@ Window {
               : 0)
       Text {
         y: (50) + (index * 16)
-        text: DesktopEnvironment.overlay.overlayItemLoader.item.itemAt(index).menu.title
+        text: (DesktopEnvironment.overlay.overlayItemLoader.item.itemAt(index).menu.title
+               + '(opened: ' + DesktopEnvironment.overlay.overlayItemLoader.item.itemAt(index).menu.opened
+               + ', focusedItemIndex: ' + DesktopEnvironment.overlay.overlayItemLoader.item.itemAt(index).menu.focusedItemIndex
+               + ')')
         color: "white"
+        font.pixelSize: 12
       }
     }
   }

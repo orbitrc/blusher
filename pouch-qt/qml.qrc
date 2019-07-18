@@ -3,5 +3,7 @@
         <file>main.qml</file>
         <file>main.cpp</file>
         <file>src/components/SidebarItem.qml</file>
+        <file>src/modules/qmldir</file>
+        <file>src/modules/Pouch.qml</file>
     </qresource>
 </RCC>

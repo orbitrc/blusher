@@ -2,7 +2,6 @@ pragma Singleton
 import QtQuick 2.12
 import QtQuick.Window 2.12 as QtQuickWindow
 import QtQuick.Layouts 1.12
-import QtGraphicalEffects 1.12
 
 import ".."
 import "Standalone" as Standalone
@@ -34,6 +33,7 @@ Item {
   readonly property alias pixelsPerDp: internal.pixelsPerDp
   readonly property alias app: internal.app
   readonly property alias menuDelegate: internal.menuDelegate
+  readonly property alias menuBarHeight: internal.menuBarHeight
 
   // States
   readonly property alias menuOpen: internal.menuOpen
@@ -204,7 +204,9 @@ Item {
     } else {
       if (menu === DesktopEnvironment.menus.applicationMenu ||
         menu.supermenu.type === Menu.MenuType.MenuBarMenu) {
-        root.overlay.menus = [];
+        for (let i = root.overlay.menus.length - 1; i >= 0; --i) {
+          root._popMenu();
+        }
       } else {
         const lastOpenedMenu = root.overlay.menus[root.overlay.menus.length - 1];
         if (menu.supermenu === lastOpenedMenu) {
@@ -353,11 +355,11 @@ Item {
 
   function _popMenu() {
     let newMenus = []
-    overlayLoader.menus[overlayLoader.menus.length - 1].close();
-    for (let i = 0; i < overlayLoader.menus.length - 1; ++i) {
-      newMenus.push(overlayLoader.menus[i])
+    root.overlay.menus[root.overlay.menus.length - 1].close();
+    for (let i = 0; i < root.overlay.menus.length - 1; ++i) {
+      newMenus.push(root.overlay.menus[i]);
     }
-    overlayLoader.menus = newMenus
+    root.overlay.menus = newMenus;
   }
 
   function _isMenuDescendantOf(menu, target) {
@@ -384,6 +386,8 @@ Item {
 
     internal.menuDelegate = deModule.menuDelegate;
 
+    internal.menuBarHeight = deModule.menuBarHeight;
+
     // Setup signal handlers.
     internal.onAppCursorChanged = deModule.onAppCursorChanged;
 
@@ -403,6 +407,8 @@ Item {
     property var menuDelegate: standaloneMenuDelegate
     property var menuItemDelegate: null
 
+    property int menuBarHeight: 30
+
     function onAppCursorChanged(cursor) {
       switch (cursor) {
       case DesktopEnvironment.Auto:
@@ -411,6 +417,7 @@ Item {
       case DesktopEnvironment.ResizeLeftRight:
         Process.app.objectName = "BLUSHER_CURSOR_RESIZE_LEFT_RIGHT";
         break;
+
       case DesktopEnvironment.ResizeUpDown:
         Process.app.objectName = "BLUSHER_CURSOR_RESIZE_UP_DOWN";
         break;

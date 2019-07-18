@@ -31,8 +31,8 @@ QtQuickWindow.Window {
     Item {
       id: _menuArea
       visible: false
-      Layout.preferredHeight: 30
-      Layout.minimumHeight: 30
+      Layout.preferredHeight: DesktopEnvironment.menuBarHeight * DesktopEnvironment.pixelsPerDp
+      Layout.minimumHeight: DesktopEnvironment.menuBarHeight * DesktopEnvironment.pixelsPerDp
       Layout.fillWidth: true
       Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 

@@ -4,13 +4,14 @@ import QtQuick.Layouts 1.12
 import Blusher 0.1
 import Blusher.DesktopEnvironment 0.1
 
+import "src/modules"
 import "src/components"
 
 Window {
   visible: true
   width: 400
   height: 300
-  title: "Pouch"
+  title: Pouch.pwd + " - Pouch"
 
   menu: Menu {
     id: testMenu
@@ -185,7 +186,8 @@ Window {
         x: 200
         title: "Hide"
         onClicked: {
-          sidebar.visible = false
+          sidebar.visible = false;
+          print(Pouch.pwd);
         }
       }
     }
