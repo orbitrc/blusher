@@ -130,14 +130,17 @@ Window {
         SidebarItem {
           title: "Home"
           icon: DesktopEnvironment.icons.goHome
+          path: "/home/user"
         }
         SidebarItem {
           title: "Documents"
           icon: DesktopEnvironment.icons.emblemDocuments
+          path: "/home/user/Documents"
         }
         SidebarItem {
           title: "Downloads"
           icon: DesktopEnvironment.icons.emblemDownloads
+          path: "/home/user/Downloads"
         }
       }
     }

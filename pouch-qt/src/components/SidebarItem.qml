@@ -1,11 +1,14 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.12
 
+import "../modules"
+
 Rectangle {
   id: root
 
   property string title: ""
   property Image icon
+  property string path: ""
 
   border.width: 0
   color: "#00000000"
@@ -16,6 +19,10 @@ Rectangle {
   MouseArea {
     anchors.fill: parent
     hoverEnabled: true
+    onClicked: {
+      Pouch.pwd = root.path;
+    }
+
     onEntered: {
       root.color = "cyan";
     }
