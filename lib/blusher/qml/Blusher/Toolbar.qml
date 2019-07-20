@@ -21,7 +21,6 @@ Item {
   // Style
   //============
   anchors.fill: parent
-//  color: "lightgreen"
 
   RowLayout {
     id: layout

@@ -9,8 +9,8 @@ import "src/components"
 
 Window {
   visible: true
-  width: 400
-  height: 300
+  windowWidth: 400
+  windowHeight: 300
   title: Pouch.pwd + " - Pouch"
 
   menu: Menu {
@@ -115,6 +115,26 @@ Window {
         }
       }
     }
+    ToolbarItem {
+      label: 'debug(' + DesktopEnvironment.pixelsPerDp + ')'
+      SegmentedControl {
+        trackingMode: SegmentedControl.TrackingMode.Momentary
+        Segment {
+          label: '-'
+        }
+        Segment {
+          label: '+'
+        }
+
+        onSelected: {
+          if (index === 0) {
+            DesktopEnvironment._debugFunction(-0.25);
+          } else if (index === 1) {
+            DesktopEnvironment._debugFunction(0.25);
+          }
+        }
+      }
+    }
   }
 
   body: SplitView {
@@ -205,29 +225,15 @@ Window {
     }
   }
 
-  Window {
+  Alert {
     id: alert
-    title: " "
-    type: Window.WindowType.Alert
-    flags: Qt.Dialog
     modality: Qt.WindowModal //Qt.ApplicationModal
 
-    minimumHeight: 200
-    maximumHeight: 200
-    minimumWidth: 300
-    maximumWidth: 300
+    message: 'Hello'
+    informativeText: '𝄞Are you sure to delete \'File\' permanently?🙍🏿‍♀️'
 
-    body: Item {
-      width: 100
-      height: 100
-
-      Button {
-        title: "resize"
-        onClicked: {
-          alert.minimumHeight -= 50
-          alert.maximumHeight -= 50
-        }
-      }
+    onOk: {
+      print('Ok clicked.');
     }
   }
 

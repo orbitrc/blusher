@@ -17,7 +17,7 @@ Rectangle {
   //================
   // Style
   //================
-  implicitHeight: itemsView.implicitHeight
+  height: DesktopEnvironment.menuBarHeight * DesktopEnvironment.pixelsPerDp
   implicitWidth: itemsView.implicitWidth
   width: this.implicitWidth
 
@@ -94,8 +94,10 @@ Rectangle {
     Repeater {
       model: root.menu
       id: menuItemViewList
+
       Standalone.MenuItemDelegate {
         menuItem: root.menu.items[index]
+        Layout.minimumHeight: root.height
       }
     }
   }

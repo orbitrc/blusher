@@ -23,6 +23,28 @@ Window {
     anchors.margins: 2
     border.color: "white"
     color: "transparent"
+    Rectangle {
+      anchors.right: parent.right
+      width: 20
+      height: 20
+      MouseArea {
+        anchors.fill: parent
+        onClicked: {
+          if (root.flags === Qt.Popup) {
+            print('change to Qt.Window');
+            root.flags = Qt.Window;
+            root.visible = false;
+            root.visible = true;
+          } else {
+            print('change to Qt.Popup');
+            root.flags = Qt.Popup;
+            root.visible = false;
+            root.visible = true;
+          }
+        }
+      }
+    }
+
     Repeater {
       model: [
         'menuOpen: ' + DesktopEnvironment.menuOpen,

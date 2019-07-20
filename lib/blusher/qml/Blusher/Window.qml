@@ -20,7 +20,14 @@ QtQuickWindow.Window {
   property Toolbar toolbar: null
   property Item body
 
+  property int windowHeight
+  property int windowWidth
+
+  height: root.windowHeight * DesktopEnvironment.pixelsPerDp
+  width: root.windowWidth * DesktopEnvironment.pixelsPerDp
+
   color: "#d6d2d0"
+  flags: root._windowFlags()
 
   ColumnLayout {
     id: columnLayout
@@ -48,7 +55,7 @@ QtQuickWindow.Window {
     Item {
       id: _toolbarArea
       visible: false
-      Layout.preferredHeight: 50
+      Layout.preferredHeight: 50 * DesktopEnvironment.pixelsPerDp
       Layout.fillWidth: true
       Layout.alignment: Qt.AlignTop
     }
@@ -69,11 +76,6 @@ QtQuickWindow.Window {
       print('main onPressed: ' + event.key)
       switch (event.key) {
       case Qt.Key_Escape:
-        if (DesktopEnvironment.menuOpen) {
-          root.menu.close()
-          DesktopEnvironment.menuClosed()
-        }
-
         break;
 
       case Qt.Key_Right:
@@ -108,6 +110,13 @@ QtQuickWindow.Window {
   //================
   function giveGlobalFocus() {
     focusScope.focus = true
+  }
+
+  function _windowFlags() {
+    if (root.type === Window.WindowType.Alert) {
+      return (Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint);
+    }
+    return Qt.Window;
   }
 
   //================

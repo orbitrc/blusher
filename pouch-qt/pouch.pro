@@ -46,6 +46,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    ../lib/blusher/qml/Blusher/Alert.qml \
     ../lib/blusher/qml/Blusher/Button.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/DesktopEnvironment.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/DebugPanel.qml \
@@ -55,6 +56,7 @@ DISTFILES += \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/MenuBarMenuDelegate.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/PopUpMenuDelegate.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/MenuItemDelegate.qml \
+    ../lib/blusher/qml/Blusher/Label.qml \
     ../lib/blusher/qml/Blusher/Menu.qml \
     ../lib/blusher/qml/Blusher/MenuItem.qml \
     ../lib/blusher/qml/Blusher/MenuItemView.qml \

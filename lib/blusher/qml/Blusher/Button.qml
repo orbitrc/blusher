@@ -18,8 +18,9 @@ Rectangle {
   property bool active: false
   property bool hover: false
 
-  width: 120
+  width: 100
   height: 34
+
   color: "transparent"
   border.width: 0
   MouseArea {
@@ -80,5 +81,11 @@ Rectangle {
     font.pixelSize: 13 * DesktopEnvironment.pixelsPerDp
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.verticalCenter: parent.verticalCenter
+  }
+
+  Rectangle {
+    id: graphicalDebugRect
+    anchors.fill: parent
+    color: "#33ff0000"
   }
 }

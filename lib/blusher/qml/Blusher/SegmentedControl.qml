@@ -1,6 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 
+import "DesktopEnvironment"
+
 Item {
   id: root
 
@@ -38,8 +40,8 @@ Item {
       Rectangle {
         id: _segment
 
-        width: 50
-        height: 28
+        width: 50 * DesktopEnvironment.pixelsPerDp
+        height: 28 * DesktopEnvironment.pixelsPerDp
         clip: true
         color: "#e0e0e0"
         border.color: "black"

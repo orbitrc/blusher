@@ -12,7 +12,7 @@ Item {
   implicitWidth: ((!root.menuItem.isMenuBarMenuItem() ? _checked.width : 0)
                   + _text.implicitWidth
                   + (!root.menuItem.isMenuBarMenuItem() ? _info.width : 0))
-  height: 30
+  height: 30 * DesktopEnvironment.pixelsPerDp
 
   Layout.fillWidth: true  // Fill when pop-up menu item.
 

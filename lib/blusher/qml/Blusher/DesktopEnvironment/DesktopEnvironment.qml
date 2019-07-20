@@ -165,7 +165,7 @@ Item {
         } else if (item.menu === DesktopEnvironment.menus.applicationMenu ||
             item.menu.supermenu.type === Menu.MenuType.MenuBarMenu) {
           item.x = root.parent.Window.window.x;
-          item.y = root.parent.Window.window.y + 30;
+          item.y = root.parent.Window.window.y + (30 * DesktopEnvironment.pixelsPerDp);
         } else {
           const parentMenuDelegate = this.itemAt(index - 1);
           item.x = parentMenuDelegate.x + parentMenuDelegate.width + 1;
@@ -394,6 +394,10 @@ Item {
     // Setup app object.
     internal.appName = Process.env.BLUSHER_APP_NAME;
     internal.appVersion = Process.env.BLUSHER_APP_VERSION;
+  }
+
+  function _debugFunction(payload) {
+    internal.pixelsPerDp += payload;
   }
 
   //================================

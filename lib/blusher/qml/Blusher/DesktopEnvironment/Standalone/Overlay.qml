@@ -17,7 +17,7 @@ QtQuickWindow.Window {
 
   visible: true
   flags: Qt.Popup
-  color: "#00000000" // "#00000000"
+  color: "#11ff0000" // "#00000000"
 
   MouseArea {
     id: _mouseArea
@@ -101,11 +101,12 @@ QtQuickWindow.Window {
   }
 
   Component.onCompleted: {
+    print('DesktopEnvironment.Standalone.Overlay.onCompleted]');
     root.requestActivate();
 
     // Make overlay cover whole screen.
-    this.width = QtQuickWindow.Screen.width
-    this.height = QtQuickWindow.Screen.height
+    this.width = QtQuickWindow.Screen.width * 3;
+    this.height = QtQuickWindow.Screen.height;
 
     _menuBarArea.x = DesktopEnvironment.parent.Window.window.x
     _menuBarArea.y = DesktopEnvironment.parent.Window.window.y
@@ -119,7 +120,7 @@ QtQuickWindow.Window {
   }
 
   function renderMenus() {
-    print('renderMenus');
+    print('renderMenus. mouseX: ' + root.mouseX);
     overlayItemLoader.sourceComponent = undefined;
     overlayItemLoader.sourceComponent = menuViewComponent;
   }

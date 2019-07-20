@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.12
 
 import "../modules"
+import Blusher.DesktopEnvironment 0.1
 
 Rectangle {
   id: root
@@ -43,5 +44,6 @@ Rectangle {
 
     x: 40
     anchors.verticalCenter: parent.verticalCenter
+    font.pixelSize: 14 * DesktopEnvironment.pixelsPerDp
   }
 }
