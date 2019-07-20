@@ -105,6 +105,16 @@ QtQuickWindow.Window {
     root.body.parent = _bodyArea
   }
 
+  //=======================
+  // Property changed
+  //=======================
+  onHeightChanged: {
+    root.windowHeight = root.height / DesktopEnvironment.pixelsPerDp;
+  }
+  onWidthChanged: {
+    root.windowWidth = root.width / DesktopEnvironment.pixelsPerDp;
+  }
+
   //================
   // Methods
   //================

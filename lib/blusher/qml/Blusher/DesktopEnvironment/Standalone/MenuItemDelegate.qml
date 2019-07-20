@@ -30,15 +30,15 @@ Item {
       visible: (root.menuItem.checked)
       anchors.verticalCenter: parent.verticalCenter
       anchors.left: parent.left
-      anchors.leftMargin: 3
-      height: 24
-      width: 24
+      anchors.leftMargin: 3 * DesktopEnvironment.pixelsPerDp
+      height: 24 * DesktopEnvironment.pixelsPerDp
+      width: 24 * DesktopEnvironment.pixelsPerDp
       children: [
         DesktopEnvironment.icons.checked,
         this.graphicalDebugRect
       ]
       property Rectangle graphicalDebugRect: Rectangle {
-        visible: false
+        visible: true
         anchors.fill: parent
         color: "#44ff0000"
       }
@@ -48,7 +48,7 @@ Item {
       text: root.menuItem.title
       anchors.verticalCenter: parent.verticalCenter
       rightPadding: 7.0       // 5.0 + styler's margin
-      leftPadding: (root.menuItem.isMenuBarMenuItem()) ? 7.0 : 7.0 + 24   // 5.0 + styler's margin + checked-image width
+      leftPadding: (root.menuItem.isMenuBarMenuItem()) ? 7.0 : 7.0 + _checked.width   // 5.0 + styler's margin + checked-image width
       font.pixelSize: 14 * DesktopEnvironment.pixelsPerDp
     }
     Item {
@@ -60,9 +60,9 @@ Item {
       height: 24 * DesktopEnvironment.pixelsPerDp
       anchors.verticalCenter: parent.verticalCenter
       anchors.right: parent.right
-      anchors.rightMargin: 3
+      anchors.rightMargin: 3 * DesktopEnvironment.pixelsPerDp
       Rectangle {
-        visible: false
+        visible: true
         anchors.fill: parent
         color: "#44ff0000"
       }
@@ -88,12 +88,12 @@ Item {
     Item {
       id: _separator
       visible: false
-      height: 2
+      height: 2 * DesktopEnvironment.pixelsPerDp
       anchors.left: parent.left
       anchors.right: parent.right
       anchors.verticalCenter: parent.verticalCenter
       Rectangle {
-        height: 1
+        height: 1 * DesktopEnvironment.pixelsPerDp
         anchors.left: parent.left; anchors.right: parent.right;
         anchors.top: parent.top
         border.width: 0
@@ -105,7 +105,7 @@ Item {
         }
       }
       Rectangle {
-        height: 1
+        height: 1 * DesktopEnvironment.pixelsPerDp
         anchors.left: parent.left; anchors.right: parent.right;
         anchors.bottom: parent.bottom
         border.width: 0

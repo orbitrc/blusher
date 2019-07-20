@@ -35,7 +35,7 @@ Rectangle {
     spacing: 0
     // Application menu
     Item {
-      width: 50
+      width: _text.implicitWidth
       Layout.alignment: Qt.AlignTop
       Layout.fillHeight: true
       MouseArea {

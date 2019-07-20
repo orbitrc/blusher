@@ -9,7 +9,7 @@ Rectangle {
 
   color: "lightgreen"
 
-  implicitWidth: _label.implicitWidth
+  implicitWidth: _label.implicitWidth + root.children[1].implicitWidth
 
   Text {
     id: _label

@@ -39,9 +39,9 @@ Item {
       const item = root.items[i]
       item.parent = layout
       item.Layout.fillHeight = true
-//      if (item.width > 0) {
-//        item.Layout.preferredWidth = view.width
-//      }
+      if (item.width > 0) {
+        item.Layout.preferredWidth = item.implicitWidth;
+      }
     }
   }
 }

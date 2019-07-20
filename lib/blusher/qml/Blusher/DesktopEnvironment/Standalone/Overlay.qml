@@ -17,7 +17,7 @@ QtQuickWindow.Window {
 
   visible: true
   flags: Qt.Popup
-  color: "#11ff0000" // "#00000000"
+  color: "#55000000" // "#00000000"
 
   MouseArea {
     id: _mouseArea
