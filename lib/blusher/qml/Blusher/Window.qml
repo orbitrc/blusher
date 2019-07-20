@@ -23,6 +23,8 @@ QtQuickWindow.Window {
   property int windowHeight
   property int windowWidth
 
+  readonly property bool maximized: (root.visibility === QtQuickWindow.Window.Maximized)
+
   height: root.windowHeight * DesktopEnvironment.pixelsPerDp
   width: root.windowWidth * DesktopEnvironment.pixelsPerDp
 
@@ -109,9 +111,13 @@ QtQuickWindow.Window {
   // Property changed
   //=======================
   onHeightChanged: {
+//    if (root.maximized) { return; }
+
     root.windowHeight = root.height / DesktopEnvironment.pixelsPerDp;
   }
   onWidthChanged: {
+//    if (root.maximized) { return; }
+
     root.windowWidth = root.width / DesktopEnvironment.pixelsPerDp;
   }
 
