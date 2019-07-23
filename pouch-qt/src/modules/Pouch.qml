@@ -44,6 +44,14 @@ Item {
     let files = [];
   }
 
+  function basename(path) {
+    if (path === '/') {
+      return path;
+    }
+    const names = path.split('/');
+    return names[names.length - 1];
+  }
+
   Component.onCompleted: {
   }
 }

@@ -11,7 +11,7 @@ Window {
   visible: true
   windowWidth: 400
   windowHeight: 300
-  title: Pouch.pwd + " - Pouch"
+  title: Pouch.basename(Pouch.pwd) + " - Pouch"
 
   menu: Menu {
     id: testMenu

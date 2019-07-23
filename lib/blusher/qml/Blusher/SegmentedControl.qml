@@ -40,7 +40,7 @@ Item {
       Rectangle {
         id: _segment
 
-        width: 50 * DesktopEnvironment.pixelsPerDp
+        width: 42 * DesktopEnvironment.pixelsPerDp
         height: 28 * DesktopEnvironment.pixelsPerDp
         clip: true
         color: "#e0e0e0"

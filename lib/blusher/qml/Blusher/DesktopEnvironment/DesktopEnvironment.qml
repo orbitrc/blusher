@@ -187,6 +187,10 @@ Item {
     id: debugPanelLoader
   }
 
+  Loader {
+    id: deModuleLoader
+  }
+
   //==========================
   // Signal handlers
   //==========================
@@ -378,10 +382,12 @@ Item {
     const dePath = Process.env.BLUSHER_DE_MODULE_PATH;
     let deModule = null;
 
+    print('[DesktopEnvironment._initDesktopEnvironmentModule] dePath: ' + dePath);
     if (dePath === '') {
       deModule = standalone;
     } else {
-      //
+      deModule = standalone;
+      deModuleLoader.setSource(dePath + '/DesktopEnvironmentModule/DesktopEnvironmentModule.qml');
     }
 
     internal.menuDelegate = deModule.menuDelegate;

@@ -5,6 +5,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QCursor>
+#include <QFile>
 
 #ifndef BLUSHER_PATH
     #define BLUSHER_PATH "/usr/lib/blusher/qml"
@@ -15,6 +16,25 @@ namespace bl {
 class Application : public QGuiApplication {
 private:
     QQmlApplicationEngine engine;
+
+    void read_conf(QVariantMap *env)
+    {
+        QFile f("/etc/blusher.conf");
+        if (!f.exists()) {
+            return;
+        }
+        f.open(QFile::ReadOnly | QFile::Text);
+        QString conf = QString(f.readAll());
+        f.close();
+        QStringList lines = conf.split("\n");
+        for (int32_t i = 0; i < lines.length(); ++i) {
+            QStringList key_value = lines[i].split("=");
+            if (key_value[0] == "desktop_environment_path") {
+                env->insert("BLUSHER_DE_MODULE_PATH", key_value[1]);
+                engine.addImportPath(key_value[1]);
+            }
+        }
+    }
 public:
     /// \brief  Constructor
     /// \param  argc
@@ -35,9 +55,10 @@ public:
 
         QVariantMap process;
         QVariantMap process_env;
+        this->read_conf(&process_env);
         process_env.insert("BLUSHER_PATH", BLUSHER_PATH);
         process_env.insert("BLUSHER_PLATFORM", "Linux");
-        process_env.insert("BLUSHER_DE_MODULE_PATH", "");
+//        process_env.insert("BLUSHER_DE_MODULE_PATH", "");
         process_env.insert("BLUSHER_APP_NAME", BLUSHER_APP_NAME);
         process_env.insert("BLUSHER_APP_VERSION", BLUSHER_APP_VERSION);
 #ifdef BLUSHER_DEBUG
