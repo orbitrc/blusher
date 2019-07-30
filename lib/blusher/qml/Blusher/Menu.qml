@@ -1,14 +1,14 @@
 import QtQuick 2.12
 import QtQml.Models 2.12
 
-import Blusher.DesktopEnvironment 0.1
+import "DesktopEnvironment"
 
 ListModel {
   id: root
   enum MenuType {
-    MenuBarMenu,
-    ContextualMenu,
-    Submenu
+    MenuBarMenu = 0,
+    ContextualMenu = 1,
+    Submenu = 2
   }
 
   default property list<ListElement> items

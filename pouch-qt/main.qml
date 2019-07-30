@@ -8,8 +8,10 @@ import "src/modules"
 import "src/components"
 
 Window {
+  id: root
+
   visible: true
-  windowWidth: 400
+  windowWidth: 500
   windowHeight: 300
   title: Pouch.basename(Pouch.pwd) + " - Pouch"
 
@@ -210,6 +212,7 @@ Window {
         title: "Hide"
         onClicked: {
           sidebar.visible = false;
+          print('hello?? ' + root);
           print(Pouch.pwd);
         }
       }

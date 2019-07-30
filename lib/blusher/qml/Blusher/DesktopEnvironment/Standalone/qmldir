@@ -1,0 +1,2 @@
+module Blusher.DesktopEnvironment.Standalone
+singleton Formatter 0.1 Formatter.qml

@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.12
 
 import ".."
 import "Standalone" as Standalone
+import Blusher.DesktopEnvironment.Standalone 0.1
 
 Item {
   id: root
@@ -35,11 +36,17 @@ Item {
   readonly property alias menuDelegate: internal.menuDelegate
   readonly property alias menuBarHeight: internal.menuBarHeight
 
+  readonly property alias shortcutToString: internal.shortcutToString
+
+  readonly property alias onMenuOpened: internal.onMenuOpened
+  readonly property alias onMenuClosed: internal.onMenuClosed
+
   // States
   readonly property alias menuOpen: internal.menuOpen
 
   // References
   property alias overlay: overlayLoader.item
+  property alias standaloneDeModule: standalone
 
   //====================
   // Private Properties
@@ -53,6 +60,11 @@ Item {
     property var menuItemDelegate: null
 
     property int menuBarHeight: 0
+
+    property var onMenuOpened: function(parent, menu) {}
+    property var onMenuClosed: function() {}
+    property var shortcutToString: function(shortcut) {}
+
 
     property string appName: ""
     property string appVersion: ""
@@ -140,9 +152,14 @@ Item {
   //==================
 
   /// \brief  Sould emitted when the menu is opening.
-  signal menuOpened(Item parent, ListModel menu)
+  function menuOpened(parent, menu) {
+    root.onMenuOpened(parent, menu);
+  }
+
   /// \brief  Should emitted when all menus are completely closed.
-  signal menuClosed()
+  function menuClosed() {
+    root.onMenuClosed();
+  }
 
   //===================
   // Components
@@ -195,45 +212,6 @@ Item {
   // Signal handlers
   //==========================
 
-  onMenuOpened: {
-    if (!this.menuOpen) {
-      // Set singleton item child of root window.
-      // It is important to refer the geometry of root window such as x and y.
-      root.parent = parent
-      // Load if not loaded yet.
-      if (!overlayLoader.sourceComponent) {
-        overlayLoader.setSource('./Standalone/Overlay.qml');
-      }
-      root.overlay.visible = true
-    } else {
-      if (menu === DesktopEnvironment.menus.applicationMenu ||
-        menu.supermenu.type === Menu.MenuType.MenuBarMenu) {
-        for (let i = root.overlay.menus.length - 1; i >= 0; --i) {
-          root._popMenu();
-        }
-      } else {
-        const lastOpenedMenu = root.overlay.menus[root.overlay.menus.length - 1];
-        if (menu.supermenu === lastOpenedMenu) {
-        } else if (root._isMenuDescendantOf(lastOpenedMenu, menu.supermenu)) {
-          root._popMenu();
-        }
-      }
-    }
-    root.overlay.menus.push(menu);
-    internal.menuOpen = true
-  }
-  onMenuClosed: {
-    for (let i = root.overlay.menus.length - 1; i >= 0; --i) {
-      root.overlay.menus[i].close();
-    }
-    root.overlay.menus = [];
-    if (root.overlay.menuBarMenu) {
-      root.overlay.menuBarMenu.focusItem(-1);
-    }
-
-    root.overlay.visible = false
-    internal.menuOpen = false
-  }
 
   Component.onCompleted: {
     print('[DesktopEnvironment.onCompleted]')
@@ -253,104 +231,6 @@ Item {
   //=============
   // Methods
   //=============
-
-  // Public methods
-  function shortcutToString(shortcut) {
-    let text = '';
-    const modifiers = shortcut & 0xff000000;
-    const key = shortcut & 0x00ffffff;
-
-    if (modifiers === DesktopEnvironment.KeyModifier.Shift) {
-      text += 'Shift';
-    } else if (modifiers === DesktopEnvironment.KeyModifier.Control) {
-      text += 'Ctrl';
-    }
-
-    switch (key) {
-    case Qt.Key_A:
-      text += '+A';
-      break;
-    case Qt.Key_B:
-      text += '+B';
-      break;
-    case Qt.Key_C:
-      text += '+C';
-      break;
-    case Qt.Key_D:
-      text += '+D';
-      break;
-    case Qt.Key_E:
-      text += '+E';
-      break;
-    case Qt.Key_F:
-      text += '+F';
-      break;
-    case Qt.Key_G:
-      text += '+G';
-      break;
-    case Qt.Key_H:
-      text += '+H';
-      break;
-    case Qt.Key_I:
-      text += '+I';
-      break;
-    case Qt.Key_J:
-      text += '+J';
-      break;
-    case Qt.Key_K:
-      text += '+K';
-      break;
-    case Qt.Key_L:
-      text += '+L';
-      break;
-    case Qt.Key_M:
-      text += '+M';
-      break;
-    case Qt.Key_N:
-      text += '+N';
-      break;
-    case Qt.Key_O:
-      text += '+O';
-      break;
-    case Qt.Key_P:
-      text += '+P';
-      break;
-    case Qt.Key_Q:
-      text += '+Q';
-      break;
-    case Qt.Key_R:
-      text += '+R';
-      break;
-    case Qt.Key_S:
-      text += '+S';
-      break;
-    case Qt.Key_T:
-      text += '+T';
-      break;
-    case Qt.Key_U:
-      text += '+U';
-      break;
-    case Qt.Key_V:
-      text += '+V';
-      break;
-    case Qt.Key_W:
-      text += '+W';
-      break;
-    case Qt.Key_X:
-      text += '+X';
-      break;
-    case Qt.Key_Y:
-      text += '+Y';
-      break;
-    case Qt.Key_Z:
-      text += '+Z';
-      break;
-    default:
-      break;
-    }
-
-    return text;
-  }
 
   // Private methods
   function _openSubmenu(menu) {
@@ -386,16 +266,22 @@ Item {
     if (dePath === '') {
       deModule = standalone;
     } else {
-      deModule = standalone;
       deModuleLoader.setSource(dePath + '/DesktopEnvironmentModule/DesktopEnvironmentModule.qml');
+      deModule = deModuleLoader.item;
     }
 
-    internal.menuDelegate = deModule.menuDelegate;
+//    internal.menuDelegate = deModule.menuDelegate;
+    internal.menuDelegate = standaloneMenuDelegate;
 
     internal.menuBarHeight = deModule.menuBarHeight;
 
     // Setup signal handlers.
     internal.onAppCursorChanged = deModule.onAppCursorChanged;
+    internal.onMenuOpened = deModule.onMenuOpened;
+    internal.onMenuClosed = deModule.onMenuClosed;
+
+    // Setup public methods.
+    internal.shortcutToString = deModule.shortcutToString;
 
     // Setup app object.
     internal.appName = Process.env.BLUSHER_APP_NAME;
@@ -419,6 +305,8 @@ Item {
 
     property int menuBarHeight: 30
 
+    property int pixelsPerDp: 1
+
     function onAppCursorChanged(cursor) {
       switch (cursor) {
       case DesktopEnvironment.Auto:
@@ -434,6 +322,51 @@ Item {
       default:
         break;
       }
+    }
+
+    function onMenuOpened(parent, menu) {
+      if (!this.menuOpen) {
+        // Set singleton item child of root window.
+        // It is important to refer the geometry of root window such as x and y.
+        root.parent = parent
+        // Load if not loaded yet.
+        if (!overlayLoader.sourceComponent) {
+          overlayLoader.setSource('./Standalone/Overlay.qml');
+        }
+        root.overlay.visible = true
+      } else {
+        if (menu === DesktopEnvironment.menus.applicationMenu ||
+          menu.supermenu.type === Menu.MenuType.MenuBarMenu) {
+          for (let i = root.overlay.menus.length - 1; i >= 0; --i) {
+            root._popMenu();
+          }
+        } else {
+          const lastOpenedMenu = root.overlay.menus[root.overlay.menus.length - 1];
+          if (menu.supermenu === lastOpenedMenu) {
+          } else if (root._isMenuDescendantOf(lastOpenedMenu, menu.supermenu)) {
+            root._popMenu();
+          }
+        }
+      }
+      root.overlay.menus.push(menu);
+      internal.menuOpen = true;
+    }
+
+    function onMenuClosed() {
+      for (let i = root.overlay.menus.length - 1; i >= 0; --i) {
+        root.overlay.menus[i].close();
+      }
+      root.overlay.menus = [];
+      if (root.overlay.menuBarMenu) {
+        root.overlay.menuBarMenu.focusItem(-1);
+      }
+
+      root.overlay.visible = false
+      internal.menuOpen = false
+    }
+
+    function shortcutToString(shortcut) {
+      return Formatter.shortcutToString(shortcut);
     }
   }
 

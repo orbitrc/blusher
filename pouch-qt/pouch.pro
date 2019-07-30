@@ -50,6 +50,7 @@ DISTFILES += \
     ../lib/blusher/qml/Blusher/Button.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/DesktopEnvironment.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/DebugPanel.qml \
+    ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/Formatter.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/MenuItemStyler.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/Overlay.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/qmldir \
