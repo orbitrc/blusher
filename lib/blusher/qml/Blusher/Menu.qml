@@ -10,14 +10,18 @@ QtObject {
     Submenu = 2
   }
 
-  default property list<QtObject> items
+  // Menu delegates are completed before menu completed.
+  // So, emit signal when the menu is really done.
+  signal ready();
+
+  default property list<QtObject> initialItems
 
   //=========================
   // Public Properties
   //=========================
   property int type
   property string title: ""
-//  property var items: []
+  property var items: []
   property var supermenu: null
 
   //=========================
@@ -39,9 +43,14 @@ QtObject {
   // Created
   //==============
   Component.onCompleted: {
-    for (let i = 0; i < root.items.length; ++i) {
-      root.addItem(root.items[i])
+    if (root.items.length > 0) {
+      return;
     }
+
+    for (let i = 0; i < root.initialItems.length; ++i) {
+      root.addItem(root.initialItems[i])
+    }
+    root.ready();
   }
 
   //==============
@@ -71,8 +80,8 @@ QtObject {
   /// \param  menuItem
   ///         Menu item to add.
   function addItem(menuItem) {
-//    root.append(menuItem)
-    menuItem.parentMenu = root
+    root.items.push(menuItem);
+    menuItem.parentMenu = root;
   }
 
   function focusItem(index) {

@@ -75,6 +75,10 @@ Item {
       property string displayName: ""
       readonly property alias version: internal.appVersion
       property int cursor: DesktopEnvironment.Cursor.Auto
+      property Menu mainMenu: Menu {
+        title: 'Main Menu'
+        type: Menu.MenuType.MenuBarMenu
+      }
 
       // Methods
       function quit() { Qt.exit(0); }
@@ -128,7 +132,6 @@ Item {
       MenuItem {
         title: "Preferences..."
       }
-
       MenuItem {
         title: "Quit"
         action: DesktopEnvironment.app.quit
@@ -212,7 +215,6 @@ Item {
   // Signal handlers
   //==========================
 
-
   Component.onCompleted: {
     print('[DesktopEnvironment.onCompleted]')
     root._initDesktopEnvironmentModule();
@@ -233,10 +235,6 @@ Item {
   //=============
 
   // Private methods
-  function _openSubmenu(menu) {
-    const prevMenu = overlayLoader.menus[overlayLoader.menus.length -1]
-  }
-
   function _popMenu() {
     let newMenus = []
     root.overlay.menus[root.overlay.menus.length - 1].close();

@@ -44,7 +44,7 @@ Item {
     columnSpacing: 0
     // Menu items
     Repeater {
-      model: root.menu
+      model: root.menu.items
       id: menuItemViewList
       Standalone.MenuItemDelegate {
         menuItem: root.menu.items[index]

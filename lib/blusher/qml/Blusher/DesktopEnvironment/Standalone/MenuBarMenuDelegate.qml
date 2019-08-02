@@ -92,7 +92,7 @@ Rectangle {
     }
     // Menu items
     Repeater {
-      model: root.menu
+      model: root.menu.items
       id: menuItemViewList
 
       Standalone.MenuItemDelegate {

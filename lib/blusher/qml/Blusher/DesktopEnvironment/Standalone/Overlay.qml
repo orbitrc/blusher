@@ -46,7 +46,7 @@ QtQuickWindow.Window {
         id: _menuBarLoader
 
         onLoaded: {
-          root.menuBarMenu = DesktopEnvironment.parent.Window.window.menu;
+          root.menuBarMenu = DesktopEnvironment.app.mainMenu;
         }
       }
     }
