@@ -28,6 +28,10 @@ private:
         f.close();
         QStringList lines = conf.split("\n");
         for (int32_t i = 0; i < lines.length(); ++i) {
+            // Ignore comment lines.
+            if (lines[i].startsWith("#")) {
+                continue;
+            }
             QStringList key_value = lines[i].split("=");
             if (key_value[0] == "desktop_environment_path") {
                 env->insert("BLUSHER_DE_MODULE_PATH", key_value[1]);
