@@ -10,68 +10,73 @@ import "src/components"
 Item {
   id: application
 
+  property var states: QtObject {
+    property bool showSidebar: true
+  }
+
   property Menu mainMenu: Menu {
     id: mainMenu
     type: Menu.MenuType.MenuBarMenu
-    title: "Blusher Main Menu"
-    MenuItem {
-      title: "File"
-      submenu: Menu {
-        type: Menu.MenuType.Submenu
-        title: "File"
-        MenuItem {
-          title: "Create New"
-          submenu: Menu {
-            type: Menu.MenuType.Submenu
-            title: "Create New"
-            MenuItem {
-              title: "New Text File"
-            }
-            MenuItem {
-              title: "New Folder"
-            }
-          }
-        }
-        MenuItem {
-          separator: true
-        }
-        MenuItem {
-          title: "Quit"
-        }
-      }
-    }
-    MenuItem {
-      title: "Edit"
-      submenu: Menu {
-        type: Menu.MenuType.Submenu
+    title: 'Blusher Main Menu'
+    items: [
+      // File
+      {
+        path: '/file/',
+        title: 'File'
+      },
+      {
+        path: '/file/create-new',
+        title: "Create New"
+      },
+      {
+        path: '/file/create-new/text',
+        title: "New Text File"
+      },
+      {
+        path: '/file/create-new/folder',
+        title: "New Folder"
+      },
+      {
+        separator: true
+      },
+      {
+        path: '/file/quit',
+        title: "Quit"
+      },
+      // Edit
+      {
+        path: '/edit/',
         title: "Edit"
-        MenuItem {
-          title: "Copy"
-          shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_C
-        }
-        MenuItem {
-          title: "Paste"
-          shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_V
-        }
-      }
-    }
-    MenuItem {
-      title: "View"
-      submenu: Menu {
-        type: Menu.MenuType.Submenu
+      },
+      {
+        path: '/edit/copy',
+        title: "Copy",
+        shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_C
+      },
+      {
+        path: '/edit/paste',
+        title: "Paste",
+        shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_V
+      },
+      // View
+      {
+        path: '/view/',
         title: "View"
-        MenuItem {
-          title: "Sidebar"
-          checked: true
-          action: function() {
-            this.checked = !this.checked;
-          }
+      },
+      {
+        path: '/view/sidebar',
+        title: "Sidebar",
+        checked: true,
+        action: function() {
+          this.checked = !this.checked;
         }
+      },
+      // Help
+      {
+        path: '/help',
+        title: "Help"
       }
-    }
-    MenuItem {
-      title: "Help"
-    }
+    ]
   }
 
   Window {

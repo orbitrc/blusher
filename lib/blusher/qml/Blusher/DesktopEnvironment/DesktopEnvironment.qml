@@ -128,25 +128,33 @@ Item {
     id: _menus
     property Menu applicationMenu: Menu {
       type: Menu.MenuType.Submenu
-      title: "Application"
-      MenuItem {
-        title: "Preferences..."
-      }
-      MenuItem {
-        title: "Quit"
-        action: DesktopEnvironment.app.quit
-        shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_Q
-      }
+      title: 'Application'
+      items: [
+        {
+          path: '/preferences',
+          title: "Preferences..."
+        },
+        {
+          path: '/quit',
+          title: "Quit",
+          action: DesktopEnvironment.app.quit,
+          shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_Q
+        },
+      ]
     }
     property Menu textEditMenu: Menu {
       type: Menu.MenuType.ContextualMenu
       title: "Text"
-      MenuItem {
-        title: "Copy"
-      }
-      MenuItem {
-        title: "Paste"
-      }
+      items: [
+        {
+          path: '/copy',
+          title: "Copy"
+        },
+        {
+          path: '/paste',
+          title: "Paste"
+        }
+      ]
     }
   }
 

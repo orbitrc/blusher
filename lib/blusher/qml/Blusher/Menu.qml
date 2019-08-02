@@ -43,13 +43,6 @@ QtObject {
   // Created
   //==============
   Component.onCompleted: {
-    if (root.items.length > 0) {
-      return;
-    }
-
-    for (let i = 0; i < root.initialItems.length; ++i) {
-      root.addItem(root.initialItems[i])
-    }
     root.ready();
   }
 
