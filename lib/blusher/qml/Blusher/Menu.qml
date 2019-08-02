@@ -1,9 +1,8 @@
 import QtQuick 2.12
-import QtQml.Models 2.12
 
 import "DesktopEnvironment"
 
-ListModel {
+QtObject {
   id: root
   enum MenuType {
     MenuBarMenu = 0,
@@ -11,13 +10,14 @@ ListModel {
     Submenu = 2
   }
 
-  default property list<ListElement> items
+  default property list<QtObject> items
 
   //=========================
   // Public Properties
   //=========================
   property int type
   property string title: ""
+//  property var items: []
   property var supermenu: null
 
   //=========================
@@ -71,7 +71,7 @@ ListModel {
   /// \param  menuItem
   ///         Menu item to add.
   function addItem(menuItem) {
-    root.append(menuItem)
+//    root.append(menuItem)
     menuItem.parentMenu = root
   }
 
