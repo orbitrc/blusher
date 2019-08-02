@@ -25,22 +25,6 @@ Rectangle {
   ListModel {
     id: listModel
 
-    ListElement {
-      property string title: "blah"
-      name: "hello"
-      cost: 1
-      action: function() {
-        print("action!!")
-      }
-    }
-    ListElement {
-      property string title: "haha"
-      name: "world"
-      cost: 2
-      action: function() {
-        print("action2!")
-      }
-    }
   }
 
   RowLayout {
