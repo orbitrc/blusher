@@ -68,6 +68,32 @@ Rectangle {
   }
 
 
+  // New cool Menu structure?
+  /*
+  Menu {
+    type: Menu.MenuType.MenuBarMenu
+    items: [
+      {
+        'path': '/file/',
+        'title': 'File',
+      },
+      {
+        'path': '/file/create-new/',
+        'title': 'Create New...',
+      },
+      {
+        'path': '/file/create-new/folder',
+        'title': 'New Folder'
+      },
+      {
+        'path': '/file/create-new/file',
+        'title': 'New File'
+      }
+    ]
+  }
+  */
+
+
 
 
   Component.onCompleted: {
