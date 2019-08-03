@@ -127,6 +127,12 @@ QtQuickWindow.Window {
     root.windowWidth = root.width / DesktopEnvironment.pixelsPerDp;
   }
 
+  onActiveChanged: {
+    if (root.active) {
+      DesktopEnvironment.app.activeWindow = root;
+    }
+  }
+
   //================
   // Methods
   //================

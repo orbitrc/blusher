@@ -7,11 +7,10 @@ import "../.."
 Item {
   id: root
 
-  property MenuItem menuItem: null
+  property var menuItem: null
+  property bool focused: false
 
-  implicitWidth: ((!root.menuItem.isMenuBarMenuItem() ? _checked.width : 0)
-                  + _text.implicitWidth
-                  + (!root.menuItem.isMenuBarMenuItem() ? _info.width : 0))
+  implicitWidth: _checked.width + _text.implicitWidth + _info.width
   height: 30 * DesktopEnvironment.pixelsPerDp
 
   Layout.fillWidth: true  // Fill when pop-up menu item.
@@ -22,12 +21,12 @@ Item {
 
     MenuItemStyler {
       anchors.fill: parent
-      visible: root.menuItem.focused
+      visible: root.focused
     }
     Item {
       id: _checked
 
-      visible: (root.menuItem.checked)
+      visible: (root.menuItem.checked !== undefined ? root.menuItem.checked : false)
       anchors.verticalCenter: parent.verticalCenter
       anchors.left: parent.left
       anchors.leftMargin: 3 * DesktopEnvironment.pixelsPerDp
@@ -47,15 +46,13 @@ Item {
       id: _text
       text: root.menuItem.title
       anchors.verticalCenter: parent.verticalCenter
+      leftPadding: 7.0 + _checked.width   // 5.0 + styler's margin + checked-image width
       rightPadding: 7.0       // 5.0 + styler's margin
-      leftPadding: (root.menuItem.isMenuBarMenuItem()) ? 7.0 : 7.0 + _checked.width   // 5.0 + styler's margin + checked-image width
       font.pixelSize: 14 * DesktopEnvironment.pixelsPerDp
     }
     Item {
       id: _info
 
-      visible: (!root.menuItem.isMenuBarMenuItem()
-                && (root.menuItem.hasSubmenu() || this.shortcutText.text !== ''))
       width: (this.shortcutText.text !== '' ? this.shortcutText.implicitWidth : 24)
       height: 24 * DesktopEnvironment.pixelsPerDp
       anchors.verticalCenter: parent.verticalCenter
@@ -68,14 +65,10 @@ Item {
       }
 
       Component.onCompleted: {
-        if (root.menuItem.isMenuBarMenuItem()) {
-          return;
-        }
-
         if (this.shortcutText.text !== '') {
           this.children.push(this.shortcutText);
         }
-        if (root.menuItem.hasSubmenu()) {
+        if (root.menuItem.path[root.menuItem.path.length - 1] === '/') {
           this.children.push(DesktopEnvironment.icons.goNext);
         }
       }
@@ -119,10 +112,6 @@ Item {
     }
 
     onClicked: {
-      // If menu bar menu.
-      if (root.menuItem.isMenuBarMenuItem()) {
-        root._menuBarMenuItemClicked(index);
-      }
       // If regular menu.
       if (!root.menuItem.isMenuBarMenuItem()) {
         if (!root.menuItem.hasSubmenu()) {
@@ -162,6 +151,7 @@ Item {
   } // MouseArea
 
   Component.onCompleted: {
+    print(JSON.stringify(root.menuItem));
     if (root.menuItem.separator) {
       this.Layout.maximumHeight = 10;
       _separator.visible = true

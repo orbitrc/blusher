@@ -12,8 +12,10 @@ QtQuickWindow.Window {
   property int mouseX: 0
   property int mouseY: 0
 
-  property list<Menu> menus
+  property var menus: []
   property Menu menuBarMenu
+
+  property alias menuBarLoader: menuBarLoader
 
   visible: true
   flags: Qt.Popup
@@ -26,7 +28,7 @@ QtQuickWindow.Window {
     hoverEnabled: true
 
     onClicked: {
-      DesktopEnvironment.menuClosed()
+      DesktopEnvironment.menuClosed();
     }
     onEntered: {
       root.mouseX = this.mouseX;
@@ -36,23 +38,20 @@ QtQuickWindow.Window {
       }
     }
 
-    MouseArea {
-      id: _menuBarArea
-      hoverEnabled: true
-      propagateComposedEvents: true
-      height: 30
+    Loader {
+      id: menuBarLoader
 
-      Loader {
-        id: _menuBarLoader
-
-        onLoaded: {
-          root.menuBarMenu = DesktopEnvironment.app.mainMenu;
-        }
+      onLoaded: {
+        root.menuBarMenu = DesktopEnvironment.app.mainMenu;
       }
     }
 
     Loader {
       id: overlayItemLoader
+    }
+
+    Loader {
+      id: popUpLoader
     }
 
     FocusScope {
@@ -100,6 +99,12 @@ QtQuickWindow.Window {
     }
   }
 
+  onVisibleChanged: {
+    if (root.visible === false) {
+      menuBarLoader.sourceComponent = undefined;
+    }
+  }
+
   Component.onCompleted: {
     print('DesktopEnvironment.Standalone.Overlay.onCompleted]');
     root.requestActivate();
@@ -107,21 +112,21 @@ QtQuickWindow.Window {
     // Make overlay cover whole screen.
     this.width = QtQuickWindow.Screen.width * 3;
     this.height = QtQuickWindow.Screen.height;
+  }
 
-    _menuBarArea.x = DesktopEnvironment.parent.Window.window.x
-    _menuBarArea.y = DesktopEnvironment.parent.Window.window.y
-    _menuBarArea.width = DesktopEnvironment.parent.Window.window.width
-
-    if (_menuBarLoader.sourceComponent !== undefined) {
-      _menuBarLoader.sourceComponent = undefined;
+  function activateMenuBar() {
+    if (menuBarLoader.sourceComponent !== undefined) {
+      menuBarLoader.sourceComponent = undefined;
     }
-    _menuBarLoader.sourceComponent = DesktopEnvironment.menuDelegate;
-    _menuBarLoader.item.menu = root.menuBarMenu;
+    menuBarLoader.sourceComponent = DesktopEnvironment.menuDelegate;
+    print(menuBarLoader);
+    menuBarLoader.x = DesktopEnvironment.app.activeWindow.x;
+    menuBarLoader.y = DesktopEnvironment.app.activeWindow.y;
+    menuBarLoader.item.popUpMenuBar = true;
+    menuBarLoader.item.menu = root.menuBarMenu;
   }
 
   function renderMenus() {
     print('renderMenus. mouseX: ' + root.mouseX);
-    overlayItemLoader.sourceComponent = undefined;
-    overlayItemLoader.sourceComponent = menuViewComponent;
   }
 }

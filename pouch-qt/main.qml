@@ -25,7 +25,7 @@ Item {
         title: 'File'
       },
       {
-        path: '/file/create-new',
+        path: '/file/create-new/',
         title: "Create New"
       },
       {
@@ -73,7 +73,7 @@ Item {
       },
       // Help
       {
-        path: '/help',
+        path: '/help/',
         title: "Help"
       }
     ]

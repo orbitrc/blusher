@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Window 2.12 as QtQuickWindow
 import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.0
 
@@ -6,17 +7,21 @@ import ".."       // Blusher.DesktopEnvironment
 import "../.."    // Blusher
 import "." as Standalone
 
-Item {
+import "../../../../js/path.js" as Path
+
+QtQuickWindow.Window {
   id: root
 
-  property Menu menu: null
+  property var menu: null // not used
+  property var items: []
+  property int focusedItemIndex: -1
 
+  flags: Qt.Popup
   //================
   // Style
   //================
-  implicitHeight: itemsView.implicitHeight
-  implicitWidth: itemsView.implicitWidth
-  width: this.implicitWidth
+  height: itemsView.implicitHeight
+  width: itemsView.implicitWidth
 
   Rectangle {
     id: _menuStyler
@@ -34,21 +39,21 @@ Item {
     source: _menuStyler
   }
 
-  GridLayout {
+  ColumnLayout {
     id: itemsView
     property alias menuItemViewList: menuItemViewList
 
-    rows: -1
-    columns: 1
-    rowSpacing: 0
-    columnSpacing: 0
+    spacing: 0
     // Menu items
     Repeater {
-      model: root.menu.items
+      model: root.items
       id: menuItemViewList
       Standalone.MenuItemDelegate {
-        menuItem: root.menu.items[index]
+        menuItem: root.items[index]
       }
     }
+  }
+
+  Component.onCompleted: {
   }
 }

@@ -61,7 +61,7 @@ Item {
 
     property int menuBarHeight: 0
 
-    property var onMenuOpened: function(parent, menu) {}
+    property var onMenuOpened: function(menu) {}
     property var onMenuClosed: function() {}
     property var shortcutToString: function(shortcut) {}
 
@@ -75,6 +75,7 @@ Item {
       property string displayName: ""
       readonly property alias version: internal.appVersion
       property int cursor: DesktopEnvironment.Cursor.Auto
+      property Window activeWindow: null
       property Menu mainMenu: Menu {
         title: 'Main Menu'
         type: Menu.MenuType.MenuBarMenu
@@ -176,33 +177,6 @@ Item {
   // Components
   //===================
 
-  // MenuView component
-  Component {
-    id: menuViewComponent
-    Repeater {
-      model: root.overlay.menus.length
-      delegate: Standalone.PopUpMenuDelegate {
-        menu: root.overlay.menus[index]
-      }
-
-      onItemAdded: {
-        if (item.menu.supermenu === null &&
-            item.menu.type === Menu.MenuType.ContextualMenu) {
-          item.x = root.overlay.mouseX + 1;
-          item.y = root.overlay.mouseY;
-        } else if (item.menu === DesktopEnvironment.menus.applicationMenu ||
-            item.menu.supermenu.type === Menu.MenuType.MenuBarMenu) {
-          item.x = root.parent.Window.window.x;
-          item.y = root.parent.Window.window.y + (30 * DesktopEnvironment.pixelsPerDp);
-        } else {
-          const parentMenuDelegate = this.itemAt(index - 1);
-          item.x = parentMenuDelegate.x + parentMenuDelegate.width + 1;
-          item.y = parentMenuDelegate.y;
-        }
-      }
-    }
-  }
-
   //================
   // Items
   //================
@@ -230,6 +204,7 @@ Item {
     if (Process.env.BLUSHER_DEBUG === true) {
       print('[DesktopEnvironment] BLUSHER_DEBUG is on.');
       debugPanelLoader.setSource('./Standalone/DebugPanel.qml');
+      debugPanelLoader.item.show();
     }
   }
 
@@ -268,10 +243,10 @@ Item {
     const dePath = Process.env.BLUSHER_DE_MODULE_PATH;
     let deModule = null;
 
-    print('[DesktopEnvironment._initDesktopEnvironmentModule] dePath: ' + dePath);
     if (dePath === '') {
       deModule = standalone;
     } else {
+      print('[DesktopEnvironment._initDesktopEnvironmentModule] dePath: ' + dePath);
       deModuleLoader.setSource(dePath + '/DesktopEnvironmentModule/DesktopEnvironmentModule.qml');
       deModule = deModuleLoader.item;
     }
@@ -330,16 +305,16 @@ Item {
       }
     }
 
-    function onMenuOpened(parent, menu) {
+    function onMenuOpened(items) {
       if (!this.menuOpen) {
-        // Set singleton item child of root window.
+        // Set singleton item child of currently activated window.
         // It is important to refer the geometry of root window such as x and y.
-        root.parent = parent
+        root.parent = DesktopEnvironment.app.activeWindow.contentItem;
         // Load if not loaded yet.
         if (!overlayLoader.sourceComponent) {
           overlayLoader.setSource('./Standalone/Overlay.qml');
         }
-        root.overlay.visible = true
+        root.overlay.show();
       } else {
         if (menu === DesktopEnvironment.menus.applicationMenu ||
           menu.supermenu.type === Menu.MenuType.MenuBarMenu) {
@@ -354,20 +329,22 @@ Item {
           }
         }
       }
-      root.overlay.menus.push(menu);
-      internal.menuOpen = true;
+      if (items) {
+        root.overlay.menus.push(items);
+        internal.menuOpen = true;
+      }
     }
 
     function onMenuClosed() {
       for (let i = root.overlay.menus.length - 1; i >= 0; --i) {
-        root.overlay.menus[i].close();
+//        root.overlay.menus[i].close();
       }
       root.overlay.menus = [];
       if (root.overlay.menuBarMenu) {
         root.overlay.menuBarMenu.focusItem(-1);
       }
 
-      root.overlay.visible = false
+      root.overlay.close();
       internal.menuOpen = false
     }
 
@@ -386,6 +363,7 @@ Item {
       // Public properties
       //===================
       property Menu menu: null
+      property bool popUpMenuBar: false
 
       Loader {
         id: _loader
@@ -394,6 +372,7 @@ Item {
       onMenuChanged: {
         if (root.menu.type === Menu.MenuType.MenuBarMenu) {
           _loader.setSource('Standalone/MenuBarMenuDelegate.qml', { 'menu': root.menu });
+          _loader.item.popUpMenuBar = root.popUpMenuBar;
         } else {
           _loader.setSource('Standalone/PopUpMenuDelegate.qml', { 'menu': root.menu });
         }

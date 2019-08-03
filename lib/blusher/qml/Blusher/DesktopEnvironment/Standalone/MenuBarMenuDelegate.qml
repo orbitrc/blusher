@@ -5,6 +5,8 @@ import ".."       // Blusher.DesktopEnvironment
 import "../.."    // Blusher
 import "." as Standalone
 
+import "../../../../js/path.js" as Path
+
 Rectangle {
   id: root
 
@@ -13,6 +15,14 @@ Rectangle {
   //===================
   property Menu menu: null
   property Menu applicationMenu: DesktopEnvironment.menus.applicationMenu
+
+  property bool popUpMenuBar: false
+
+  property bool active: false
+  property bool applicationMenuFocused: false
+  property int focusedItemIndex: -1
+
+  property var _menuItems: []
 
   //================
   // Style
@@ -34,72 +44,129 @@ Rectangle {
 
     spacing: 0
     // Application menu
-    Item {
-      width: _text.implicitWidth
+    Standalone.MenuBarMenuItemDelegate {
+      menuItem: root.applicationMenu
+      focused: root.applicationMenuFocused
+      menuBarActive: root.popUpMenuBar
+      bold: true
+
       Layout.alignment: Qt.AlignTop
       Layout.fillHeight: true
-      MouseArea {
-        anchors.fill: parent
-        hoverEnabled: true
 
-        onClicked: {
-          if (root.menu.focusedItemIndex > -1 || root.applicationMenu.opened) {
-            // Menu bar menu already activated.
-            root.menu.focusItem(-1);
-            DesktopEnvironment.menuClosed();
+      onPressed: {
+        if (!root.popUpMenuBar) {
+          DesktopEnvironment.onMenuOpened();
+          DesktopEnvironment.overlay.activateMenuBar();
+        } else {
+          DesktopEnvironment.onMenuClosed();
+        }
+      }
+
+      onClicked: {
+      }
+      onEntered: {
+        if (root.popUpMenuBar) {
+          root.focusedItemIndex = -1;
+          root.applicationMenuFocused = true;
+          root.openSubmenu(root.applicationMenu.items,
+            DesktopEnvironment.overlay.menuBarLoader.x,
+            DesktopEnvironment.overlay.menuBarLoader.y + 30);
+        }
+      }
+    }
+
+    // Menu items
+    Repeater {
+      model: root._menuItems
+      id: menuItemViewList
+
+      Standalone.MenuBarMenuItemDelegate {
+        menuItem: root._menuItems[index]
+        focused: (root.focusedItemIndex === index)
+        menuBarActive: root.popUpMenuBar
+
+        Layout.minimumHeight: root.height
+
+        onPressed: {
+          if (!root.popUpMenuBar) {
+            DesktopEnvironment.onMenuOpened();
+            DesktopEnvironment.overlay.activateMenuBar();
           } else {
-            // Menu bar menu not activated before.
-            root.applicationMenu.open(Window.window.contentItem);
+            DesktopEnvironment.onMenuClosed();
           }
         }
         onEntered: {
-          // Menu bar menu already activated.
-          if (root.menu.focusedItemIndex > -1) {
-            root.menu.focusItem(-1);
-            root.applicationMenu.open(Window.window.contentItem);
-          }
-        }
-        onExited: {
-          if (root.menu.focusedItemIndex > -1 ||
-              root.applicationMenu.opened) {
+          if (!root.popUpMenuBar) {
             return;
           }
-        }
 
-        Connections {
-          target: root.menu
-          onFocusedItemIndexChanged: {
-            root.applicationMenu.close();
+          if (root.focusedItemIndex !== index || root.applicationMenuFocused) {
+            root.applicationMenuFocused = false;
+            root.focusedItemIndex = index;
+            root.openSubmenu(root.filterItems(root.menu, this.menuItem.path),
+              DesktopEnvironment.overlay.menuBarLoader.x + this.x,
+              DesktopEnvironment.overlay.menuBarLoader.y + 30 + this.y);
           }
         }
+      }
+    }
+  }
 
-        MenuItemStyler {
-          anchors.fill: parent
-          visible: root.applicationMenu.opened
+  Loader {
+    id: popUpMenuLoader
+  }
+
+  onVisibleChanged: {
+    print('asdf');
+  }
+
+  onMenuChanged: {
+    if (root.menu) {
+      const menu = root.menu;
+
+      root._menuItems = [];
+      for (let i = 0; i < menu.items.length; ++i) {
+        // Ignore separator.
+        if (menu.items[i].separator) {
+          continue;
         }
-        Text {
-          id: _text
-
-          text: DesktopEnvironment.app.name
-
-          anchors.verticalCenter: parent.verticalCenter
-          rightPadding: 7.0   // 5.0 + styler's margin
-          leftPadding: 7.0    // 5.0 + styler's margin
-          font.pixelSize: 14 * DesktopEnvironment.pixelsPerDp
-          font.bold: true
+        if (Path.join(menu.items[i].path, '..') === '/') {
+          root._menuItems.push(menu.items[i]);
         }
       }
     }
-    // Menu items
-    Repeater {
-      model: root.menu.items
-      id: menuItemViewList
+  }
 
-      Standalone.MenuItemDelegate {
-        menuItem: root.menu.items[index]
-        Layout.minimumHeight: root.height
+  //==========================
+  // Methods
+  //==========================
+
+  // Open submenu as pop up menu with list of menu items.
+  function openSubmenu(items, x, y) {
+    popUpMenuLoader.setSource('PopUpMenuDelegate.qml', { items: items });
+    popUpMenuLoader.item.x = x;
+    popUpMenuLoader.item.y = y;
+    popUpMenuLoader.item.show();
+  }
+
+  // Get child items of given menu by path.
+  function filterItems(menu, path) {
+    if (!path.endsWith('/')) {
+      print('Not a submenu! path: ' + path);
+    }
+    const resolvedMenuPath = Path.join(path, '.');
+    let filtered = [];
+
+    for (let i = 0; i < menu.items.length; ++i) {
+      let item = menu.items[i];
+      if (item.separator) {
+        continue;
+      }
+      if (Path.join(menu.items[i].path, '..') === resolvedMenuPath) {
+        filtered.push(menu.items[i]);
       }
     }
+    return filtered;
   }
 }
 

@@ -55,6 +55,7 @@ DISTFILES += \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/Overlay.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/qmldir \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/MenuBarMenuDelegate.qml \
+    ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/MenuBarMenuItemDelegate.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/PopUpMenuDelegate.qml \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/MenuItemDelegate.qml \
     ../lib/blusher/qml/Blusher/Label.qml \
