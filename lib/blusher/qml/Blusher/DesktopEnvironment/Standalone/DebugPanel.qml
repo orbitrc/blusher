@@ -75,7 +75,7 @@ Window {
     Repeater {
       model: [
         'overlay.visible: ' + (DesktopEnvironment.overlay ? DesktopEnvironment.overlay.visible : ''),
-        'overlay item: ' + (DesktopEnvironment.overlay ? DesktopEnvironment.overlay.overlayItemLoader.item : '')
+        'overlay item: ' + (DesktopEnvironment.overlay ? DesktopEnvironment.overlay.popUpLoader : '')
       ]
       Text {
         y: index * 16

@@ -7,8 +7,6 @@ import "../.."    // Blusher
 QtQuickWindow.Window {
   id: root
 
-  property alias overlayItemLoader: overlayItemLoader
-
   property int mouseX: 0
   property int mouseY: 0
 
@@ -47,10 +45,6 @@ QtQuickWindow.Window {
     }
 
     Loader {
-      id: overlayItemLoader
-    }
-
-    Loader {
       id: popUpLoader
     }
 
@@ -62,9 +56,7 @@ QtQuickWindow.Window {
 
         switch (event.key) {
         case Qt.Key_Escape:
-          if (DesktopEnvironment.menuOpen) {
-            DesktopEnvironment.menuClosed();
-          }
+          root.close();
           break;
 
         case Qt.Key_Down:
@@ -119,7 +111,6 @@ QtQuickWindow.Window {
       menuBarLoader.sourceComponent = undefined;
     }
     menuBarLoader.sourceComponent = DesktopEnvironment.menuDelegate;
-    print(menuBarLoader);
     menuBarLoader.x = DesktopEnvironment.app.activeWindow.x;
     menuBarLoader.y = DesktopEnvironment.app.activeWindow.y;
     menuBarLoader.item.popUpMenuBar = true;

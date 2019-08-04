@@ -12,9 +12,13 @@ import "../../../../js/path.js" as Path
 QtQuickWindow.Window {
   id: root
 
-  property var menu: null // not used
+  property var menu: null
   property var items: []
+  property string path
+
   property int focusedItemIndex: -1
+
+  property var _menuItems: []
 
   flags: Qt.Popup
   //================
@@ -46,14 +50,93 @@ QtQuickWindow.Window {
     spacing: 0
     // Menu items
     Repeater {
-      model: root.items
+      model: root._menuItems
       id: menuItemViewList
       Standalone.MenuItemDelegate {
-        menuItem: root.items[index]
+        menuItem: root._menuItems[index]
+        focused: (root.focusedItemIndex === index)
+
+        onClicked: {
+          this.trigger();
+          DesktopEnvironment.overlay.close();
+        }
+
+        onEntered: {
+          root.focusedItemIndex = index;
+          if (this.menuItem.path.endsWith('/')) {
+            print('===== onEntered =====');
+            print(this.menuItem.path);
+            print(JSON.stringify(root.items));
+            print(' pos: ' + root.x + 'x' + root.y);
+            print('-----------------------');
+            root.openSubmenu(this.menuItem.path, root.childItems(root.items, this.menuItem.path),
+              root.x + root.width,
+              root.y);
+          }
+        }
       }
     }
   }
 
-  Component.onCompleted: {
+  Loader {
+    id: popUpMenuLoader
+  }
+
+
+  onItemsChanged: {
+    print('=======onItemsChanged==========');
+    print(' items: ' + JSON.stringify(root.items));
+    print(' path:  ' + root.path);
+    root._menuItems = root.filterItems(root.items, root.path);
+    print(' filtered: ' + JSON.stringify(root._menuItems));
+    print('-------------------------------');
+  }
+
+  //==========================
+  // Methods
+  //==========================
+
+  // Open submenu as pop up menu with list of menu items.
+  function openSubmenu(path, items, x, y) {
+    if (popUpMenuLoader.sourceComponent) {
+      popUpMenuLoader.sourceComponent = undefined;
+    }
+    popUpMenuLoader.setSource('PopUpMenuDelegate.qml', { path: path, items: items });
+    popUpMenuLoader.item.x = x;
+    popUpMenuLoader.item.y = y;
+    popUpMenuLoader.item.show();
+  }
+
+  // Get all children of path.
+  function childItems(items, path) {
+    if (!path.endsWith('/')) {
+      print('Not a submenu! path: ' + path);
+    }
+    let itemList = [];
+    for (let i = 0; i < items.length; ++i) {
+      let item = items[i];
+      if (item.path !== path && item.path.startsWith(path)) {
+        itemList.push(item);
+      }
+    }
+    return itemList;
+  }
+
+  // Filter menu items by path.
+  function filterItems(items, path) {
+    if (!path.endsWith('/')) {
+      print('Not a submenu! path: ' + path);
+    }
+    const resolvedMenuPath = Path.join(path, '.');
+    let filtered = [];
+
+    for (let i = 0; i < items.length; ++i) {
+      let item = items[i];
+      if (Path.join(item.path, '..') === resolvedMenuPath) {
+        print(' item: ' + JSON.stringify(item));
+        filtered.push(item);
+      }
+    }
+    return filtered;
   }
 }

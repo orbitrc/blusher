@@ -23,6 +23,7 @@ Rectangle {
   property int focusedItemIndex: -1
 
   property var _menuItems: []
+  property var _applicationMenuItems: []
 
   //================
   // Style
@@ -68,7 +69,7 @@ Rectangle {
         if (root.popUpMenuBar) {
           root.focusedItemIndex = -1;
           root.applicationMenuFocused = true;
-          root.openSubmenu(root.applicationMenu.items,
+          root.openSubmenu('/', root.applicationMenu.items,
             DesktopEnvironment.overlay.menuBarLoader.x,
             DesktopEnvironment.overlay.menuBarLoader.y + 30);
         }
@@ -103,7 +104,7 @@ Rectangle {
           if (root.focusedItemIndex !== index || root.applicationMenuFocused) {
             root.applicationMenuFocused = false;
             root.focusedItemIndex = index;
-            root.openSubmenu(root.filterItems(root.menu, this.menuItem.path),
+            root.openSubmenu(this.menuItem.path, root.childItems(root.menu, this.menuItem.path),
               DesktopEnvironment.overlay.menuBarLoader.x + this.x,
               DesktopEnvironment.overlay.menuBarLoader.y + 30 + this.y);
           }
@@ -117,7 +118,7 @@ Rectangle {
   }
 
   onVisibleChanged: {
-    print('asdf');
+    print('[MenuBarMenuDelegate.onVisibleChanged]');
   }
 
   onMenuChanged: {
@@ -137,16 +138,46 @@ Rectangle {
     }
   }
 
+  Component.onCompleted: {
+    const menu = root.applicationMenu;
+    for (let i = 0; i < menu.items.length; ++i) {
+      if (Path.join(menu.items[i].path, '..') === '/') {
+        root._menuItems.push(menu.items[i]);
+      }
+    }
+  }
+
   //==========================
   // Methods
   //==========================
 
   // Open submenu as pop up menu with list of menu items.
-  function openSubmenu(items, x, y) {
-    popUpMenuLoader.setSource('PopUpMenuDelegate.qml', { items: items });
+  function openSubmenu(path, items, x, y) {
+    if (popUpMenuLoader.sourceComponent) {
+      popUpMenuLoader.sourceComponent = undefined;
+    }
+    popUpMenuLoader.setSource('PopUpMenuDelegate.qml', { path: path, items: items });
     popUpMenuLoader.item.x = x;
     popUpMenuLoader.item.y = y;
     popUpMenuLoader.item.show();
+  }
+
+  // Get all children of path.
+  function childItems(menu, path) {
+    if (!path.endsWith('/')) {
+      print('Not a submenu! path: ' + path);
+    }
+    let itemList = [];
+    for (let i = 0; i < menu.items.length; ++i) {
+      let item = menu.items[i];
+      if (item.path !== path && item.path.startsWith(path)) {
+        itemList.push(item);
+      }
+    }
+    print('=======childItems==========');
+    print(JSON.stringify(itemList));
+    print('#===========================#');
+    return itemList;
   }
 
   // Get child items of given menu by path.

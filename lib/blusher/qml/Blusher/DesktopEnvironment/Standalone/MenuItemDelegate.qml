@@ -10,6 +10,9 @@ Item {
   property var menuItem: null
   property bool focused: false
 
+  signal clicked(var mouse)
+  signal entered()
+
   implicitWidth: _checked.width + _text.implicitWidth + _info.width
   height: 30 * DesktopEnvironment.pixelsPerDp
 
@@ -44,7 +47,7 @@ Item {
     }
     Text {
       id: _text
-      text: root.menuItem.title
+      text: (!root.menuItem.separator) ? root.menuItem.title : ' '
       anchors.verticalCenter: parent.verticalCenter
       leftPadding: 7.0 + _checked.width   // 5.0 + styler's margin + checked-image width
       rightPadding: 7.0       // 5.0 + styler's margin
@@ -112,50 +115,33 @@ Item {
     }
 
     onClicked: {
-      // If regular menu.
-      if (!root.menuItem.isMenuBarMenuItem()) {
-        if (!root.menuItem.hasSubmenu()) {
-          print('MenuItem.action')
-        }
-        if (root.menuItem.action !== null) {
-          root.menuItem.action();
-        }
-      }
+      root.clicked(mouse);
     }
 
     onEntered: {
-      if (root.menuItem.isMenuBarMenuItem()) {
-        root._menuBarMenuItemEntered(index);
-      } else {
-        if (root.menuItem.separator) {
-          root.menuItem.parentMenu.focusItem(-1);
-        } else {
-          root.menuItem.parentMenu.focusItem(index);
-        }
-        if (root.menuItem.hasSubmenu() && !root.menuItem.submenu.opened) {
-          root.menuItem.submenu.open(parent)
-        }
-      }
+      root.entered();
     }
     onExited: {
-      if (root.menuItem.isMenuBarMenuItem()) {
-        root._menuBarMenuItemExited();
-      } else {
-        // If submenu is opened, don't take focus of this item.
-        if (root.menuItem.hasSubmenu() && root.menuItem.submenu.opened) {
-          return;
-        }
-        root.menuItem.parentMenu.focusItem(-1);
+      // If submenu is opened, don't take focus of this item.
+      if (root.menuItem.path.endsWith('/')) {
+        return;
       }
+//      root.menuItem.parentMenu.focusItem(-1);
     }
   } // MouseArea
 
   Component.onCompleted: {
-    print(JSON.stringify(root.menuItem));
     if (root.menuItem.separator) {
       this.Layout.maximumHeight = 10;
       _separator.visible = true
     }
+  }
+
+  function trigger() {
+    if (root.menuItem.action) {
+      root.menuItem.action();
+    }
+    DesktopEnvironment.menuItemTriggered(root.menuItem.path);
   }
 
   function _menuBarMenuItemClicked(index) {

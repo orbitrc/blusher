@@ -173,6 +173,8 @@ Item {
     root.onMenuClosed();
   }
 
+  signal menuItemTriggered(string path)
+
   //===================
   // Components
   //===================

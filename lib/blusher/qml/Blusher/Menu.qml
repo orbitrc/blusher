@@ -29,6 +29,7 @@ QtObject {
   //=========================
   property int focusedItemIndex: -1
   readonly property alias opened: _private.opened
+  readonly property string path: '/'
 
   //=========================
   // Private Properties

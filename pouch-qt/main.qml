@@ -10,7 +10,7 @@ import "src/components"
 Item {
   id: application
 
-  property var states: QtObject {
+  property var store: QtObject {
     property bool showSidebar: true
   }
 
@@ -37,6 +37,7 @@ Item {
         title: "New Folder"
       },
       {
+        path: '/file/separator1',
         separator: true
       },
       {
@@ -66,9 +67,9 @@ Item {
       {
         path: '/view/sidebar',
         title: "Sidebar",
-        checked: true,
+        checked: application.store.showSidebar,
         action: function() {
-          this.checked = !this.checked;
+          application.store.showSidebar = !application.store.showSidebar;
         }
       },
       // Help
