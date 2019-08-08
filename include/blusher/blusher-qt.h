@@ -21,6 +21,7 @@ private:
     {
         QFile f("/etc/blusher.conf");
         if (!f.exists()) {
+            env->insert("BLUSHER_DE_MODULE_PATH", "");
             return;
         }
         f.open(QFile::ReadOnly | QFile::Text);
