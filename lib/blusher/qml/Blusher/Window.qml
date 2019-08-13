@@ -65,6 +65,9 @@ QtQuickWindow.Window {
       id: _bodyArea
       Layout.fillWidth: true
       Layout.fillHeight: true
+      children: [
+        root.body
+      ]
     }
   }
 
@@ -110,7 +113,7 @@ QtQuickWindow.Window {
       _toolbarArea.visible = true
     }
 
-    root.body.parent = _bodyArea
+//    root.body.parent = _bodyArea
   }
 
   //=======================

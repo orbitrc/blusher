@@ -63,6 +63,7 @@ DISTFILES += \
     ../lib/blusher/qml/Blusher/MenuItem.qml \
     ../lib/blusher/qml/Blusher/MenuItemView.qml \
     ../lib/blusher/qml/Blusher/MenuView.qml \
+    ../lib/blusher/qml/Blusher/ScrollView.qml \
     ../lib/blusher/qml/Blusher/Segment.qml \
     ../lib/blusher/qml/Blusher/SegmentedControl.qml \
     ../lib/blusher/qml/Blusher/SplitView.qml \

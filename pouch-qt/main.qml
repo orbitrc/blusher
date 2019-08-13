@@ -224,6 +224,24 @@ Item {
             print(Pouch.pwd);
           }
         }
+        ScrollView {
+          x: 300
+          width: 100
+//          height: 170
+          anchors.top: parent.top
+          anchors.bottom: parent.bottom
+          Rectangle {
+            width: 100
+            height: 150
+            color: "black"
+          }
+          Rectangle {
+            y: 150
+            width: 80
+            height: 150
+            color: "red"
+          }
+        }
       }
 
       Component.onCompleted: {
