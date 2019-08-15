@@ -22,8 +22,11 @@ Setup Development Environment
 WARNING! THIS GUIDE IS NOT COMPLETE!!
 
 ### ubuntu 19.04
+
+Download and install Qt Creator from Qt official homepage.
+
 ```sh
-$ sudo apt-get install qt5-qmake
+$ sudo apt-get install qt5-qmake qt5-default qtdeclarative5-dev qml qml-module-qtquick2 qml-module-qtquick-window2
 ```
 
 
