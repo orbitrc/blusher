@@ -4,14 +4,24 @@ import "DesktopEnvironment"
 
 Rectangle {
   id: root
-  width: 100
-  height: 30
+  //===============
+  // Size/Position
+  //===============
+  property rect rect: Qt.rect(0, 0, 100, 30)
+  property rect pos: Qt.rect(0, 0, 0, 0)
+
+  width: rect.width * DesktopEnvironment.pixelsPerDp
+  height: rect.height * DesktopEnvironment.pixelsPerDp
+  x: pos.x * DesktopEnvironment.pixelsPerDp
+  y: pos.y * DesktopEnvironment.pixelsPerDp
 
   //=========================
   // Public Properties
   //=========================
-  property string text: ""
+  property alias text: _input.text
   property alias font: _font
+  property string fontFamily: 'Liberation Sans'
+  property real fontSize: 14
   property Menu menu: DesktopEnvironment.menus.textEditMenu
 
   //=========================
@@ -19,8 +29,8 @@ Rectangle {
   //=========================
   QtObject {
     id: _font
-    property real size: 14
-    property alias family: _input.font.family
+    property real size: root.fontSize
+    property alias family: root.fontFamily
     property alias pixelSize: _input.font.pixelSize
     property alias pointSize: _input.font.pointSize
   }
@@ -32,13 +42,14 @@ Rectangle {
   TextInput {
     id: _input
 
-    text: root.text
+//    text: root.text
 
     anchors.fill: parent
     verticalAlignment: TextInput.AlignVCenter
     leftPadding: 4
     rightPadding: 4
     font.pixelSize: root.font.size * DesktopEnvironment.pixelsPerDp
+    font.family: root.font.family
     selectionColor: "lightblue"
 
     selectByMouse: true

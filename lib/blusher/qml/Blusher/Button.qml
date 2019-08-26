@@ -18,8 +18,16 @@ Rectangle {
   property bool active: false
   property bool hover: false
 
-  width: 100
-  height: 34
+  //===============
+  // Size/Position
+  //===============
+  property rect rect: Qt.rect(0, 0, 100, 34)
+  property rect pos: Qt.rect(0, 0, 0, 0)
+
+  width: rect.width * DesktopEnvironment.pixelsPerDp
+  height: rect.height * DesktopEnvironment.pixelsPerDp
+  x: pos.x * DesktopEnvironment.pixelsPerDp
+  y: pos.y * DesktopEnvironment.pixelsPerDp
 
   color: "transparent"
   border.width: 0
@@ -79,6 +87,7 @@ Rectangle {
     id: _text
     text: root.title
     font.pixelSize: 13 * DesktopEnvironment.pixelsPerDp
+    font.family: "Liberation Sans"
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.verticalCenter: parent.verticalCenter
   }

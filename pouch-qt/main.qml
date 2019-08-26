@@ -179,8 +179,8 @@ Item {
 
         TextField {
           id: _lorem
-          width: 200
-          height: 30
+          rect.width: 200
+          rect.height: 30
           text: "Lorem ipsum (" + _lorem.font.family + ")"
         }
         Text {
@@ -214,14 +214,13 @@ Item {
           }
         }
         Button {
-          width: 100
-          height: 50
-          x: 200
-          title: "Hide"
+          rect.width: 100
+          rect.height: 60
+          pos.x: 200
+          title: "Echo"
           onClicked: {
-            sidebar.visible = false;
-            print('hello?? ' + root);
-            print(Pouch.pwd);
+//            sidebar.visible = false;
+            print(_lorem.text);
           }
         }
         ScrollView {
