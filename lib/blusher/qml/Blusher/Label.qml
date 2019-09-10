@@ -16,6 +16,7 @@ Rectangle {
   property alias font: _font
   property bool selectable: false
   property Menu menu: DesktopEnvironment.menus.textEditMenu
+  property alias fontSize: _font.size
 
   //=========================
   // Private Properties
