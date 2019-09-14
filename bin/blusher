@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+import json
+
+def make_qmake_file(blusher_app):
+    source = ''
+    source += 'QT + gui quick\n'
+    source += 'CONFIG += c++11\n'
+    source += 'DEFINES += QT_DEPRECATED_WARNINGS\n'
+    source += 'DEFINES += BLUSHER_APP_VERSION=\\\\\\"$$VERSION\\\\\\" \n'
+    source += 'DEFINES += "BLUSHER_APP_NAME=$$(BLUSHER_APP_NAME)" \n'
+        # BLUSHER_PATH=\\\"$$PWD/../lib/blusher/qml\\\" \
+        # BLUSHER_DEBUG
+        # BLUSHER_PATH=\\\"/usr/lib/blusher/qml\\\"
+
+def make_appdir_structure(blusher_app):
+    os.mkdir('AppDir')
+    os.mkdir('AppDir/bin')
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print('Usage:\n\tblusher build')
+    else:
+        if sys.argv[1] == 'build':
+            print('* blusher build')
+            print('* Gathering informations...')
+            if os.path.isfile('blusher-app.json') is False:
+                print('blusher-app.json file could not found.')
+                exit(1)
+            f = open('blusher-app.json', 'r')
+            blusher_app_json = f.read()
+            f.close()
+
+            blusher_app = json.loads(blusher_app_json)
+
+            desktopEntry = blusher_app['desktopEntry']
+            if os.path.isfile(desktopEntry) is False:
+                print(desktopEntry + ' file could not found.')
+                exit(1)
+
+            print(' - Name: ' + blusher_app['name'])
+            print(' - Version: ' + blusher_app['version'])
+
+            if os.path.isdir('build') is False:
+                os.mkdir('build')
+
+            os.system('cd build && qmake ../pouch.pro ' \
+                + '-spec linux-g++ ' \
+                + '"BLUSHER_APP_NAME=\\"' + blusher_app['name'].replace(' ', '\\ ') + '\\"" ' \
+                + '"VERSION=' + blusher_app['version'] + '" ' \
+                + 'CONFIG+=qtquickcompiler && make qmake_all')
+            os.system('cd build && make -j8')
+
+            if os.path.isdir('AppDir') is True:
+                os.system('rm -rf AppDir')
+            make_appdir_structure(blusher_app)
+            # os.system('cp AppDir/-.desktop')

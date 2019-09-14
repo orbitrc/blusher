@@ -205,6 +205,8 @@ Item {
 
     if (Process.env.BLUSHER_DEBUG === true) {
       print('[DesktopEnvironment] BLUSHER_DEBUG is on.');
+      print('[DesktopEnvironment] BLUSHER_APP_NAME="' + Process.env.BLUSHER_APP_NAME + '"');
+      print('[DesktopEnvironment] BLUSHER_APP_VERSION="' + Process.env.BLUSHER_APP_VERSION + '"');
       debugPanelLoader.setSource('./Standalone/DebugPanel.qml');
       debugPanelLoader.item.show();
     }

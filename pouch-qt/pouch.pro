@@ -1,8 +1,6 @@
 QT = gui quick
 CONFIG += c++11
 
-VERSION = 0.1.0
-
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Refer to the documentation for the
@@ -35,7 +33,7 @@ QML2_IMPORT_PATH +=
 QML_DESIGNER_IMPORT_PATH =
 
 DEFINES += BLUSHER_APP_VERSION=\\\"$$VERSION\\\" \
-        BLUSHER_APP_NAME=\\\"Pouch\\\" \
+        BLUSHER_APP_NAME=\\\"$$BLUSHER_APP_NAME\\\" \
         BLUSHER_PATH=\\\"$$PWD/../lib/blusher/qml\\\" \
         BLUSHER_DEBUG
         # BLUSHER_PATH=\\\"/usr/lib/blusher/qml\\\"
