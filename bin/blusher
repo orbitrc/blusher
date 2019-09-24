@@ -4,26 +4,120 @@ import sys
 import os
 import json
 
-def make_qmake_file(blusher_app):
+APPIMAGETOOL_URL = 'https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage'
+
+def is_toolchain_installed():
+    if os.path.isfile(os.environ['HOME'] + '/.blusher-dev/appimagetool-x86_64.AppImage'):
+        return True
+    print('* Toolchain is not downloaded.')
+    return False
+
+def install_toolchain():
+    print('* Downloading toolchain...')
+    os.system('mkdir -p ' + os.environ['HOME'] + '/.blusher-dev')
+    print(' - Download files.')
+    os.system('wget {url} -O {target}'.format(
+        url=APPIMAGETOOL_URL,
+        target=os.environ['HOME'] + '/.blusher-dev/appimagetool-x86_64.AppImage'))
+    print(' - Add executable to the binary.')
+    os.system('chmod +x {}'.format(os.environ['HOME'] + '/.blusher-dev/appimagetool-x86_64.AppImage'))
+
+
+def get_blusher_app_struct():
+    print('* Gathering informations...')
+    if os.path.isfile('blusher-app.json') is False:
+        print('blusher-app.json file could not found.')
+        exit(1)
+    f = open('blusher-app.json', 'r')
+    blusher_app_json = f.read()
+    f.close()
+
+    blusher_app = json.loads(blusher_app_json)
+    return blusher_app
+
+
+def make_qmake_file(blusher_app, debug=False):
     source = ''
-    source += 'QT + gui quick\n'
+    source += 'QT = gui quick\n'
     source += 'CONFIG += c++11\n'
+    source += 'CONFIG -= qtquickcompiler\n'
     source += 'DEFINES += QT_DEPRECATED_WARNINGS\n'
     source += 'DEFINES += BLUSHER_APP_VERSION=\\\\\\"$$VERSION\\\\\\" \n'
-    source += 'DEFINES += "BLUSHER_APP_NAME=$$(BLUSHER_APP_NAME)" \n'
-        # BLUSHER_PATH=\\\"$$PWD/../lib/blusher/qml\\\" \
-        # BLUSHER_DEBUG
-        # BLUSHER_PATH=\\\"/usr/lib/blusher/qml\\\"
+    source += 'DEFINES += "BLUSHER_APP_NAME=\\\\\\"$$(BLUSHER_APP_NAME)\\\\\\"" \n'
+    source += 'DEFINES += BLUSHER_PATH=\\\\\\"/usr/lib/blusher/qml\\\\\\"\n'
+    # BLUSHER_PATH=\\\"$$PWD/../lib/blusher/qml\\\" \
+    if debug:
+        source += 'DEFINES += BLUSHER_DEBUG \n'
+
+    source += 'SOURCES +='
+    for src in blusher_app['qtCppSources']:
+        source += (' ' + src)
+    source += '\n'
+
+    source += 'RESOURCES += qml.qrc'
+
+    f = open('blusher_qt_qmake_tmp.pro', 'w')
+    f.write(source)
+    f.close()
 
 def make_appdir_structure(blusher_app):
     os.mkdir('AppDir')
-    os.mkdir('AppDir/bin')
+    os.mkdir('AppDir/usr')
+    os.mkdir('AppDir/usr/bin')
+    os.mkdir('AppDir/usr/lib')
+    os.mkdir('AppDir/usr/share')
+    os.mkdir('AppDir/usr/share/applications')
+    os.mkdir('AppDir/usr/share/icons')
+
+def blusher_create():
+    """
+ +-- my-app
+ |---- .gitignore
+ |---- blusher-app.json
+ |---- qml.qrc
+ |---- src/
+ |      |-- components/
+ |      +-- modules/
+ |---- AppDir/
+    """
+    pass
+
+
+def blusher_debug():
+    '''
+    $ blusher debug
+    '''
+    print('* blusher debug')
+    blusher_app = get_blusher_app_struct()
+
+    print(' - Name: ' + blusher_app['name'])
+    print(' - Version: ' + blusher_app['version'])
+
+    if os.path.isdir('debug') is False:
+        os.mkdir('debug')
+
+    make_qmake_file(blusher_app, debug=True)
+
+    os.system('cd debug && qmake ../blusher_qt_qmake_tmp.pro ' \
+        + '-spec linux-g++ ' \
+        + '"BLUSHER_APP_NAME=\\"' + blusher_app['name'].replace(' ', '\\ ') + '\\"" ' \
+        + '"VERSION=' + blusher_app['version'] + '" ' \
+        + ' CONFIG+=debug CONFIG+=qml_debug && make qmake_all')
+    os.system('cd debug && make -j8')
+
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print('Usage:\n\tblusher build')
+        print('Usage:\n\tblusher build|debug|create')
     else:
-        if sys.argv[1] == 'build':
+        # Check toolchain
+        if is_toolchain_installed() is not True:
+            install_toolchain()
+
+        if sys.argv[1] == 'debug':
+            blusher_debug()
+
+        elif sys.argv[1] == 'build':
             print('* blusher build')
             print('* Gathering informations...')
             if os.path.isfile('blusher-app.json') is False:
@@ -50,7 +144,7 @@ if __name__ == '__main__':
                 + '-spec linux-g++ ' \
                 + '"BLUSHER_APP_NAME=\\"' + blusher_app['name'].replace(' ', '\\ ') + '\\"" ' \
                 + '"VERSION=' + blusher_app['version'] + '" ' \
-                + 'CONFIG+=qtquickcompiler && make qmake_all')
+                + ' && make qmake_all')
             os.system('cd build && make -j8')
 
             if os.path.isdir('AppDir') is True:

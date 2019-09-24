@@ -223,6 +223,21 @@ Item {
             print(_lorem.text);
           }
         }
+
+        Rectangle {
+          x: 100
+          y: 100
+          width: 100
+          height: 100
+          color: "blue"
+          MouseArea {
+            anchors.fill: parent
+            onPositionChanged: {
+              print(root.x += 1);
+            }
+          }
+        }
+
         ScrollView {
           x: 300
           width: 100

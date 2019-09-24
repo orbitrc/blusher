@@ -204,7 +204,7 @@ Item {
     root._initDesktopEnvironmentModule();
 
     if (Process.env.BLUSHER_DEBUG === true) {
-      print('[DesktopEnvironment] BLUSHER_DEBUG is on.');
+      print('[DesktopEnvironment] BLUSHER_DEBUG=true.');
       print('[DesktopEnvironment] BLUSHER_APP_NAME="' + Process.env.BLUSHER_APP_NAME + '"');
       print('[DesktopEnvironment] BLUSHER_APP_VERSION="' + Process.env.BLUSHER_APP_VERSION + '"');
       debugPanelLoader.setSource('./Standalone/DebugPanel.qml');
@@ -291,6 +291,11 @@ Item {
     property int menuBarHeight: 30
 
     property int pixelsPerDp: 1
+
+    property int decorationTopHeight: 0
+    property int decorationBottomHeight: 0
+    property int decorationLeftWidth: 0
+    property int decorationRightWidth: 0
 
     function onAppCursorChanged(cursor) {
       switch (cursor) {
