@@ -297,13 +297,23 @@ Item {
       id: aboutPanel
 
       type: Window.WindowType.Panel
+      visible: false
 
       minimumFrameWidth: 240
       minimumFrameHeight: 240
 
       body: Item {
-        Label {
-          text: 'Pouch'
+        Column {
+          Label {
+            text: 'Pouch'
+          }
+          Label {
+            text: 'v' + Process.env.BLUSHER_APP_VERSION
+          }
+          Label {
+            text: 'Author: Gene Ryu (hardboiled65@gmail.com)'
+            selectable: true
+          }
         }
       }
     }

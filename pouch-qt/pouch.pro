@@ -32,8 +32,8 @@ QML2_IMPORT_PATH +=
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =
 
-DEFINES += BLUSHER_APP_VERSION=\\\"$$VERSION\\\" \
-        BLUSHER_APP_NAME=\\\"$$BLUSHER_APP_NAME\\\" \
+DEFINES += BLUSHER_APP_VERSION=\\\"0.1.0\\\" \
+        BLUSHER_APP_NAME=\\\"Pouch\\\" \
 
 contains(DEFINES, BLUSHER_DEBUG) {
     message("BLUSHER IS DEBUG MODE!")

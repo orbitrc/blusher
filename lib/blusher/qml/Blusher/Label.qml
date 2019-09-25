@@ -4,8 +4,6 @@ import "DesktopEnvironment"
 
 Rectangle {
   id: root
-  width: 100
-  height: 30
 
   color: root.backgroundColor
 
@@ -24,6 +22,12 @@ Rectangle {
 
   property alias implicitWidth: _text.implicitWidth
 
+  //===============
+  // Size/Position
+  //===============
+  property size rect: Qt.size(100, 30)
+  property rect pos: Qt.rect(0, 0, 0, 0)
+
   //=========================
   // Private Properties
   //=========================
@@ -35,6 +39,9 @@ Rectangle {
     property alias pixelSize: _text.font.pixelSize
     property alias pointSize: _text.font.pointSize
   }
+
+  width: root.rect.width * DesktopEnvironment.pixelsPerDp
+  height: root.rect.height * DesktopEnvironment.pixelsPerDp
 
   border.width: 0
   clip: true
@@ -54,6 +61,7 @@ Rectangle {
     selectionColor: "lightblue"
 
     selectByMouse: root.selectable
+    cursorPosition: 0
 
     MouseArea {
       anchors.fill: parent
