@@ -16,6 +16,8 @@ install:
 install-dev:
 	rm -rf /usr/bin/blusher
 	cp bin/blusher /usr/bin/blusher
+	rm -rf /usr/include/blusher
+	cp -r include/blusher /usr/include/blusher
 
 dist: lib
 	rm -rf blusher_$(VERSION)
