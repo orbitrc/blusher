@@ -34,9 +34,11 @@ QML_DESIGNER_IMPORT_PATH =
 
 DEFINES += BLUSHER_APP_VERSION=\\\"$$VERSION\\\" \
         BLUSHER_APP_NAME=\\\"$$BLUSHER_APP_NAME\\\" \
-        BLUSHER_PATH=\\\"$$PWD/../lib/blusher/qml\\\" \
-        BLUSHER_DEBUG
-        # BLUSHER_PATH=\\\"/usr/lib/blusher/qml\\\"
+        BLUSHER_PATH=\\\"/usr/lib/blusher/qml\\\"
+
+defined(BLUSHER_DEBUG) {
+    BLUSHER_PATH=\\\"$$PWD/../lib/blusher/qml\\\"
+}
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
