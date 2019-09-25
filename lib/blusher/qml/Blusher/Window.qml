@@ -6,6 +6,7 @@ import "DesktopEnvironment"
 
 QtQuickWindow.Window {
   id: root
+
   enum WindowType {
     DocumentWindow,
     AppWindow,
@@ -23,11 +24,19 @@ QtQuickWindow.Window {
   property int windowHeight
   property int windowWidth
 
+  property int minimumFrameWidth: 0
+  property int minimumFrameHeight: 0
+  property int minimumBodyWidth: 0
+  property int minimumBodyHeight: 0
+
 
   readonly property bool maximized: (root.visibility === QtQuickWindow.Window.Maximized)
 
   height: root.windowHeight * DesktopEnvironment.pixelsPerDp
   width: root.windowWidth * DesktopEnvironment.pixelsPerDp
+
+//  minimumWidth: root.minimumFrameWidth  // xcb error. why??
+//  minimumHeight: root.minimumFrameHeight
 
   color: "#d6d2d0"
   flags: root._windowFlags()
@@ -148,6 +157,9 @@ QtQuickWindow.Window {
   function _windowFlags() {
     if (root.type === Window.WindowType.Alert) {
       return (Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint);
+    }
+    if (root.type === Window.WindowType.Panel) {
+      return (Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint);
     }
     return Qt.Window;
   }

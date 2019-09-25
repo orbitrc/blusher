@@ -34,10 +34,13 @@ QML_DESIGNER_IMPORT_PATH =
 
 DEFINES += BLUSHER_APP_VERSION=\\\"$$VERSION\\\" \
         BLUSHER_APP_NAME=\\\"$$BLUSHER_APP_NAME\\\" \
-        BLUSHER_PATH=\\\"/usr/lib/blusher/qml\\\"
 
-defined(BLUSHER_DEBUG) {
-    BLUSHER_PATH=\\\"$$PWD/../lib/blusher/qml\\\"
+contains(DEFINES, BLUSHER_DEBUG) {
+    message("BLUSHER IS DEBUG MODE!")
+    DEFINES += BLUSHER_PATH=\\\"$$PWD/../lib/blusher/qml\\\"
+}
+!contains(DEFINES, BLUSHER_DEBUG) {
+    DEFINES += BLUSHER_PATH=\\\"/usr/lib/blusher/qml\\\"
 }
 
 # Default rules for deployment.

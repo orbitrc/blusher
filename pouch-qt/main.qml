@@ -76,7 +76,17 @@ Item {
       {
         path: '/help/',
         title: "Help"
+      },
+      {
+        path: '/help/about',
+        title: 'About Pouch ...',
+        action: function() {
+          if (aboutPanel.visible === false) {
+            aboutPanel.show();
+          }
+        }
       }
+
     ]
   }
 
@@ -183,9 +193,10 @@ Item {
           rect.height: 30
           text: "Lorem ipsum (" + _lorem.font.family + ")"
         }
-        Text {
+        Label {
           y: 30
-          font.pixelSize: 10
+          fontSize: 10
+          height: 12
           text: _lorem.font.pointSize + "pt, (" + _lorem.font.pixelSize + "px)"
         }
 
@@ -277,6 +288,23 @@ Item {
 
       onOk: {
         print('Ok clicked.');
+      }
+    }
+    //========
+    // About
+    //========
+    Window {
+      id: aboutPanel
+
+      type: Window.WindowType.Panel
+
+      minimumFrameWidth: 240
+      minimumFrameHeight: 240
+
+      body: Item {
+        Label {
+          text: 'Pouch'
+        }
       }
     }
   } // Window

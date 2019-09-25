@@ -81,11 +81,11 @@ Item {
         }
 
         onPositionChanged: {
-          const view = root.views[index]
-          view.Layout.preferredWidth += (mouse.x - _private.dividerOffset)
+          const view = root.views[index];
+          view.Layout.preferredWidth += (mouse.x - _private.dividerOffset);
           // Minimun width
           if (view.Layout.preferredWidth < _private.resizingViewMinimumWidth) {
-            view.Layout.preferredWidth = _private.resizingViewMinimumWidth
+            view.Layout.preferredWidth = _private.resizingViewMinimumWidth;
           }
         }
       }
