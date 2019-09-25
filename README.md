@@ -13,7 +13,7 @@ Blusher is dependent in Qt and QML(with QtQuick). so before install Blusher, ins
 
 ```sh
 $ sudo apt-get update
-$ sudo apt-get install libqt5gui5 libqt5qml5
+$ sudo apt-get install libqt5gui5 libqt5qml5 libqt5quick5 qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-window2 qml-module-qtgraphicaleffects
 ```
 ### Common
 
