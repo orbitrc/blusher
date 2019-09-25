@@ -96,14 +96,58 @@ def blusher_debug():
     if os.path.isdir('debug') is False:
         os.mkdir('debug')
 
-    make_qmake_file(blusher_app, debug=True)
+    qmake_file = 'blusher_qt_qmake_tmp.pro'
+    if blusher_app.get('qtProject') is not None:
+        qmake_file = blusher_app['qtProject']
+    else:
+        make_qmake_file(blusher_app, debug=True)
 
-    os.system('cd debug && qmake ../blusher_qt_qmake_tmp.pro ' \
-        + '-spec linux-g++ ' \
+    os.system('cd debug && qmake ../' + qmake_file + ' ' \
+        + ' -spec linux-g++ ' \
         + '"BLUSHER_APP_NAME=\\"' + blusher_app['name'].replace(' ', '\\ ') + '\\"" ' \
         + '"VERSION=' + blusher_app['version'] + '" ' \
         + ' CONFIG+=debug CONFIG+=qml_debug && make qmake_all')
     os.system('cd debug && make -j8')
+
+def blusher_build():
+    '''
+    $ blusher build
+    '''
+    print('* blusher build')
+    blusher_app = get_blusher_app_struct()
+
+    print(' - Name: ' + blusher_app['name'])
+    print(' - Version: ' + blusher_app['version'])
+
+    if os.path.isdir('build') is False:
+        os.mkdir('build')
+
+    qmake_file = 'blusher_qt_qmake_tmp.pro'
+    if blusher_app.get('qtProject') is not None:
+        qmake_file = blusher_app['qtProject']
+    else:
+        make_qmake_file(blusher_app, debug=True)
+
+    bin_name = blusher_app['name']
+    if blusher_app.get('bin') is not None:
+        bin_name = blusher_app['bin']
+
+    os.system('cd build && qmake ../' + qmake_file + ' ' \
+        + ' -spec linux-g++ ' \
+        + '"BLUSHER_APP_NAME=\\"' + blusher_app['name'].replace(' ', '\\ ') + '\\"" ' \
+        + '"VERSION=' + blusher_app['version'] + '" ' \
+        + ' TARGET="' + bin_name.replace(' ', '\\ ') + '" && make qmake_all')
+    os.system('cd build && make -j8')
+
+    # Make AppImage.
+    if os.path.isdir('AppDir/usr/bin') is False:
+        os.mkdir('AppDir/usr')
+        os.mkdir('AppDir/usr/bin')
+    os.system('cp build/' + bin_name + ' AppDir/usr/bin')
+    os.system('rm -f AppDir/AppRun')
+    os.system('ln -s usr/bin/' + bin_name + ' AppDir/AppRun')
+    os.system(os.environ['HOME'] + '/.blusher-dev/appimagetool-x86_64.AppImage AppDir')
+    os.system('mv ' + bin_name + '-x86_64.AppImage ' + bin_name + '.AppImage')
 
 
 if __name__ == '__main__':
@@ -118,36 +162,5 @@ if __name__ == '__main__':
             blusher_debug()
 
         elif sys.argv[1] == 'build':
-            print('* blusher build')
-            print('* Gathering informations...')
-            if os.path.isfile('blusher-app.json') is False:
-                print('blusher-app.json file could not found.')
-                exit(1)
-            f = open('blusher-app.json', 'r')
-            blusher_app_json = f.read()
-            f.close()
-
-            blusher_app = json.loads(blusher_app_json)
-
-            desktopEntry = blusher_app['desktopEntry']
-            if os.path.isfile(desktopEntry) is False:
-                print(desktopEntry + ' file could not found.')
-                exit(1)
-
-            print(' - Name: ' + blusher_app['name'])
-            print(' - Version: ' + blusher_app['version'])
-
-            if os.path.isdir('build') is False:
-                os.mkdir('build')
-
-            os.system('cd build && qmake ../pouch.pro ' \
-                + '-spec linux-g++ ' \
-                + '"BLUSHER_APP_NAME=\\"' + blusher_app['name'].replace(' ', '\\ ') + '\\"" ' \
-                + '"VERSION=' + blusher_app['version'] + '" ' \
-                + ' && make qmake_all')
-            os.system('cd build && make -j8')
-
-            if os.path.isdir('AppDir') is True:
-                os.system('rm -rf AppDir')
-            make_appdir_structure(blusher_app)
+            blusher_build()
             # os.system('cp AppDir/-.desktop')

@@ -13,6 +13,10 @@ install:
 	rm -rf /usr/lib/blusher
 	cp -r lib/blusher /usr/lib/blusher
 
+install-dev:
+	rm -rf /usr/bin/blusher
+	cp bin/blusher /usr/bin/blusher
+
 dist: lib
 	rm -rf blusher_$(VERSION)
 	mkdir blusher_$(VERSION)

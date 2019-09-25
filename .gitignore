@@ -3,3 +3,7 @@ debug/
 build/
 *.pro.user
 lib/*.so*
+pouch-qt/AppDir/usr/bin/Pouch
+.DirIcon
+*.AppImage
+AppRun
