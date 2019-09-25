@@ -7,6 +7,16 @@ Desktop GUI Toolkit written in QML.
 Install
 ----------
 
+Blusher is dependent in Qt and QML(with QtQuick). so before install Blusher, install Qt dependencies.
+
+### ubuntu 19.04
+
+```sh
+$ sudo apt-get update
+$ sudo apt-get install libqt5gui5 libqt5qml5
+```
+### Common
+
 Currently Blusher default supports only path exactly /usr/lib/blusher
 
 ```sh
