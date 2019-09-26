@@ -200,7 +200,7 @@ Item {
     root._initDesktopEnvironmentModule();
 
     if (Process.env.BLUSHER_DEBUG === true) {
-      print('[DesktopEnvironment] BLUSHER_DEBUG=true.');
+      print('[DesktopEnvironment] BLUSHER_DEBUG=true');
       print('[DesktopEnvironment] BLUSHER_APP_NAME="' + Process.env.BLUSHER_APP_NAME + '"');
       print('[DesktopEnvironment] BLUSHER_APP_VERSION="' + Process.env.BLUSHER_APP_VERSION + '"');
     }
