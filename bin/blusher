@@ -43,9 +43,8 @@ def make_qmake_file(blusher_app, debug=False):
     source += 'CONFIG -= qtquickcompiler\n'
     source += 'DEFINES += QT_DEPRECATED_WARNINGS\n'
     source += 'DEFINES += BLUSHER_APP_VERSION=\\\\\\"$$VERSION\\\\\\" \n'
-    source += 'DEFINES += "BLUSHER_APP_NAME=\\\\\\"$$(BLUSHER_APP_NAME)\\\\\\"" \n'
+    source += 'DEFINES += "BLUSHER_APP_NAME=\\\\\\"' + blusher_app['name'].replace(' ', '\\ ') + '\\\\\\"" \n'
     source += 'DEFINES += BLUSHER_PATH=\\\\\\"/usr/lib/blusher/qml\\\\\\"\n'
-    # BLUSHER_PATH=\\\"$$PWD/../lib/blusher/qml\\\" \
     if debug:
         source += 'DEFINES += BLUSHER_DEBUG \n'
 
@@ -55,6 +54,12 @@ def make_qmake_file(blusher_app, debug=False):
     source += '\n'
 
     source += 'RESOURCES += qml.qrc'
+
+    source += '\n'
+    if blusher_app.get('bin') is not None:
+        source += 'TARGET = ' + blusher_app['bin']
+    else:
+        source += 'TARGET = ' + blusher_app['name']
 
     f = open('blusher_qt_qmake_tmp.pro', 'w')
     f.write(source)
