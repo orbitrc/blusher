@@ -188,10 +188,6 @@ Item {
   }
 
   Loader {
-    id: debugPanelLoader
-  }
-
-  Loader {
     id: deModuleLoader
   }
 
@@ -207,8 +203,6 @@ Item {
       print('[DesktopEnvironment] BLUSHER_DEBUG=true.');
       print('[DesktopEnvironment] BLUSHER_APP_NAME="' + Process.env.BLUSHER_APP_NAME + '"');
       print('[DesktopEnvironment] BLUSHER_APP_VERSION="' + Process.env.BLUSHER_APP_VERSION + '"');
-      debugPanelLoader.setSource('./Standalone/DebugPanel.qml');
-      debugPanelLoader.item.show();
     }
   }
 
