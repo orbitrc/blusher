@@ -46,7 +46,13 @@ def make_qmake_file(blusher_app, debug=False):
     source += 'DEFINES += "BLUSHER_APP_NAME=\\\\\\"' + blusher_app['name'].replace(' ', '\\ ') + '\\\\\\"" \n'
     source += 'DEFINES += BLUSHER_PATH=\\\\\\"/usr/lib/blusher/qml\\\\\\"\n'
     if debug:
-        source += 'DEFINES += BLUSHER_DEBUG \n'
+        source += 'DEFINES += BLUSHER_DEBUG\n'
+
+    if blusher_app.get('qtCppHeaders') is not None:
+        source += 'HEADERS +='
+        for h in blusher_app['qtCppHeaders']:
+            source += (' ' + h)
+        source += '\n'
 
     source += 'SOURCES +='
     for src in blusher_app['qtCppSources']:
