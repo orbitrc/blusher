@@ -36,6 +36,12 @@ def get_blusher_app_struct():
     return blusher_app
 
 
+def get_bin_name(blusher_app):
+    if blusher_app.get('bin') is not None:
+        return blusher_app['bin']
+    return blusher_app['name']
+
+
 def make_qmake_file(blusher_app, debug=False):
     source = ''
     source += 'QT = gui quick\n'
@@ -62,10 +68,10 @@ def make_qmake_file(blusher_app, debug=False):
     source += 'RESOURCES += qml.qrc'
 
     source += '\n'
-    if blusher_app.get('bin') is not None:
-        source += 'TARGET = ' + blusher_app['bin']
+    if debug is False:
+        source += get_bin_name(blusher_app)
     else:
-        source += 'TARGET = ' + blusher_app['name']
+        source += 'TARGET = a.out\n'
 
     f = open('blusher_qt_qmake_tmp.pro', 'w')
     f.write(source)
@@ -119,6 +125,28 @@ def blusher_debug():
         + '"VERSION=' + blusher_app['version'] + '" ' \
         + ' CONFIG+=debug CONFIG+=qml_debug && make qmake_all')
     os.system('cd debug && make -j8')
+
+    # Copy components and modules.
+    os.system('rm -rf debug/components debug/modules')
+    os.system('cp -r src/components debug/components')
+    os.system('cp -r src/modules debug/modules')
+
+    # Make executable script.
+    script = '''#!/bin/sh
+BASEDIR=$(dirname $(readlink -f $0))
+
+export QML2_IMPORT_PATH=$BASEDIR/components
+export QML2_IMPORT_PATH=$BASEDIR/modules
+
+$BASEDIR/a.out
+'''
+
+    bin_name = get_bin_name(blusher_app)
+    f = open('debug/' + bin_name, 'w')
+    f.write(script)
+    f.close()
+
+    os.system('chmod +x debug/' + bin_name)
 
 def blusher_build():
     '''

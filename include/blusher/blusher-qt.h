@@ -7,6 +7,8 @@
 #include <QCursor>
 #include <QFile>
 
+#include <unistd.h>
+
 #ifndef BLUSHER_PATH
     #define BLUSHER_PATH "/usr/lib/blusher/qml"
 #endif
@@ -66,6 +68,14 @@ Application::Application(int& argc, char *argv[])
 
     engine.addImportPath(BLUSHER_PATH);
 
+#ifdef BLUSHER_DEBUG
+    fprintf(stdout, "Blusher import path list: [\n");
+    for (int i = 0; i < engine.importPathList().length(); ++i) {
+        fprintf(stdout, "  \"%s\",\n", engine.importPathList()[i].toStdString().c_str());
+    }
+    fprintf(stdout, "]\n");
+#endif
+
     QVariantMap process = this->make_process();
     process.insert("app", QVariant::fromValue(this));
 
@@ -76,7 +86,7 @@ Application::Application(int& argc, char *argv[])
         Qt::QueuedConnection
     );
 
-    engine.load(url);
+    // engine.load(url);
 }
 
 void Application::read_conf(QVariantMap *env)
@@ -102,6 +112,7 @@ void Application::read_conf(QVariantMap *env)
         }
     }
 }
+
 
 QVariantMap Application::make_process()
 {
