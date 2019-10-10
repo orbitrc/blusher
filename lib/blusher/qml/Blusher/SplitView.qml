@@ -6,6 +6,11 @@ import "DesktopEnvironment"
 Item {
   id: root
 
+  enum Orientation {
+    Horizontal,
+    Vertical
+  }
+
   default property list<Item> views
 
   //=========================

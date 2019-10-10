@@ -73,6 +73,7 @@ DISTFILES += \
     ../lib/blusher/qml/Blusher/TextField.qml \
     ../lib/blusher/qml/Blusher/Toolbar.qml \
     ../lib/blusher/qml/Blusher/ToolbarItem.qml \
+    ../lib/blusher/qml/Blusher/View.qml \
     ../lib/blusher/qml/Blusher/Window.qml \
     ../lib/blusher/qml/Blusher/Window2.qml \
     ../lib/blusher/qml/Blusher/qmldir

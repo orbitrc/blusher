@@ -12,5 +12,6 @@ MenuItem 0.1 MenuItem.qml
 TextField 0.1 TextField.qml
 Toolbar 0.1 Toolbar.qml
 ToolbarItem 0.1 ToolbarItem.qml
+View 0.1 View.qml
 SplitView 0.1 SplitView.qml
 ScrollView 0.1 ScrollView.qml
