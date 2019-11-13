@@ -235,19 +235,27 @@ Item {
           }
         }
 
-        Rectangle {
+        View {
           x: 100
           y: 100
           width: 100
           height: 100
-          color: "blue"
-          MouseArea {
+          Rectangle {
             anchors.fill: parent
-            onPositionChanged: {
-              print(root.x += 1);
+            x: 100
+            y: 100
+            width: 100
+            height: 100
+            color: "blue"
+            MouseArea {
+              anchors.fill: parent
+              onPositionChanged: {
+                print(root.x += 1);
+              }
             }
           }
         }
+
 
         ScrollView {
           x: 300

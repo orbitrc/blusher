@@ -1,13 +1,15 @@
-import QtQuick 2.12
+import QtQml 2.12
+import QtQuick 2.12 as QtQuick
 
 import "DesktopEnvironment"
 
-Item {
+QtObject {
   id: root
 
-  property size size: Qt.size(0, 0)
-  property point pos: Qt.point(0, 0)
+  property real x
+  property real y
+  property real width
+  property real height
 
-  width: root.size.width * DesktopEnvironment.pixelsPerDp
-  height: root.size.height * DesktopEnvironment.pixelsPerDp
+  default property var item
 }

@@ -38,6 +38,9 @@ Item {
     for (let i = 0; i < root.items.length; ++i) {
       const item = root.items[i]
       item.parent = layout
+      // Fill height.
+//      item.anchors.top = layout.top;
+//      item.anchors.bottom = layout.bottom;
       item.Layout.fillHeight = true
       if (item.width > 0) {
         item.Layout.preferredWidth = item.implicitWidth;
