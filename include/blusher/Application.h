@@ -1,70 +1,32 @@
-//  blusher/Application.h
-//
-//  Author:     Gene Ryu
-//  Created:    2018. 10. 09. 10:48
-//  Copyright (c) 2018 Gene Ryu. All rights reserved.
-//
-//
+#ifndef _BL_APPLICATION_H
+#define _BL_APPLICATION_H
 
-//==========
-// Cobalt
-//==========
-#ifdef Cobalt
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
 
 namespace bl {
 
-class Application {
-    constructor(list<string> argv);
-    int exec();
-};
-
-} // namespace bl
-
-#endif // Cobalt
-
-//========
-// C
-//========
-#ifdef __cplusplus
-extern "C" {
-#endif
-#ifndef Cobalt
-
-#include <cobalt.h>
-
-typedef struct object bl_Application;
-
-extern const type __type__bl_Application;
-
-typedef list_1 list_string;
-bl_Application bl_Application_constructor(const list_string* argv);
-
-integer bl_Application_exec(const bl_Application *self);
-
-#endif /* Cobalt */
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
-
-//============
-// C++
-//============
-#ifdef __cplusplus
-#ifndef Cobalt
-
-#include <string>
-
-namespace bl {
-
-class Application {
-private:
+class Application : public QGuiApplication
+{
+    Q_OBJECT
 public:
-    Application();
-    ~Application();
-    void title(const std::string& name) const;
+    Application(int& argc, char *argv[]);
+
+    ~Application()
+    {}
+
+    QQmlApplicationEngine* engine()
+    {
+        return &this->m_engine;
+    }
+
+private:
+    QQmlApplicationEngine m_engine;
+
+    void readConf(QVariantMap *env);
 };
 
 } // namespace bl
 
-#endif // COBALT
-#endif // __cplusplus
+#endif // _BL_APPLICATION_H

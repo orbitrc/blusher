@@ -2,6 +2,7 @@
 debug/
 build/
 *.pro.user
+*.so*
 lib/*.so*
 pouch-qt/AppDir/usr/bin/Pouch
 .DirIcon

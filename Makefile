@@ -1,33 +1,38 @@
-OBJ = Application_bridge.o \
-	Application.o
+VERSION_MAJOR = 0
+VERSION_MINOR = 1
+VERSION_PATCH = 0
+VERSION = 0.1.0
+SHARED_LIB_TARGET_DIR = lib/blusher/qml/Blusher
 
-VERSION = "0.1.0-alpha1"
+default:
+	mkdir -p build
+	cd build && qmake ../blusher.pro -spec linux-g++ && make qmake_all
+	cd build && make -j8
+	cp build/libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH) $(SHARED_LIB_TARGET_DIR)
+	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR)
+	ln -s libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH) $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR)
+	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR)
+	ln -s libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR) $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR)
+	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.so
+	ln -s libblusher.so.$(VERSION_MAJOR) $(SHARED_LIB_TARGET_DIR)/libblusher.so
 
-default: lib
-	echo "default: Make libraries."
-
-lib: $(OBJ)
-	$(CC) -shared -Wl,-soname,libblusher.so.0 -Iinclude -o lib/libblusher.so.0.1.0 $^ -lQt5Quick -lQt5Gui -lQt5Qml -lQt5Network -lQt5Core /usr/lib/libGL.so -lpthread
+debug:
+	mkdir -p debug
+	cd debug && qmake ../blusher.pro -spec linux-g++ CONFIG+=debug && make qmake_all
+	cd debug && make -j8
+	cp debug/libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH) $(SHARED_LIB_TARGET_DIR)
+	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR)
+	ln -s libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH) $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR)
+	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR)
+	ln -s libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR) $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR)
+	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.so
+	ln -s libblusher.so.$(VERSION_MAJOR) $(SHARED_LIB_TARGET_DIR)/libblusher.so
 
 install:
-	rm -rf /usr/lib/blusher
-	cp -r lib/blusher /usr/lib/blusher
-
-install-dev:
-	rm -rf /usr/bin/blusher
-	cp bin/blusher /usr/bin/blusher
-	rm -rf /usr/include/blusher
-	cp -r include/blusher /usr/include/blusher
-
-dist: lib
-	rm -rf blusher_$(VERSION)
-	mkdir blusher_$(VERSION)
-	cp -r lib blusher_$(VERSION)
-	tar cvf blusher_$(VERSION).tar blusher_$(VERSION)
-	gzip blusher_$(VERSION).tar
+	rm -rf /usr/lib/qml/Foundation
+	cp -r qml/Foundation /usr/lib/qml/
 
 clean:
-	rm -rf lib/libblusher.so*
-
-Application.o: src/Application.c
-	$(CC) -c -Iinclude -fPIC $^ -o $@
+	rm -rf build
+	rm -rf debug
+	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.so*

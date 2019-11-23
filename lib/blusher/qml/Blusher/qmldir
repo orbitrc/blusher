@@ -1,4 +1,5 @@
 module Blusher
+plugin blusher
 TestItem 0.1 TestItem.qml
 Window 0.1 Window.qml
 Window2 0.1 Window2.qml
@@ -12,6 +13,5 @@ MenuItem 0.1 MenuItem.qml
 TextField 0.1 TextField.qml
 Toolbar 0.1 Toolbar.qml
 ToolbarItem 0.1 ToolbarItem.qml
-View 0.1 View.qml
 SplitView 0.1 SplitView.qml
 ScrollView 0.1 ScrollView.qml

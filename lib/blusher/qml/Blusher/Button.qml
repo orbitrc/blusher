@@ -1,10 +1,12 @@
 import QtQuick 2.12
 import QtGraphicalEffects 1.0
 
+import Blusher 0.1
 import "DesktopEnvironment"
 
-Rectangle {
+View {
   id: root
+
   enum ButtonType {
     PushButton,
     RadioButton
@@ -24,13 +26,13 @@ Rectangle {
   property rect rect: Qt.rect(0, 0, 100, 34)
   property rect pos: Qt.rect(0, 0, 0, 0)
 
-  width: rect.width * DesktopEnvironment.pixelsPerDp
-  height: rect.height * DesktopEnvironment.pixelsPerDp
-  x: pos.x * DesktopEnvironment.pixelsPerDp
-  y: pos.y * DesktopEnvironment.pixelsPerDp
+  width: 100
+  height: 34
+  x: 0
+  y: 0
 
-  color: "transparent"
-  border.width: 0
+//  color: "transparent"
+//  border.width: 0
   MouseArea {
     id: mouseArea
     anchors.fill: parent
@@ -88,8 +90,8 @@ Rectangle {
     text: root.title
     font.pixelSize: 13 * DesktopEnvironment.pixelsPerDp
     font.family: "Liberation Sans"
-    anchors.horizontalCenter: parent.horizontalCenter
-    anchors.verticalCenter: parent.verticalCenter
+    anchors.horizontalCenter: root.horizontalCenter
+    anchors.verticalCenter: root.verticalCenter
   }
 
   Rectangle {
