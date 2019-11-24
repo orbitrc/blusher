@@ -13,9 +13,9 @@ Window3 {
     MouseArea {
       anchors.fill: parent
       onClicked: {
-        print('hello!');
         print(Object.keys(DesktopEnvironmentPlugin.screens));
         DesktopEnvironmentPlugin.screenInfoChanged("foo", "bar", "baz");
+        print(Window3.WindowType.AppWindow);
       }
     }
   }

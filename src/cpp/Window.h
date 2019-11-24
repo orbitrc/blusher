@@ -7,13 +7,28 @@ class Window : public QQuickWindow
 {
     Q_OBJECT
 
+    Q_PROPERTY(int type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(qreal pixelsPerDp READ pixelsPerDp NOTIFY pixelsPerDpChanged)
+public:
+    enum class WindowType {
+        DocumentWindow,
+        AppWindow,
+        Panel,
+        Dialog,
+        Alert,
+        Menu,
+    };
+    Q_ENUM(WindowType)
+
 public:
     explicit Window(QWindow *parent = nullptr);
 
+    int type() const;
+    void setType(int type);
     qreal pixelsPerDp() const;
 
 signals:
+    void typeChanged();
     void pixelsPerDpChanged();
 
 public slots:
@@ -23,6 +38,7 @@ private slots:
     void onScreensChanged();
 
 private:
+    int m_type;
     qreal m_pixelsPerDp;
 };
 
