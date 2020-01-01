@@ -5,11 +5,15 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
+#include <QDebug>
+
 namespace bl {
 
 class Application : public QGuiApplication
 {
     Q_OBJECT
+
+    Q_PROPERTY(int testValue READ testValue CONSTANT)
 public:
     Application(int& argc, char *argv[]);
 
@@ -20,6 +24,12 @@ public:
     {
         return &this->m_engine;
     }
+
+    int testValue() const { return 42; }
+
+    static Application *self;
+
+    static Application* instance();
 
 private:
     QQmlApplicationEngine m_engine;

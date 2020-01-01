@@ -1,9 +1,9 @@
-#ifndef _BL_WINDOW_H
-#define _BL_WINDOW_H
+#ifndef _BL_BASE_WINDOW_H
+#define _BL_BASE_WINDOW_H
 
 #include <QQuickWindow>
 
-class Window : public QQuickWindow
+class BaseWindow : public QQuickWindow
 {
     Q_OBJECT
 
@@ -21,7 +21,7 @@ public:
     Q_ENUM(WindowType)
 
 public:
-    explicit Window(QWindow *parent = nullptr);
+    explicit BaseWindow(QWindow *parent = nullptr);
 
     int type() const;
     void setType(int type);
@@ -42,4 +42,4 @@ private:
     qreal m_pixelsPerDp;
 };
 
-#endif // _BL_WINDOW_H
+#endif // _BL_BASE_WINDOW_H

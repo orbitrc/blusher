@@ -1,23 +1,23 @@
-#include "Window.h"
+#include "BaseWindow.h"
 
 #include <QScreen>
 
-Window::Window(QWindow *parent)
+BaseWindow::BaseWindow(QWindow *parent)
     : QQuickWindow(parent)
 {
-    this->m_type = static_cast<int>(Window::WindowType::AppWindow);
+    this->m_type = static_cast<int>(BaseWindow::WindowType::AppWindow);
     this->m_pixelsPerDp = 1;
 
     QObject::connect(this, &QQuickWindow::screenChanged,
                      this, [this]() { qDebug() << this->screen(); });
 }
 
-int Window::type() const
+int BaseWindow::type() const
 {
     return this->m_type;
 }
 
-void Window::setType(int type)
+void BaseWindow::setType(int type)
 {
     if (type != this->m_type) {
         this->m_type = type;
@@ -26,17 +26,17 @@ void Window::setType(int type)
     }
 }
 
-qreal Window::pixelsPerDp() const
+qreal BaseWindow::pixelsPerDp() const
 {
     return this->m_pixelsPerDp;
 }
 
-void Window::q_onScreenChanged()
+void BaseWindow::q_onScreenChanged()
 {
 
 }
 
-void Window::onScreensChanged()
+void BaseWindow::onScreensChanged()
 {
 
 }

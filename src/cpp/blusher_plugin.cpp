@@ -1,9 +1,26 @@
 #include "blusher_plugin.h"
 
-#include "View.h"
-#include "Window.h"
+#include <QGuiApplication>
 
+#include <blusher/Application.h>
+
+#include "View.h"
+#include "BaseWindow.h"
+
+#include "Blusher.h"
 #include "DesktopEnvironment.h"
+
+//======================
+// Singleton providers
+//======================
+static QObject* blusher_blusher_singleton_provider(
+    QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    (void)engine;
+    (void)scriptEngine;
+
+    return bl::Blusher::singleton;
+}
 
 static QObject* blusher_desktop_environment_singleton_provider(
     QQmlEngine *engine, QJSEngine *scriptEngine)
@@ -16,11 +33,18 @@ static QObject* blusher_desktop_environment_singleton_provider(
     return bl::DesktopEnvironment::singleton;
 }
 
+//=========================
+// Initialize and register
+//=========================
 void BlusherPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
     (void)engine;
     (void)uri;
 
+    // Blusher
+    bl::Blusher::singleton = new bl::Blusher;
+    bl::Blusher::singleton->_set_app(QGuiApplication::instance());
+    // DesktopEnvironment
     bl::DesktopEnvironment::singleton = new bl::DesktopEnvironment;
 }
 
@@ -28,7 +52,8 @@ void BlusherPlugin::registerTypes(const char *uri)
 {
     // @uri Blusher
     qmlRegisterType<bl::View>(uri, 0, 1, "View");
-    qmlRegisterType<Window>(uri, 0, 1, "Window3");
+    qmlRegisterType<BaseWindow>(uri, 0, 1, "BaseWindow");
 
+    qmlRegisterSingletonType<bl::Blusher>("Blusher", 0, 1, "Blusher", blusher_blusher_singleton_provider);
     qmlRegisterSingletonType<bl::DesktopEnvironment>("Blusher", 0, 1, "DesktopEnvironmentPlugin", blusher_desktop_environment_singleton_provider);
 }

@@ -62,6 +62,7 @@ DISTFILES += \
     ../lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/MenuItemDelegate.qml \
     ../lib/blusher/qml/Blusher/Label.qml \
     ../lib/blusher/qml/Blusher/Menu.qml \
+    ../lib/blusher/qml/Blusher/MenuBar.qml \
     ../lib/blusher/qml/Blusher/MenuItem.qml \
     ../lib/blusher/qml/Blusher/MenuItemView.qml \
     ../lib/blusher/qml/Blusher/MenuView.qml \
@@ -76,4 +77,5 @@ DISTFILES += \
     ../lib/blusher/qml/Blusher/View.qml \
     ../lib/blusher/qml/Blusher/Window.qml \
     ../lib/blusher/qml/Blusher/Window2.qml \
+    ../lib/blusher/qml/Blusher/Window3.qml \
     ../lib/blusher/qml/Blusher/qmldir

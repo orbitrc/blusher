@@ -13,6 +13,9 @@
 
 namespace bl {
 
+Application* Application::self = nullptr;
+
+
 Application::Application(int& argc, char *argv[])
     : QGuiApplication(argc, argv)
 {
@@ -38,6 +41,8 @@ Application::Application(int& argc, char *argv[])
     this->m_engine.rootContext()->setContextProperty("Process", process);
 
     // m_engine.addImportPath(BLUSHER_PATH);
+
+    Application::self = this;
 }
 
 void Application::readConf(QVariantMap *env)
@@ -64,6 +69,11 @@ void Application::readConf(QVariantMap *env)
             this->m_engine.addImportPath(key_value[1]);
         }
     }
+}
+
+Application* Application::instance()
+{
+    return Application::self;
 }
 
 } // namespace bl

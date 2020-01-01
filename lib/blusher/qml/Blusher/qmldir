@@ -3,6 +3,7 @@ plugin blusher
 TestItem 0.1 TestItem.qml
 Window 0.1 Window.qml
 Window2 0.1 Window2.qml
+Window3 0.1 Window3.qml
 Alert 0.1 Alert.qml
 Button 0.1 Button.qml
 SegmentedControl 0.1 SegmentedControl.qml
@@ -10,6 +11,7 @@ Segment 0.1 Segment.qml
 Label 0.1 Label.qml
 Menu 0.1 Menu.qml
 MenuItem 0.1 MenuItem.qml
+MenuBar 0.1 MenuBar.qml
 TextField 0.1 TextField.qml
 Toolbar 0.1 Toolbar.qml
 ToolbarItem 0.1 ToolbarItem.qml
