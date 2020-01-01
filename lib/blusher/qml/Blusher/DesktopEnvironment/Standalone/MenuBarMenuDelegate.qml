@@ -16,15 +16,6 @@ Rectangle {
   property Menu menu: null
   property Menu applicationMenu: DesktopEnvironment.menus.applicationMenu
 
-  property bool popUpMenuBar: false
-
-  property bool active: false
-  property bool applicationMenuFocused: false
-  property int focusedItemIndex: -1
-
-  property var _menuItems: []
-  property var _applicationMenuItems: []
-
   //================
   // Style
   //================
@@ -45,159 +36,72 @@ Rectangle {
 
     spacing: 0
     // Application menu
-    Standalone.MenuBarMenuItemDelegate {
-      menuItem: root.applicationMenu
-      focused: root.applicationMenuFocused
-      menuBarActive: root.popUpMenuBar
-      bold: true
-
+    Item {
+      width: _text.implicitWidth
       Layout.alignment: Qt.AlignTop
       Layout.fillHeight: true
+      MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
 
-      onPressed: {
-        if (!root.popUpMenuBar) {
-          DesktopEnvironment.onMenuOpened();
-          DesktopEnvironment.overlay.activateMenuBar();
-        } else {
-          DesktopEnvironment.onMenuClosed();
-        }
-      }
-
-      onClicked: {
-      }
-      onEntered: {
-        if (root.popUpMenuBar) {
-          root.focusedItemIndex = -1;
-          root.applicationMenuFocused = true;
-          root.openSubmenu('/', root.applicationMenu.items,
-            DesktopEnvironment.overlay.menuBarLoader.x,
-            DesktopEnvironment.overlay.menuBarLoader.y + 30);
-        }
-      }
-    }
-
-    // Menu items
-    Repeater {
-      model: root._menuItems
-      id: menuItemViewList
-
-      Standalone.MenuBarMenuItemDelegate {
-        menuItem: root._menuItems[index]
-        focused: (root.focusedItemIndex === index)
-        menuBarActive: root.popUpMenuBar
-
-        Layout.minimumHeight: root.height
-
-        onPressed: {
-          if (!root.popUpMenuBar) {
-            DesktopEnvironment.onMenuOpened();
-            DesktopEnvironment.overlay.activateMenuBar();
+        onClicked: {
+          if (root.menu.focusedItemIndex > -1 || root.applicationMenu.opened) {
+            // Menu bar menu already activated.
+            root.menu.focusItem(-1);
+            DesktopEnvironment.menuClosed();
           } else {
-            DesktopEnvironment.onMenuClosed();
+            // Menu bar menu not activated before.
+            root.applicationMenu.open(Window.window.contentItem);
           }
         }
         onEntered: {
-          if (!root.popUpMenuBar) {
+          // Menu bar menu already activated.
+          if (root.menu.focusedItemIndex > -1) {
+            root.menu.focusItem(-1);
+            root.applicationMenu.open(Window.window.contentItem);
+          }
+        }
+        onExited: {
+          if (root.menu.focusedItemIndex > -1 ||
+              root.applicationMenu.opened) {
             return;
           }
+        }
 
-          if (root.focusedItemIndex !== index || root.applicationMenuFocused) {
-            root.applicationMenuFocused = false;
-            root.focusedItemIndex = index;
-            root.openSubmenu(this.menuItem.path, root.childItems(root.menu, this.menuItem.path),
-              DesktopEnvironment.overlay.menuBarLoader.x + this.x,
-              DesktopEnvironment.overlay.menuBarLoader.y + 30 + this.y);
+        Connections {
+          target: root.menu
+          onFocusedItemIndexChanged: {
+            root.applicationMenu.close();
           }
         }
-      }
-    }
-  }
 
-  Loader {
-    id: popUpMenuLoader
-  }
-
-  onVisibleChanged: {
-    print('[MenuBarMenuDelegate.onVisibleChanged]');
-  }
-
-  onMenuChanged: {
-    if (root.menu) {
-      const menu = root.menu;
-
-      root._menuItems = [];
-      for (let i = 0; i < menu.items.length; ++i) {
-        // Ignore separator.
-        if (menu.items[i].separator) {
-          continue;
+        MenuItemStyler {
+          anchors.fill: parent
+          visible: root.applicationMenu.opened
         }
-        if (Path.join(menu.items[i].path, '..') === '/') {
-          root._menuItems.push(menu.items[i]);
+        Text {
+          id: _text
+
+          text: DesktopEnvironment.app.name
+
+          anchors.verticalCenter: parent.verticalCenter
+          rightPadding: 7.0   // 5.0 + styler's margin
+          leftPadding: 7.0    // 5.0 + styler's margin
+          font.pixelSize: 14 * DesktopEnvironment.pixelsPerDp
+          font.bold: true
         }
       }
     }
-  }
+    // Menu items
+    Repeater {
+      model: root.menu
+      id: menuItemViewList
 
-  Component.onCompleted: {
-    const menu = root.applicationMenu;
-    for (let i = 0; i < menu.items.length; ++i) {
-      if (Path.join(menu.items[i].path, '..') === '/') {
-        root._menuItems.push(menu.items[i]);
+      Standalone.MenuItemDelegate {
+        menuItem: root.menu.items[index]
+        Layout.minimumHeight: root.height
       }
     }
-  }
-
-  //==========================
-  // Methods
-  //==========================
-
-  // Open submenu as pop up menu with list of menu items.
-  function openSubmenu(path, items, x, y) {
-    if (popUpMenuLoader.sourceComponent) {
-      popUpMenuLoader.sourceComponent = undefined;
-    }
-    popUpMenuLoader.setSource('PopUpMenuDelegate.qml', { path: path, items: items });
-    popUpMenuLoader.item.x = x;
-    popUpMenuLoader.item.y = y;
-    popUpMenuLoader.item.show();
-  }
-
-  // Get all children of path.
-  function childItems(menu, path) {
-    if (!path.endsWith('/')) {
-      print('Not a submenu! path: ' + path);
-    }
-    let itemList = [];
-    for (let i = 0; i < menu.items.length; ++i) {
-      let item = menu.items[i];
-      if (item.path !== path && item.path.startsWith(path)) {
-        itemList.push(item);
-      }
-    }
-    print('=======childItems==========');
-    print(JSON.stringify(itemList));
-    print('#===========================#');
-    return itemList;
-  }
-
-  // Get child items of given menu by path.
-  function filterItems(menu, path) {
-    if (!path.endsWith('/')) {
-      print('Not a submenu! path: ' + path);
-    }
-    const resolvedMenuPath = Path.join(path, '.');
-    let filtered = [];
-
-    for (let i = 0; i < menu.items.length; ++i) {
-      let item = menu.items[i];
-      if (item.separator) {
-        continue;
-      }
-      if (Path.join(menu.items[i].path, '..') === resolvedMenuPath) {
-        filtered.push(menu.items[i]);
-      }
-    }
-    return filtered;
   }
 }
 

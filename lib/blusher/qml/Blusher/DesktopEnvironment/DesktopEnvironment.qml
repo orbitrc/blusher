@@ -130,32 +130,25 @@ Item {
     property Menu applicationMenu: Menu {
       type: Menu.MenuType.Submenu
       title: 'Application'
-      items: [
-        {
-          path: '/preferences',
-          title: "Preferences..."
-        },
-        {
-          path: '/quit',
-          title: "Quit",
-          action: DesktopEnvironment.app.quit,
-          shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_Q
-        },
-      ]
+      MenuItem {
+        title: "Preferences..."
+      }
+
+      MenuItem {
+        title: "Quit"
+        action: DesktopEnvironment.app.quit
+        shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_Q
+      }
     }
     property Menu textEditMenu: Menu {
       type: Menu.MenuType.ContextualMenu
       title: "Text"
-      items: [
-        {
-          path: '/copy',
-          title: "Copy"
-        },
-        {
-          path: '/paste',
-          title: "Paste"
-        }
-      ]
+      MenuItem {
+        title: 'Copy'
+      }
+      MenuItem {
+        title: 'Paste'
+      }
     }
   }
 

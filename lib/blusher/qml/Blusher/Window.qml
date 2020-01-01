@@ -100,23 +100,16 @@ QtQuickWindow.Window {
     }
   }
 
-  Connections {
-    target: root.menu
-    onReady: {
-//    if (root.type === Window.WindowType.AppWindow ||
-//        root.type === Window.WindowType.DocumentWindow) {
-      if (root.menu && !menuViewLoader.sourceComponent) {
-        menuViewLoader.sourceComponent = DesktopEnvironment.menuDelegate
-        menuViewLoader.item.menu = root.menu;
-        _menuArea.visible = true
-      }
-    }
-  }
-
   //=======================
   // Created
   //=======================
   Component.onCompleted: {
+    if (root.menu) {
+      menuViewLoader.sourceComponent = DesktopEnvironment.menuDelegate
+      menuViewLoader.item.menu = root.menu
+      _menuArea.visible = true
+    }
+
     if (root.toolbar) {
       root.toolbar.parent = _toolbarArea
       root.toolbar.anchors.fill = _toolbarArea

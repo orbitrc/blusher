@@ -1,8 +1,9 @@
 import QtQuick 2.12
+import QtQml.Models 2.12
 
 import "DesktopEnvironment"
 
-QtObject {
+ListModel {
   id: root
   enum MenuType {
     MenuBarMenu = 0,
@@ -10,18 +11,13 @@ QtObject {
     Submenu = 2
   }
 
-  // Menu delegates are completed before menu completed.
-  // So, emit signal when the menu is really done.
-  signal ready();
-
-  default property list<QtObject> initialItems
+  default property list<ListElement> items
 
   //=========================
   // Public Properties
   //=========================
   property int type
   property string title: ""
-  property var items: []
   property var supermenu: null
 
   //=========================
@@ -29,7 +25,6 @@ QtObject {
   //=========================
   property int focusedItemIndex: -1
   readonly property alias opened: _private.opened
-  readonly property string path: '/'
 
   //=========================
   // Private Properties
@@ -44,7 +39,9 @@ QtObject {
   // Created
   //==============
   Component.onCompleted: {
-    root.ready();
+    for (let i = 0; i < root.items.length; ++i) {
+      root.addItem(root.items[i])
+    }
   }
 
   //==============
@@ -74,8 +71,8 @@ QtObject {
   /// \param  menuItem
   ///         Menu item to add.
   function addItem(menuItem) {
-    root.items.push(menuItem);
-    menuItem.parentMenu = root;
+    root.append(menuItem)
+    menuItem.parentMenu = root
   }
 
   function focusItem(index) {

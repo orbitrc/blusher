@@ -7,13 +7,11 @@ import "../.."
 Item {
   id: root
 
-  property var menuItem: null
-  property bool focused: false
+  property MenuItem menuItem: null
 
-  signal clicked(var mouse)
-  signal entered()
-
-  implicitWidth: _checked.width + _text.implicitWidth + _info.width
+  implicitWidth: ((!root.menuItem.isMenuBarMenuItem() ? _checked.width : 0)
+                  + _text.implicitWidth
+                  + (!root.menuItem.isMenuBarMenuItem() ? _info.width : 0))
   height: 30 * DesktopEnvironment.pixelsPerDp
 
   Layout.fillWidth: true  // Fill when pop-up menu item.
@@ -24,12 +22,12 @@ Item {
 
     MenuItemStyler {
       anchors.fill: parent
-      visible: root.focused
+      visible: root.menuItem.focused
     }
     Item {
       id: _checked
 
-      visible: (root.menuItem.checked !== undefined ? root.menuItem.checked : false)
+      visible: (root.menuItem.checked)
       anchors.verticalCenter: parent.verticalCenter
       anchors.left: parent.left
       anchors.leftMargin: 3 * DesktopEnvironment.pixelsPerDp
@@ -47,15 +45,17 @@ Item {
     }
     Text {
       id: _text
-      text: (!root.menuItem.separator) ? root.menuItem.title : ' '
+      text: root.menuItem.title
       anchors.verticalCenter: parent.verticalCenter
-      leftPadding: 7.0 + _checked.width   // 5.0 + styler's margin + checked-image width
       rightPadding: 7.0       // 5.0 + styler's margin
+      leftPadding: (root.menuItem.isMenuBarMenuItem()) ? 7.0 : 7.0 + _checked.width   // 5.0 + styler's margin + checked-image width
       font.pixelSize: 14 * DesktopEnvironment.pixelsPerDp
     }
     Item {
       id: _info
 
+      visible: (!root.menuItem.isMenuBarMenuItem()
+                && (root.menuItem.hasSubmenu() || this.shortcutText.text !== ''))
       width: (this.shortcutText.text !== '' ? this.shortcutText.implicitWidth : 24)
       height: 24 * DesktopEnvironment.pixelsPerDp
       anchors.verticalCenter: parent.verticalCenter
@@ -68,10 +68,14 @@ Item {
       }
 
       Component.onCompleted: {
+        if (root.menuItem.isMenuBarMenuItem()) {
+          return;
+        }
+
         if (this.shortcutText.text !== '') {
           this.children.push(this.shortcutText);
         }
-        if (root.menuItem.path[root.menuItem.path.length - 1] === '/') {
+        if (root.menuItem.hasSubmenu()) {
           this.children.push(DesktopEnvironment.icons.goNext);
         }
       }
@@ -115,18 +119,45 @@ Item {
     }
 
     onClicked: {
-      root.clicked(mouse);
+      // If menu bar menu.
+      if (root.menuItem.isMenuBarMenuItem()) {
+        root._menuBarMenuItemClicked(index);
+      }
+      // If regular menu.
+      if (!root.menuItem.isMenuBarMenuItem()) {
+        if (!root.menuItem.hasSubmenu()) {
+          print('MenuItem.action')
+        }
+        if (root.menuItem.action !== null) {
+          root.menuItem.action();
+        }
+      }
     }
 
     onEntered: {
-      root.entered();
+      if (root.menuItem.isMenuBarMenuItem()) {
+        root._menuBarMenuItemEntered(index);
+      } else {
+        if (root.menuItem.separator) {
+          root.menuItem.parentMenu.focusItem(-1);
+        } else {
+          root.menuItem.parentMenu.focusItem(index);
+        }
+        if (root.menuItem.hasSubmenu() && !root.menuItem.submenu.opened) {
+          root.menuItem.submenu.open(parent)
+        }
+      }
     }
     onExited: {
-      // If submenu is opened, don't take focus of this item.
-      if (root.menuItem.path.endsWith('/')) {
-        return;
+      if (root.menuItem.isMenuBarMenuItem()) {
+        root._menuBarMenuItemExited();
+      } else {
+        // If submenu is opened, don't take focus of this item.
+        if (root.menuItem.hasSubmenu() && root.menuItem.submenu.opened) {
+          return;
+        }
+        root.menuItem.parentMenu.focusItem(-1);
       }
-//      root.menuItem.parentMenu.focusItem(-1);
     }
   } // MouseArea
 
@@ -135,13 +166,6 @@ Item {
       this.Layout.maximumHeight = 10;
       _separator.visible = true
     }
-  }
-
-  function trigger() {
-    if (root.menuItem.action) {
-      root.menuItem.action();
-    }
-    DesktopEnvironment.menuItemTriggered(root.menuItem.path);
   }
 
   function _menuBarMenuItemClicked(index) {
