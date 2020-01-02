@@ -22,6 +22,12 @@ void BaseWindow::setType(int type)
     if (type != this->m_type) {
         this->m_type = type;
 
+        // No window frame for menu window.
+        if (type == static_cast<int>(WindowType::Menu)) {
+            QWindow::setFlag(Qt::FramelessWindowHint, true);
+            QWindow::setFlag(Qt::Popup, true);
+        }
+
         emit this->typeChanged();
     }
 }
@@ -30,6 +36,32 @@ qreal BaseWindow::pixelsPerDp() const
 {
     return this->m_pixelsPerDp;
 }
+
+
+//======================
+// Event handlers
+//======================
+bool BaseWindow::event(QEvent *event)
+{
+    if (event->type() == QEvent::UpdateRequest) {
+        // Grab mouse if window type is menu.
+        if (this->type() == static_cast<int>(WindowType::Menu)) {
+            QWindow::setMouseGrabEnabled(true);
+        }
+    }
+
+    return QQuickWindow::event(event);
+}
+
+void BaseWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (this->type() == static_cast<int>(WindowType::Menu)) {
+        QWindow::setMouseGrabEnabled(false);
+        QQuickWindow::close();
+    }
+    QQuickWindow::keyPressEvent(event);
+}
+
 
 void BaseWindow::q_onScreenChanged()
 {

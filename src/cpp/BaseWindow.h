@@ -27,6 +27,10 @@ public:
     void setType(int type);
     qreal pixelsPerDp() const;
 
+protected:
+    bool event(QEvent *) override;
+    void keyPressEvent(QKeyEvent *) override;
+
 signals:
     void typeChanged();
     void pixelsPerDpChanged();

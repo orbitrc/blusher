@@ -4,12 +4,12 @@ import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.0
 
 import ".."       // Blusher.DesktopEnvironment
-import "../.."    // Blusher
+import Blusher 0.1    // Blusher
 import "." as Standalone
 
 import "../../../../js/path.js" as Path
 
-QtQuickWindow.Window {
+BaseWindow {
   id: root
 
   property Menu menu: null
@@ -18,7 +18,8 @@ QtQuickWindow.Window {
 
   property int focusedItemIndex: -1
 
-  flags: Qt.Popup
+  type: BaseWindow.WindowType.Menu
+  flags: Qt.Tool | Qt.FramelessWindowHint
 
   visible: true
   //================
