@@ -9,6 +9,9 @@ Item {
 
   property MenuItem menuItem: null
 
+  signal clicked(var mouse);
+  signal entered();
+
   implicitWidth: ((!root.menuItem.isMenuBarMenuItem() ? _checked.width : 0)
                   + _text.implicitWidth
                   + (!root.menuItem.isMenuBarMenuItem() ? _info.width : 0))
@@ -177,7 +180,7 @@ Item {
       // Menu bar menu not activated before.
       root.menuItem.parentMenu.focusItem(index);
       if (root.menuItem.hasSubmenu()) {
-        root.menuItem.submenu.open(Window.window.contentItem)
+        root.menuItem.submenu.open(Window.window.contentItem);
       }
     }
   }

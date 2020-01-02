@@ -12,15 +12,15 @@ import "../../../../js/path.js" as Path
 QtQuickWindow.Window {
   id: root
 
-  property var menu: null
+  property Menu menu: null
   property var items: []
   property string path
 
   property int focusedItemIndex: -1
 
-  property var _menuItems: []
-
   flags: Qt.Popup
+
+  visible: true
   //================
   // Style
   //================
@@ -50,11 +50,11 @@ QtQuickWindow.Window {
     spacing: 0
     // Menu items
     Repeater {
-      model: root._menuItems
+      model: root.menu
       id: menuItemViewList
       Standalone.MenuItemDelegate {
-        menuItem: root._menuItems[index]
-        focused: (root.focusedItemIndex === index)
+        menuItem: root.menu.items[index]
+//        focused: (root.focusedItemIndex === index)
 
         onClicked: {
           this.trigger();

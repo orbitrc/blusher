@@ -157,8 +157,8 @@ Item {
   //==================
 
   /// \brief  Sould emitted when the menu is opening.
-  function menuOpened(parent, menu) {
-    root.onMenuOpened(parent, menu);
+  function menuOpened(menu, x, y) {
+    root.onMenuOpened(menu, x, y);
   }
 
   /// \brief  Should emitted when all menus are completely closed.
@@ -175,6 +175,9 @@ Item {
   //================
   // Items
   //================
+  Loader {
+    id: menuLoader
+  }
 
   Loader {
     id: overlayLoader
@@ -301,7 +304,7 @@ Item {
       }
     }
 
-    function onMenuOpened(items) {
+    function onMenuOpened(menu, x, y) {
       if (!this.menuOpen) {
         // Set singleton item child of currently activated window.
         // It is important to refer the geometry of root window such as x and y.
@@ -311,6 +314,11 @@ Item {
           overlayLoader.setSource('./Standalone/Overlay.qml');
         }
         root.overlay.show();
+
+        if (!menuLoader.sourceComponent) {
+          menuLoader.sourceComponent = standaloneMenuDelegate;
+          menuLoader.item.menu = menu;
+        }
       } else {
         if (menu === DesktopEnvironment.menus.applicationMenu ||
           menu.supermenu.type === Menu.MenuType.MenuBarMenu) {
@@ -325,10 +333,12 @@ Item {
           }
         }
       }
+      /*
       if (items) {
         root.overlay.menus.push(items);
         internal.menuOpen = true;
       }
+      */
     }
 
     function onMenuClosed() {
@@ -368,7 +378,7 @@ Item {
       onMenuChanged: {
         if (root.menu.type === Menu.MenuType.MenuBarMenu) {
           _loader.setSource('Standalone/MenuBarMenuDelegate.qml', { 'menu': root.menu });
-          _loader.item.popUpMenuBar = root.popUpMenuBar;
+//          _loader.item.popUpMenuBar = root.popUpMenuBar;
         } else {
           _loader.setSource('Standalone/PopUpMenuDelegate.qml', { 'menu': root.menu });
         }

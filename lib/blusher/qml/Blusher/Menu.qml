@@ -50,12 +50,12 @@ ListModel {
   /// \brief  Open menu.
   /// \param  view
   ///         Visual item parent that menu view should be belowed.
-  function open(view) {
+  function open(view, x=0, y=0) {
     if (root.type === Menu.MenuType.MenuBarMenu) {
       return;
     }
     _private.opened = true
-    DesktopEnvironment.menuOpened(view, root)
+    DesktopEnvironment.menuOpened(root, x, y);
   }
 
   /// \brief  Close menu.
