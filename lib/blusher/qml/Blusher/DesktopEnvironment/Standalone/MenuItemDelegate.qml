@@ -164,6 +164,10 @@ Item {
     }
   } // MouseArea
 
+  Loader {
+    id: submenuLoader
+  }
+
   Component.onCompleted: {
     if (root.menuItem.separator) {
       this.Layout.maximumHeight = 10;
@@ -175,12 +179,16 @@ Item {
     if (root.menuItem.parentMenu.focusedItemIndex > -1) {
       // Menu bar menu already activated.
       root.menuItem.parentMenu.focusItem(-1);
-      DesktopEnvironment.menuClosed()
+      DesktopEnvironment.menuClosed();
     } else {
       // Menu bar menu not activated before.
       root.menuItem.parentMenu.focusItem(index);
       if (root.menuItem.hasSubmenu()) {
-        root.menuItem.submenu.open(Window.window.contentItem);
+//        root.menuItem.submenu.open(Window.window.contentItem, 10, 10);
+        submenuLoader.setSource('./PopUpMenuDelegate.qml', { menu: root.menuItem.submenu });
+        let pos = root.mapToGlobal(0, 30);
+        submenuLoader.item.x = pos.x;
+        submenuLoader.item.y = pos.y;
       }
     }
   }

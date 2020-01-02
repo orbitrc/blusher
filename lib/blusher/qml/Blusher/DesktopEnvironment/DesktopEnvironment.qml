@@ -369,7 +369,6 @@ Item {
       // Public properties
       //===================
       property Menu menu: null
-      property bool popUpMenuBar: false
 
       Loader {
         id: _loader
@@ -378,7 +377,6 @@ Item {
       onMenuChanged: {
         if (root.menu.type === Menu.MenuType.MenuBarMenu) {
           _loader.setSource('Standalone/MenuBarMenuDelegate.qml', { 'menu': root.menu });
-//          _loader.item.popUpMenuBar = root.popUpMenuBar;
         } else {
           _loader.setSource('Standalone/PopUpMenuDelegate.qml', { 'menu': root.menu });
         }
