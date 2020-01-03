@@ -55,7 +55,8 @@ bool BaseWindow::event(QEvent *event)
 
 void BaseWindow::keyPressEvent(QKeyEvent *event)
 {
-    if (this->type() == static_cast<int>(WindowType::Menu)) {
+    if (this->type() == static_cast<int>(WindowType::Menu) &&
+            event->key() == Qt::Key_Escape) {
         QWindow::setMouseGrabEnabled(false);
         QQuickWindow::close();
     }

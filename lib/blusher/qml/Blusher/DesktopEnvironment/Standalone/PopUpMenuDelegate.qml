@@ -19,7 +19,7 @@ BaseWindow {
   property int focusedItemIndex: -1
 
   type: BaseWindow.WindowType.Menu
-  flags: Qt.Tool | Qt.FramelessWindowHint
+  flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
 
   visible: true
   //================
@@ -81,6 +81,42 @@ BaseWindow {
 
   Loader {
     id: popUpMenuLoader
+  }
+
+  FocusScope {
+    focus: true
+
+    Keys.onPressed: {
+      let lastMenu = null;
+
+      switch (event.key) {
+      case Qt.Key_Escape:
+        root.close();
+        break;
+
+      case Qt.Key_Down:
+        if (root.menu.focusedItemIndex === -1) {
+          root.menu.focusFirstItem();
+        } else {
+          root.menu.focusNextItem();
+        }
+        break;
+
+      case Qt.Key_Up:
+        if (root.menu.focusedItemIndex === -1) {
+          root.menu.focusLastItem();
+        } else {
+          root.menu.focusPreviousItem();
+        }
+        break;
+
+      case Qt.Key_Right:
+        break;
+
+      default:
+        break;
+      }
+    }
   }
 
 
