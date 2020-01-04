@@ -147,7 +147,11 @@ Item {
           root.menuItem.parentMenu.focusItem(index);
         }
         if (root.menuItem.hasSubmenu() && !root.menuItem.submenu.opened) {
-          root.menuItem.submenu.open(parent)
+//          root.menuItem.submenu.open(parent)
+          submenuLoader.setSource('./PopUpMenuDelegate.qml', { menu: root.menuItem.submenu });
+          let pos = root.mapToGlobal(root.width, 0);
+          submenuLoader.item.x = pos.x;
+          submenuLoader.item.y = pos.y;
         }
       }
     }
@@ -204,7 +208,7 @@ Item {
         DesktopEnvironment.menus.applicationMenu.opened) {
       root.menuItem.parentMenu.focusItem(index);
       if (root.menuItem.hasSubmenu()) {
-        root.menuItem.submenu.open(Window.window.contentItem)
+//        root.menuItem.submenu.open(Window.window.contentItem)
       }
     }
   }

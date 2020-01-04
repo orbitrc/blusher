@@ -121,12 +121,6 @@ BaseWindow {
 
 
   onItemsChanged: {
-    print('=======onItemsChanged==========');
-    print(' items: ' + JSON.stringify(root.items));
-    print(' path:  ' + root.path);
-    root._menuItems = root.filterItems(root.items, root.path);
-    print(' filtered: ' + JSON.stringify(root._menuItems));
-    print('-------------------------------');
   }
 
   //==========================
@@ -135,6 +129,7 @@ BaseWindow {
 
   // Open submenu as pop up menu with list of menu items.
   function openSubmenu(path, items, x, y) {
+    print('PopUpMenuDelegate: openSubmenu');
     if (popUpMenuLoader.sourceComponent) {
       popUpMenuLoader.sourceComponent = undefined;
     }
