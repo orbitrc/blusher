@@ -37,6 +37,7 @@ Window3 {
     onClicked: {
       print('Button clicked!');
       print(Blusher.app);
+      print(Object.keys(DesktopEnvironmentPlugin.screens));
     }
   }
 }

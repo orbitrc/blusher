@@ -9,6 +9,7 @@ class BaseWindow : public QQuickWindow
 
     Q_PROPERTY(int type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(qreal pixelsPerDp READ pixelsPerDp NOTIFY pixelsPerDpChanged)
+    Q_PROPERTY(QString screenName READ screenName NOTIFY screenNameChanged)
 public:
     enum class WindowType {
         DocumentWindow,
@@ -26,6 +27,7 @@ public:
     int type() const;
     void setType(int type);
     qreal pixelsPerDp() const;
+    QString screenName() const;
 
 protected:
     bool event(QEvent *) override;
@@ -34,6 +36,7 @@ protected:
 signals:
     void typeChanged();
     void pixelsPerDpChanged();
+    void screenNameChanged();
 
 public slots:
 

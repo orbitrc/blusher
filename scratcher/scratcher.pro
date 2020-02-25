@@ -1,6 +1,9 @@
 QT = gui quick
 
 CONFIG += c++11
+CONFIG(debug, debug|release){
+    CONFIG += console
+}
 
 DEFINES += QT_DEPRECATED_WARNINGS
 

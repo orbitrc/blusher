@@ -37,6 +37,11 @@ qreal BaseWindow::pixelsPerDp() const
     return this->m_pixelsPerDp;
 }
 
+QString BaseWindow::screenName() const
+{
+    return this->screen()->name();
+}
+
 
 //======================
 // Event handlers
