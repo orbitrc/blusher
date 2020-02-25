@@ -38,6 +38,7 @@ Window3 {
       print('Button clicked!');
       print(Blusher.app);
       print(Object.keys(DesktopEnvironmentPlugin.screens));
+      print(root.screenName);
     }
   }
 }

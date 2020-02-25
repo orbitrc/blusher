@@ -28,5 +28,6 @@ HEADERS += src/cpp/blusher_plugin.h \
 TARGET = blusher
 
 DISTFILES += \
-    lib/blusher/qml/Blusher/Window3.qml
+    lib/blusher/qml/Blusher/Window3.qml \
+    lib/blusher/qml/Blusher/Button.qml
 

@@ -57,32 +57,35 @@ View {
   }
 
   Rectangle {
-    id: _styler
-    anchors.fill: parent
-    color: "#808080"
-    anchors.rightMargin: 2
-    anchors.leftMargin: 2
-    anchors.bottomMargin: 2
-    anchors.topMargin: 2
-    border.width: 0
-    radius: 3
-    LinearGradient {
-      anchors.fill: parent
-      gradient: Gradient {
-        GradientStop { position: 0.0; color: "darkgrey" }
-        GradientStop { position: 1.0; color: "white" }
-      }
-      source: parent
-      visible: (root.active !== true)
-    }
-  }
+    id: _borderOut
 
-  DropShadow {
-    anchors.fill: _styler
-    verticalOffset: 3
-    radius: 2
-    color: "#a9a9a9"
-    source: _styler
+    anchors.fill: parent
+    color: "#9d9795"
+    border.width: 0
+    radius: 5
+    Rectangle {
+      id: _styler
+
+      anchors.fill: parent
+      anchors.rightMargin: 1
+      anchors.leftMargin: 1
+      anchors.bottomMargin: 1
+      anchors.topMargin: 1
+      // Inner border
+      border.width: 1
+      border.color: "#f7f6f6"
+
+      radius: 5
+      LinearGradient {
+        anchors.fill: parent
+        gradient: Gradient {
+          GradientStop { position: 0.0; color: "#f0efee" }
+          GradientStop { position: 1.0; color: "#d6d1ce" }
+        }
+        source: parent
+        visible: (root.active !== true)
+      }
+    }
   }
 
   Text {
@@ -96,6 +99,7 @@ View {
 
   Rectangle {
     id: graphicalDebugRect
+    visible: false
     anchors.fill: parent
     color: "#33ff0000"
   }
