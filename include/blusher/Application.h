@@ -15,6 +15,11 @@ class Application : public QApplication
 
     Q_PROPERTY(int testValue READ testValue CONSTANT)
 public:
+    /// \brief  Constructor
+    /// \param  argc
+    ///         Reference to C argc.
+    /// \param  argv
+    ///         C argv.
     Application(int& argc, char *argv[]);
 
     ~Application()
