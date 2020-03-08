@@ -17,7 +17,7 @@ Application* Application::self = nullptr;
 
 
 Application::Application(int& argc, char *argv[])
-    : QGuiApplication(argc, argv)
+    : QApplication(argc, argv)
 {
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&m_engine, &QQmlApplicationEngine::objectCreated,
@@ -74,6 +74,11 @@ void Application::readConf(QVariantMap *env)
 Application* Application::instance()
 {
     return Application::self;
+}
+
+int Application::exec()
+{
+    return QApplication::exec();
 }
 
 } // namespace bl

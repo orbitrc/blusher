@@ -1,7 +1,7 @@
 #ifndef _BL_APPLICATION_H
 #define _BL_APPLICATION_H
 
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
@@ -9,7 +9,7 @@
 
 namespace bl {
 
-class Application : public QGuiApplication
+class Application : public QApplication
 {
     Q_OBJECT
 
@@ -19,6 +19,8 @@ public:
 
     ~Application()
     {}
+
+    int exec();
 
     QQmlApplicationEngine* engine()
     {

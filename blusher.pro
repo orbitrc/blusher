@@ -1,5 +1,5 @@
-QT = gui quick
-CONFIG += c++11 console
+QT = gui quick widgets
+CONFIG += c++11
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
