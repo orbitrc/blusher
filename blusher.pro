@@ -9,7 +9,7 @@ VERSION = 0.1.0
 
 SOURCES += src/cpp/blusher_plugin.cpp \
     src/Application.cpp \
-    src/cpp/Application_bridge.cpp \
+#    src/cpp/Application_bridge.cpp \
     src/cpp/BaseWindow.cpp \
     src/cpp/Blusher.cpp \
     src/cpp/DesktopEnvironment.cpp \
