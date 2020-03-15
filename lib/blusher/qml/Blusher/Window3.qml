@@ -20,7 +20,7 @@ BaseWindow {
     x: 0
     y: root.hasMenuBar() ? 30 : 0
     width: root.width
-    height: root.height - root.hasMenuBar() ? 30 : 0
+    height: root.height - (root.hasMenuBar() ? 30 : 0)
   }
 
   function hasMenuBar() {
