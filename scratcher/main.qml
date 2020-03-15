@@ -1,4 +1,5 @@
 import Blusher 0.1
+import Blusher.DesktopEnvironment 0.1
 //import QtQuick.Window 2.12
 import QtQuick 2.12
 
@@ -37,7 +38,7 @@ Window3 {
     onClicked: {
       print('Button clicked!');
       print(Blusher.app);
-      print(Object.keys(DesktopEnvironmentPlugin.screens));
+      print(Object.keys(DesktopEnvironment.screens));
       print(root.screenName);
     }
   }

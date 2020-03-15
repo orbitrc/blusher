@@ -2,6 +2,8 @@
 
 #include <QFile>
 
+#include <QWidget>
+
 // To ignore IDE's error.
 #ifndef BLUSHER_APP_NAME
 #define BLUSHER_APP_NAME ""
@@ -41,6 +43,8 @@ Application::Application(int& argc, char *argv[])
     this->m_engine.rootContext()->setContextProperty("Process", process);
 
     // m_engine.addImportPath(BLUSHER_PATH);
+
+    this->m_popUpZone = new QWidget;
 
     Application::self = this;
 }

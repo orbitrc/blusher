@@ -3,7 +3,8 @@ import QtQuick 2.12
 import QtQuick.Window 2.12 as QtQuickWindow
 import QtQuick.Layouts 1.12
 
-import ".."
+//import ".."
+import Blusher 0.1
 import "Standalone" as Standalone
 import Blusher.DesktopEnvironment.Standalone 0.1
 
@@ -31,6 +32,7 @@ Item {
   // Properties
   //===================
   property string name: "standalone"
+  property var screens: DesktopEnvironmentPlugin.screens  // Need binding to change signal?
   readonly property alias pixelsPerDp: internal.pixelsPerDp
   readonly property alias app: internal.app
   readonly property alias menuDelegate: internal.menuDelegate

@@ -7,6 +7,8 @@
 
 #include <QDebug>
 
+class QWidget;
+
 namespace bl {
 
 class Application : public QApplication
@@ -40,6 +42,7 @@ public:
 
 private:
     QQmlApplicationEngine m_engine;
+    QWidget *m_popUpZone;
 
     void readConf(QVariantMap *env);
 };
