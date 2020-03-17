@@ -18,8 +18,10 @@ DesktopEnvironment::DesktopEnvironment(QObject *parent)
     for (int i = 0; i < screens.length(); ++i) {
         QScreen *scr = screens[i];
         QString name = scr->name();
-        this->m_screens[name] = QVariantMap();
-        this->m_screens[name].toMap()["pixelsPerDp"] = 1;
+
+        QVariantMap screen_info;
+        screen_info["pixelsPerDp"] = 1;
+        this->m_screens[name] = screen_info;
     }
 
     QObject::connect(this, &DesktopEnvironment::screenInfoChanged,

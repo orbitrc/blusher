@@ -1,5 +1,7 @@
 #include "BaseWindow.h"
 
+#include "DesktopEnvironment.h"
+
 #include <QScreen>
 
 BaseWindow::BaseWindow(QWindow *parent)
@@ -71,7 +73,14 @@ void BaseWindow::keyPressEvent(QKeyEvent *event)
 
 void BaseWindow::q_onScreenChanged(QScreen *qscreen)
 {
-    qDebug() << qscreen;
+    QString screen_name = qscreen->name();
+
+    QVariantMap screens = bl::DesktopEnvironment::singleton->screens();
+    if (!screens.contains(screen_name)) {
+        qDebug() << "[WARNING] Screen name \"" << screen_name << "\" does not exist.";
+    }
+    const QVariant& screen = screens[screen_name];
+    this->m_pixelsPerDp = screen.toMap()["pixelsPerDp"].toInt();
 }
 
 void BaseWindow::onScreensChanged()
