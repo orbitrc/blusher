@@ -9,7 +9,7 @@ BaseWindow::BaseWindow(QWindow *parent)
     this->m_pixelsPerDp = 1;
 
     QObject::connect(this, &QQuickWindow::screenChanged,
-                     this, [this]() { qDebug() << this->screen(); });
+                     this, &BaseWindow::q_onScreenChanged);
 }
 
 int BaseWindow::type() const
@@ -69,9 +69,9 @@ void BaseWindow::keyPressEvent(QKeyEvent *event)
 }
 
 
-void BaseWindow::q_onScreenChanged()
+void BaseWindow::q_onScreenChanged(QScreen *qscreen)
 {
-
+    qDebug() << qscreen;
 }
 
 void BaseWindow::onScreensChanged()

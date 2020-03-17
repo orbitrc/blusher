@@ -41,7 +41,7 @@ signals:
 public slots:
 
 private slots:
-    void q_onScreenChanged();
+    void q_onScreenChanged(QScreen *qscreen);
     void onScreensChanged();
 
 private:
