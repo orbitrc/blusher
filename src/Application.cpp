@@ -5,7 +5,7 @@
 #include <QWidget>
 #include <QMenu>
 
-#include <src/cpp/Menu.h>
+#include "../src/cpp/Menu.h"
 
 // To ignore IDE's error.
 #ifndef BLUSHER_APP_NAME
