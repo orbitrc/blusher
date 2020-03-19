@@ -42,5 +42,14 @@ Window3 {
       print(root.screenName);
       print(Process.env.BLUSHER_APP_NAME);
     }
+    Menu2 {
+      QtObject {
+        id: test
+      }
+      Component.onCompleted: {
+        this.addItem(test);
+      }
+    }
   }
+
 }

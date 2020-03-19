@@ -6,6 +6,7 @@
 
 #include "View.h"
 #include "BaseWindow.h"
+#include "Menu.h"
 
 #include "Blusher.h"
 #include "DesktopEnvironment.h"
@@ -53,6 +54,7 @@ void BlusherPlugin::registerTypes(const char *uri)
     // @uri Blusher
     qmlRegisterType<bl::View>(uri, 0, 1, "View");
     qmlRegisterType<BaseWindow>(uri, 0, 1, "BaseWindow");
+    qmlRegisterType<bl::Menu>(uri, 0, 1, "Menu2");
 
     qmlRegisterSingletonType<bl::Blusher>("Blusher", 0, 1, "Blusher", blusher_blusher_singleton_provider);
     qmlRegisterSingletonType<bl::DesktopEnvironment>("Blusher", 0, 1, "DesktopEnvironmentPlugin", blusher_desktop_environment_singleton_provider);
