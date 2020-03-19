@@ -3,6 +3,9 @@
 #include <QFile>
 
 #include <QWidget>
+#include <QMenu>
+
+#include <src/cpp/Menu.h>
 
 // To ignore IDE's error.
 #ifndef BLUSHER_APP_NAME
@@ -52,6 +55,13 @@ Application* Application::instance()
 int Application::exec()
 {
     return QApplication::exec();
+}
+
+void Application::openMenu(bl::Menu *menu)
+{
+    QMenu *qmenu = new QMenu;
+    qmenu->addAction("Hello");
+    qmenu->popup(QPoint(0, 0));
 }
 
 } // namespace bl

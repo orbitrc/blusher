@@ -33,6 +33,7 @@ public:
     QQmlListProperty<QObject> items();
 
     Q_INVOKABLE void addItem(QObject *item);
+    Q_INVOKABLE void open();
 
 signals:
     void typeChanged();

@@ -41,8 +41,10 @@ Window3 {
       print(Object.keys(DesktopEnvironment.screens));
       print(root.screenName);
       print(Process.env.BLUSHER_APP_NAME);
+      testMenu.open();
     }
     Menu2 {
+      id: testMenu
       QtObject {
         id: test
       }

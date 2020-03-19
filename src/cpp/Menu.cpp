@@ -2,6 +2,8 @@
 
 #include <QDebug>
 
+#include <blusher/Application.h>
+
 namespace bl {
 
 Menu::Menu(QObject *parent)
@@ -45,6 +47,11 @@ QQmlListProperty<QObject> Menu::items()
 void Menu::addItem(QObject *item)
 {
     this->m_items.append(item);
+}
+
+void Menu::open()
+{
+    Application::instance()->openMenu(this);
 }
 
 } // namespace bl

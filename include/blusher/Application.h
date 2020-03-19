@@ -19,6 +19,8 @@ class QWidget;
 
 namespace bl {
 
+class Menu;
+
 class Application : public QApplication
 {
     Q_OBJECT
@@ -76,6 +78,8 @@ public:
     static Application *self;
 
     static Application* instance();
+
+    void openMenu(bl::Menu *menu);
 
 private:
     QQmlApplicationEngine m_engine;
