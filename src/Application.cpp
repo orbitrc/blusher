@@ -7,14 +7,6 @@
 
 #include "../src/cpp/Menu.h"
 
-// To ignore IDE's error.
-#ifndef BLUSHER_APP_NAME
-#define BLUSHER_APP_NAME ""
-#endif
-
-#ifndef BLUSHER_APP_VERSION
-#define BLUSHER_APP_VERSION ""
-#endif
 
 namespace bl {
 
