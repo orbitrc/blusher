@@ -57,6 +57,16 @@ Window3 {
         print("Hello, world!");
       }
     }
+    MenuItem2 {
+      title: "Open..."
+      submenu: Menu2 {
+        title: "Open"
+        MenuItem2 {
+          title: "from file"
+        }
+      }
+    }
+
     Component.onCompleted: {
       this.addItem(test);
     }
