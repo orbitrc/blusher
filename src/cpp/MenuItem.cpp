@@ -1,5 +1,6 @@
 #include "MenuItem.h"
 
+#include <QMenu>
 #include <QAction>
 
 #include "Menu.h"
@@ -9,7 +10,7 @@ namespace bl {
 MenuItem::MenuItem(QObject *parent)
     : QObject(parent)
 {
-
+    this->m_submenu = nullptr;
 }
 
 QString MenuItem::title() const
@@ -49,7 +50,7 @@ QAction* MenuItem::to_qaction()
     // Add submenu.
     if (this->submenu() != nullptr) {
         Menu *submenu = qobject_cast<Menu*>(this->submenu());
-        qaction->setMenu(submenu->to_qmenu());
+        qaction->setMenu(reinterpret_cast<QMenu*>(submenu->to_qmenu()));
     }
 
     return qaction;

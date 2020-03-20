@@ -79,6 +79,9 @@ Window3 {
         MenuItem2 {
           title: "from file"
         }
+        MenuItem2 {
+          title: "recent"
+        }
       }
     }
 

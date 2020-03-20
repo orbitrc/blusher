@@ -6,6 +6,7 @@ View {
   id: root
 
   property Menu2 menu: null
+  property bool active: false
 
   height: 30
 

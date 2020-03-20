@@ -6,6 +6,7 @@
 
 #include <blusher/Application.h>
 #include "MenuItem.h"
+#include "MenuView.h"
 
 namespace bl {
 
@@ -52,9 +53,9 @@ QList<QObject*> Menu::items_data()
     return this->m_items;
 }
 
-QMenu* Menu::to_qmenu()
+MenuView* Menu::to_qmenu()
 {
-    QMenu *qmenu = new QMenu;
+    MenuView *qmenu = new MenuView;
     qmenu->setTitle(this->title());
     for (int i = 0; i < this->m_items.length(); ++i) {
         MenuItem *item = qobject_cast<MenuItem*>(this->m_items[i]);

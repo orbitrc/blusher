@@ -3,10 +3,10 @@
 #include <QFile>
 
 #include <QWidget>
-#include <QMenu>
 
 #include "../src/cpp/Menu.h"
 #include "../src/cpp/MenuItem.h"
+#include "../src/cpp/MenuView.h"
 
 
 namespace bl {
@@ -52,7 +52,7 @@ int Application::exec()
 
 void Application::openMenu(bl::Menu *menu)
 {
-    QMenu *qmenu = menu->to_qmenu();
+    MenuView *qmenu = menu->to_qmenu();
     qmenu->popup(QPoint(0, 0));
 }
 
