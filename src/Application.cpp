@@ -52,11 +52,7 @@ int Application::exec()
 
 void Application::openMenu(bl::Menu *menu)
 {
-    QMenu *qmenu = new QMenu;
-    for (int i = 0; i < menu->items_data().length(); ++i) {
-        MenuItem *item = qobject_cast<MenuItem*>(menu->items_data()[i]);
-        qmenu->addAction(item->title());
-    }
+    QMenu *qmenu = menu->to_qmenu();
     qmenu->popup(QPoint(0, 0));
 }
 

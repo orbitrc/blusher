@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+class QAction;
+
 namespace bl {
 
 class MenuItem : public QObject
@@ -15,8 +17,12 @@ public:
     QString title() const;
     void setTitle(QString title);
 
+    QAction* to_qaction();
+
 signals:
     void titleChanged();
+
+    void triggered();
 
 public slots:
 

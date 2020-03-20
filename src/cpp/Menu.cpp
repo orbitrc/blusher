@@ -1,8 +1,11 @@
 #include "Menu.h"
 
+#include <QMenu>
+
 #include <QDebug>
 
 #include <blusher/Application.h>
+#include "MenuItem.h"
 
 namespace bl {
 
@@ -48,6 +51,22 @@ QList<QObject*> Menu::items_data()
 {
     return this->m_items;
 }
+
+QMenu* Menu::to_qmenu()
+{
+    QMenu *qmenu = new QMenu;
+    qmenu->setTitle(this->title());
+    for (int i = 0; i < this->m_items.length(); ++i) {
+        MenuItem *item = qobject_cast<MenuItem*>(this->m_items[i]);
+        qmenu->addAction(item->to_qaction());
+    }
+
+    return qmenu;
+}
+
+//==================
+// QML Invokables
+//==================
 
 void Menu::addItem(QObject *item)
 {

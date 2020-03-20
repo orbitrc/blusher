@@ -1,5 +1,7 @@
 #include "MenuItem.h"
 
+#include <QAction>
+
 namespace bl {
 
 MenuItem::MenuItem(QObject *parent)
@@ -20,6 +22,16 @@ void MenuItem::setTitle(QString title)
 
         emit this->titleChanged();
     }
+}
+
+QAction* MenuItem::to_qaction()
+{
+    QAction *qaction = new QAction;
+    qaction->setText(this->title());
+    QObject::connect(qaction, &QAction::triggered,
+                     this, &MenuItem::triggered);
+
+    return qaction;
 }
 
 } // namespace bl

@@ -5,6 +5,8 @@
 
 #include <QQmlListProperty>
 
+class QMenu;
+
 namespace bl {
 
 class Menu : public QObject
@@ -32,6 +34,7 @@ public:
 
     QQmlListProperty<QObject> items();
     QList<QObject*> items_data();
+    QMenu* to_qmenu();
 
     Q_INVOKABLE void addItem(QObject *item);
     Q_INVOKABLE void open();

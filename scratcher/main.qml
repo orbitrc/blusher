@@ -49,6 +49,13 @@ Window3 {
         id: test
         title: "Hello"
       }
+      MenuItem2 {
+        title: "World"
+        onTriggered: {
+          print("Hello, world!");
+        }
+      }
+
       Component.onCompleted: {
         this.addItem(test);
       }
