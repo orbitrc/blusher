@@ -11,16 +11,31 @@ Window3 {
   width: 300
   height: 300
 
-//  menu: Menu {
-//    title: 'Application Menu'
-//    MenuItem {
-//      title: 'File'
-//      submenu: Menu {
-//        title: 'Quit'
-//      }
-//    }
-//  }
-  menu: 'menu'
+  menu: Menu2 {
+    title: 'Application Menu'
+    type: Menu2.MenuBarMenu
+    MenuItem2 {
+      title: 'File'
+      submenu: Menu2 {
+        title: 'File'
+        MenuItem2 {
+          title: 'Quit'
+        }
+      }
+    }
+    MenuItem2 {
+      title: 'Edit'
+      submenu: Menu2 {
+        title: 'Edit'
+        MenuItem2 {
+          title: 'Copy'
+        }
+        MenuItem2 {
+          title: 'Paste'
+        }
+      }
+    }
+  }
 
   View {
     anchors.fill: parent

@@ -8,10 +8,14 @@ BaseWindow {
 
   default property alias bodyItems: body.data
 
-  property string menu: ''
+  property Menu2 menu: null
 
   MenuBar {
     id: menuBar
+    menu: root.menu
+    visible: root.hasMenuBar()
+
+    width: root.width
   }
 
   View {
@@ -24,6 +28,6 @@ BaseWindow {
   }
 
   function hasMenuBar() {
-    return root.menu !== '';
+    return root.menu !== null;
   }
 }
