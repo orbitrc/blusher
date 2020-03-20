@@ -14,6 +14,7 @@ SOURCES += src/cpp/blusher_plugin.cpp \
     src/cpp/Blusher.cpp \
     src/cpp/DesktopEnvironment.cpp \
     src/cpp/Menu.cpp \
+    src/cpp/MenuItem.cpp \
     src/cpp/View.cpp
 
 HEADERS += src/cpp/blusher_plugin.h \
@@ -25,6 +26,7 @@ HEADERS += src/cpp/blusher_plugin.h \
     src/cpp/Blusher.h \
     src/cpp/DesktopEnvironment.h \
     src/cpp/Menu.h \
+    src/cpp/MenuItem.h \
     src/cpp/View.h
 
 TARGET = blusher

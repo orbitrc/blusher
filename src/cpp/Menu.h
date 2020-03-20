@@ -31,6 +31,7 @@ public:
     void setTitle(QString title);
 
     QQmlListProperty<QObject> items();
+    QList<QObject*> items_data();
 
     Q_INVOKABLE void addItem(QObject *item);
     Q_INVOKABLE void open();

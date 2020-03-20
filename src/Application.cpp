@@ -6,6 +6,7 @@
 #include <QMenu>
 
 #include "../src/cpp/Menu.h"
+#include "../src/cpp/MenuItem.h"
 
 
 namespace bl {
@@ -52,7 +53,10 @@ int Application::exec()
 void Application::openMenu(bl::Menu *menu)
 {
     QMenu *qmenu = new QMenu;
-    qmenu->addAction("Hello");
+    for (int i = 0; i < menu->items_data().length(); ++i) {
+        MenuItem *item = qobject_cast<MenuItem*>(menu->items_data()[i]);
+        qmenu->addAction(item->title());
+    }
     qmenu->popup(QPoint(0, 0));
 }
 

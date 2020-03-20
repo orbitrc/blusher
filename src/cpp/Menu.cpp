@@ -44,6 +44,11 @@ QQmlListProperty<QObject> Menu::items()
     return QQmlListProperty<QObject>(this, this->m_items);
 }
 
+QList<QObject*> Menu::items_data()
+{
+    return this->m_items;
+}
+
 void Menu::addItem(QObject *item)
 {
     this->m_items.append(item);

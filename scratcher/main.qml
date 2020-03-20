@@ -45,8 +45,9 @@ Window3 {
     }
     Menu2 {
       id: testMenu
-      QtObject {
+      MenuItem2 {
         id: test
+        title: "Hello"
       }
       Component.onCompleted: {
         this.addItem(test);
