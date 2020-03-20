@@ -6,7 +6,7 @@ import Blusher 0.1
 BaseWindow {
   id: root
 
-  default property alias bodyItems: body.children
+  default property alias bodyItems: body.data
 
   property string menu: ''
 

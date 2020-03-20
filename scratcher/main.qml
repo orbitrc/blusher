@@ -43,23 +43,22 @@ Window3 {
       print(Process.env.BLUSHER_APP_NAME);
       testMenu.open();
     }
-    Menu2 {
-      id: testMenu
-      MenuItem2 {
-        id: test
-        title: "Hello"
-      }
-      MenuItem2 {
-        title: "World"
-        onTriggered: {
-          print("Hello, world!");
-        }
-      }
-
-      Component.onCompleted: {
-        this.addItem(test);
-      }
-    }
   }
 
+  Menu2 {
+    id: testMenu
+    MenuItem2 {
+      id: test
+      title: "Hello"
+    }
+    MenuItem2 {
+      title: "World"
+      onTriggered: {
+        print("Hello, world!");
+      }
+    }
+    Component.onCompleted: {
+      this.addItem(test);
+    }
+  }
 }
