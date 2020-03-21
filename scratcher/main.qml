@@ -18,6 +18,7 @@ Window3 {
       title: 'File'
       submenu: Menu2 {
         title: 'File'
+        type: Menu2.Submenu
         MenuItem2 {
           title: 'Quit'
         }

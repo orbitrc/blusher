@@ -2,6 +2,7 @@
 #define _BL_MENU_H
 
 #include <QObject>
+#include <QQmlParserStatus>
 
 #include <QQmlListProperty>
 
@@ -9,13 +10,14 @@ namespace bl {
 
 class MenuView;
 
-class Menu : public QObject
+class Menu : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
     Q_PROPERTY(int type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QQmlListProperty<QObject> items READ items)
     Q_CLASSINFO("DefaultProperty", "items")
+    Q_INTERFACES(QQmlParserStatus)
 public:
     enum class MenuType {
         MenuBarMenu = 0,
@@ -38,6 +40,9 @@ public:
 
     Q_INVOKABLE void addItem(QObject *item);
     Q_INVOKABLE void open();
+
+    virtual void classBegin() override;
+    virtual void componentComplete() override;
 
 signals:
     void typeChanged();

@@ -3,6 +3,8 @@
 #include <QMenu>
 #include <QAction>
 
+#include <QDebug>
+
 #include "Menu.h"
 
 namespace bl {
@@ -11,6 +13,7 @@ MenuItem::MenuItem(QObject *parent)
     : QObject(parent)
 {
     this->m_submenu = nullptr;
+    this->m_parentMenu = nullptr;
 }
 
 QString MenuItem::title() const
@@ -40,6 +43,21 @@ void MenuItem::setSubmenu(QObject *submenu)
     emit this->submenuChanged();
 }
 
+QObject* MenuItem::parentMenu() const
+{
+    return this->m_parentMenu;
+}
+
+void MenuItem::setParentMenu(QObject *menu)
+{
+    if (this->m_parentMenu != menu) {
+        this->m_parentMenu = menu;
+
+        emit this->parentMenuChanged();
+    }
+}
+
+
 QAction* MenuItem::to_qaction()
 {
     QAction *qaction = new QAction;
@@ -54,6 +72,19 @@ QAction* MenuItem::to_qaction()
     }
 
     return qaction;
+}
+
+//=====================
+// QQmlParserStatus
+//=====================
+
+void MenuItem::classBegin()
+{
+}
+
+void MenuItem::componentComplete()
+{
+    this->setParentMenu(this->parent());
 }
 
 } // namespace bl

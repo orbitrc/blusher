@@ -65,6 +65,18 @@ MenuView* Menu::to_qmenu()
     return qmenu;
 }
 
+//====================
+// QQmlParserStatus
+//====================
+
+void Menu::classBegin()
+{
+}
+
+void Menu::componentComplete()
+{
+}
+
 //==================
 // QML Invokables
 //==================

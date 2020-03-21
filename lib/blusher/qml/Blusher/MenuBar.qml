@@ -7,6 +7,7 @@ View {
 
   property Menu2 menu: null
   property bool active: false
+  property int focusedItemIndex: -1
 
   height: 30
 
@@ -26,10 +27,16 @@ View {
         }
         MouseArea {
           anchors.fill: parent
+          hoverEnabled: root.active
           onClicked: {
             if (modelData.submenu !== null) {
+              root.active = true;
               modelData.submenu.open();
             }
+          }
+          onEntered: {
+            print(modelData.title + ' entered');
+//            modelData.submenu.open();
           }
         }
       }
