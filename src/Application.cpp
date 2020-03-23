@@ -50,12 +50,12 @@ int Application::exec()
     return QApplication::exec();
 }
 
-void Application::openMenu(bl::Menu *menu)
+void Application::openMenu(bl::Menu *menu, double x, double y)
 {
     MenuView *qmenu = menu->to_qmenu();
     QObject::connect(qmenu, &MenuView::closedByUser,
                      this, &Application::menuClosedByUser);
-    qmenu->popup(QPoint(0, 0));
+    qmenu->popup(QPoint(x, y));
 }
 
 QRectF Application::menuBarRect() const

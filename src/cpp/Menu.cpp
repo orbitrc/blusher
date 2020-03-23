@@ -86,9 +86,9 @@ void Menu::addItem(QObject *item)
     this->m_items.append(item);
 }
 
-void Menu::open()
+void Menu::open(double x, double y)
 {
-    Application::instance()->openMenu(this);
+    Application::instance()->openMenu(this, x, y);
 }
 
 } // namespace bl

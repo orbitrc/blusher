@@ -39,7 +39,7 @@ public:
     MenuView* to_qmenu();
 
     Q_INVOKABLE void addItem(QObject *item);
-    Q_INVOKABLE void open();
+    Q_INVOKABLE void open(double x = 0, double y = 0);
 
     virtual void classBegin() override;
     virtual void componentComplete() override;

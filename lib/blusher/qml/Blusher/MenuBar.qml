@@ -56,6 +56,7 @@ View {
             menuItem.openMenu();
           }
         }
+
         function openMenu() {
           let globalPos = root.mapToGlobal(0, 0);
           Blusher.app.setMenuBarRect(Qt.rect(
@@ -64,12 +65,14 @@ View {
           Blusher.app.setMenuBarMenuItemRect(Qt.rect(
             globalMenuItemPos.x, globalMenuItemPos.y, menuItem.width, menuItem.height));
           root.focusedItemIndex = index;
-          modelData.submenu.open();
+
+          modelData.submenu.open(globalMenuItemPos.x, globalMenuItemPos.y + root.height);
         }
-      }
-      }
-    }
-  }
+        } // Item
+      } // Repeater
+    } // Row
+  } // Rectangle
+
   Connections {
     target: Blusher.app
     onMenuClosedByUser: {

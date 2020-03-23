@@ -58,8 +58,8 @@ void MenuView::keyPressEvent(QKeyEvent *event)
 
 void MenuView::mouseMoveEvent(QMouseEvent *event)
 {
-    if (Application::instance()->menuBarRect().contains(event->x(), event->y())) {
-        if (!Application::instance()->menuBarMenuItemRect().contains(event->x(), event->y())) {
+    if (Application::instance()->menuBarRect().contains(event->globalX(), event->globalY())) {
+        if (!Application::instance()->menuBarMenuItemRect().contains(event->globalX(), event->globalY())) {
             this->close();
         }
     }

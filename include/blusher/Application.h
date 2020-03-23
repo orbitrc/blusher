@@ -82,7 +82,7 @@ public:
 
     static Application* instance();
 
-    void openMenu(bl::Menu *menu);
+    void openMenu(bl::Menu *menu, double x, double y);
 
     QRectF menuBarRect() const;
     Q_INVOKABLE void setMenuBarRect(QRectF rect);
