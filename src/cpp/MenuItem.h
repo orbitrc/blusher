@@ -18,6 +18,9 @@ class MenuItem : public QObject, public QQmlParserStatus
 public:
     explicit MenuItem(QObject *parent = nullptr);
 
+    //=========================
+    // Property getter/setter
+    //=========================
     QString title() const;
     void setTitle(QString title);
 
@@ -27,8 +30,15 @@ public:
     QObject* parentMenu() const;
     void setParentMenu(QObject *menu);
 
+
+    Q_INVOKABLE bool isMenuBarMenuItem() const;
+
+
     QAction* to_qaction();
 
+    //===================
+    // QQmlParserStatus
+    //===================
     virtual void classBegin() override;
     virtual void componentComplete() override;
 

@@ -58,6 +58,17 @@ void MenuItem::setParentMenu(QObject *menu)
 }
 
 
+bool MenuItem::isMenuBarMenuItem() const
+{
+    Menu *parentMenu = qobject_cast<Menu*>(this->parentMenu());
+    if (this->parentMenu() != nullptr &&
+            parentMenu->type() == static_cast<int>(Menu::MenuType::MenuBarMenu)) {
+        return true;
+    }
+    return false;
+}
+
+
 QAction* MenuItem::to_qaction()
 {
     QAction *qaction = new QAction;
