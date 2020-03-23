@@ -15,14 +15,21 @@ View {
     anchors.fill: parent
     color: "gray"
 
-    Repeater {
+    Row {
+      Repeater {
       model: root.menu.items
-      Item {
+        Item {
         id: menuItem
 
         width: menuItemText.implicitWidth
         height: root.height
         x: this.width * index
+        Rectangle {
+          visible: root.focusedItemIndex === index
+          color: "red"
+          anchors.fill: parent
+        }
+
         Text {
           id: menuItemText
           text: modelData.title
@@ -56,8 +63,10 @@ View {
           let globalMenuItemPos = menuItem.mapToGlobal(0, 0);
           Blusher.app.setMenuBarMenuItemRect(Qt.rect(
             globalMenuItemPos.x, globalMenuItemPos.y, menuItem.width, menuItem.height));
+          root.focusedItemIndex = index;
           modelData.submenu.open();
         }
+      }
       }
     }
   }
@@ -65,6 +74,7 @@ View {
     target: Blusher.app
     onMenuClosedByUser: {
       root.active = false;
+      root.focusedItemIndex = -1;
     }
   }
 }

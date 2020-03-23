@@ -75,7 +75,6 @@ QRectF Application::menuBarMenuItemRect() const
 
 void Application::setMenuBarMenuItemRect(QRectF rect)
 {
-    qDebug() << "setMenuBarMenuItemRect()" << rect;
     this->m_menuBarMenuItemRect = rect;
 }
 

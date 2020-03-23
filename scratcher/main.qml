@@ -36,6 +36,12 @@ Window3 {
         }
       }
     }
+    MenuItem2 {
+      title: 'View'
+      submenu: Menu2 {
+        title: 'View'
+      }
+    }
   }
 
   View {
