@@ -1,10 +1,13 @@
 #ifndef _BL_APPLICATION_H
 #define _BL_APPLICATION_H
 
+// Application
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-
+// GUI
+#include <QRectF>
+// Debug
 #include <QDebug>
 
 #ifndef BLUSHER_APP_NAME
@@ -81,9 +84,20 @@ public:
 
     void openMenu(bl::Menu *menu);
 
+    QRectF menuBarRect() const;
+    Q_INVOKABLE void setMenuBarRect(QRectF rect);
+    QRectF menuBarMenuItemRect() const;
+    Q_INVOKABLE void setMenuBarMenuItemRect(QRectF rect);
+
+signals:
+    void menuClosed();
+    void menuClosedByUser();
+
 private:
     QQmlApplicationEngine m_engine;
-    QWidget *m_popUpZone;
+    QWidget *m_popUpZone;   // Maybe not used.
+    QRectF m_menuBarRect;
+    QRectF m_menuBarMenuItemRect;
 
     void readConf(QVariantMap *env);
 };

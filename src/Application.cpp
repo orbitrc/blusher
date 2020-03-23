@@ -53,7 +53,30 @@ int Application::exec()
 void Application::openMenu(bl::Menu *menu)
 {
     MenuView *qmenu = menu->to_qmenu();
+    QObject::connect(qmenu, &MenuView::closedByUser,
+                     this, &Application::menuClosedByUser);
     qmenu->popup(QPoint(0, 0));
+}
+
+QRectF Application::menuBarRect() const
+{
+    return this->m_menuBarRect;
+}
+
+void Application::setMenuBarRect(QRectF rect)
+{
+    this->m_menuBarRect = rect;
+}
+
+QRectF Application::menuBarMenuItemRect() const
+{
+    return this->m_menuBarMenuItemRect;
+}
+
+void Application::setMenuBarMenuItemRect(QRectF rect)
+{
+    qDebug() << "setMenuBarMenuItemRect()" << rect;
+    this->m_menuBarMenuItemRect = rect;
 }
 
 } // namespace bl

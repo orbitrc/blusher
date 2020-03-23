@@ -7,6 +7,7 @@ namespace bl {
 
 class MenuView : public QMenu
 {
+    Q_OBJECT
 public:
     MenuView(QWidget *parent = nullptr);
 
@@ -19,6 +20,10 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *) override;
     void mouseMoveEvent(QMouseEvent *) override;
+
+signals:
+    void closed();
+    void closedByUser();
 
 private:
     bool m_menuBarMenu;

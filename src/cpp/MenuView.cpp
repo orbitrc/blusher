@@ -6,6 +6,8 @@
 
 #include <QDebug>
 
+#include <blusher/Application.h>
+
 namespace bl {
 MenuView::MenuView(QWidget *parent)
     : QMenu(parent)
@@ -36,6 +38,11 @@ void MenuView::setMenuBarRect(QRectF rect)
 
 void MenuView::keyPressEvent(QKeyEvent *event)
 {
+    // Emit signal when Esc key pressed.
+    if (event->key() == Qt::Key_Escape) {
+        emit this->closedByUser();
+    }
+
     // Prevent round navigation.
     if (event->key() == Qt::Key_Down &&
             QMenu::activeAction() == QMenu::actions().last()) {
@@ -51,12 +58,17 @@ void MenuView::keyPressEvent(QKeyEvent *event)
 
 void MenuView::mouseMoveEvent(QMouseEvent *event)
 {
-    if (this->isMenuBarMenu()) {
-        if (this->menuBarRect().contains(event->x(), event->y())) {
-            qDebug() << "MenuBar area!";
-            return;
+    if (Application::instance()->menuBarRect().contains(event->x(), event->y())) {
+        if (!Application::instance()->menuBarMenuItemRect().contains(event->x(), event->y())) {
+            this->close();
         }
     }
+//    if (this->isMenuBarMenu()) {
+//        if (this->menuBarRect().contains(event->x(), event->y())) {
+//            qDebug() << "MenuBar area!";
+//            return;
+//        }
+//    }
 
     QMenu::mouseMoveEvent(event);
 }

@@ -18,6 +18,8 @@ View {
     Repeater {
       model: root.menu.items
       Item {
+        id: menuItem
+
         width: menuItemText.implicitWidth
         height: root.height
         x: this.width * index
@@ -29,17 +31,40 @@ View {
           anchors.fill: parent
           hoverEnabled: root.active
           onClicked: {
-            if (modelData.submenu !== null) {
+            if (!root.active) {
               root.active = true;
-              modelData.submenu.open();
+              // Open submenu if exists.
+              if (modelData.submenu !== null) {
+                menuItem.openMenu();
+              }
+            } else {
+              root.active = false;
             }
           }
           onEntered: {
-            print(modelData.title + ' entered');
-//            modelData.submenu.open();
+            if (!root.active) {
+              return;
+            }
+//            print(modelData.title + ' entered');
+            menuItem.openMenu();
           }
         }
+        function openMenu() {
+          let globalPos = root.mapToGlobal(0, 0);
+          Blusher.app.setMenuBarRect(Qt.rect(
+            globalPos.x, globalPos.y, root.width, root.height));
+          let globalMenuItemPos = menuItem.mapToGlobal(0, 0);
+          Blusher.app.setMenuBarMenuItemRect(Qt.rect(
+            globalMenuItemPos.x, globalMenuItemPos.y, menuItem.width, menuItem.height));
+          modelData.submenu.open();
+        }
       }
+    }
+  }
+  Connections {
+    target: Blusher.app
+    onMenuClosedByUser: {
+      root.active = false;
     }
   }
 }
