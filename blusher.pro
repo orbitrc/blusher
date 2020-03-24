@@ -7,6 +7,8 @@ TEMPLATE = lib
 
 VERSION = 0.1.0
 
+INCLUDEPATH += ./include
+
 SOURCES += src/cpp/blusher_plugin.cpp \
     src/Application.cpp \
 #    src/cpp/Application_bridge.cpp \
