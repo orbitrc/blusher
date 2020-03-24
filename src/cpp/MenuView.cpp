@@ -58,17 +58,11 @@ void MenuView::keyPressEvent(QKeyEvent *event)
 
 void MenuView::mouseMoveEvent(QMouseEvent *event)
 {
-    if (Application::instance()->menuBarRect().contains(event->globalX(), event->globalY())) {
-        if (!Application::instance()->menuBarMenuItemRect().contains(event->globalX(), event->globalY())) {
+    if (Application::instance()->menuBarRect().contains(event->screenPos())) {
+        if (!Application::instance()->menuBarMenuItemRect().contains(event->screenPos())) {
             this->close();
         }
     }
-//    if (this->isMenuBarMenu()) {
-//        if (this->menuBarRect().contains(event->x(), event->y())) {
-//            qDebug() << "MenuBar area!";
-//            return;
-//        }
-//    }
 
     QMenu::mouseMoveEvent(event);
 }
