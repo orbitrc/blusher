@@ -37,6 +37,10 @@ View {
         Text {
           id: menuItemText
           text: modelData.title
+          font.pixelSize: 14
+          leftPadding: 7
+          rightPadding: 7
+          anchors.verticalCenter: parent.verticalCenter
         }
         MouseArea {
           anchors.fill: parent
