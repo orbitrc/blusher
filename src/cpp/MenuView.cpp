@@ -73,4 +73,11 @@ void MenuView::mouseMoveEvent(QMouseEvent *event)
     QMenu::mouseMoveEvent(event);
 }
 
+void MenuView::mousePressEvent(QMouseEvent *event)
+{
+    emit this->closedByUser();
+
+    QMenu::mousePressEvent(event);
+}
+
 } // namespace bl

@@ -20,6 +20,7 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *) override;
     void mouseMoveEvent(QMouseEvent *) override;
+    void mousePressEvent(QMouseEvent *) override;
 
 signals:
     void closed();
