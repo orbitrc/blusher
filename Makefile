@@ -1,3 +1,4 @@
+QMAKE ?= qmake
 VERSION_MAJOR = 0
 VERSION_MINOR = 1
 VERSION_PATCH = 0
@@ -6,7 +7,7 @@ SHARED_LIB_TARGET_DIR = lib/blusher/qml/Blusher
 
 default:
 	mkdir -p build
-	cd build && qmake ../blusher.pro -spec linux-g++ && make qmake_all
+	cd build && $(QMAKE) ../blusher.pro -spec linux-g++ && make qmake_all
 	cd build && make -j8
 	cp build/libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH) $(SHARED_LIB_TARGET_DIR)
 	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR)
@@ -18,7 +19,7 @@ default:
 
 debug:
 	mkdir -p debug
-	cd debug && qmake ../blusher.pro -spec linux-g++ CONFIG+=debug && make qmake_all
+	cd debug && $(QMAKE) ../blusher.pro -spec linux-g++ CONFIG+=debug && make qmake_all
 	cd debug && make -j8
 	cp debug/libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH) $(SHARED_LIB_TARGET_DIR)
 	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR)
