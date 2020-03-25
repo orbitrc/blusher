@@ -4,6 +4,8 @@
 #include <QQuickItem>
 #include <QQuickPaintedItem>
 
+#include "BaseWindow.h"
+
 namespace bl {
 
 class View : public QQuickItem
@@ -14,6 +16,7 @@ class View : public QQuickItem
     Q_PROPERTY(qreal y READ y WRITE setY NOTIFY yChanged)
     Q_PROPERTY(qreal width READ width WRITE setWidth NOTIFY widthChanged)
     Q_PROPERTY(qreal height READ height WRITE setHeight NOTIFY heightChanged)
+    Q_PROPERTY(BaseWindow* window READ window CONSTANT)
 public:
     View(QQuickItem *parent = nullptr);
 
@@ -28,6 +31,8 @@ public:
 
     qreal height() const;
     void setHeight(qreal height);
+
+    BaseWindow* window() const;
 
 signals:
     void xChanged();

@@ -73,4 +73,9 @@ void View::setHeight(qreal height)
     }
 }
 
+BaseWindow* View::window() const
+{
+    return qobject_cast<BaseWindow*>(QQuickItem::window());
+}
+
 } // namespace bl
