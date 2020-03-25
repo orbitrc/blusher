@@ -61,6 +61,12 @@ MenuView* Menu::to_qmenu()
         MenuItem *item = qobject_cast<MenuItem*>(this->m_items[i]);
         qmenu->addAction(item->to_qaction());
     }
+    // Open empty menu cause problem on some systems: ubuntu
+    if (this->m_items.length() == 0) {
+        QAction *dummy_item = new QAction;
+        dummy_item->setEnabled(false);
+        qmenu->addAction(dummy_item);
+    }
     // Delete after closed.
     QObject::connect(qmenu, &QMenu::aboutToHide,
                      qmenu, &QObject::deleteLater);
