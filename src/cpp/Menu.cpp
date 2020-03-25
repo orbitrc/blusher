@@ -61,6 +61,9 @@ MenuView* Menu::to_qmenu()
         MenuItem *item = qobject_cast<MenuItem*>(this->m_items[i]);
         qmenu->addAction(item->to_qaction());
     }
+    // Delete after closed.
+    QObject::connect(qmenu, &QMenu::aboutToHide,
+                     qmenu, &QObject::deleteLater);
 
     return qmenu;
 }
