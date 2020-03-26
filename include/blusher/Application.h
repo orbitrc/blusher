@@ -10,6 +10,8 @@
 // Debug
 #include <QDebug>
 
+#include <blusher/blusher_base.h>
+
 #ifndef BLUSHER_APP_NAME
 #define BLUSHER_APP_NAME ""
 #endif
@@ -24,7 +26,7 @@ namespace bl {
 
 class Menu;
 
-class Application : public QApplication
+class BL_EXPORT Application : public QApplication
 {
     Q_OBJECT
 

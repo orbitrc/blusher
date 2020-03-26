@@ -1,7 +1,8 @@
 QT = gui quick widgets
 CONFIG += c++11
 
-DEFINES += QT_DEPRECATED_WARNINGS
+DEFINES += QT_DEPRECATED_WARNINGS \
+    BL_BUILDING
 
 TEMPLATE = lib
 
@@ -25,6 +26,7 @@ HEADERS += src/cpp/blusher_plugin.h \
     include/blusher/Application.h \
 #    src/Application_bridge.h \
 #    include/blusher/blusher-qt.h \
+    include/blusher/blusher_base.h \
     src/cpp/BaseWindow.h \
     src/cpp/Blusher.h \
     src/cpp/DesktopEnvironment.h \
