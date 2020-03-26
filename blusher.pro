@@ -38,6 +38,7 @@ TARGET = blusher
 DISTFILES += \
     lib/blusher/qml/Blusher/Window3.qml \
     lib/blusher/qml/Blusher/Button.qml \
+    lib/blusher/qml/Blusher/Label.qml \
     lib/blusher/qml/Blusher/Menu.qml \
     lib/blusher/qml/Blusher/MenuItem.qml \
     lib/blusher/qml/Blusher/MenuBar.qml \

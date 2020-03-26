@@ -67,6 +67,15 @@ Window3 {
     }
   }
 
+  View {
+    id: infoArea
+    y: 30
+
+    Label {
+      text: 'Screen name: ' + root.screenName
+    }
+  }
+
   Menu2 {
     id: testMenu
     MenuItem2 {
