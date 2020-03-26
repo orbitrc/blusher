@@ -73,6 +73,8 @@ void BaseWindow::keyPressEvent(QKeyEvent *event)
 
 void BaseWindow::q_onScreenChanged(QScreen *qscreen)
 {
+    emit this->screenNameChanged();
+
     QString screen_name = qscreen->name();
 
     QVariantMap screens = bl::DesktopEnvironment::singleton->screens();
@@ -81,6 +83,7 @@ void BaseWindow::q_onScreenChanged(QScreen *qscreen)
     }
     const QVariant& screen = screens[screen_name];
     this->m_pixelsPerDp = screen.toMap()["pixelsPerDp"].toInt();
+    emit this->pixelsPerDpChanged();
 }
 
 void BaseWindow::onScreensChanged()
