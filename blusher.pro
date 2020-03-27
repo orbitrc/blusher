@@ -44,5 +44,6 @@ DISTFILES += \
     lib/blusher/qml/Blusher/Menu.qml \
     lib/blusher/qml/Blusher/MenuItem.qml \
     lib/blusher/qml/Blusher/MenuBar.qml \
-    lib/blusher/qml/Blusher/DesktopEnvironment/DesktopEnvironment.qml
+    lib/blusher/qml/Blusher/DesktopEnvironment/DesktopEnvironment.qml \
+    lib/blusher/qml/Blusher/plugins.qmltypes
 

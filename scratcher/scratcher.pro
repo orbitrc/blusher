@@ -18,7 +18,7 @@ RESOURCES += qml.qrc
 
 QML_IMPORT_PATH += ../lib/blusher/qml
 
-QML2_IMPORT_PATH += ../lib/blusher/qml
+#QML2_IMPORT_PATH += ../lib/blusher/qml
 
 DEFINES += BLUSHER_APP_VERSION=\\\"0.1.0\\\" \
         BLUSHER_APP_NAME=\\\"Scratcher\\\" \
