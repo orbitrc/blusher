@@ -373,7 +373,6 @@ Module {
             }
         }
         Property { name: "type"; type: "int" }
-        Property { name: "separator"; type: "bool" }
         Property { name: "title"; type: "string" }
         Property { name: "items"; type: "QObject"; isList: true; isReadonly: true }
         Method {
@@ -397,6 +396,7 @@ Module {
         exports: ["Blusher/MenuItem2 0.1"]
         exportMetaObjectRevisions: [0]
         Property { name: "title"; type: "string" }
+        Property { name: "separator"; type: "bool" }
         Property { name: "submenu"; type: "QObject"; isPointer: true }
         Property { name: "parentMenu"; type: "QObject"; isPointer: true }
         Signal { name: "triggered" }
