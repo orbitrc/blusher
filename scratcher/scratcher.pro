@@ -27,3 +27,7 @@ DEFINES += BLUSHER_APP_VERSION=\\\"0.1.0\\\" \
 contains(DEFINES, BLUSHER_DEBUG) {
     message("BLUSHER IS DEBUG MODE!")
 }
+
+win32: LIBS += -L$$PWD/../lib/blusher/qml/Blusher/ -lblusher
+win32: DEPENDPATH += $$PWD/../include
+win32: PRE_TARGETDEPS += $$PWD/../lib/blusher/qml/Blusher/blusher.lib

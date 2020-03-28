@@ -36,6 +36,8 @@ HEADERS += src/cpp/blusher_plugin.h \
     src/cpp/View.h
 
 TARGET = blusher
+# blusher.dll rather than blusher{X}.dll
+win32: CONFIG += skip_target_version_ext
 
 DISTFILES += \
     lib/blusher/qml/Blusher/Window3.qml \
