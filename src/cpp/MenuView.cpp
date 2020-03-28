@@ -7,6 +7,7 @@
 #include <QDebug>
 
 #include <blusher/Application.h>
+#include "HydrogenStyle.h"
 
 namespace bl {
 MenuView::MenuView(QWidget *parent)
@@ -14,6 +15,8 @@ MenuView::MenuView(QWidget *parent)
 {
     this->m_menuBarMenu = false;
     this->m_menuBarRect = QRectF(0, 0, 100, 10);
+
+    this->setStyle(new HydrogenStyle);
 }
 
 bool MenuView::isMenuBarMenu() const
