@@ -12,6 +12,7 @@ namespace bl {
 MenuItem::MenuItem(QObject *parent)
     : QObject(parent)
 {
+    this->m_separator = false;
     this->m_submenu = nullptr;
     this->m_parentMenu = nullptr;
 }
@@ -27,6 +28,20 @@ void MenuItem::setTitle(QString title)
         this->m_title = title;
 
         emit this->titleChanged();
+    }
+}
+
+bool MenuItem::separator() const
+{
+    return this->m_separator;
+}
+
+void MenuItem::setSeparator(bool value)
+{
+    if (this->m_separator != value) {
+        this->m_separator = value;
+
+        emit this->separatorChanged();
     }
 }
 
@@ -76,6 +91,10 @@ QAction* MenuItem::to_qaction()
     // Connect action.
     QObject::connect(qaction, &QAction::triggered,
                      this, &MenuItem::triggered);
+    // Set separator.
+    if (this->separator()) {
+        qaction->setSeparator(true);
+    }
     // Add submenu.
     if (this->submenu() != nullptr) {
         Menu *submenu = qobject_cast<Menu*>(this->submenu());

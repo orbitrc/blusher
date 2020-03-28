@@ -34,6 +34,12 @@ Window3 {
         MenuItem2 {
           title: 'Paste'
         }
+        MenuItem2 {
+          separator: true
+        }
+        MenuItem2 {
+          title: 'Select All'
+        }
       }
     }
     MenuItem2 {

@@ -373,6 +373,7 @@ Module {
             }
         }
         Property { name: "type"; type: "int" }
+        Property { name: "separator"; type: "bool" }
         Property { name: "title"; type: "string" }
         Property { name: "items"; type: "QObject"; isList: true; isReadonly: true }
         Method {

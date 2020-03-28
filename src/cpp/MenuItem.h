@@ -12,6 +12,7 @@ class MenuItem : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+    Q_PROPERTY(bool separator READ separator WRITE setSeparator NOTIFY separatorChanged)
     Q_PROPERTY(QObject* submenu READ submenu WRITE setSubmenu NOTIFY submenuChanged)
     Q_PROPERTY(QObject* parentMenu READ parentMenu WRITE setParentMenu NOTIFY parentMenuChanged)
     Q_INTERFACES(QQmlParserStatus)
@@ -23,6 +24,9 @@ public:
     //=========================
     QString title() const;
     void setTitle(QString title);
+
+    bool separator() const;
+    void setSeparator(bool value);
 
     QObject* submenu() const;
     void setSubmenu(QObject *submenu);
@@ -44,6 +48,7 @@ public:
 
 signals:
     void titleChanged();
+    void separatorChanged();
     void submenuChanged();
     void parentMenuChanged();
 
@@ -53,6 +58,7 @@ public slots:
 
 private:
     QString m_title;
+    bool m_separator;
     QObject *m_submenu;
     QObject *m_parentMenu;
 };
