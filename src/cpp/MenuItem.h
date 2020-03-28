@@ -15,6 +15,8 @@ class MenuItem : public QObject, public QQmlParserStatus
     Q_PROPERTY(bool separator READ separator WRITE setSeparator NOTIFY separatorChanged)
     Q_PROPERTY(QObject* submenu READ submenu WRITE setSubmenu NOTIFY submenuChanged)
     Q_PROPERTY(QObject* parentMenu READ parentMenu WRITE setParentMenu NOTIFY parentMenuChanged)
+    Q_PROPERTY(int shortcut READ shortcut WRITE setShortcut NOTIFY shortcutChanged)
+    Q_PROPERTY(bool checked READ checked WRITE setChecked NOTIFY checkedChanged)
     Q_INTERFACES(QQmlParserStatus)
 public:
     explicit MenuItem(QObject *parent = nullptr);
@@ -34,6 +36,12 @@ public:
     QObject* parentMenu() const;
     void setParentMenu(QObject *menu);
 
+    int shortcut() const;
+    void setShortcut(int shortcut);
+
+    bool checked() const;
+    void setChecked(bool value);
+
 
     Q_INVOKABLE bool isMenuBarMenuItem() const;
 
@@ -51,6 +59,8 @@ signals:
     void separatorChanged();
     void submenuChanged();
     void parentMenuChanged();
+    void shortcutChanged();
+    void checkedChanged();
 
     void triggered();
 
@@ -61,6 +71,8 @@ private:
     bool m_separator;
     QObject *m_submenu;
     QObject *m_parentMenu;
+    int m_shortcut;
+    bool m_checked;
 };
 
 } // namespace bl

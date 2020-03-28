@@ -15,6 +15,8 @@ MenuItem::MenuItem(QObject *parent)
     this->m_separator = false;
     this->m_submenu = nullptr;
     this->m_parentMenu = nullptr;
+    this->m_shortcut = 0;
+    this->m_checked = false;
 }
 
 QString MenuItem::title() const
@@ -69,6 +71,34 @@ void MenuItem::setParentMenu(QObject *menu)
         this->m_parentMenu = menu;
 
         emit this->parentMenuChanged();
+    }
+}
+
+int MenuItem::shortcut() const
+{
+    return this->m_shortcut;
+}
+
+void MenuItem::setShortcut(int shortcut)
+{
+    if (this->m_shortcut != shortcut) {
+        this->m_shortcut = shortcut;
+
+        emit this->shortcutChanged();
+    }
+}
+
+bool MenuItem::checked() const
+{
+    return this->m_checked;
+}
+
+void MenuItem::setChecked(bool value)
+{
+    if (this->m_checked != value) {
+        this->m_checked = value;
+
+        emit this->checkedChanged();
     }
 }
 
