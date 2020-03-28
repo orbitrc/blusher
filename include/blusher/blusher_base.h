@@ -11,10 +11,12 @@
 
 #ifdef Q_OS_LINUX
     #define BL_PLATFORM_LINUX
-#elif Q_OS_MACOS
-    #DEFINE BL_PLATFORM_MACOS
-#elif Q_OS_WIN
-    #DEFINE BL_PLATFORM_WINDOWS
+#endif
+#ifdef Q_OS_MACOS
+    #define BL_PLATFORM_MACOS
+#endif
+#ifdef Q_OS_WIN
+    #define BL_PLATFORM_WINDOWS
 #endif
 
 #endif // _BL_BLUSHER_BASE_H
