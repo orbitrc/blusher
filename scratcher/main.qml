@@ -97,14 +97,25 @@ Window3 {
       }
     }
     MenuItem2 {
+      separator: true
+    }
+    MenuItem2 {
       title: "Open..."
       submenu: Menu2 {
         title: "Open"
+        type: Menu2.MenuType.Submenu
         MenuItem2 {
           title: "from file"
         }
         MenuItem2 {
           title: "recent"
+        }
+        MenuItem2 {
+          title: "Submenu Test"
+          submenu: Menu2 {
+            title: "Submenu Test"
+            type: Menu2.MenuType.Submenu
+          }
         }
       }
     }
