@@ -11,6 +11,7 @@ class HydrogenStyle::Impl
 public:
     QColor menu_background_color = QColor::fromRgb(238, 238, 238);
     QColor menu_separator_color = QColor::fromRgb(0xd8, 0xd8, 0xd8);
+    QColor menu_focus_color = QColor::fromRgb(173, 202, 230);
 };
 
 HydrogenStyle::HydrogenStyle()
@@ -45,7 +46,7 @@ void HydrogenStyle::drawControl(ControlElement element,
             painter->fillRect(
                 option->rect.x() + 1,
                 option->rect.y() + 1,
-                18,  18, QColor(Qt::red)
+                18,  18, QColor(Qt::cyan)
             );
         }
         // Separator.
@@ -57,7 +58,7 @@ void HydrogenStyle::drawControl(ControlElement element,
         }
         // Focus item.
         if (option->state & QStyle::State_Selected) {
-            painter->fillRect(option->rect, QColor::fromRgb(173, 202, 230));
+            painter->fillRect(option->rect, this->pImpl->menu_focus_color);
         }
         // Draw menu item title.
         QFont font;
@@ -79,7 +80,7 @@ void HydrogenStyle::drawPrimitive(PrimitiveElement element,
     switch (element) {
     case PE_FrameMenu:
     {
-        painter->fillRect(option->rect, Qt::red);
+        painter->fillRect(option->rect, QColor::fromRgb(0, 0, 0, 0));
         break;
     }
     default:
