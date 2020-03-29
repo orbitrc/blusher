@@ -6,8 +6,21 @@
 #include <QDebug>
 
 namespace bl {
+class HydrogenStyle::Impl
+{
+public:
+    QColor menu_background_color = QColor::fromRgb(238, 238, 238);
+    QColor menu_separator_color = QColor::fromRgb(0xd8, 0xd8, 0xd8);
+};
+
 HydrogenStyle::HydrogenStyle()
 {
+    this->pImpl = new Impl;
+}
+
+HydrogenStyle::~HydrogenStyle()
+{
+    delete this->pImpl;
 }
 
 void HydrogenStyle::drawControl(ControlElement element,
@@ -26,7 +39,7 @@ void HydrogenStyle::drawControl(ControlElement element,
             qstyleoption_cast<const QStyleOptionMenuItem*>(option);
 
         // Background color.
-        painter->fillRect(option->rect, QColor::fromRgb(238, 238, 238));
+        painter->fillRect(option->rect, this->pImpl->menu_background_color);
         // Dummy.
         if (item_option->menuItemType != QStyleOptionMenuItem::Separator) {
             painter->fillRect(
@@ -40,7 +53,7 @@ void HydrogenStyle::drawControl(ControlElement element,
             QRectF rect = option->rect;
             rect.setY(option->rect.y() + 4);
             rect.setHeight(4);
-            painter->fillRect(rect, QColor::fromRgb(0xd8, 0xd8, 0xd8));
+            painter->fillRect(rect, this->pImpl->menu_separator_color);
         }
         // Focus item.
         if (option->state & QStyle::State_Selected) {
@@ -79,7 +92,7 @@ int HydrogenStyle::pixelMetric(PixelMetric metric, const QStyleOption *option,
 {
     switch (metric) {
     case PM_MenuVMargin:
-        return 20;
+        return 0;
     default:
         return QProxyStyle::pixelMetric(metric, option, widget);
     }

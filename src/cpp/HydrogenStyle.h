@@ -9,7 +9,10 @@ class HydrogenStyle : public QProxyStyle
 {
     Q_OBJECT
 public:
+    class Impl;
+
     HydrogenStyle();
+    ~HydrogenStyle();
 
     void drawControl(ControlElement element, const QStyleOption *option,
             QPainter *painter, const QWidget *widget = nullptr) const override;
@@ -22,6 +25,8 @@ public:
 
     QSize sizeFromContents(ContentsType type, const QStyleOption *option,
             const QSize &size, const QWidget *widget) const override;
+private:
+    Impl *pImpl;
 };
 
 } // namespace bl
