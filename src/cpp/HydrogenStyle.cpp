@@ -37,11 +37,10 @@ void HydrogenStyle::drawControl(ControlElement element,
         }
         // Separator.
         if (item_option->menuItemType == QStyleOptionMenuItem::Separator) {
-            QLinearGradient gradient(option->rect.topLeft(), option->rect.bottomLeft());
-            gradient.setColorAt(0, QColor::fromRgb(0, 0, 0, 0));
-            gradient.setColorAt(0.5, Qt::gray);
-            gradient.setColorAt(1, QColor("#00000000"));
-            painter->fillRect(option->rect, gradient);
+            QRectF rect = option->rect;
+            rect.setY(option->rect.y() + 4);
+            rect.setHeight(4);
+            painter->fillRect(rect, QColor::fromRgb(0xd8, 0xd8, 0xd8));
         }
         // Focus item.
         if (option->state & QStyle::State_Selected) {
