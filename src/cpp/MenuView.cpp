@@ -17,6 +17,13 @@ MenuView::MenuView(QWidget *parent)
     this->m_menuBarRect = QRectF(0, 0, 100, 10);
 
     this->setStyle(new HydrogenStyle);
+
+    Application *app = Application::instance();
+    QObject::connect(this, &QMenu::destroyed,
+                     this, [app]() {
+        app->setMenuBarRect(QRectF(0, 0, 0, 0));
+        app->setMenuBarMenuItemRect(QRectF(0, 0, 0, 0));
+    });
 }
 
 bool MenuView::isMenuBarMenu() const
