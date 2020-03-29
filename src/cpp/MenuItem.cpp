@@ -145,6 +145,11 @@ void MenuItem::classBegin()
 void MenuItem::componentComplete()
 {
     this->setParentMenu(this->parent());
+
+    if (this->submenu() != nullptr) {
+        qobject_cast<Menu*>(this->submenu())->setSupermenu(
+            qobject_cast<Menu*>(this->submenu()));
+    }
 }
 
 } // namespace bl

@@ -16,6 +16,7 @@ class Menu : public QObject, public QQmlParserStatus
     Q_PROPERTY(int type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QQmlListProperty<QObject> items READ items)
+    Q_PROPERTY(Menu* supermenu READ supermenu WRITE setSupermenu NOTIFY supermenuChanged)
     Q_CLASSINFO("DefaultProperty", "items")
     Q_INTERFACES(QQmlParserStatus)
 public:
@@ -34,6 +35,9 @@ public:
     QString title() const;
     void setTitle(QString title);
 
+    Menu* supermenu() const;
+    void setSupermenu(Menu *supermenu);
+
     QQmlListProperty<QObject> items();
     QList<QObject*> items_data();
     MenuView* to_qmenu();
@@ -47,6 +51,7 @@ public:
 signals:
     void typeChanged();
     void titleChanged();
+    void supermenuChanged();
 
 public slots:
 
@@ -54,6 +59,7 @@ private:
     int m_type;
     QString m_title;
     QList<QObject*> m_items;
+    Menu *m_supermenu;
 };
 
 } // namespace bl

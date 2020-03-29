@@ -13,6 +13,7 @@ namespace bl {
 Menu::Menu(QObject *parent)
     : QObject(parent)
 {
+    this->m_supermenu = nullptr;
 }
 
 int Menu::type() const
@@ -43,6 +44,20 @@ void Menu::setTitle(QString title)
     }
 }
 
+Menu* Menu::supermenu() const
+{
+    return this->m_supermenu;
+}
+
+void Menu::setSupermenu(Menu *supermenu)
+{
+    if (this->m_supermenu != supermenu) {
+        this->m_supermenu = supermenu;
+
+        emit this->supermenuChanged();
+    }
+}
+
 QQmlListProperty<QObject> Menu::items()
 {
     return QQmlListProperty<QObject>(this, this->m_items);
@@ -67,9 +82,12 @@ MenuView* Menu::to_qmenu()
         dummy_item->setEnabled(false);
         qmenu->addAction(dummy_item);
     }
-    // Delete after closed.
-    QObject::connect(qmenu, &QMenu::aboutToHide,
-                     qmenu, &QObject::deleteLater);
+    // Delete after closed if it is top level menu.
+    if (this->supermenu() == nullptr ||
+            this->supermenu()->type() != static_cast<int>(Menu::MenuType::MenuBarMenu)) {
+        QObject::connect(qmenu, &QMenu::aboutToHide,
+                        qmenu, &QObject::deleteLater);
+    }
 
     return qmenu;
 }

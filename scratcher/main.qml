@@ -84,6 +84,8 @@ Window3 {
 
   Menu2 {
     id: testMenu
+    type: Menu2.MenuType.ContextualMenu
+    title: 'Test Menu'
     MenuItem2 {
       id: test
       title: "Hello"
