@@ -84,7 +84,7 @@ MenuView* Menu::to_qmenu()
     }
     // Delete after closed if it is top level menu.
     if (this->supermenu() == nullptr ||
-            this->supermenu()->type() != static_cast<int>(Menu::MenuType::MenuBarMenu)) {
+            this->supermenu()->type() == static_cast<int>(Menu::MenuType::MenuBarMenu)) {
         QObject::connect(qmenu, &QMenu::aboutToHide,
                         qmenu, &QObject::deleteLater);
     }

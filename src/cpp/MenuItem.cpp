@@ -148,7 +148,7 @@ void MenuItem::componentComplete()
 
     if (this->submenu() != nullptr) {
         qobject_cast<Menu*>(this->submenu())->setSupermenu(
-            qobject_cast<Menu*>(this->submenu()));
+            qobject_cast<Menu*>(this->parentMenu()));
     }
 }
 
