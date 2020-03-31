@@ -8,3 +8,5 @@ pouch-qt/AppDir/usr/bin/Pouch
 .DirIcon
 *.AppImage
 AppRun
+
+build-scratcher-*/
