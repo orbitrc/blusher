@@ -1,9 +1,4 @@
-QMAKE ?= qmake
-VERSION_MAJOR = 0
-VERSION_MINOR = 1
-VERSION_PATCH = 0
-VERSION = 0.1.0
-SHARED_LIB_TARGET_DIR = lib/blusher/qml/Blusher
+include Makefile.base
 
 default:
 	mkdir -p build
