@@ -75,10 +75,18 @@ Window3 {
 
   View {
     id: infoArea
-    y: 30
+    y: 34
 
-    Label {
-      text: 'Screen name: ' + root.screenName
+    Row {
+      Label {
+        text: 'Screen name: '
+        backgroundColor: 'cyan'
+      }
+      Label {
+        text: root.screenName
+        selectable: true
+        backgroundColor: 'magenta'
+      }
     }
   }
 

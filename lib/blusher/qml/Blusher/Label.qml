@@ -34,7 +34,7 @@ View {
     property alias pointSize: _text.font.pointSize
   }
 
-  width: 100
+  width: root.implicitWidth
   height: 30
 
   Rectangle {
