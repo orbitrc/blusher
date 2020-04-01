@@ -3,8 +3,11 @@ debug/
 build/
 *.pro.user
 *.so*
+*.dylib
 lib/*.so*
 pouch-qt/AppDir/usr/bin/Pouch
 .DirIcon
 *.AppImage
 AppRun
+
+.DS_Store
