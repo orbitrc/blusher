@@ -66,7 +66,7 @@ View {
       MouseArea {
         anchors.fill: parent
 
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        acceptedButtons: Qt.RightButton
 
         cursorShape: (root.selectable ? Qt.IBeamCursor : Qt.ArrowCursor)
         propagateComposedEvents: true
