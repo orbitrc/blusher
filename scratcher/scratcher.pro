@@ -1,7 +1,7 @@
 QT = gui quick widgets
 
 CONFIG += c++11
-CONFIG(debug, debug|release){
+!macx: CONFIG(debug, debug|release){
     CONFIG += console
 }
 

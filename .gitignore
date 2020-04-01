@@ -3,6 +3,7 @@ debug/
 build/
 *.pro.user
 *.so*
+*.dylib
 lib/*.so*
 pouch-qt/AppDir/usr/bin/Pouch
 .DirIcon
@@ -10,3 +11,5 @@ pouch-qt/AppDir/usr/bin/Pouch
 AppRun
 
 build-scratcher-*/
+
+.DS_Store
