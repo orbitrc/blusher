@@ -14,7 +14,20 @@ View {
   property alias font: _font
   //  property string fontFamily: ''
   property bool selectable: false
-  property Menu menu: DesktopEnvironment.menus.textEditMenu
+  property Menu2 menu: Menu2 {
+    title: 'Text Contextual'
+    type: Menu2.MenuType.ContextualMenu
+    MenuItem2 {
+      title: 'Copy'
+    }
+    MenuItem2 {
+      separator: true
+    }
+    MenuItem2 {
+      title: 'Select All'
+    }
+  }
+
   property alias fontSize: _font.size
   property alias fontColor: _font.color
 
@@ -64,7 +77,8 @@ View {
       cursorPosition: 0
 
       MouseArea {
-        anchors.fill: parent
+        width: _text.implicitWidth
+        height: _text.implicitHeight
 
         acceptedButtons: Qt.RightButton
 
@@ -75,7 +89,7 @@ View {
           if (mouse.button === Qt.LeftButton) {
             mouse.accepted = true;
           } else if (mouse.button === Qt.RightButton) {
-            root.menu.open(Window.window.contentItem);
+            root.menu.open();
             print(_text.selectedText);
             print(_text.selectionStart + '-' + _text.selectionEnd);
             print(_text.text.length);
