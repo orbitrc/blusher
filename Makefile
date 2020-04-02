@@ -25,8 +25,10 @@ debug:
 	ln -s libblusher.so.$(VERSION_MAJOR) $(SHARED_LIB_TARGET_DIR)/libblusher.so
 
 install:
-	rm -rf /usr/lib/qml/Foundation
-	cp -r qml/Foundation /usr/lib/qml/
+	rm -rf /usr/lib/blusher
+	cp -r lib/blusher /usr/lib/blusher
+	rm -rf /usr/lib/libblusher.so*
+	mv /usr/lib/blusher/qml/Blusher/libblusher.so* /usr/lib/
 
 clean:
 	rm -rf build
