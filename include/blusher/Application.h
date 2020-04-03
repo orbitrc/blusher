@@ -102,16 +102,15 @@ private:
     QRectF m_menuBarMenuItemRect;
 
     void readConf(QVariantMap *env);
-    void addPaths();
+    void addPaths()
+    {
+#ifndef QT_DEBUG
+        this->engine()->addImportPath("/usr/lib/blusher/qml");
+        this->engine()->addPluginPath("/usr/lib");
+#endif
+    }
 };
 
-void Application::addPaths()
-{
-#ifndef QT_DEBUG
-    this->engine()->addImportPath("/usr/lib/blusher/qml");
-    this->engine()->addPluginPath("/usr/lib");
-#endif
-}
 
 } // namespace bl
 
