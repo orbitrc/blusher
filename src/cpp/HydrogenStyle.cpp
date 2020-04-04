@@ -64,8 +64,11 @@ void HydrogenStyle::drawControl(ControlElement element,
         QFont font;
         font.setPixelSize(14);
         painter->setFont(font);
-        painter->drawText(QRect(32, option->rect.y(), 100, 20), 0, item_option->text);
-//        QProxyStyle::drawControl(element, option, painter, widget);
+        painter->drawText(QRect(20, option->rect.y() + 2, 100, 20), 0, item_option->text);
+        // Submenu icon.
+        if (item_option->menuItemType == QStyleOptionMenuItem::SubMenu) {
+            painter->drawText(QRect(option->rect.width() - 20, option->rect.y(), 20, 20), 0, ">");
+        }
 
         break;
     }
@@ -111,8 +114,9 @@ QSize HydrogenStyle::sizeFromContents(ContentsType type,
         QFont font = item_option->font;
         font.setPixelSize(14);
         QFontMetrics fm(font);
-        int width = fm.boundingRect(item_option->text).width();
-        width += 40;
+        int width = 20  // Check icon area.
+            + fm.boundingRect(item_option->text).width()
+            + 40;       // Shorcut or submenu icon area.
         int height = 20;
         if (item_option->menuItemType == QStyleOptionMenuItem::Separator) {
             height = 12;
