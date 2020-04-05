@@ -89,7 +89,8 @@ View {
           if (mouse.button === Qt.LeftButton) {
             mouse.accepted = true;
           } else if (mouse.button === Qt.RightButton) {
-            root.menu.open();
+            let pos = mapToGlobal(mouse.x, mouse.y);
+            root.menu.open(pos.x, pos.y + 1);
             print(_text.selectedText);
             print(_text.selectionStart + '-' + _text.selectionEnd);
             print(_text.text.length);
