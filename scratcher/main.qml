@@ -8,8 +8,8 @@ Window3 {
 
   title: 'Scratcher'
   visible: true
-  width: 300
-  height: 300
+  width: 400
+  height: 400
 
   menu: Menu2 {
     title: 'Application Menu'
@@ -61,6 +61,7 @@ Window3 {
     }
   }
 
+  // Buttons demo.
   Button {
     title: 'Button'
     onClicked: {
@@ -73,9 +74,12 @@ Window3 {
     }
   }
 
+  // Labels demo.
   View {
     id: infoArea
     y: 34
+
+    width: 200
 
     Row {
       Label {
@@ -86,6 +90,25 @@ Window3 {
         text: root.screenName
         selectable: true
         backgroundColor: 'magenta'
+      }
+    }
+  }
+
+  // Checkboxes demo.
+  View {
+    id: checkboxArea
+    x: infoArea.width
+    y: 34
+
+    Checkbox {
+      title: 'Check All'
+
+      onClicked: {
+        if (this.checkState === Checkbox.CheckState.Unchecked) {
+          this.checkState = Checkbox.CheckState.Checked;
+        } else {
+          this.checkState = Checkbox.CheckState.Unchecked;
+        }
       }
     }
   }
