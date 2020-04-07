@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtGraphicalEffects 1.0
 
 import Blusher 0.1
 
@@ -24,26 +25,29 @@ View {
     width: 20
     height: 20
     radius: 4
-    color: 'red'
-    Rectangle {
-      anchors.centerIn: parent
-      width: 14
-      height: 14
-      radius: 4
-      Image {
-        source: image()
+    color: 'blue'
+    Image {
+      id: checkImage
+      source: image()
+      anchors.centerIn: checkArea
+      width: root.checkState !== Checkbox.CheckState.Unchecked ? 18 : 0
+      height: root.checkState !== Checkbox.CheckState.Unchecked ? 18 : 0
 
-        function image() {
-          switch (root.checkState) {
-          case Checkbox.CheckState.Checked:
-            return '../../icons/standalone/scalable/status/checked.svg';
-          case Checkbox.CheckState.Mixed:
-            return '';
-          default:
-            return '';
-          }
+      function image() {
+        switch (root.checkState) {
+        case Checkbox.CheckState.Checked:
+          return '../../icons/standalone/scalable/status/checked.svg';
+        case Checkbox.CheckState.Mixed:
+          return '';
+        default:
+          return '';
         }
       }
+    }
+    ColorOverlay {
+      anchors.fill: checkImage
+      source: checkImage
+      color: '#ffffff'
     }
   }
 
