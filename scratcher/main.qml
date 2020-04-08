@@ -101,14 +101,43 @@ Window3 {
     y: 34
 
     Checkbox {
+      id: checboxAll
       title: 'Check All'
+      checkState: getState()
+      customCheckFunction: true
 
       onClicked: {
-        if (this.checkState === Checkbox.CheckState.Unchecked) {
-          this.checkState = Checkbox.CheckState.Checked;
+        if (this.checkState === Checkbox.CheckState.Unchecked ||
+            this.checkState === Checkbox.CheckState.Mixed) {
+          checkbox1.checkState = Checkbox.CheckState.Checked;
+          checkbox2.checkState = Checkbox.CheckState.Checked;
         } else {
-          this.checkState = Checkbox.CheckState.Unchecked;
+          checkbox1.checkState = Checkbox.CheckState.Unchecked;
+          checkbox2.checkState = Checkbox.CheckState.Unchecked;
         }
+      }
+      function getState() {
+        if (checkbox1.checkState === Checkbox.CheckState.Checked &&
+            checkbox2.checkState === Checkbox.CheckState.Checked) {
+          return Checkbox.CheckState.Checked;
+        } else if (checkbox1.checkState === Checkbox.CheckState.Unchecked &&
+            checkbox2.checkState === Checkbox.CheckState.Unchecked) {
+          return Checkbox.CheckState.Unchecked;
+        } else {
+          return Checkbox.CheckState.Mixed;
+        }
+      }
+    }
+    Column {
+      x: 30
+      y: 30
+      Checkbox {
+        id: checkbox1
+        title: 'Check 1'
+      }
+      Checkbox {
+        id: checkbox2
+        title: 'Check 2'
       }
     }
   }

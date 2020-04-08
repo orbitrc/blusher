@@ -17,6 +17,7 @@ View {
 
   property string title: ''
   property int checkState: 0
+  property var customCheckFunction: false
 
   signal clicked()
 
@@ -60,7 +61,19 @@ View {
   MouseArea {
     anchors.fill: parent
     onClicked: {
+      if (!root.customCheckFunction) {
+        root.checkFunction();
+      }
+
       root.clicked();
+    }
+  }
+
+  function checkFunction() {
+    if (root.checkState === Checkbox.CheckState.Unchecked) {
+      root.checkState = Checkbox.CheckState.Checked;
+    } else {
+      root.checkState = Checkbox.CheckState.Unchecked;
     }
   }
 }
