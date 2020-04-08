@@ -38,7 +38,7 @@ View {
         case Checkbox.CheckState.Checked:
           return '../../icons/standalone/scalable/status/checked.svg';
         case Checkbox.CheckState.Mixed:
-          return '';
+          return '../../icons/standalone/scalable/status/mixed.svg';
         default:
           return '';
         }
