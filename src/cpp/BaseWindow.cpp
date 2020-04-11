@@ -5,6 +5,8 @@
 
 #include <QScreen>
 
+namespace bl {
+
 BaseWindow::BaseWindow(QWindow *parent)
     : QQuickWindow(parent)
 {
@@ -70,7 +72,7 @@ void BaseWindow::keyPressEvent(QKeyEvent *event)
     }
 
     // Convert Qt key modifiers to Blusher modifiers.
-    using KeyModifier = bl::Blusher::KeyModifier;
+    using KeyModifier = Blusher::KeyModifier;
     int modifiers = static_cast<int>(KeyModifier::None);
     if (event->modifiers() & Qt::ControlModifier) {
         modifiers |= static_cast<int>(KeyModifier::Control);
@@ -85,7 +87,7 @@ void BaseWindow::keyPressEvent(QKeyEvent *event)
         modifiers |= static_cast<int>(KeyModifier::Super);
     }
 
-    bl::KeyEvent *ke = new bl::KeyEvent(modifiers, event->key());
+    KeyEvent *ke = new KeyEvent(modifiers, event->key());
     ke->deleteLater();
     emit this->keyPressed(ke);
     /*
@@ -118,3 +120,5 @@ void BaseWindow::onScreensChanged()
 {
 
 }
+
+} // namespace bl

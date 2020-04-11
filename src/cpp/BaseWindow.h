@@ -5,6 +5,8 @@
 
 #include "KeyEvent.h"
 
+namespace bl {
+
 class BaseWindow : public QQuickWindow
 {
     Q_OBJECT
@@ -40,7 +42,7 @@ signals:
     void pixelsPerDpChanged();
     void screenNameChanged();
 
-    void keyPressed(bl::KeyEvent *event);
+    void keyPressed(KeyEvent *event);
 
 public slots:
 
@@ -52,5 +54,7 @@ private:
     int m_type;
     qreal m_pixelsPerDp;
 };
+
+} // namespace bl
 
 #endif // _BL_BASE_WINDOW_H
