@@ -3,6 +3,8 @@
 
 #include <QQuickWindow>
 
+#include "KeyEvent.h"
+
 class BaseWindow : public QQuickWindow
 {
     Q_OBJECT
@@ -37,6 +39,8 @@ signals:
     void typeChanged();
     void pixelsPerDpChanged();
     void screenNameChanged();
+
+    void keyPressed(bl::KeyEvent *event);
 
 public slots:
 

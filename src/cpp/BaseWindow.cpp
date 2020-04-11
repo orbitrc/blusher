@@ -1,6 +1,7 @@
 #include "BaseWindow.h"
 
 #include "DesktopEnvironment.h"
+#include "Blusher.h"
 
 #include <QScreen>
 
@@ -67,6 +68,33 @@ void BaseWindow::keyPressEvent(QKeyEvent *event)
         QWindow::setMouseGrabEnabled(false);
         QQuickWindow::close();
     }
+
+    // Convert Qt key modifiers to Blusher modifiers.
+    using KeyModifier = bl::Blusher::KeyModifier;
+    int modifiers = static_cast<int>(KeyModifier::None);
+    if (event->modifiers() & Qt::ControlModifier) {
+        modifiers |= static_cast<int>(KeyModifier::Control);
+    }
+    if (event->modifiers() & Qt::AltModifier) {
+        modifiers |= static_cast<int>(KeyModifier::Alt);
+    }
+    if (event->modifiers() & Qt::ShiftModifier) {
+        modifiers |= static_cast<int>(KeyModifier::Shift);
+    }
+    if (event->modifiers() & Qt::MetaModifier) {
+        modifiers |= static_cast<int>(KeyModifier::Super);
+    }
+
+    bl::KeyEvent *ke = new bl::KeyEvent(modifiers, event->key());
+    ke->deleteLater();
+    emit this->keyPressed(ke);
+    /*
+    QObject::connect(ke, &QObject::destroyed,
+                     this, []() {
+        qDebug() << "destroyed!";
+    });
+    */
+
     QQuickWindow::keyPressEvent(event);
 }
 

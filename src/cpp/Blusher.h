@@ -13,6 +13,16 @@ class Blusher : public QObject
 
     Q_PROPERTY(Application* app READ app NOTIFY appChanged)
 public:
+    enum class KeyModifier {
+        None    = 0x00000000, // 00000000 00000000 00000000 00000000
+        Shift   = 0x01000000, // 00000001 00000000 00000000 00000000
+        Control = 0x02000000, // 00000010 00000000 00000000 00000000
+        Alt     = 0x04000000, // 00000100 00000000 00000000 00000000
+        Super   = 0x08000000, // 00001000 00000000 00000000 00000000
+    };
+    Q_ENUM(KeyModifier)
+
+public:
     explicit Blusher(QObject *parent = nullptr);
 
     Application* app() const;

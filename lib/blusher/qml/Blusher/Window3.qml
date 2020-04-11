@@ -1,5 +1,5 @@
 import QtQml 2.12
-import QtQuick 2.12 as QtQuick
+import QtQuick 2.12
 
 import Blusher 0.1
 
@@ -25,6 +25,10 @@ BaseWindow {
     y: root.hasMenuBar() ? 30 : 0
     width: root.width
     height: root.height - (root.hasMenuBar() ? 30 : 0)
+  }
+
+  onKeyPressed: {
+    print(event.modifiers);
   }
 
   function hasMenuBar() {
