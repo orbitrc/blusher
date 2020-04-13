@@ -45,7 +45,7 @@ win32: CONFIG += skip_target_version_ext
 
 DISTFILES += \
     lib/blusher/qml/Blusher/Checkbox.qml \
-    lib/blusher/qml/Blusher/Window3.qml \
+    lib/blusher/qml/Blusher/Window.qml \
     lib/blusher/qml/Blusher/Button.qml \
     lib/blusher/qml/Blusher/Label.qml \
     lib/blusher/qml/Blusher/Menu.qml \

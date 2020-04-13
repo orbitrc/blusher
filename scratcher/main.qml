@@ -3,7 +3,7 @@ import Blusher.DesktopEnvironment 0.1
 //import QtQuick.Window 2.12
 import QtQuick 2.12
 
-Window3 {
+Window {
   id: root
 
   title: 'Scratcher'

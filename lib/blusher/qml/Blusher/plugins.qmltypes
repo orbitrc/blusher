@@ -585,8 +585,8 @@ Module {
     }
     Component {
         prototype: "QQuickWindowQmlImpl"
-        name: "Blusher/Window 0.1"
-        exports: ["Blusher/Window 0.1"]
+        name: "Blusher/Window1 0.1"
+        exports: ["Blusher/Window1 0.1"]
         exportMetaObjectRevisions: [1]
         isComposite: true
         defaultProperty: "data"

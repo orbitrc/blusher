@@ -1,9 +1,9 @@
 module Blusher
 plugin blusher
 TestItem 0.1 TestItem.qml
-Window 0.1 Window.qml
+Window1 0.1 Window1.qml
 Window2 0.1 Window2.qml
-Window3 0.1 Window3.qml
+Window 0.1 Window.qml
 Alert 0.1 Alert.qml
 Button 0.1 Button.qml
 Checkbox 0.1 Checkbox.qml
