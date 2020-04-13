@@ -30,6 +30,8 @@ public:
 
     static Blusher *singleton;
 
+    Q_INVOKABLE void copyTextToClipboard(QString text);
+
 signals:
     void appChanged();
 

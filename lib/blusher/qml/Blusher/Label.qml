@@ -19,6 +19,9 @@ View {
     type: Menu2.MenuType.ContextualMenu
     MenuItem2 {
       title: 'Copy'
+      onTriggered: {
+        Blusher.copyTextToClipboard(_text.selectedText);
+      }
     }
     MenuItem2 {
       separator: true
