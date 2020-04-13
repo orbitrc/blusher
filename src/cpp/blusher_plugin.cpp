@@ -56,8 +56,8 @@ void BlusherPlugin::registerTypes(const char *uri)
     // @uri Blusher
     qmlRegisterType<bl::View>(uri, 0, 1, "View");
     qmlRegisterType<bl::BaseWindow>(uri, 0, 1, "BaseWindow");
-    qmlRegisterType<bl::Menu>(uri, 0, 1, "Menu2");
-    qmlRegisterType<bl::MenuItem>(uri, 0, 1, "MenuItem2");
+    qmlRegisterType<bl::Menu>(uri, 0, 1, "Menu");
+    qmlRegisterType<bl::MenuItem>(uri, 0, 1, "MenuItem");
 
     qmlRegisterUncreatableType<bl::KeyEvent>(uri, 0, 1, "KeyEvent", "");
 

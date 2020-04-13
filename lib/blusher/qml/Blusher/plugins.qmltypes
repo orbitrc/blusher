@@ -362,7 +362,7 @@ Module {
         name: "bl::Menu"
         defaultProperty: "items"
         prototype: "QObject"
-        exports: ["Blusher/Menu2 0.1"]
+        exports: ["Blusher/Menu 0.1"]
         exportMetaObjectRevisions: [0]
         Enum {
             name: "MenuType"
@@ -393,7 +393,7 @@ Module {
     Component {
         name: "bl::MenuItem"
         prototype: "QObject"
-        exports: ["Blusher/MenuItem2 0.1"]
+        exports: ["Blusher/MenuItem 0.1"]
         exportMetaObjectRevisions: [0]
         Property { name: "title"; type: "string" }
         Property { name: "separator"; type: "bool" }
@@ -503,8 +503,8 @@ Module {
     }
     Component {
         prototype: "QQmlListModel"
-        name: "Blusher/Menu 0.1"
-        exports: ["Blusher/Menu 0.1"]
+        name: "Blusher/Menu1 0.1"
+        exports: ["Blusher/Menu1 0.1"]
         exportMetaObjectRevisions: [1]
         isComposite: true
         defaultProperty: "items"
@@ -548,15 +548,15 @@ Module {
     }
     Component {
         prototype: "QQmlListElement"
-        name: "Blusher/MenuItem 0.1"
-        exports: ["Blusher/MenuItem 0.1"]
+        name: "Blusher/MenuItem1 0.1"
+        exports: ["Blusher/MenuItem1 0.1"]
         exportMetaObjectRevisions: [1]
         isComposite: true
         Property { name: "title"; type: "string" }
         Property { name: "image"; type: "QQuickImage"; isPointer: true }
         Property { name: "separator"; type: "bool" }
-        Property { name: "submenu"; type: "Menu_QMLTYPE_0"; isPointer: true }
-        Property { name: "parentMenu"; type: "Menu_QMLTYPE_0"; isPointer: true }
+        Property { name: "submenu"; type: "Menu1_QMLTYPE_0"; isPointer: true }
+        Property { name: "parentMenu"; type: "Menu1_QMLTYPE_0"; isPointer: true }
         Property { name: "action"; type: "QVariant" }
         Property { name: "shortcut"; type: "int" }
         Property { name: "checked"; type: "bool" }
@@ -601,7 +601,7 @@ Module {
             }
         }
         Property { name: "type"; type: "int" }
-        Property { name: "menu"; type: "Menu_QMLTYPE_0"; isPointer: true }
+        Property { name: "menu"; type: "Menu1_QMLTYPE_0"; isPointer: true }
         Property { name: "toolbar"; type: "Toolbar_QMLTYPE_3"; isPointer: true }
         Property { name: "body"; type: "QQuickItem"; isPointer: true }
         Property { name: "windowHeight"; type: "int" }

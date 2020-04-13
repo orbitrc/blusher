@@ -10,8 +10,8 @@ ListElement {
   property string title: ""
   property Image image: null
   property bool separator: false
-  property Menu submenu: null
-  property Menu parentMenu: null
+  property Menu1 submenu: null
+  property Menu1 parentMenu: null
   property var action: null
   property int shortcut: 0
   property bool checked: false

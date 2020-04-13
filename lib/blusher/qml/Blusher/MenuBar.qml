@@ -5,7 +5,7 @@ import Blusher 0.1
 View {
   id: root
 
-  property Menu2 menu: null
+  property Menu menu: null
   property bool active: false
   property int focusedItemIndex: -1
 

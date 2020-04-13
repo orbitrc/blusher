@@ -14,19 +14,19 @@ View {
   property alias font: _font
   //  property string fontFamily: ''
   property bool selectable: false
-  property Menu2 menu: Menu2 {
+  property Menu menu: Menu {
     title: 'Text Contextual'
-    type: Menu2.MenuType.ContextualMenu
-    MenuItem2 {
+    type: Menu.MenuType.ContextualMenu
+    MenuItem {
       title: 'Copy'
       onTriggered: {
         Blusher.copyTextToClipboard(_text.selectedText);
       }
     }
-    MenuItem2 {
+    MenuItem {
       separator: true
     }
-    MenuItem2 {
+    MenuItem {
       title: 'Select All'
     }
   }

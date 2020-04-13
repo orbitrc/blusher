@@ -11,40 +11,40 @@ Window {
   width: 400
   height: 400
 
-  menu: Menu2 {
+  menu: Menu {
     title: 'Application Menu'
     type: Menu2.MenuBarMenu
-    MenuItem2 {
+    MenuItem {
       title: 'File'
-      submenu: Menu2 {
+      submenu: Menu {
         title: 'File'
         type: Menu2.Submenu
-        MenuItem2 {
+        MenuItem {
           title: 'Quit'
         }
       }
     }
-    MenuItem2 {
+    MenuItem {
       title: 'Edit'
-      submenu: Menu2 {
+      submenu: Menu {
         title: 'Edit'
-        MenuItem2 {
+        MenuItem {
           title: 'Copy'
         }
-        MenuItem2 {
+        MenuItem {
           title: 'Paste'
         }
-        MenuItem2 {
+        MenuItem {
           separator: true
         }
-        MenuItem2 {
+        MenuItem {
           title: 'Select All'
         }
       }
     }
-    MenuItem2 {
+    MenuItem {
       title: 'View'
-      submenu: Menu2 {
+      submenu: Menu {
         title: 'View'
       }
     }
@@ -142,37 +142,37 @@ Window {
     }
   }
 
-  Menu2 {
+  Menu {
     id: testMenu
     type: Menu2.MenuType.ContextualMenu
     title: 'Test Menu'
-    MenuItem2 {
+    MenuItem {
       id: test
       title: "Hello"
     }
-    MenuItem2 {
+    MenuItem {
       title: "World"
       onTriggered: {
         print("Hello, world!");
       }
     }
-    MenuItem2 {
+    MenuItem {
       separator: true
     }
-    MenuItem2 {
+    MenuItem {
       title: "Open..."
-      submenu: Menu2 {
+      submenu: Menu {
         title: "Open"
         type: Menu2.MenuType.Submenu
-        MenuItem2 {
+        MenuItem {
           title: "from file"
         }
-        MenuItem2 {
+        MenuItem {
           title: "recent"
         }
-        MenuItem2 {
+        MenuItem {
           title: "Submenu Test"
-          submenu: Menu2 {
+          submenu: Menu {
             title: "Submenu Test"
             type: Menu2.MenuType.Submenu
           }

@@ -129,26 +129,26 @@ Item {
   }
   QtObject {
     id: _menus
-    property Menu applicationMenu: Menu {
-      type: Menu.MenuType.Submenu
+    property Menu1 applicationMenu: Menu1 {
+      type: Menu1.MenuType.Submenu
       title: 'Application'
-      MenuItem {
+      MenuItem1 {
         title: "Preferences..."
       }
 
-      MenuItem {
+      MenuItem1 {
         title: "Quit"
         action: DesktopEnvironment.app.quit
         shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_Q
       }
     }
-    property Menu textEditMenu: Menu {
-      type: Menu.MenuType.ContextualMenu
+    property Menu1 textEditMenu: Menu1 {
+      type: Menu1.MenuType.ContextualMenu
       title: "Text"
-      MenuItem {
+      MenuItem1 {
         title: 'Copy'
       }
-      MenuItem {
+      MenuItem1 {
         title: 'Paste'
       }
     }

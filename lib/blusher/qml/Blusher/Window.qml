@@ -8,7 +8,7 @@ BaseWindow {
 
   default property alias bodyItems: body.data
 
-  property Menu2 menu: null
+  property Menu menu: null
 
   MenuBar {
     id: menuBar
