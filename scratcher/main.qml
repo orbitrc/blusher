@@ -13,12 +13,12 @@ Window {
 
   menu: Menu {
     title: 'Application Menu'
-    type: Menu2.MenuBarMenu
+    type: Menu.MenuType.MenuBarMenu
     MenuItem {
       title: 'File'
       submenu: Menu {
         title: 'File'
-        type: Menu2.Submenu
+        type: Menu.MenuType.Submenu
         MenuItem {
           title: 'Quit'
         }
@@ -144,7 +144,7 @@ Window {
 
   Menu {
     id: testMenu
-    type: Menu2.MenuType.ContextualMenu
+    type: Menu.MenuType.ContextualMenu
     title: 'Test Menu'
     MenuItem {
       id: test
@@ -163,7 +163,7 @@ Window {
       title: "Open..."
       submenu: Menu {
         title: "Open"
-        type: Menu2.MenuType.Submenu
+        type: Menu.MenuType.Submenu
         MenuItem {
           title: "from file"
         }
@@ -174,7 +174,7 @@ Window {
           title: "Submenu Test"
           submenu: Menu {
             title: "Submenu Test"
-            type: Menu2.MenuType.Submenu
+            type: Menu.MenuType.Submenu
           }
         }
       }
