@@ -21,7 +21,7 @@ View {
 
     Row {
       Repeater {
-      model: root.menu.items
+      model: (root.menu !== null) ? root.menu.items : 0
         Item {
         id: menuItem
 
