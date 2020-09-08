@@ -11,8 +11,6 @@ VERSION = 0.1.0
 INCLUDEPATH += ./include
 
 SOURCES += src/cpp/blusher_plugin.cpp \
-    src/Application.cpp \
-#    src/cpp/Application_bridge.cpp \
     src/cpp/BaseWindow.cpp \
     src/cpp/Blusher.cpp \
     src/cpp/DesktopEnvironment.cpp \
@@ -24,7 +22,7 @@ SOURCES += src/cpp/blusher_plugin.cpp \
     src/cpp/View.cpp
 
 HEADERS += src/cpp/blusher_plugin.h \
-    include/blusher.h \
+    include/blusher/blusher.h \
     include/blusher/Application.h \
 #    src/Application_bridge.h \
 #    include/blusher/blusher-qt.h \
