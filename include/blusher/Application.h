@@ -61,8 +61,6 @@ public:
 
         this->m_engine.rootContext()->setContextProperty("Process", process);
 
-        // m_engine.addImportPath(BLUSHER_PATH);
-
 //        this->m_popUpZone = new QWidget;
 
         Application::self = this;
