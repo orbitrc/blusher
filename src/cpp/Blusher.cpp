@@ -54,7 +54,7 @@ void Blusher::openMenu(bl::Menu *menu, double x, double y)
     MenuView *qmenu = menu->to_qmenu();
     QObject::connect(qmenu, &MenuView::closedByUser,
                      this, &Blusher::menuClosedByUser);
-    qmenu->popup(QPoint(x, y));
+//    qmenu->popup(QPoint(x, y));
 }
 
 } // namespace bl

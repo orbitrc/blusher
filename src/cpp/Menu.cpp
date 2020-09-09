@@ -1,6 +1,7 @@
 #include "Menu.h"
 
 #include <QMenu>
+#include <QQuickItem>
 
 #include <QDebug>
 
@@ -70,7 +71,8 @@ QList<QObject*> Menu::items_data()
 
 MenuView* Menu::to_qmenu()
 {
-    MenuView *qmenu = new MenuView;
+    MenuView *qmenu = new MenuView(this);
+    /*
     qmenu->setTitle(this->title());
     for (int i = 0; i < this->m_items.length(); ++i) {
         MenuItem *item = qobject_cast<MenuItem*>(this->m_items[i]);
@@ -88,6 +90,7 @@ MenuView* Menu::to_qmenu()
         QObject::connect(qmenu, &QMenu::aboutToHide,
                         qmenu, &QObject::deleteLater);
     }
+    */
 
     return qmenu;
 }
@@ -115,7 +118,18 @@ void Menu::addItem(QObject *item)
 
 void Menu::open(double x, double y)
 {
-    Blusher::singleton->openMenu(this, x, y);
+//    Blusher::singleton->openMenu(this, x, y);
+    MenuView *menuView = new MenuView(this);
+
+    // Connect signal.
+    QObject::connect(menuView, &MenuView::closedByUser,
+                     Blusher::singleton, &Blusher::menuClosedByUser);
+
+    // Set geometry.
+    auto width = menuView->rootObject()->property("width").toInt();
+    auto height = menuView->rootObject()->property("height").toInt();
+    menuView->setGeometry(x, y, width, height);
+    menuView->show();
 }
 
 } // namespace bl

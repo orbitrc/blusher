@@ -1,4 +1,4 @@
-QT = gui quick widgets
+QT = gui quick quickwidgets
 
 CONFIG += c++11
 !macx: CONFIG(debug, debug|release){

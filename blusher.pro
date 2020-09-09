@@ -1,4 +1,4 @@
-QT = gui quick widgets
+QT = gui quick quickwidgets
 CONFIG += c++11
 
 DEFINES += QT_DEPRECATED_WARNINGS \
@@ -36,6 +36,8 @@ HEADERS += src/cpp/blusher_plugin.h \
     src/cpp/MenuItem.h \
     src/cpp/MenuView.h \
     src/cpp/View.h
+
+RESOURCES = resources/resources.qrc
 
 TARGET = blusher
 # blusher.dll rather than blusher{X}.dll

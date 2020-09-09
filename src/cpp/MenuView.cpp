@@ -3,24 +3,39 @@
 #include <QWidget>
 #include <QKeyEvent>
 #include <QMouseEvent>
+#include <QQuickItem>
 
 #include <QDebug>
 
 #include "Blusher.h"
 #include "HydrogenStyle.h"
+#include "Menu.h"
 
 namespace bl {
-MenuView::MenuView(QWidget *parent)
-    : QMenu(parent)
+MenuView::MenuView(Menu *menu, QWidget *parent)
+    : QQuickWidget(parent)
 {
+    setAttribute(Qt::WA_X11NetWmWindowTypeMenu);
+    setWindowFlag(Qt::FramelessWindowHint);
+    setWindowFlag(Qt::X11BypassWindowManagerHint);
+
+    setAttribute(Qt::WA_TranslucentBackground);
+    setAttribute(Qt::WA_AlwaysStackOnTop);
+    setClearColor(Qt::transparent);
+
     this->m_menuBarMenu = false;
     this->m_menuBarRect = QRectF(0, 0, 100, 10);
 
-    this->setStyle(new HydrogenStyle);
+    this->m_menu = menu;
 
+    setSource(QUrl("qrc:/qml/Menu.qml"));
+    rootObject()->setProperty("menu", QVariant::fromValue(this->m_menu));
+
+    // Reset menu bar rect when menu destroyed.
     Blusher *blusher = Blusher::singleton;
-    QObject::connect(this, &QMenu::destroyed,
+    QObject::connect(this, &QQuickWidget::destroyed,
                      this, [blusher]() {
+        qDebug() << "Menu destroyed.";
         blusher->setMenuBarRect(QRectF(0, 0, 0, 0));
         blusher->setMenuBarMenuItemRect(QRectF(0, 0, 0, 0));
     });
@@ -50,10 +65,13 @@ void MenuView::keyPressEvent(QKeyEvent *event)
 {
     // Emit signal when Esc key pressed.
     if (event->key() == Qt::Key_Escape) {
+        qDebug() << "ESC pressed.";
+        close();
         emit this->closedByUser();
     }
 
     // Prevent round navigation.
+    /*
     if (event->key() == Qt::Key_Down &&
             QMenu::activeAction() == QMenu::actions().last()) {
         return;
@@ -62,26 +80,39 @@ void MenuView::keyPressEvent(QKeyEvent *event)
             QMenu::activeAction() == QMenu::actions().first()) {
         return;
     }
+    */
 
-    QMenu::keyPressEvent(event);
+    QQuickWidget::keyPressEvent(event);
 }
 
 void MenuView::mouseMoveEvent(QMouseEvent *event)
 {
     if (Blusher::singleton->menuBarRect().contains(event->screenPos())) {
         if (!Blusher::singleton->menuBarMenuItemRect().contains(event->screenPos())) {
-            this->close();
+            close();
         }
     }
 
-    QMenu::mouseMoveEvent(event);
+    QQuickWidget::mouseMoveEvent(event);
 }
 
 void MenuView::mousePressEvent(QMouseEvent *event)
 {
+    close();
     emit this->closedByUser();
 
-    QMenu::mousePressEvent(event);
+    QQuickWidget::mousePressEvent(event);
+}
+
+void MenuView::paintEvent(QPaintEvent *evt)
+{
+    QWindow *window = windowHandle();
+    if (window) {
+        window->setMouseGrabEnabled(true);
+        window->setKeyboardGrabEnabled(true);
+    }
+
+    QQuickWidget::paintEvent(evt);
 }
 
 } // namespace bl

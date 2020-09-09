@@ -1,15 +1,17 @@
 #ifndef _BL_MENU_VIEW_H
 #define _BL_MENU_VIEW_H
 
-#include <QMenu>
+#include <QQuickWidget>
 
 namespace bl {
 
-class MenuView : public QMenu
+class Menu;
+
+class MenuView : public QQuickWidget
 {
     Q_OBJECT
 public:
-    MenuView(QWidget *parent = nullptr);
+    MenuView(Menu *menu, QWidget *parent = nullptr);
 
     bool isMenuBarMenu() const;
     void setMenuBarMenu(bool value);
@@ -21,6 +23,7 @@ protected:
     void keyPressEvent(QKeyEvent *) override;
     void mouseMoveEvent(QMouseEvent *) override;
     void mousePressEvent(QMouseEvent *) override;
+    virtual void paintEvent(QPaintEvent *event) override;
 
 signals:
     void closed();
@@ -29,6 +32,8 @@ signals:
 private:
     bool m_menuBarMenu;
     QRectF m_menuBarRect;
+
+    Menu *m_menu;
 };
 
 } // namespace bl
