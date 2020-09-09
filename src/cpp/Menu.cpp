@@ -62,6 +62,8 @@ void Menu::setSupermenu(Menu *supermenu)
 QQmlListProperty<MenuItem> Menu::items()
 {
     return QQmlListProperty<MenuItem>(this, this->m_items);
+    // Above constructor is deprecated. Use below when obsolete.
+    // return QQmlListProperty<MenuItem>(this, &this->m_items);
 }
 
 
