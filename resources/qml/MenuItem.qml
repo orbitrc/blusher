@@ -91,7 +91,7 @@ Blusher.View {
   Text {
     visible: !root.menuItem.separator
     text: menuItem.title
-    font.pixelSize: 16
+    font.pixelSize: 14
   }
   MouseArea {
     anchors.fill: parent
@@ -99,7 +99,11 @@ Blusher.View {
     hoverEnabled: true
 
     onEntered: {
-      print('entered');
+      // Ignore separator.
+      if (root.menuItem.separator) {
+        return;
+      }
+
       rootRect.state = 'hovered';
     }
 
