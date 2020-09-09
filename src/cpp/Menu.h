@@ -39,7 +39,6 @@ public:
     void setSupermenu(Menu *supermenu);
 
     QQmlListProperty<QObject> items();
-    QList<QObject*> items_data();
     MenuView* to_qmenu();
 
     Q_INVOKABLE void addItem(QObject *item);

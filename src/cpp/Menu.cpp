@@ -64,10 +64,6 @@ QQmlListProperty<QObject> Menu::items()
     return QQmlListProperty<QObject>(this, this->m_items);
 }
 
-QList<QObject*> Menu::items_data()
-{
-    return this->m_items;
-}
 
 MenuView* Menu::to_qmenu()
 {
