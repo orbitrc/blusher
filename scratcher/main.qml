@@ -75,6 +75,13 @@ Window {
       testMenu.open();
     }
   }
+  Button {
+    title: 'Scale +'
+    x: 100
+    onClicked: {
+      DesktopEnvironmentPlugin.changeScale("eDP1", DesktopEnvironmentPlugin.screens['eDP1']['scale'] + 0.1);
+    }
+  }
 
   // Labels demo.
   View {

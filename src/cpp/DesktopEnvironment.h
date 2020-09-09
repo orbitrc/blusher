@@ -19,6 +19,8 @@ public:
 
     static DesktopEnvironment *singleton;
 
+    Q_INVOKABLE void changeScale(const QString& name, qreal scale);
+
 signals:
     void screensChanged();
     void screenInfoChanged(QString name, QString key, QVariant value);
