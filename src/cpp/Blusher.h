@@ -5,6 +5,8 @@
 
 #include <QRectF>
 
+#include "Menu.h"
+
 namespace bl {
 
 class Application;
@@ -38,6 +40,9 @@ public:
     Q_INVOKABLE void setMenuBarRect(QRectF rect);
     QRectF menuBarMenuItemRect() const;
     Q_INVOKABLE void setMenuBarMenuItemRect(QRectF rect);
+
+    /// \brief Open menu to given position.
+    void openMenu(bl::Menu *menu, double x, double y);
 
 signals:
     void appChanged();

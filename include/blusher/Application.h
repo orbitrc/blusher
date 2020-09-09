@@ -66,8 +66,6 @@ public:
         this->m_engine.rootContext()->setContextProperty("Process", process);
 
 //        this->m_popUpZone = new QWidget;
-
-        Application::self = this;
     }
 
     ~Application()
@@ -82,16 +80,10 @@ public:
 
     int testValue() const { return 42; }
 
-    /// \brief Self instance.
-    static Application *self;
-
     /// \brief Get the self instance.
     ///
     /// \return Self singleton instance.
     static Application* instance();
-
-    /// \brief Open menu to given position.
-    void openMenu(bl::Menu *menu, double x, double y);
 
 signals:
     void menuClosed();
@@ -110,9 +102,6 @@ private:
 #endif
     }
 };
-
-
-inline Application* Application::self = nullptr;
 
 
 inline void Application::readConf(QVariantMap *env)
@@ -143,20 +132,12 @@ inline void Application::readConf(QVariantMap *env)
 
 inline Application* Application::instance()
 {
-    return Application::self;
+    return qobject_cast<Application*>(QApplication::instance());
 }
 
 inline int Application::exec()
 {
     return QApplication::exec();
-}
-
-inline void Application::openMenu(bl::Menu *menu, double x, double y)
-{
-    MenuView *qmenu = menu->to_qmenu();
-    QObject::connect(qmenu, &MenuView::closedByUser,
-                     this, &Application::menuClosedByUser);
-    qmenu->popup(QPoint(x, y));
 }
 
 } // namespace bl

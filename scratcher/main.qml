@@ -66,7 +66,8 @@ Window {
     title: 'Button'
     onClicked: {
       print('Button clicked!');
-      print(Blusher.app);
+      print(Process.app);
+      print(Blusher);
       print(Object.keys(DesktopEnvironment.screens));
       print(root.screenName);
       print(Process.env.BLUSHER_APP_NAME);

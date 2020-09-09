@@ -4,7 +4,7 @@
 
 #include <QDebug>
 
-#include <blusher/Application.h>
+#include "Blusher.h"
 #include "MenuItem.h"
 #include "MenuView.h"
 
@@ -115,7 +115,7 @@ void Menu::addItem(QObject *item)
 
 void Menu::open(double x, double y)
 {
-    Application::instance()->openMenu(this, x, y);
+    Blusher::singleton->openMenu(this, x, y);
 }
 
 } // namespace bl
