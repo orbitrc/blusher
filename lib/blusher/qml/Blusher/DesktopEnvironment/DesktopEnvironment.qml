@@ -47,7 +47,6 @@ Item {
   readonly property alias menuOpen: internal.menuOpen
 
   // References
-  property alias overlay: overlayLoader.item
   property alias standaloneDeModule: standalone
 
   //====================
@@ -157,17 +156,6 @@ Item {
   //==================
   // Signals
   //==================
-
-  /// \brief  Sould emitted when the menu is opening.
-  function menuOpened(menu, x, y) {
-    root.onMenuOpened(menu, x, y);
-  }
-
-  /// \brief  Should emitted when all menus are completely closed.
-  function menuClosed() {
-    root.onMenuClosed();
-  }
-
   signal menuItemTriggered(string path)
 
   //===================
@@ -175,16 +163,8 @@ Item {
   //===================
 
   //================
-  // Items
+  // Loaders
   //================
-  Loader {
-    id: menuLoader
-  }
-
-  Loader {
-    id: overlayLoader
-  }
-
   Loader {
     id: deModuleLoader
   }
@@ -206,7 +186,6 @@ Item {
 
   Component.onDestruction: {
     print('[DesktopEnvironment.onDestruction]')
-    overlayLoader.sourceComponent = undefined
   }
 
   //=============
@@ -247,11 +226,6 @@ Item {
       deModule = deModuleLoader.item;
     }
 
-//    internal.menuDelegate = deModule.menuDelegate;
-    internal.menuDelegate = standaloneMenuDelegate;
-
-    internal.menuBarHeight = deModule.menuBarHeight;
-
     // Setup signal handlers.
     internal.onAppCursorChanged = deModule.onAppCursorChanged;
     internal.onMenuOpened = deModule.onMenuOpened;
@@ -277,11 +251,6 @@ Item {
   QtObject {
     id: standalone
 
-    property var menuDelegate: standaloneMenuDelegate
-    property var menuItemDelegate: null
-
-    property int menuBarHeight: 30
-
     property int pixelsPerDp: 1
 
     property int decorationTopHeight: 0
@@ -306,83 +275,8 @@ Item {
       }
     }
 
-    function onMenuOpened(menu, x, y) {
-      if (!this.menuOpen) {
-        // Set singleton item child of currently activated window.
-        // It is important to refer the geometry of root window such as x and y.
-        root.parent = DesktopEnvironment.app.activeWindow.contentItem;
-        // Load if not loaded yet.
-        if (!overlayLoader.sourceComponent) {
-          overlayLoader.setSource('./Standalone/Overlay.qml');
-        }
-        root.overlay.show();
-
-        if (!menuLoader.sourceComponent) {
-          menuLoader.sourceComponent = standaloneMenuDelegate;
-          menuLoader.item.menu = menu;
-        }
-      } else {
-        if (menu === DesktopEnvironment.menus.applicationMenu ||
-          menu.supermenu.type === Menu.MenuType.MenuBarMenu) {
-          for (let i = root.overlay.menus.length - 1; i >= 0; --i) {
-            root._popMenu();
-          }
-        } else {
-          const lastOpenedMenu = root.overlay.menus[root.overlay.menus.length - 1];
-          if (menu.supermenu === lastOpenedMenu) {
-          } else if (root._isMenuDescendantOf(lastOpenedMenu, menu.supermenu)) {
-            root._popMenu();
-          }
-        }
-      }
-      /*
-      if (items) {
-        root.overlay.menus.push(items);
-        internal.menuOpen = true;
-      }
-      */
-    }
-
-    function onMenuClosed() {
-      for (let i = root.overlay.menus.length - 1; i >= 0; --i) {
-//        root.overlay.menus[i].close();
-      }
-      root.overlay.menus = [];
-      if (root.overlay.menuBarMenu) {
-        root.overlay.menuBarMenu.focusItem(-1);
-      }
-
-      root.overlay.close();
-      internal.menuOpen = false
-    }
-
     function shortcutToString(shortcut) {
       return Formatter.shortcutToString(shortcut);
-    }
-  }
-
-  // Standalone menu delegate component.
-  Component {
-    id: standaloneMenuDelegate
-    Item {
-      id: root
-
-      //===================
-      // Public properties
-      //===================
-      property Menu menu: null
-
-      Loader {
-        id: _loader
-      }
-
-      onMenuChanged: {
-        if (root.menu.type === Menu.MenuType.MenuBarMenu) {
-          _loader.setSource('Standalone/MenuBarMenuDelegate.qml', { 'menu': root.menu });
-        } else {
-          _loader.setSource('Standalone/PopUpMenuDelegate.qml', { 'menu': root.menu });
-        }
-      }
     }
   }
 }
