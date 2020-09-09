@@ -112,6 +112,8 @@ void Menu::componentComplete()
 void Menu::addItem(MenuItem *item)
 {
     this->m_items.append(item);
+
+    emit this->itemsChanged();
 }
 
 void Menu::open(double x, double y)

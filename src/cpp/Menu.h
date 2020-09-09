@@ -17,7 +17,7 @@ class Menu : public QObject, public QQmlParserStatus
     Q_OBJECT
     Q_PROPERTY(int type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
-    Q_PROPERTY(QQmlListProperty<bl::MenuItem> items READ items)
+    Q_PROPERTY(QQmlListProperty<bl::MenuItem> items READ items NOTIFY itemsChanged)
     Q_PROPERTY(Menu* supermenu READ supermenu WRITE setSupermenu NOTIFY supermenuChanged)
     Q_CLASSINFO("DefaultProperty", "items")
     Q_INTERFACES(QQmlParserStatus)
@@ -50,6 +50,7 @@ public:
     virtual void componentComplete() override;
 
 signals:
+    void itemsChanged();
     void typeChanged();
     void titleChanged();
     void supermenuChanged();
