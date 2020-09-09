@@ -11,7 +11,7 @@ Blusher.View {
   readonly property int separatorHeight: 4
   readonly property string separatorColor: "#d8d8d8"
 
-  height: (!root.menuItem.separator) ? 20 : 12
+  height: (!root.menuItem.separator) ? 24 : 12
 
   Rectangle {
     id: rootRect
@@ -37,6 +37,7 @@ Blusher.View {
         anchors.fill: parent
         anchors.margins: 2
 
+        radius: 4
         color: rootRect.color
       }
     }
@@ -59,7 +60,7 @@ Blusher.View {
       anchors.fill: innerShadowSource
       horizontalOffset: -2
       verticalOffset: -2
-      radius: 2
+      radius: 4
       samples: 16
       color: "#ffffff"
       source: innerShadowSource
