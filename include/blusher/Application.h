@@ -46,6 +46,8 @@ public:
                 QCoreApplication::exit(-1);
         }, Qt::QueuedConnection);
 
+        this->addPaths();
+
         QVariantMap process;
         QVariantMap env;
 
@@ -86,7 +88,6 @@ private:
     {
 #ifndef QT_DEBUG
         this->engine()->addImportPath("/usr/lib/blusher/qml");
-        this->engine()->addPluginPath("/usr/lib");
 #endif
     }
 };
