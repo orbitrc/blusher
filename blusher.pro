@@ -50,6 +50,8 @@ DISTFILES += \
     lib/blusher/qml/Blusher/Label.qml \
     lib/blusher/qml/Blusher/MenuBar.qml \
     lib/blusher/qml/Blusher/DesktopEnvironment/DesktopEnvironment.qml \
+    lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/qmldir \
+    lib/blusher/qml/Blusher/DesktopEnvironment/Standalone/Formatter.qml \
     lib/blusher/qml/Blusher/plugins.qmltypes \
     lib/blusher/qml/Blusher/qmldir
 
