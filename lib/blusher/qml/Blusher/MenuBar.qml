@@ -67,10 +67,10 @@ View {
 
         function openMenu() {
           let globalPos = root.mapToGlobal(0, 0);
-          Blusher.app.setMenuBarRect(Qt.rect(
+          Blusher.setMenuBarRect(Qt.rect(
             globalPos.x, globalPos.y, root.width, root.height));
           let globalMenuItemPos = menuItem.mapToGlobal(0, 0);
-          Blusher.app.setMenuBarMenuItemRect(Qt.rect(
+          Blusher.setMenuBarMenuItemRect(Qt.rect(
             globalMenuItemPos.x, globalMenuItemPos.y, menuItem.width, menuItem.height));
           root.focusedItemIndex = index;
 
@@ -82,7 +82,7 @@ View {
   } // Rectangle
 
   Connections {
-    target: Blusher.app
+    target: Blusher
     onMenuClosedByUser: {
       root.active = false;
       root.focusedItemIndex = -1;

@@ -3,9 +3,11 @@
 
 #include <QObject>
 
-#include <blusher/Application.h>
+#include <QRectF>
 
 namespace bl {
+
+class Application;
 
 class Blusher : public QObject
 {
@@ -32,13 +34,24 @@ public:
 
     Q_INVOKABLE void copyTextToClipboard(QString text);
 
+    QRectF menuBarRect() const;
+    Q_INVOKABLE void setMenuBarRect(QRectF rect);
+    QRectF menuBarMenuItemRect() const;
+    Q_INVOKABLE void setMenuBarMenuItemRect(QRectF rect);
+
 signals:
     void appChanged();
+
+    void menuClosed();
+    void menuClosedByUser();
 
 public slots:
 
 private:
     QObject *p_app;
+
+    QRectF m_menuBarRect;
+    QRectF m_menuBarMenuItemRect;
 };
 
 #endif // _BL_BLUSHER_H

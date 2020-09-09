@@ -6,7 +6,7 @@
 
 #include <QDebug>
 
-#include <blusher/Application.h>
+#include "Blusher.h"
 #include "HydrogenStyle.h"
 
 namespace bl {
@@ -18,11 +18,11 @@ MenuView::MenuView(QWidget *parent)
 
     this->setStyle(new HydrogenStyle);
 
-    Application *app = Application::instance();
+    Blusher *blusher = Blusher::singleton;
     QObject::connect(this, &QMenu::destroyed,
-                     this, [app]() {
-        app->setMenuBarRect(QRectF(0, 0, 0, 0));
-        app->setMenuBarMenuItemRect(QRectF(0, 0, 0, 0));
+                     this, [blusher]() {
+        blusher->setMenuBarRect(QRectF(0, 0, 0, 0));
+        blusher->setMenuBarMenuItemRect(QRectF(0, 0, 0, 0));
     });
 }
 
@@ -68,8 +68,8 @@ void MenuView::keyPressEvent(QKeyEvent *event)
 
 void MenuView::mouseMoveEvent(QMouseEvent *event)
 {
-    if (Application::instance()->menuBarRect().contains(event->screenPos())) {
-        if (!Application::instance()->menuBarMenuItemRect().contains(event->screenPos())) {
+    if (Blusher::singleton->menuBarRect().contains(event->screenPos())) {
+        if (!Blusher::singleton->menuBarMenuItemRect().contains(event->screenPos())) {
             this->close();
         }
     }

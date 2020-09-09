@@ -1,4 +1,4 @@
-#include <blusher.h>
+#include <blusher/blusher.h>
 
 #include <QDebug>
 

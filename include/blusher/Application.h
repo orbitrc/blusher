@@ -93,11 +93,6 @@ public:
     /// \brief Open menu to given position.
     void openMenu(bl::Menu *menu, double x, double y);
 
-    QRectF menuBarRect() const;
-    Q_INVOKABLE void setMenuBarRect(QRectF rect);
-    QRectF menuBarMenuItemRect() const;
-    Q_INVOKABLE void setMenuBarMenuItemRect(QRectF rect);
-
 signals:
     void menuClosed();
     void menuClosedByUser();
@@ -105,8 +100,6 @@ signals:
 private:
     QQmlApplicationEngine m_engine;
     QWidget *m_popUpZone;   // Maybe not used.
-    QRectF m_menuBarRect;
-    QRectF m_menuBarMenuItemRect;
 
     void readConf(QVariantMap *env);
     void addPaths()
@@ -119,10 +112,10 @@ private:
 };
 
 
-Application* Application::self = nullptr;
+inline Application* Application::self = nullptr;
 
 
-void Application::readConf(QVariantMap *env)
+inline void Application::readConf(QVariantMap *env)
 {
     QFile f("/etc/blusher.conf");
     if (!f.exists()) {
@@ -148,42 +141,22 @@ void Application::readConf(QVariantMap *env)
     }
 }
 
-Application* Application::instance()
+inline Application* Application::instance()
 {
     return Application::self;
 }
 
-int Application::exec()
+inline int Application::exec()
 {
     return QApplication::exec();
 }
 
-void Application::openMenu(bl::Menu *menu, double x, double y)
+inline void Application::openMenu(bl::Menu *menu, double x, double y)
 {
     MenuView *qmenu = menu->to_qmenu();
     QObject::connect(qmenu, &MenuView::closedByUser,
                      this, &Application::menuClosedByUser);
     qmenu->popup(QPoint(x, y));
-}
-
-QRectF Application::menuBarRect() const
-{
-    return this->m_menuBarRect;
-}
-
-void Application::setMenuBarRect(QRectF rect)
-{
-    this->m_menuBarRect = rect;
-}
-
-QRectF Application::menuBarMenuItemRect() const
-{
-    return this->m_menuBarMenuItemRect;
-}
-
-void Application::setMenuBarMenuItemRect(QRectF rect)
-{
-    this->m_menuBarMenuItemRect = rect;
 }
 
 } // namespace bl

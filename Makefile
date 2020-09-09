@@ -5,11 +5,9 @@ default:
 	cd build && $(QMAKE) ../blusher.pro -spec linux-g++ && make qmake_all
 	cd build && make -j8
 	cp build/libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH) $(SHARED_LIB_TARGET_DIR)
-	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR)
+	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.so $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR) $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR)
 	ln -s libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH) $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR)
-	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR)
 	ln -s libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR) $(SHARED_LIB_TARGET_DIR)/libblusher.so.$(VERSION_MAJOR)
-	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.so
 	ln -s libblusher.so.$(VERSION_MAJOR) $(SHARED_LIB_TARGET_DIR)/libblusher.so
 
 debug:
