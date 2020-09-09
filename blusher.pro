@@ -22,11 +22,11 @@ SOURCES += src/cpp/blusher_plugin.cpp \
     src/cpp/View.cpp
 
 HEADERS += src/cpp/blusher_plugin.h \
+    include/blusher/base.h \
     include/blusher/blusher.h \
     include/blusher/Application.h \
 #    src/Application_bridge.h \
 #    include/blusher/blusher-qt.h \
-    include/blusher/blusher_base.h \
     src/cpp/BaseWindow.h \
     src/cpp/Blusher.h \
     src/cpp/DesktopEnvironment.h \

@@ -12,9 +12,7 @@
 // Debug
 #include <QDebug>
 
-#include <blusher/blusher_base.h>
-#include "../src/cpp/Menu.h"
-#include "../src/cpp/MenuView.h"
+#include <blusher/base.h>
 
 #ifndef BLUSHER_APP_NAME
 #define BLUSHER_APP_NAME ""
@@ -30,11 +28,8 @@ namespace bl {
 
 class Menu;
 
-class BL_EXPORT Application : public QApplication
+class Application : public QApplication
 {
-    Q_OBJECT
-
-    Q_PROPERTY(int testValue READ testValue CONSTANT)
 public:
     /// \brief  Constructor
     /// \param  argc
@@ -77,13 +72,6 @@ public:
     {
         return &this->m_engine;
     }
-
-    int testValue() const { return 42; }
-
-    /// \brief Get the self instance.
-    ///
-    /// \return Self singleton instance.
-    static Application* instance();
 
 signals:
     void menuClosed();
@@ -128,11 +116,6 @@ inline void Application::readConf(QVariantMap *env)
             this->m_engine.addImportPath(key_value[1]);
         }
     }
-}
-
-inline Application* Application::instance()
-{
-    return qobject_cast<Application*>(QApplication::instance());
 }
 
 inline int Application::exec()

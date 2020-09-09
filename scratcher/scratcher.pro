@@ -9,7 +9,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 INCLUDEPATH += ../include
 
-LIBS += -L../lib/blusher/qml/Blusher -lblusher
+LIBS +=
 
 SOURCES += \
         main.cpp

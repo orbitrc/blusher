@@ -4,6 +4,8 @@
 
 #include <blusher/Application.h>
 
+#include "MenuView.h"
+
 namespace bl {
 
 Blusher *Blusher::singleton = nullptr;
