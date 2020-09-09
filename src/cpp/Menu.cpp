@@ -59,9 +59,9 @@ void Menu::setSupermenu(Menu *supermenu)
     }
 }
 
-QQmlListProperty<QObject> Menu::items()
+QQmlListProperty<MenuItem> Menu::items()
 {
-    return QQmlListProperty<QObject>(this, this->m_items);
+    return QQmlListProperty<MenuItem>(this, this->m_items);
 }
 
 
@@ -107,7 +107,7 @@ void Menu::componentComplete()
 // QML Invokables
 //==================
 
-void Menu::addItem(QObject *item)
+void Menu::addItem(MenuItem *item)
 {
     this->m_items.append(item);
 }
