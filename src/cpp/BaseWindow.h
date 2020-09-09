@@ -12,7 +12,7 @@ class BaseWindow : public QQuickWindow
     Q_OBJECT
 
     Q_PROPERTY(int type READ type WRITE setType NOTIFY typeChanged)
-    Q_PROPERTY(qreal pixelsPerDp READ pixelsPerDp NOTIFY pixelsPerDpChanged)
+    Q_PROPERTY(qreal screenScale READ screenScale NOTIFY screenScaleChanged)
     Q_PROPERTY(QString screenName READ screenName NOTIFY screenNameChanged)
 public:
     enum class WindowType {
@@ -30,7 +30,7 @@ public:
 
     int type() const;
     void setType(int type);
-    qreal pixelsPerDp() const;
+    qreal screenScale() const;
     QString screenName() const;
 
 protected:
@@ -39,7 +39,7 @@ protected:
 
 signals:
     void typeChanged();
-    void pixelsPerDpChanged();
+    void screenScaleChanged();
     void screenNameChanged();
 
     void keyPressed(KeyEvent *event);
@@ -52,7 +52,7 @@ private slots:
 
 private:
     int m_type;
-    qreal m_pixelsPerDp;
+    qreal m_scale;
 };
 
 } // namespace bl

@@ -11,7 +11,7 @@ BaseWindow::BaseWindow(QWindow *parent)
     : QQuickWindow(parent)
 {
     this->m_type = static_cast<int>(BaseWindow::WindowType::AppWindow);
-    this->m_pixelsPerDp = 1;
+    this->m_scale = 1;
 
     QObject::connect(this, &QQuickWindow::screenChanged,
                      this, &BaseWindow::q_onScreenChanged);
@@ -37,9 +37,9 @@ void BaseWindow::setType(int type)
     }
 }
 
-qreal BaseWindow::pixelsPerDp() const
+qreal BaseWindow::screenScale() const
 {
-    return this->m_pixelsPerDp;
+    return this->m_scale;
 }
 
 QString BaseWindow::screenName() const
@@ -112,8 +112,8 @@ void BaseWindow::q_onScreenChanged(QScreen *qscreen)
         qDebug() << "[WARNING] Screen name \"" << screen_name << "\" does not exist.";
     }
     const QVariant& screen = screens[screen_name];
-    this->m_pixelsPerDp = screen.toMap()["pixelsPerDp"].toInt();
-    emit this->pixelsPerDpChanged();
+    this->m_scale = screen.toMap()["scale"].toInt();
+    emit this->screenScaleChanged();
 }
 
 void BaseWindow::onScreensChanged()

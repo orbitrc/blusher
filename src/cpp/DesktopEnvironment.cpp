@@ -21,7 +21,9 @@ DesktopEnvironment::DesktopEnvironment(QObject *parent)
         QString name = scr->name();
 
         QVariantMap screen_info;
-        screen_info["pixelsPerDp"] = 1;
+        screen_info["scale"] = 1;
+        screen_info["width"] = scr->geometry().width();
+        screen_info["height"] = scr->geometry().height();
         this->m_screens[name] = screen_info;
     }
 
