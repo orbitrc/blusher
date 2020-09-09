@@ -2,8 +2,6 @@
 
 #include <QGuiApplication>
 
-#include <blusher/Application.h>
-
 #include "View.h"
 #include "BaseWindow.h"
 #include "Menu.h"

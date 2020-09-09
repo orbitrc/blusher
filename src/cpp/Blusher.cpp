@@ -1,8 +1,7 @@
 #include "Blusher.h"
 
+#include <QApplication>
 #include <QClipboard>
-
-#include <blusher/Application.h>
 
 #include "MenuView.h"
 
@@ -16,9 +15,9 @@ Blusher::Blusher(QObject *parent)
 
 }
 
-Application* Blusher::app() const
+QApplication* Blusher::app() const
 {
-    return static_cast<Application*>(this->p_app);
+    return qobject_cast<QApplication*>(QApplication::instance());
 }
 
 void Blusher::_set_app(QObject *app)

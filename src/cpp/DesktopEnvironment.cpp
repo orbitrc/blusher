@@ -1,10 +1,11 @@
 #include "DesktopEnvironment.h"
 
-#include <blusher/Application.h>
-
+#include <QApplication>
 #include <QScreen>
 // Debug
 #include <QDebug>
+
+#include "Blusher.h"
 
 namespace bl {
 
@@ -13,7 +14,7 @@ DesktopEnvironment *DesktopEnvironment::singleton = nullptr;
 DesktopEnvironment::DesktopEnvironment(QObject *parent)
     : QObject(parent)
 {
-    Application *app = qobject_cast<Application*>(Application::instance());
+    QApplication *app = Blusher::singleton->app();
     auto screens = app->screens();
     for (int i = 0; i < screens.length(); ++i) {
         QScreen *scr = screens[i];

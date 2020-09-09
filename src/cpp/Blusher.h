@@ -7,15 +7,14 @@
 
 #include "Menu.h"
 
-namespace bl {
+class QApplication;
 
-class Application;
+namespace bl {
 
 class Blusher : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(Application* app READ app NOTIFY appChanged)
 public:
     enum class KeyModifier {
         None    = 0x00000000, // 00000000 00000000 00000000 00000000
@@ -29,7 +28,7 @@ public:
 public:
     explicit Blusher(QObject *parent = nullptr);
 
-    Application* app() const;
+    QApplication* app() const;
     void _set_app(QObject *app);
 
     static Blusher *singleton;
