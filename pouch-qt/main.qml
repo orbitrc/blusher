@@ -18,76 +18,65 @@ Item {
     id: mainMenu
     type: Menu.MenuType.MenuBarMenu
     title: 'Blusher Main Menu'
-    items: [
-      // File
-      {
-        path: '/file/',
-        title: 'File'
-      },
-      {
-        path: '/file/create-new/',
-        title: "Create New"
-      },
-      {
-        path: '/file/create-new/text',
-        title: "New Text File"
-      },
-      {
-        path: '/file/create-new/folder',
-        title: "New Folder"
-      },
-      {
-        path: '/file/separator1',
-        separator: true
-      },
-      {
-        path: '/file/quit',
-        title: "Quit"
-      },
-      // Edit
-      {
-        path: '/edit/',
-        title: "Edit"
-      },
-      {
-        path: '/edit/copy',
-        title: "Copy",
-        shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_C
-      },
-      {
-        path: '/edit/paste',
-        title: "Paste",
-        shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_V
-      },
-      // View
-      {
-        path: '/view/',
-        title: "View"
-      },
-      {
-        path: '/view/sidebar',
-        title: "Sidebar",
-        checked: application.store.showSidebar,
-        action: function() {
-          application.store.showSidebar = !application.store.showSidebar;
+    MenuItem {
+      title: "File"
+      submenu: Menu {
+        type: Menu.MenuType.Submenu
+        title: "File"
+        MenuItem {
+          title: "Create New"
+          submenu: Menu {
+            type: Menu.MenuType.Submenu
+            title: "Create New"
+            MenuItem {
+              title: "New Text File"
+            }
+            MenuItem {
+              title: "New Folder"
+            }
+          }
         }
-      },
-      // Help
-      {
-        path: '/help/',
-        title: "Help"
-      },
-      {
-        path: '/help/about',
-        title: 'About Pouch ...',
-        action: function() {
-          if (aboutPanel.visible === false) {
-            aboutPanel.show();
+
+        MenuItem {
+          separator: true
+        }
+        MenuItem {
+          title: "Quit"
+        }
+      }
+    }
+    MenuItem {
+      title: "Edit"
+      submenu: Menu {
+        type: Menu.MenuType.Submenu
+        title: "Edit"
+        MenuItem {
+          title: "Copy"
+          shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_C
+        }
+        MenuItem {
+          title: "Paste"
+          shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_V
+        }
+      }
+    }
+    MenuItem {
+      title: "View"
+      submenu: Menu {
+        type: Menu.MenuType.Submenu
+        title: "View"
+        MenuItem {
+          title: "Sidebar"
+          checked: true
+          action: function() {
+            this.checked = !this.checked;
           }
         }
       }
-
-    ]
+    }
+    MenuItem {
+      title: "Help"
+    }
   }
 
   Window {

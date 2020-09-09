@@ -1,17 +1,20 @@
 module Blusher
+plugin blusher
 TestItem 0.1 TestItem.qml
-Window 0.1 Window.qml
+Window1 0.1 Window1.qml
 Window2 0.1 Window2.qml
+Window 0.1 Window.qml
 Alert 0.1 Alert.qml
 Button 0.1 Button.qml
+Checkbox 0.1 Checkbox.qml
 SegmentedControl 0.1 SegmentedControl.qml
 Segment 0.1 Segment.qml
 Label 0.1 Label.qml
-Menu 0.1 Menu.qml
-MenuItem 0.1 MenuItem.qml
+Menu1 0.1 Menu1.qml
+MenuItem1 0.1 MenuItem1.qml
+MenuBar 0.1 MenuBar.qml
 TextField 0.1 TextField.qml
 Toolbar 0.1 Toolbar.qml
 ToolbarItem 0.1 ToolbarItem.qml
-View 0.1 View.qml
 SplitView 0.1 SplitView.qml
 ScrollView 0.1 ScrollView.qml

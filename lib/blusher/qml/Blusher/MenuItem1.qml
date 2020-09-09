@@ -1,6 +1,7 @@
 import QtQuick 2.12
+import QtQml.Models 2.12
 
-QtObject {
+ListElement {
   id: root
 
   //=========================
@@ -9,8 +10,8 @@ QtObject {
   property string title: ""
   property Image image: null
   property bool separator: false
-  property Menu submenu: null
-  property Menu parentMenu: null
+  property Menu1 submenu: null
+  property Menu1 parentMenu: null
   property var action: null
   property int shortcut: 0
   property bool checked: false

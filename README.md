@@ -46,3 +46,36 @@ Pouch
 Pouch is the demo app using Blusher. It is a simple virtual file manager.
 
 
+Development
+------------
+
+### Predefined macros
+
+Predefined macros provide meta information or change behavior when compiling an app.
+
+#### BLUSHER\_APP\_NAME
+
+type: string
+
+This is your app's name. Commonly in English.
+
+If not defined, empty string is assigned.
+
+
+#### BLUSHER\_APP\_VERSION
+
+type: string
+
+This is your app's version. App version should follow SemVer.
+
+If not defined, empty string is assigned.
+
+
+#### BLUSHER\_DEBUG
+
+type: bool
+
+If this macro defined, Blusher QML is running in debug mode.
+
+Do not use this for production.
+

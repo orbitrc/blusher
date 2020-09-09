@@ -3,7 +3,8 @@ import QtQuick 2.12
 import QtQuick.Window 2.12 as QtQuickWindow
 import QtQuick.Layouts 1.12
 
-import ".."
+//import ".."
+import Blusher 0.1
 import "Standalone" as Standalone
 import Blusher.DesktopEnvironment.Standalone 0.1
 
@@ -31,6 +32,7 @@ Item {
   // Properties
   //===================
   property string name: "standalone"
+  property var screens: DesktopEnvironmentPlugin.screens  // Need binding to change signal?
   readonly property alias pixelsPerDp: internal.pixelsPerDp
   readonly property alias app: internal.app
   readonly property alias menuDelegate: internal.menuDelegate
@@ -127,35 +129,28 @@ Item {
   }
   QtObject {
     id: _menus
-    property Menu applicationMenu: Menu {
-      type: Menu.MenuType.Submenu
+    property Menu1 applicationMenu: Menu1 {
+      type: Menu1.MenuType.Submenu
       title: 'Application'
-      items: [
-        {
-          path: '/preferences',
-          title: "Preferences..."
-        },
-        {
-          path: '/quit',
-          title: "Quit",
-          action: DesktopEnvironment.app.quit,
-          shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_Q
-        },
-      ]
+      MenuItem1 {
+        title: "Preferences..."
+      }
+
+      MenuItem1 {
+        title: "Quit"
+        action: DesktopEnvironment.app.quit
+        shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_Q
+      }
     }
-    property Menu textEditMenu: Menu {
-      type: Menu.MenuType.ContextualMenu
+    property Menu1 textEditMenu: Menu1 {
+      type: Menu1.MenuType.ContextualMenu
       title: "Text"
-      items: [
-        {
-          path: '/copy',
-          title: "Copy"
-        },
-        {
-          path: '/paste',
-          title: "Paste"
-        }
-      ]
+      MenuItem1 {
+        title: 'Copy'
+      }
+      MenuItem1 {
+        title: 'Paste'
+      }
     }
   }
 
@@ -164,8 +159,8 @@ Item {
   //==================
 
   /// \brief  Sould emitted when the menu is opening.
-  function menuOpened(parent, menu) {
-    root.onMenuOpened(parent, menu);
+  function menuOpened(menu, x, y) {
+    root.onMenuOpened(menu, x, y);
   }
 
   /// \brief  Should emitted when all menus are completely closed.
@@ -182,6 +177,9 @@ Item {
   //================
   // Items
   //================
+  Loader {
+    id: menuLoader
+  }
 
   Loader {
     id: overlayLoader
@@ -308,7 +306,7 @@ Item {
       }
     }
 
-    function onMenuOpened(items) {
+    function onMenuOpened(menu, x, y) {
       if (!this.menuOpen) {
         // Set singleton item child of currently activated window.
         // It is important to refer the geometry of root window such as x and y.
@@ -318,6 +316,11 @@ Item {
           overlayLoader.setSource('./Standalone/Overlay.qml');
         }
         root.overlay.show();
+
+        if (!menuLoader.sourceComponent) {
+          menuLoader.sourceComponent = standaloneMenuDelegate;
+          menuLoader.item.menu = menu;
+        }
       } else {
         if (menu === DesktopEnvironment.menus.applicationMenu ||
           menu.supermenu.type === Menu.MenuType.MenuBarMenu) {
@@ -332,10 +335,12 @@ Item {
           }
         }
       }
+      /*
       if (items) {
         root.overlay.menus.push(items);
         internal.menuOpen = true;
       }
+      */
     }
 
     function onMenuClosed() {
@@ -366,7 +371,6 @@ Item {
       // Public properties
       //===================
       property Menu menu: null
-      property bool popUpMenuBar: false
 
       Loader {
         id: _loader
@@ -375,7 +379,6 @@ Item {
       onMenuChanged: {
         if (root.menu.type === Menu.MenuType.MenuBarMenu) {
           _loader.setSource('Standalone/MenuBarMenuDelegate.qml', { 'menu': root.menu });
-          _loader.item.popUpMenuBar = root.popUpMenuBar;
         } else {
           _loader.setSource('Standalone/PopUpMenuDelegate.qml', { 'menu': root.menu });
         }

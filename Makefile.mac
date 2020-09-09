@@ -1,0 +1,18 @@
+include Makefile.base
+
+default:
+	mkdir -p build
+	cd build && $(QMAKE) ../blusher.pro -spec macx-clang && make qmake_all
+	cd build && make -j8
+	cp build/libblusher.$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH).dylib $(SHARED_LIB_TARGET_DIR)
+	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.$(VERSION_MAJOR).$(VERSION_MINOR).dylib
+	ln -s libblusher.$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH).dylib $(SHARED_LIB_TARGET_DIR)/libblusher.$(VERSION_MAJOR).$(VERSION_MINOR).dylib
+	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.$(VERSION_MAJOR).dylib
+	ln -s libblusher.$(VERSION_MAJOR).$(VERSION_MINOR).dylib $(SHARED_LIB_TARGET_DIR)/libblusher.$(VERSION_MAJOR).dylib
+	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.dylib
+	ln -s libblusher.$(VERSION_MAJOR).dylib $(SHARED_LIB_TARGET_DIR)/libblusher.dylib
+
+clean:
+	rm -rf build
+	rm -rf debug
+	rm -f $(SHARED_LIB_TARGET_DIR)/libblusher.*

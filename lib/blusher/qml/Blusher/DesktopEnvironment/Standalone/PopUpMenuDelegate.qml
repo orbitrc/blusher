@@ -4,23 +4,24 @@ import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.0
 
 import ".."       // Blusher.DesktopEnvironment
-import "../.."    // Blusher
+import Blusher 0.1    // Blusher
 import "." as Standalone
 
 import "../../../../js/path.js" as Path
 
-QtQuickWindow.Window {
+BaseWindow {
   id: root
 
-  property var menu: null
+  property Menu menu: null
   property var items: []
   property string path
 
   property int focusedItemIndex: -1
 
-  property var _menuItems: []
+  type: BaseWindow.WindowType.Menu
+  flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
 
-  flags: Qt.Popup
+  visible: true
   //================
   // Style
   //================
@@ -50,11 +51,11 @@ QtQuickWindow.Window {
     spacing: 0
     // Menu items
     Repeater {
-      model: root._menuItems
+      model: root.menu
       id: menuItemViewList
       Standalone.MenuItemDelegate {
-        menuItem: root._menuItems[index]
-        focused: (root.focusedItemIndex === index)
+        menuItem: root.menu.items[index]
+//        focused: (root.focusedItemIndex === index)
 
         onClicked: {
           this.trigger();
@@ -82,14 +83,44 @@ QtQuickWindow.Window {
     id: popUpMenuLoader
   }
 
+  FocusScope {
+    focus: true
+
+    Keys.onPressed: {
+      let lastMenu = null;
+
+      switch (event.key) {
+      case Qt.Key_Escape:
+        root.close();
+        break;
+
+      case Qt.Key_Down:
+        if (root.menu.focusedItemIndex === -1) {
+          root.menu.focusFirstItem();
+        } else {
+          root.menu.focusNextItem();
+        }
+        break;
+
+      case Qt.Key_Up:
+        if (root.menu.focusedItemIndex === -1) {
+          root.menu.focusLastItem();
+        } else {
+          root.menu.focusPreviousItem();
+        }
+        break;
+
+      case Qt.Key_Right:
+        break;
+
+      default:
+        break;
+      }
+    }
+  }
+
 
   onItemsChanged: {
-    print('=======onItemsChanged==========');
-    print(' items: ' + JSON.stringify(root.items));
-    print(' path:  ' + root.path);
-    root._menuItems = root.filterItems(root.items, root.path);
-    print(' filtered: ' + JSON.stringify(root._menuItems));
-    print('-------------------------------');
   }
 
   //==========================
@@ -98,6 +129,7 @@ QtQuickWindow.Window {
 
   // Open submenu as pop up menu with list of menu items.
   function openSubmenu(path, items, x, y) {
+    print('PopUpMenuDelegate: openSubmenu');
     if (popUpMenuLoader.sourceComponent) {
       popUpMenuLoader.sourceComponent = undefined;
     }

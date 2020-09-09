@@ -1,32 +1,42 @@
 import QtQuick 2.12
 
+import Blusher 0.1
+
 import "DesktopEnvironment"
 
-Rectangle {
+View {
   id: root
-
-  color: root.backgroundColor
 
   //=========================
   // Public Properties
   //=========================
   property string text: ""
   property alias font: _font
-//  property string fontFamily: ''
+  //  property string fontFamily: ''
   property bool selectable: false
-  property Menu menu: DesktopEnvironment.menus.textEditMenu
+  property Menu menu: Menu {
+    title: 'Text Contextual'
+    type: Menu.MenuType.ContextualMenu
+    MenuItem {
+      title: 'Copy'
+      onTriggered: {
+        Blusher.copyTextToClipboard(_text.selectedText);
+      }
+    }
+    MenuItem {
+      separator: true
+    }
+    MenuItem {
+      title: 'Select All'
+    }
+  }
+
   property alias fontSize: _font.size
   property alias fontColor: _font.color
 
   property string backgroundColor: "#00000000"
 
   property alias implicitWidth: _text.implicitWidth
-
-  //===============
-  // Size/Position
-  //===============
-  property size rect: Qt.size(100, 30)
-  property rect pos: Qt.rect(0, 0, 0, 0)
 
   //=========================
   // Private Properties
@@ -40,45 +50,54 @@ Rectangle {
     property alias pointSize: _text.font.pointSize
   }
 
-  width: root.rect.width * DesktopEnvironment.pixelsPerDp
-  height: root.rect.height * DesktopEnvironment.pixelsPerDp
+  width: root.implicitWidth
+  height: 30
 
-  border.width: 0
-  clip: true
-
-  TextInput {
-    id: _text
-
-    text: root.text
-    readOnly: true
+  Rectangle {
+    id: rectangle
 
     anchors.fill: parent
-    verticalAlignment: TextInput.AlignVCenter
-    leftPadding: 4
-    rightPadding: 4
-    font.pixelSize: root.font.size * DesktopEnvironment.pixelsPerDp
-    color: root.font.color
-    selectionColor: "lightblue"
+    color: root.backgroundColor
 
-    selectByMouse: root.selectable
-    cursorPosition: 0
+    border.width: 0
+    clip: true
 
-    MouseArea {
+    TextInput {
+      id: _text
+
+      text: root.text
+      readOnly: true
+
       anchors.fill: parent
+      verticalAlignment: TextInput.AlignVCenter
+      leftPadding: 4
+      rightPadding: 4
+      font.pixelSize: root.font.size * DesktopEnvironment.pixelsPerDp
+      color: root.font.color
+      selectionColor: "lightblue"
 
-      acceptedButtons: Qt.LeftButton | Qt.RightButton
+      selectByMouse: root.selectable
+      cursorPosition: 0
 
-      cursorShape: (root.selectable ? Qt.IBeamCursor : Qt.ArrowCursor)
-      propagateComposedEvents: true
+      MouseArea {
+        width: _text.implicitWidth
+        height: _text.implicitHeight
 
-      onClicked: {
-        if (mouse.button === Qt.LeftButton) {
-          mouse.accepted = true;
-        } else if (mouse.button === Qt.RightButton) {
-          root.menu.open(Window.window.contentItem);
-          print(_text.selectedText);
-          print(_text.selectionStart + '-' + _text.selectionEnd);
-          print(_text.text.length);
+        acceptedButtons: Qt.RightButton
+
+        cursorShape: (root.selectable ? Qt.IBeamCursor : Qt.ArrowCursor)
+        propagateComposedEvents: true
+
+        onClicked: {
+          if (mouse.button === Qt.LeftButton) {
+            mouse.accepted = true;
+          } else if (mouse.button === Qt.RightButton) {
+            let pos = mapToGlobal(mouse.x, mouse.y);
+            root.menu.open(pos.x, pos.y + 1);
+            print(_text.selectedText);
+            print(_text.selectionStart + '-' + _text.selectionEnd);
+            print(_text.text.length);
+          }
         }
       }
     }
