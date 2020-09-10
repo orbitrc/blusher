@@ -35,13 +35,8 @@ Item {
   property var screens: DesktopEnvironmentPlugin.screens  // Need binding to change signal?
   readonly property alias pixelsPerDp: internal.pixelsPerDp
   readonly property alias app: internal.app
-  readonly property alias menuDelegate: internal.menuDelegate
-  readonly property alias menuBarHeight: internal.menuBarHeight
 
   readonly property alias shortcutToString: internal.shortcutToString
-
-  readonly property alias onMenuOpened: internal.onMenuOpened
-  readonly property alias onMenuClosed: internal.onMenuClosed
 
   // States
   readonly property alias menuOpen: internal.menuOpen
@@ -57,15 +52,7 @@ Item {
     property bool menuOpen: false
     property real pixelsPerDp: 1
 
-    property var menuDelegate: null
-    property var menuItemDelegate: null
-
-    property int menuBarHeight: 0
-
-    property var onMenuOpened: function(menu) {}
-    property var onMenuClosed: function() {}
     property var shortcutToString: function(shortcut) {}
-
 
     property string appName: ""
     property string appVersion: ""
@@ -193,26 +180,6 @@ Item {
   //=============
 
   // Private methods
-  function _popMenu() {
-    let newMenus = []
-    root.overlay.menus[root.overlay.menus.length - 1].close();
-    for (let i = 0; i < root.overlay.menus.length - 1; ++i) {
-      newMenus.push(root.overlay.menus[i]);
-    }
-    root.overlay.menus = newMenus;
-  }
-
-  function _isMenuDescendantOf(menu, target) {
-    let it = menu;
-    while (it !== null) {
-      if (it === target) {
-        return true;
-      }
-      it = it.supermenu;
-    }
-
-    return false;
-  }
 
   function _initDesktopEnvironmentModule() {
     const dePath = Process.env.BLUSHER_DE_MODULE_PATH;
@@ -228,8 +195,6 @@ Item {
 
     // Setup signal handlers.
     internal.onAppCursorChanged = deModule.onAppCursorChanged;
-    internal.onMenuOpened = deModule.onMenuOpened;
-    internal.onMenuClosed = deModule.onMenuClosed;
 
     // Setup public methods.
     internal.shortcutToString = deModule.shortcutToString;
