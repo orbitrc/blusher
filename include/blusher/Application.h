@@ -22,6 +22,10 @@
 #define BLUSHER_APP_VERSION ""
 #endif
 
+#ifndef BLUSHER_PATH
+#define BLUSHER_PATH "/usr/lib/blusher"
+#endif
+
 class QWidget;
 
 namespace bl {
@@ -52,6 +56,13 @@ public:
         QVariantMap env;
 
         this->readConf(&env);
+        // Add DE module path.
+        if (env.value("BLUSHER_DE_MODULE_PATH").toString() == "") {
+            qDebug() << "bl::Application - DE module path is empty. using standalone.\n";
+            this->m_engine.addImportPath(QString(BLUSHER_PATH) + "/qml/Blusher/Standalone");
+        } else {
+            this->m_engine.addImportPath(env.value("BLUSHER_DE_MODULE_PATH").toString());
+        }
         env.insert("BLUSHER_APP_NAME", BLUSHER_APP_NAME);
         env.insert("BLUSHER_APP_VERSION", BLUSHER_APP_VERSION);
 #ifdef BLUSHER_DEBUG
@@ -61,8 +72,6 @@ public:
         process.insert("app", QVariant::fromValue(this));
 
         this->m_engine.rootContext()->setContextProperty("Process", process);
-
-//        this->m_popUpZone = new QWidget;
     }
 
     ~Application()

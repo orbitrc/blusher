@@ -5,8 +5,7 @@ import QtQuick.Layouts 1.12
 
 //import ".."
 import Blusher 0.1
-import "Standalone" as Standalone
-import Blusher.DesktopEnvironment.Standalone 0.1
+import DesktopEnvironmentModule 0.1
 
 Item {
   id: root
@@ -42,7 +41,7 @@ Item {
   readonly property alias menuOpen: internal.menuOpen
 
   // References
-  property alias standaloneDeModule: standalone
+//  property alias standaloneDeModule: standalone
 
   //====================
   // Private Properties
@@ -185,24 +184,16 @@ Item {
 
   function _initDesktopEnvironmentModule() {
     const dePath = Process.env.BLUSHER_DE_MODULE_PATH;
-    let deModule = null;
-
-    if (dePath === '') {
-      deModule = standalone;
-    } else {
-      print('[DesktopEnvironment._initDesktopEnvironmentModule] dePath: ' + dePath);
-      deModuleLoader.setSource(dePath + '/DesktopEnvironmentModule/DesktopEnvironmentModule.qml');
-      deModule = deModuleLoader.item;
-    }
+    print('[DesktopEnvironment._initDesktopEnvironmentModule] dePath: ' + dePath);
 
     // Setup basic informations.
-    internal.name = deModule.name;
+    internal.name = DesktopEnvironmentModule.name;
 
     // Setup signal handlers.
-    internal.onAppCursorChanged = deModule.onAppCursorChanged;
+    internal.onAppCursorChanged = DesktopEnvironmentModule.onAppCursorChanged;
 
     // Setup public methods.
-    internal.shortcutToString = deModule.shortcutToString;
+    internal.shortcutToString = DesktopEnvironmentModule.shortcutToString;
 
     // Setup app object.
     internal.appName = Process.env.BLUSHER_APP_NAME;
@@ -211,44 +202,5 @@ Item {
 
   function _debugFunction(payload) {
     internal.pixelsPerDp += payload;
-  }
-
-  //================================
-  // Standalone implementations
-  //================================
-
-  // Standalone desktop environment module.
-  QtObject {
-    id: standalone
-
-    property string name: 'standalone'
-
-    property int pixelsPerDp: 1
-
-    property int decorationTopHeight: 0
-    property int decorationBottomHeight: 0
-    property int decorationLeftWidth: 0
-    property int decorationRightWidth: 0
-
-    function onAppCursorChanged(cursor) {
-      switch (cursor) {
-      case DesktopEnvironment.Auto:
-        Process.app.objectName = "BLUSHER_CURSOR_AUTO";
-        break;
-      case DesktopEnvironment.ResizeLeftRight:
-        Process.app.objectName = "BLUSHER_CURSOR_RESIZE_LEFT_RIGHT";
-        break;
-
-      case DesktopEnvironment.ResizeUpDown:
-        Process.app.objectName = "BLUSHER_CURSOR_RESIZE_UP_DOWN";
-        break;
-      default:
-        break;
-      }
-    }
-
-    function shortcutToString(shortcut) {
-      return Formatter.shortcutToString(shortcut);
-    }
   }
 }
