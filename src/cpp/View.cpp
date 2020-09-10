@@ -85,7 +85,9 @@ BaseWindow* View::window() const
 //==================
 void View::scale(qreal multiple)
 {
+    qDebug() << "Y was: " << QQuickItem::x();
     QQuickItem::setX(this->m_pos.x() * multiple);
+    qDebug() << "..and now: " << QQuickItem::x();
     QQuickItem::setY(this->m_pos.y() * multiple);
     QQuickItem::setWidth(this->m_size.width() * multiple);
     QQuickItem::setHeight(this->m_size.height() * multiple);

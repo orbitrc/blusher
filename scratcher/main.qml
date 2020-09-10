@@ -77,10 +77,19 @@ Window {
     }
   }
   Button {
-    title: 'Scale +'
-    x: 100
+    title: '1'
+    x: 120
+    width: 50
     onClicked: {
-      DesktopEnvironmentPlugin.changeScale("eDP1", DesktopEnvironmentPlugin.screens['eDP1']['scale'] + 0.1);
+      DesktopEnvironmentPlugin.changeScale("eDP1", 1);
+    }
+  }
+  Button {
+    title: '1.25'
+    x: 180
+    width: 50
+    onClicked: {
+      DesktopEnvironmentPlugin.changeScale("eDP1", 1.25);
     }
   }
 
