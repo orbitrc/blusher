@@ -85,8 +85,15 @@ BaseWindow* View::window() const
 //==================
 void View::scale(qreal multiple)
 {
-    QQuickItem::setX(this->m_pos.x() * multiple);
-    QQuickItem::setY(this->m_pos.y() * multiple);
+    // Even x, y are 0, the real positions may not 0 since layout.
+    qreal x = this->m_pos.x();
+    qreal y = this->m_pos.y();
+    if (x != 0) {
+        QQuickItem::setX(x * multiple);
+    }
+    if (y != 0) {
+        QQuickItem::setY(this->m_pos.y() * multiple);
+    }
     QQuickItem::setWidth(this->m_size.width() * multiple);
     QQuickItem::setHeight(this->m_size.height() * multiple);
 }
