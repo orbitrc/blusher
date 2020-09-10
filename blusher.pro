@@ -22,11 +22,6 @@ SOURCES += src/cpp/blusher_plugin.cpp \
     src/cpp/View.cpp
 
 HEADERS += src/cpp/blusher_plugin.h \
-    include/blusher/base.h \
-    include/blusher/blusher.h \
-    include/blusher/Application.h \
-#    src/Application_bridge.h \
-#    include/blusher/blusher-qt.h \
     src/cpp/BaseWindow.h \
     src/cpp/Blusher.h \
     src/cpp/DesktopEnvironment.h \
@@ -44,6 +39,9 @@ TARGET = blusher
 win32: CONFIG += skip_target_version_ext
 
 DISTFILES += \
+    include/blusher/base.h \
+    include/blusher/blusher.h \
+    include/blusher/Application.h \
     lib/blusher/qml/Blusher/Checkbox.qml \
     lib/blusher/qml/Blusher/Window.qml \
     lib/blusher/qml/Blusher/Button.qml \
