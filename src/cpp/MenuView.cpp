@@ -23,6 +23,8 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
     setAttribute(Qt::WA_AlwaysStackOnTop);
     setClearColor(Qt::transparent);
 
+    setAttribute(Qt::WA_DeleteOnClose);
+
     this->m_menuBarMenu = false;
     this->m_menuBarRect = QRectF(0, 0, 100, 10);
 
@@ -35,10 +37,13 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
     Blusher *blusher = Blusher::singleton;
     QObject::connect(this, &QQuickWidget::destroyed,
                      this, [blusher]() {
-        qDebug() << "Menu destroyed.";
         blusher->setMenuBarRect(QRectF(0, 0, 0, 0));
         blusher->setMenuBarMenuItemRect(QRectF(0, 0, 0, 0));
     });
+}
+
+MenuView::~MenuView()
+{
 }
 
 bool MenuView::isMenuBarMenu() const

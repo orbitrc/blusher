@@ -12,6 +12,7 @@ class MenuView : public QQuickWidget
     Q_OBJECT
 public:
     MenuView(Menu *menu, QWidget *parent = nullptr);
+    ~MenuView();
 
     bool isMenuBarMenu() const;
     void setMenuBarMenu(bool value);
