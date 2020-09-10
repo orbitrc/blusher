@@ -67,6 +67,7 @@ Window {
     title: 'Button'
     onClicked: {
       print('Button clicked!');
+      print('deModule name: ' + DesktopEnvironment.name);
       print(Process.app);
       print(Blusher);
       print(Object.keys(DesktopEnvironment.screens));

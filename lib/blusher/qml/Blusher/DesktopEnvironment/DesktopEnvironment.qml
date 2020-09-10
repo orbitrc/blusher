@@ -31,7 +31,7 @@ Item {
   //===================
   // Properties
   //===================
-  property string name: "standalone"
+  readonly property string name: internal.name
   property var screens: DesktopEnvironmentPlugin.screens  // Need binding to change signal?
   readonly property alias pixelsPerDp: internal.pixelsPerDp
   readonly property alias app: internal.app
@@ -49,6 +49,8 @@ Item {
   //====================
   QtObject {
     id: internal
+    property string name: 'standalone'
+
     property bool menuOpen: false
     property real pixelsPerDp: 1
 
@@ -193,6 +195,9 @@ Item {
       deModule = deModuleLoader.item;
     }
 
+    // Setup basic informations.
+    internal.name = deModule.name;
+
     // Setup signal handlers.
     internal.onAppCursorChanged = deModule.onAppCursorChanged;
 
@@ -215,6 +220,8 @@ Item {
   // Standalone desktop environment module.
   QtObject {
     id: standalone
+
+    property string name: 'standalone'
 
     property int pixelsPerDp: 1
 
