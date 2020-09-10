@@ -13,7 +13,7 @@ Blusher.View {
   Rectangle {
     anchors.fill: parent
 
-    color: (root.menu === null) ? "red" : Qt.rgba(238, 238, 238, 255)
+    color: (root.menu === null) ? "red" : "#eaeaea"
 
     Flow {
       id: menuItems
@@ -33,13 +33,17 @@ Blusher.View {
 
   /// Calculate total menu height.
   function menuHeight() {
+    // For prevent QWidget with 0x0 size, set default size.
     if (root.menu === null) {
-      return 0;
+      return 10;
     }
 
     let height = 0;
     for (let i = 0; i < menuItems.children.length; ++i) {
       height += menuItems.children[i].height;
+    }
+    if (height === 0) {
+      return 10;
     }
 
     return height;
