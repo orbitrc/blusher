@@ -1,7 +1,5 @@
 pragma Singleton
 import QtQuick 2.12
-import QtQuick.Window 2.12 as QtQuickWindow
-import QtQuick.Layouts 1.12
 
 //import ".."
 import Blusher 0.1
@@ -33,15 +31,8 @@ Item {
   readonly property string name: internal.name
   property var screens: DesktopEnvironmentPlugin.screens  // Need binding to change signal?
   readonly property alias pixelsPerDp: internal.pixelsPerDp
-  readonly property alias app: internal.app
 
   readonly property alias shortcutToString: internal.shortcutToString
-
-  // States
-  readonly property alias menuOpen: internal.menuOpen
-
-  // References
-//  property alias standaloneDeModule: standalone
 
   //====================
   // Private Properties
@@ -55,8 +46,10 @@ Item {
 
     property var shortcutToString: function(shortcut) {}
 
-    property string appName: ""
-    property string appVersion: ""
+    // appName and appVersion are deprecated.
+    // Using Process.env.BLUSHER_APP_NAME and Process.env.BLUSHER_APP_VERSION.
+    property string appName: "deprecated"
+    property string appVersion: "deprecated"
 
     property var onAppCursorChanged: function(cursor) {}
     property var app: QtObject {
@@ -153,9 +146,6 @@ Item {
   //================
   // Loaders
   //================
-  Loader {
-    id: deModuleLoader
-  }
 
   //==========================
   // Signal handlers
@@ -194,10 +184,6 @@ Item {
 
     // Setup public methods.
     internal.shortcutToString = DesktopEnvironmentModule.shortcutToString;
-
-    // Setup app object.
-    internal.appName = Process.env.BLUSHER_APP_NAME;
-    internal.appVersion = Process.env.BLUSHER_APP_VERSION;
   }
 
   function _debugFunction(payload) {
