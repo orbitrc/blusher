@@ -39,12 +39,13 @@ protected:
 
 signals:
     void typeChanged();
-    void screenScaleChanged();
+    void screenScaleChanged(qreal scale);
     void screenNameChanged();
 
     void keyPressed(KeyEvent *event);
 
 public slots:
+    void changeScale();
 
 private slots:
     void q_onScreenChanged(QScreen *qscreen);

@@ -15,6 +15,8 @@ BaseWindow::BaseWindow(QWindow *parent)
 
     QObject::connect(this, &QQuickWindow::screenChanged,
                      this, &BaseWindow::q_onScreenChanged);
+    QObject::connect(DesktopEnvironment::singleton, &DesktopEnvironment::screensChanged,
+                     this, &BaseWindow::changeScale);
 }
 
 int BaseWindow::type() const
@@ -100,6 +102,21 @@ void BaseWindow::keyPressEvent(QKeyEvent *event)
     QQuickWindow::keyPressEvent(event);
 }
 
+//=================
+// Public slots
+//=================
+void BaseWindow::changeScale()
+{
+    QVariantMap screens = bl::DesktopEnvironment::singleton->screens();
+    const QVariant& screen = screens[this->screenName()];
+    qreal scale = screen.toMap()["scale"].toReal();
+    this->m_scale = scale;
+    emit this->screenScaleChanged(scale);
+}
+
+//=================
+// Private slots
+//=================
 
 void BaseWindow::q_onScreenChanged(QScreen *qscreen)
 {
@@ -112,8 +129,8 @@ void BaseWindow::q_onScreenChanged(QScreen *qscreen)
         qDebug() << "[WARNING] Screen name \"" << screen_name << "\" does not exist.";
     }
     const QVariant& screen = screens[screen_name];
-    this->m_scale = screen.toMap()["scale"].toInt();
-    emit this->screenScaleChanged();
+    this->m_scale = screen.toMap()["scale"].toReal();
+    emit this->screenScaleChanged(this->m_scale);
 }
 
 void BaseWindow::onScreensChanged()

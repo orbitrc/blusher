@@ -7,6 +7,8 @@ namespace bl {
 View::View(QQuickItem *parent)
     : QQuickItem(parent)
 {
+    QObject::connect(this, &QQuickItem::windowChanged,
+                     this, &View::onWindowChanged);
 }
 
 qreal View::x() const
@@ -76,6 +78,29 @@ void View::setHeight(qreal height)
 BaseWindow* View::window() const
 {
     return qobject_cast<BaseWindow*>(QQuickItem::window());
+}
+
+//==================
+// Public slots
+//==================
+void View::scale(qreal multiple)
+{
+    QQuickItem::setX(this->m_pos.x() * multiple);
+    QQuickItem::setY(this->m_pos.y() * multiple);
+    QQuickItem::setWidth(this->m_size.width() * multiple);
+    QQuickItem::setHeight(this->m_size.height() * multiple);
+}
+
+//==================
+// Private slots
+//==================
+void View::onWindowChanged(QQuickWindow *window)
+{
+    BaseWindow *baseWindow = qobject_cast<BaseWindow*>(window);
+    if (baseWindow) {
+        QObject::connect(baseWindow, &BaseWindow::screenScaleChanged,
+                         this, &View::scale);
+    }
 }
 
 } // namespace bl

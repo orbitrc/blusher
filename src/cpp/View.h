@@ -41,6 +41,10 @@ signals:
     void heightChanged();
 
 public slots:
+    void scale(qreal multiple);
+
+private slots:
+    void onWindowChanged(QQuickWindow *window);
 
 private:
     QPointF m_pos;
