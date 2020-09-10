@@ -76,22 +76,46 @@ Window {
       testMenu.open();
     }
   }
-  Button {
-    title: '1'
+
+  // Scale demo.
+  View {
     x: 120
-    width: 50
-    onClicked: {
-      DesktopEnvironmentPlugin.changeScale("eDP1", 1);
+    width: 400
+    height: 100
+    Flow {
+      anchors.fill: parent
+
+      Button {
+        title: '1'
+        width: 50
+        onClicked: {
+          DesktopEnvironmentPlugin.changeScale("eDP1", 1);
+        }
+      }
+      Button {
+        title: '1.25'
+        width: 50
+        onClicked: {
+          DesktopEnvironmentPlugin.changeScale("eDP1", 1.25);
+        }
+      }
+      Button {
+        title: '1.5'
+        width: 50
+        onClicked: {
+          DesktopEnvironmentPlugin.changeScale("eDP1", 1.5);
+        }
+      }
+      Button {
+        title: '2'
+        width: 50
+        onClicked: {
+          DesktopEnvironmentPlugin.changeScale("eDP1", 2);
+        }
+      }
     }
   }
-  Button {
-    title: '1.25'
-    x: 180
-    width: 50
-    onClicked: {
-      DesktopEnvironmentPlugin.changeScale("eDP1", 1.25);
-    }
-  }
+
 
   // Labels demo.
   View {
