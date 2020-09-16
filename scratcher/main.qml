@@ -21,6 +21,10 @@ Window {
         type: Menu.MenuType.Submenu
         MenuItem {
           title: 'Quit'
+          onTriggered: {
+            print('Quit');
+            Qt.quit();
+          }
         }
       }
     }

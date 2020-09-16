@@ -98,6 +98,16 @@ Blusher.View {
 
     hoverEnabled: true
 
+    onPressed: {
+      // Ignore separator.
+      if (root.menuItem.separator) {
+        return;
+      }
+
+      // Emit signal.
+      root.menuItem.triggered();
+    }
+
     onEntered: {
       // Ignore separator.
       if (root.menuItem.separator) {
