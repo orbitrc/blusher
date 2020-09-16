@@ -95,9 +95,8 @@ private:
     void readConf(QVariantMap *env);
     void addPaths()
     {
-#ifndef QT_DEBUG
-        this->engine()->addImportPath("/usr/lib/blusher/qml");
-#endif
+        QString blusherPath = QString(BLUSHER_PATH) + "/qml";
+        this->engine()->addImportPath(blusherPath);
     }
 };
 
