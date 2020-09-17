@@ -1,7 +1,9 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 
-Item {
+import Blusher 0.1
+
+View {
   id: root
 
   enum DisplayMode {
@@ -10,7 +12,7 @@ Item {
     LabelOnly
   }
 
-  default property list<Item> items
+  default property list<ToolbarItem> items
 
   //=========================
   // Public Properties
@@ -20,7 +22,9 @@ Item {
   //============
   // Style
   //============
-  anchors.fill: parent
+  anchors.left: parent.left
+  anchors.right: parent.right
+  height: 50
 
   RowLayout {
     id: layout
@@ -39,8 +43,6 @@ Item {
       const item = root.items[i]
       item.parent = layout
       // Fill height.
-//      item.anchors.top = layout.top;
-//      item.anchors.bottom = layout.bottom;
       item.Layout.fillHeight = true
       if (item.width > 0) {
         item.Layout.preferredWidth = item.implicitWidth;
