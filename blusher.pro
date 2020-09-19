@@ -43,6 +43,7 @@ DISTFILES += \
     include/blusher/blusher.h \
     include/blusher/Application.h \
     lib/blusher/qml/Blusher/Checkbox.qml \
+    lib/blusher/qml/Blusher/Slider.qml \
     lib/blusher/qml/Blusher/Window.qml \
     lib/blusher/qml/Blusher/Button.qml \
     lib/blusher/qml/Blusher/Label.qml \
