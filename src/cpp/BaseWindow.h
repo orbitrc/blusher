@@ -11,6 +11,7 @@ class BaseWindow : public QQuickWindow
 {
     Q_OBJECT
 
+    Q_PROPERTY(int netWmWindowType READ netWmWindowType WRITE setNetWmWindowType NOTIFY netWmWindowTypeChanged)
     Q_PROPERTY(int type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(qreal screenScale READ screenScale NOTIFY screenScaleChanged)
     Q_PROPERTY(QString screenName READ screenName NOTIFY screenNameChanged)
@@ -46,16 +47,22 @@ public:
 public:
     explicit BaseWindow(QWindow *parent = nullptr);
 
+    int netWmWindowType() const;
+    void setNetWmWindowType(int type);
+
     int type() const;
     void setType(int type);
+
     qreal screenScale() const;
     QString screenName() const;
 
 protected:
     bool event(QEvent *) override;
     void keyPressEvent(QKeyEvent *) override;
+    void showEvent(QShowEvent *) override;
 
 signals:
+    void netWmWindowTypeChanged();
     void typeChanged();
     void screenScaleChanged(qreal scale);
     void screenNameChanged();
@@ -70,6 +77,7 @@ private slots:
     void onScreensChanged();
 
 private:
+    int m_netWmWindowType;
     int m_type;
     qreal m_scale;
 };

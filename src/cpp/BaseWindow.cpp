@@ -1,6 +1,8 @@
 #include "BaseWindow.h"
 
+#include <blusher/base.h>
 #include "DesktopEnvironment.h"
+#include "Ewmh.h"
 #include "Blusher.h"
 
 #include <QScreen>
@@ -10,6 +12,7 @@ namespace bl {
 BaseWindow::BaseWindow(QWindow *parent)
     : QQuickWindow(parent)
 {
+    this->m_netWmWindowType = static_cast<int>(BaseWindow::NetWmWindowType::Normal);
     this->m_type = static_cast<int>(BaseWindow::WindowType::AppWindow);
     this->m_scale = 1;
 
@@ -17,6 +20,20 @@ BaseWindow::BaseWindow(QWindow *parent)
                      this, &BaseWindow::q_onScreenChanged);
     QObject::connect(DesktopEnvironment::singleton, &DesktopEnvironment::screensChanged,
                      this, &BaseWindow::changeScale);
+}
+
+int BaseWindow::netWmWindowType() const
+{
+    return this->m_netWmWindowType;
+}
+
+void BaseWindow::setNetWmWindowType(int type)
+{
+    if (this->m_netWmWindowType != type) {
+        this->m_netWmWindowType = type;
+
+        emit this->netWmWindowTypeChanged();
+    }
 }
 
 int BaseWindow::type() const
@@ -100,6 +117,26 @@ void BaseWindow::keyPressEvent(QKeyEvent *event)
     */
 
     QQuickWindow::keyPressEvent(event);
+}
+
+void BaseWindow::showEvent(QShowEvent *evt)
+{
+#ifdef BL_PLATFORM_LINUX
+    if (this->m_netWmWindowType == static_cast<int>(NetWmWindowType::Normal)) {
+        return QQuickWindow::showEvent(evt);
+    }
+
+    // Set _NET_WM_WINDOW_TYPE.
+    switch (this->netWmWindowType()) {
+    case static_cast<int>(NetWmWindowType::Dock):
+        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Dock);
+        break;
+    default:
+        break;
+    }
+#endif // BL_PLATFORM_LINUX
+
+    return QQuickWindow::showEvent(evt);
 }
 
 //=================

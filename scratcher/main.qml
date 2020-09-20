@@ -205,6 +205,12 @@ Window {
     text: slider.value
   }
 
+  // Window demo.
+//  Window {
+//    visible: true
+//    netWmWindowType: Window.NetWmWindowType.Dock
+//  }
+
   Menu {
     id: testMenu
     type: Menu.MenuType.ContextualMenu
