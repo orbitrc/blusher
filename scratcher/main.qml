@@ -205,11 +205,41 @@ Window {
     text: slider.value
   }
 
-  // Window demo.
-//  Window {
-//    visible: true
-//    netWmWindowType: Window.NetWmWindowType.Dock
-//  }
+  // Windows demo.
+  View {
+    id: windowsDemo
+    y: 180
+
+    Button {
+      title: 'Dock window'
+      onClicked: {
+        if (!windowsDemoLoader.sourceComponent) {
+          windowsDemoLoader.sourceComponent = dockWindow;
+        } else {
+          windowsDemoLoader.sourceComponent = undefined;
+        }
+      }
+    }
+
+    Loader {
+      id: windowsDemoLoader
+    }
+  }
+
+  Component {
+    id: dockWindow
+    Window {
+      visible: true
+      netWmWindowType: Window.NetWmWindowType.Dock
+
+      width: 300
+      height: 60
+
+      Label {
+        text: 'parent: ' + this.parent
+      }
+    }
+  }
 
   Menu {
     id: testMenu
