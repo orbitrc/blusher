@@ -25,6 +25,24 @@ public:
     };
     Q_ENUM(WindowType)
 
+    enum class NetWmWindowType {
+        Desktop,
+        Dock,
+        Toolbar,
+        Menu,
+        Utility,
+        Splash,
+        Dialog,
+        DropDownMenu,
+        PopUpMenu,
+        ToolTip,
+        Notification,
+        Combo,
+        Dnd,
+        Normal,
+    };
+    Q_ENUM(NetWmWindowType)
+
 public:
     explicit BaseWindow(QWindow *parent = nullptr);
 
