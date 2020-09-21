@@ -8,6 +8,12 @@ View {
   width: 200
   height: 20
 
+  enum SliderType {
+    Continuous,
+    TicksWithSnap,
+    TicksWithoutSnap
+  }
+
   property real start: 0.0
   property real end: 1.0
   property real step: 0.0

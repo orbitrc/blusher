@@ -1,5 +1,7 @@
 #include "BaseWindow.h"
 
+#include <stdint.h>
+
 #include <blusher/base.h>
 #include "DesktopEnvironment.h"
 #include "Ewmh.h"
@@ -34,6 +36,33 @@ void BaseWindow::setNetWmWindowType(int type)
 
         emit this->netWmWindowTypeChanged();
     }
+}
+
+bool BaseWindow::onAllDesktops() const
+{
+#ifdef BL_PLATFORM_LINUX
+    uint32_t desktop = Ewmh::get_net_wm_desktop(winId());
+    if (desktop == 0xFFFFFFFF) {
+        return true;
+    }
+    return false;
+#endif // BL_PLATFORM_LINUX
+    return false;
+}
+
+void BaseWindow::setOnAllDesktops(bool value)
+{
+#ifdef BL_PLATFORM_LINUX
+    if (this->onAllDesktops() != value && value == true) {
+        Ewmh::set_net_wm_desktop(winId(), 0xFFFFFFFF);
+
+        emit this->onAllDesktopsChanged(value);
+    } else if (this->onAllDesktops() != value && value == false) {
+        Ewmh::set_net_wm_desktop(winId(), 1);
+
+        emit this->onAllDesktopsChanged(value);
+    }
+#endif // BL_PLATFORM_LINUX
 }
 
 int BaseWindow::type() const

@@ -129,6 +129,33 @@ void Ewmh::set_net_wm_window_type(uint32_t w, bl::BaseWindow::NetWmWindowType ty
     xcb_atom_t type_atom = Ewmh::get_atom(conn, type_str);
 
     Ewmh::change_property(conn, mode, w, "_NET_WM_WINDOW_TYPE", XCB_ATOM_ATOM, 1, (void*)(&type_atom));
+
+    xcb_disconnect(conn);
+}
+
+uint32_t Ewmh::get_net_wm_desktop(uint32_t w)
+{
+    xcb_connection_t *conn = xcb_connect(NULL, NULL);
+
+    xcb_get_property_cookie_t cookie = Ewmh::get_property(conn, w,
+        "_NET_WM_DESKTOP", XCB_ATOM_CARDINAL);
+    xcb_get_property_reply_t *reply = xcb_get_property_reply(conn, cookie, NULL);
+    uint32_t value = *(uint32_t*)reply;
+
+    free(reply);
+    xcb_disconnect(conn);
+
+    return value;
+}
+
+void Ewmh::set_net_wm_desktop(uint32_t w, uint32_t desktop)
+{
+    xcb_connection_t *conn = xcb_connect(NULL, NULL);
+
+    Ewmh::change_property(conn, XCB_PROP_MODE_REPLACE, w, "_NET_WM_DESKTOP",
+        XCB_ATOM_CARDINAL, 1, (void*)&desktop);
+
+    xcb_disconnect(conn);
 }
 
 //=====================

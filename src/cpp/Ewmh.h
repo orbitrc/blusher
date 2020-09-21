@@ -24,6 +24,10 @@ public:
     //=================================
 //    static QString get_net_wm_name(uint32_t w);
 //    static uint32_t get_net_wm_desktop(uint32_t w);
+    static uint32_t get_net_wm_desktop(uint32_t w);
+
+    static void set_net_wm_desktop(uint32_t w, uint32_t desktop);
+
     static QList<bl::BaseWindow::NetWmWindowType> get_net_wm_window_type(uint32_t w);
 
     static void set_net_wm_window_type(uint32_t w, bl::BaseWindow::NetWmWindowType type, bool replace = false);

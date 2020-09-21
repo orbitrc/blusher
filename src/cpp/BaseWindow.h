@@ -12,6 +12,7 @@ class BaseWindow : public QQuickWindow
     Q_OBJECT
 
     Q_PROPERTY(int netWmWindowType READ netWmWindowType WRITE setNetWmWindowType NOTIFY netWmWindowTypeChanged)
+    Q_PROPERTY(bool onAllDesktops READ onAllDesktops WRITE setOnAllDesktops NOTIFY onAllDesktopsChanged)
     Q_PROPERTY(int type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(qreal screenScale READ screenScale NOTIFY screenScaleChanged)
     Q_PROPERTY(QString screenName READ screenName NOTIFY screenNameChanged)
@@ -50,6 +51,9 @@ public:
     int netWmWindowType() const;
     void setNetWmWindowType(int type);
 
+    bool onAllDesktops() const;
+    void setOnAllDesktops(bool value);
+
     int type() const;
     void setType(int type);
 
@@ -63,6 +67,7 @@ protected:
 
 signals:
     void netWmWindowTypeChanged();
+    void onAllDesktopsChanged(bool value);
     void typeChanged();
     void screenScaleChanged(qreal scale);
     void screenNameChanged();
