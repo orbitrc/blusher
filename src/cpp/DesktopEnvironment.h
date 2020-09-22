@@ -12,10 +12,13 @@ class DesktopEnvironment : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QVariantMap screens READ screens NOTIFY screensChanged)
+    Q_PROPERTY(QVariantMap primaryScreen READ primaryScreen NOTIFY primaryScreenChanged)
 public:
     explicit DesktopEnvironment(QObject *parent = nullptr);
 
     QVariantMap screens() const;
+
+    QVariantMap primaryScreen() const;
 
     static DesktopEnvironment *singleton;
 
@@ -23,6 +26,7 @@ public:
 
 signals:
     void screensChanged();
+    void primaryScreenChanged();
     void screenInfoChanged(QString name, QString key, QVariant value);
 
 public slots:

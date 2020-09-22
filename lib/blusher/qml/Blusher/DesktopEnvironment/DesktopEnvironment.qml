@@ -30,6 +30,7 @@ Item {
   //===================
   readonly property string name: internal.name
   property var screens: DesktopEnvironmentPlugin.screens  // Need binding to change signal?
+  property var primaryScreen: DesktopEnvironmentPlugin.primaryScreen
   readonly property alias pixelsPerDp: internal.pixelsPerDp
 
   readonly property alias shortcutToString: internal.shortcutToString

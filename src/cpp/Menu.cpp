@@ -2,6 +2,8 @@
 
 #include <QMenu>
 #include <QQuickItem>
+#include <QScreen>
+#include <QWindow>
 
 #include <QDebug>
 
@@ -126,9 +128,16 @@ void Menu::open(double x, double y)
                      Blusher::singleton, &Blusher::menuClosedByUser);
 
     // Set geometry.
+    int screenX = x;
+    int screenY = y;
+    if (this->parent() && qvariant_cast<QWindow*>(this->parent()->property("window"))) {
+        auto window = qvariant_cast<QWindow*>(this->parent()->property("window"));
+        screenX += window->screen()->geometry().x();
+        screenY += window->screen()->geometry().y();
+    }
     auto width = menuView->rootObject()->property("width").toInt();
     auto height = menuView->rootObject()->property("height").toInt();
-    menuView->setGeometry(x, y, width, height);
+    menuView->setGeometry(screenX, screenY, width, height);
     menuView->show();
 }
 
