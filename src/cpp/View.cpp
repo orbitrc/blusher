@@ -7,6 +7,9 @@ namespace bl {
 View::View(QQuickItem *parent)
     : QQuickItem(parent)
 {
+    this->m_size.setWidth(0);
+    this->m_size.setHeight(0);
+
     QObject::connect(this, &QQuickItem::windowChanged,
                      this, &View::onWindowChanged);
 }
