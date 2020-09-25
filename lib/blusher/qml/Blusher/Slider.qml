@@ -94,4 +94,8 @@ View {
     anchors.fill: parent
     color: "#55ff0000"
   }
+
+  Component.onCompleted: {
+    knob.x = value / (end * 0.01) * (track.width * 0.01);
+  }
 }

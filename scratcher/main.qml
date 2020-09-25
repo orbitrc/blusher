@@ -189,6 +189,7 @@ Window {
     }
   }
 
+  // Sliders demo.
   Slider {
     id: slider
 
@@ -198,6 +199,7 @@ Window {
     start: 0
     end: 200
     step: 1
+    value: 50
   }
   Label {
     x: 20
