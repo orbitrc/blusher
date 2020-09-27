@@ -133,6 +133,50 @@ void Ewmh::set_net_wm_window_type(uint32_t w, bl::BaseWindow::NetWmWindowType ty
     xcb_disconnect(conn);
 }
 
+QList<int> Ewmh::get_net_wm_strut_partial(uint32_t w)
+{
+    xcb_connection_t *conn = xcb_connect(NULL, NULL);
+
+    xcb_get_property_cookie_t cookie = Ewmh::get_property(conn, w,
+        "_NET_WM_STRUT_PARTIAL", XCB_ATOM_CARDINAL);
+    xcb_get_property_reply_t *reply = xcb_get_property_reply(conn, cookie, NULL);
+    size_t len = xcb_get_property_value_length(reply);
+    QList<int> strut;
+    // Value length must be 12.
+    if (len == 12) {
+        free(reply);
+        return strut;
+    }
+    void *ret = xcb_get_property_value(reply);
+    for (size_t i = 0; i < 12; ++i) {
+        strut.push_back(((uint32_t*)ret)[i]);
+    }
+
+    free(reply);
+    xcb_disconnect(conn);
+
+    return strut;
+}
+
+void Ewmh::set_net_wm_strut_partial(uint32_t w, QList<int> strut)
+{
+    xcb_connection_t *conn = xcb_connect(NULL, NULL);
+
+    if (strut.length() != 12) {
+        return;
+    }
+
+    uint32_t data[12];
+    for (int i = 0; i < strut.length(); ++i) {
+        data[i] = strut.value(i);
+    }
+
+    Ewmh::change_property(conn, XCB_PROP_MODE_REPLACE, w, "_NET_WM_STRUT_PARTIAL",
+        XCB_ATOM_CARDINAL, 12, (void*)data);
+
+    xcb_disconnect(conn);
+}
+
 uint32_t Ewmh::get_net_wm_desktop(uint32_t w)
 {
     xcb_connection_t *conn = xcb_connect(NULL, NULL);

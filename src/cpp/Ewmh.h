@@ -28,6 +28,10 @@ public:
 
     static void set_net_wm_desktop(uint32_t w, uint32_t desktop);
 
+    static QList<int> get_net_wm_strut_partial(uint32_t w);
+
+    static void set_net_wm_strut_partial(uint32_t w, QList<int> strut);
+
     static QList<bl::BaseWindow::NetWmWindowType> get_net_wm_window_type(uint32_t w);
 
     static void set_net_wm_window_type(uint32_t w, bl::BaseWindow::NetWmWindowType type, bool replace = false);

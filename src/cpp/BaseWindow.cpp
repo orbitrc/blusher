@@ -14,6 +14,7 @@ namespace bl {
 BaseWindow::BaseWindow(QWindow *parent)
     : QQuickWindow(parent)
 {
+    this->m_netWmStrutPartial = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     this->m_netWmWindowType = static_cast<int>(BaseWindow::NetWmWindowType::Normal);
     this->m_type = static_cast<int>(BaseWindow::WindowType::AppWindow);
     this->m_scale = 1;
@@ -22,6 +23,24 @@ BaseWindow::BaseWindow(QWindow *parent)
                      this, &BaseWindow::q_onScreenChanged);
     QObject::connect(DesktopEnvironment::singleton, &DesktopEnvironment::screensChanged,
                      this, &BaseWindow::changeScale);
+}
+
+QList<int> BaseWindow::netWmStrutPartial() const
+{
+    return this->m_netWmStrutPartial;
+}
+
+void BaseWindow::setNetWmStrutPartial(QList<int> value)
+{
+    if (value.length() == 12) {
+        this->m_netWmStrutPartial = value;
+
+#ifdef BL_PLATFORM_LINUX
+        Ewmh::set_net_wm_strut_partial(winId(), value);
+#endif // BL_BLATFORM_LINUX
+
+        emit this->netWmStrutPartialChanged(value);
+    }
 }
 
 int BaseWindow::netWmWindowType() const

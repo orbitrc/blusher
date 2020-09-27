@@ -11,6 +11,7 @@ class BaseWindow : public QQuickWindow
 {
     Q_OBJECT
 
+    Q_PROPERTY(QList<int> netWmStrutPartial READ netWmStrutPartial WRITE setNetWmStrutPartial NOTIFY netWmStrutPartialChanged)
     Q_PROPERTY(int netWmWindowType READ netWmWindowType WRITE setNetWmWindowType NOTIFY netWmWindowTypeChanged)
     Q_PROPERTY(bool onAllDesktops READ onAllDesktops WRITE setOnAllDesktops NOTIFY onAllDesktopsChanged)
     Q_PROPERTY(int type READ type WRITE setType NOTIFY typeChanged)
@@ -48,6 +49,9 @@ public:
 public:
     explicit BaseWindow(QWindow *parent = nullptr);
 
+    QList<int> netWmStrutPartial() const;
+    void setNetWmStrutPartial(QList<int> value);
+
     int netWmWindowType() const;
     void setNetWmWindowType(int type);
 
@@ -66,6 +70,7 @@ protected:
     void showEvent(QShowEvent *) override;
 
 signals:
+    void netWmStrutPartialChanged(QList<int> strut);
     void netWmWindowTypeChanged();
     void onAllDesktopsChanged(bool value);
     void typeChanged();
@@ -82,6 +87,7 @@ private slots:
     void onScreensChanged();
 
 private:
+    QList<int> m_netWmStrutPartial;
     int m_netWmWindowType;
     int m_type;
     qreal m_scale;
