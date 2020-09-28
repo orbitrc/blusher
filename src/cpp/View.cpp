@@ -56,7 +56,8 @@ void View::setWidth(qreal width)
     if (width != this->m_size.width()) {
         this->m_size.setWidth(width);
 
-        QQuickItem::setWidth(width);
+        qreal scale = (this->window() != nullptr) ? this->window()->screenScale() : 1;
+        QQuickItem::setWidth(width * scale);
 
         emit this->widthChanged();
     }
@@ -72,7 +73,8 @@ void View::setHeight(qreal height)
     if (height != this->m_size.height()) {
         this->m_size.setHeight(height);
 
-        QQuickItem::setHeight(height);
+        qreal scale = (this->window() != nullptr) ? this->window()->screenScale() : 1;
+        QQuickItem::setHeight(height * scale);
 
         emit this->heightChanged();
     }
