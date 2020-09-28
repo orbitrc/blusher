@@ -161,7 +161,7 @@ void BaseWindow::setWidth(int width)
     if (this->m_size.width() != width) {
         this->m_size.setWidth(width);
 
-        QQuickWindow::setWidth(width);
+        QQuickWindow::setWidth(width * this->screenScale());
 
         emit this->widthChanged(width);
     }
@@ -177,7 +177,7 @@ void BaseWindow::setHeight(int height)
     if (this->m_size.height() != height) {
         this->m_size.setHeight(height);
 
-        QQuickWindow::setHeight(height);
+        QQuickWindow::setHeight(height * this->screenScale());
 
         emit this->heightChanged(height);
     }
@@ -286,6 +286,11 @@ void BaseWindow::changeScale()
     }
     qreal scale = screen_info->scale();
     this->m_scale = scale;
+
+    // Scale window size.
+    QWindow::setWidth(this->width() * scale);
+    QWindow::setHeight(this->height() * scale);
+
     emit this->screenScaleChanged(scale);
 }
 
@@ -334,14 +339,14 @@ void BaseWindow::q_onYChanged(int y)
 
 void BaseWindow::q_onWidthChanged(int width)
 {
-    this->m_size.setWidth(width);
+    this->m_size.setWidth(width / this->screenScale());
 
     emit this->widthChanged(width);
 }
 
 void BaseWindow::q_onHeightChanged(int height)
 {
-    this->m_size.setHeight(height);
+    this->m_size.setHeight(height / this->screenScale());
 
     emit this->heightChanged(height);
 }
