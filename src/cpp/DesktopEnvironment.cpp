@@ -59,6 +59,8 @@ QVariantMap DesktopEnvironment::primaryScreen() const
     primary_screen_info["name"] = primary_screen->name();
     primary_screen_info["x"] = primary_screen->geometry().x();
     primary_screen_info["y"] = primary_screen->geometry().y();
+    primary_screen_info["width"] = primary_screen->geometry().width();
+    primary_screen_info["height"] = primary_screen->geometry().height();
 
     return primary_screen_info;
 }
