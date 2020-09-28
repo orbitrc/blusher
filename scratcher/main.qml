@@ -8,7 +8,7 @@ Window {
 
   title: 'Scratcher'
   visible: true
-  width: 400
+  width: 500
   height: 400
 
   menu: Menu {
@@ -78,6 +78,7 @@ Window {
       print(root.screenName);
       print(Process.env.BLUSHER_APP_NAME);
       print(JSON.stringify(DesktopEnvironmentPlugin.screens));
+      this.width += 1;
       testMenu.open();
     }
   }
@@ -123,6 +124,11 @@ Window {
 
 
   // Labels demo.
+  Label {
+    x: 340
+    text: '(' + root.x + ', ' + root.y + ') ' + root.width + 'x' + root.height
+  }
+
   View {
     id: infoArea
     y: 34

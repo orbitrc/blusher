@@ -17,12 +17,27 @@ BaseWindow::BaseWindow(QWindow *parent)
     this->m_netWmStrutPartial = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     this->m_netWmWindowType = static_cast<int>(BaseWindow::NetWmWindowType::Normal);
     this->m_type = static_cast<int>(BaseWindow::WindowType::AppWindow);
+    this->m_pos.setX(QQuickWindow::x());
+    this->m_pos.setY(QQuickWindow::y());
+    this->m_size.setWidth(QQuickWindow::width());
+    this->m_size.setHeight(QQuickWindow::height());
     this->m_scale = 1;
 
     QObject::connect(this, &QQuickWindow::screenChanged,
                      this, &BaseWindow::q_onScreenChanged);
     QObject::connect(DesktopEnvironment::singleton, &DesktopEnvironment::screenScaleChanged,
                      this, &BaseWindow::changeScale);
+
+    // Connect signals that window geometry changed by window manager.
+    // Not connect to setX signals because prevent circular signal chain.
+    QObject::connect(this, &QWindow::xChanged,
+                     this, &BaseWindow::q_onXChanged);
+    QObject::connect(this, &QWindow::yChanged,
+                     this, &BaseWindow::q_onYChanged);
+    QObject::connect(this, &QWindow::widthChanged,
+                     this, &BaseWindow::q_onWidthChanged);
+    QObject::connect(this, &QWindow::heightChanged,
+                     this, &BaseWindow::q_onHeightChanged);
 }
 
 QList<int> BaseWindow::netWmStrutPartial() const
@@ -101,6 +116,70 @@ void BaseWindow::setType(int type)
         }
 
         emit this->typeChanged();
+    }
+}
+
+int BaseWindow::x() const
+{
+    return this->m_pos.x();
+}
+
+void BaseWindow::setX(int x)
+{
+    if (this->m_pos.x() != x) {
+        this->m_pos.setX(x);
+
+        QQuickWindow::setX(x);
+
+        emit this->xChanged(x);
+    }
+}
+
+int BaseWindow::y() const
+{
+    return this->m_pos.y();
+}
+
+void BaseWindow::setY(int y)
+{
+    if (this->m_pos.y() != y) {
+        this->m_pos.setY(y);
+
+        QQuickWindow::setY(y);
+
+        emit this->yChanged(y);
+    }
+}
+
+int BaseWindow::width() const
+{
+    return this->m_size.width();
+}
+
+void BaseWindow::setWidth(int width)
+{
+    if (this->m_size.width() != width) {
+        this->m_size.setWidth(width);
+
+        QQuickWindow::setWidth(width);
+
+        emit this->widthChanged(width);
+    }
+}
+
+int BaseWindow::height() const
+{
+    return this->m_size.height();
+}
+
+void BaseWindow::setHeight(int height)
+{
+    if (this->m_size.height() != height) {
+        this->m_size.setHeight(height);
+
+        QQuickWindow::setHeight(height);
+
+        emit this->heightChanged(height);
     }
 }
 
@@ -237,6 +316,34 @@ void BaseWindow::q_onScreenChanged(QScreen *qscreen)
     }
     this->m_scale = screen_info->scale();
     emit this->screenScaleChanged(this->m_scale);
+}
+
+void BaseWindow::q_onXChanged(int x)
+{
+    this->m_pos.setX(x);
+
+    emit this->xChanged(x);
+}
+
+void BaseWindow::q_onYChanged(int y)
+{
+    this->m_pos.setY(y);
+
+    emit this->yChanged(y);
+}
+
+void BaseWindow::q_onWidthChanged(int width)
+{
+    this->m_size.setWidth(width);
+
+    emit this->widthChanged(width);
+}
+
+void BaseWindow::q_onHeightChanged(int height)
+{
+    this->m_size.setHeight(height);
+
+    emit this->heightChanged(height);
 }
 
 void BaseWindow::onScreensChanged()

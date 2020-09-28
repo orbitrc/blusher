@@ -15,6 +15,10 @@ class BaseWindow : public QQuickWindow
     Q_PROPERTY(int netWmWindowType READ netWmWindowType WRITE setNetWmWindowType NOTIFY netWmWindowTypeChanged)
     Q_PROPERTY(bool onAllDesktops READ onAllDesktops WRITE setOnAllDesktops NOTIFY onAllDesktopsChanged)
     Q_PROPERTY(int type READ type WRITE setType NOTIFY typeChanged)
+    Q_PROPERTY(int x READ x WRITE setX NOTIFY xChanged)
+    Q_PROPERTY(int y READ y WRITE setY NOTIFY yChanged)
+    Q_PROPERTY(int width READ width WRITE setWidth NOTIFY widthChanged)
+    Q_PROPERTY(int height READ height WRITE setHeight NOTIFY heightChanged)
     Q_PROPERTY(qreal screenScale READ screenScale NOTIFY screenScaleChanged)
     Q_PROPERTY(QString screenName READ screenName NOTIFY screenNameChanged)
 public:
@@ -61,6 +65,18 @@ public:
     int type() const;
     void setType(int type);
 
+    int x() const;
+    void setX(int x);
+
+    int y() const;
+    void setY(int y);
+
+    int width() const;
+    void setWidth(int width);
+
+    int height() const;
+    void setHeight(int height);
+
     qreal screenScale() const;
     QString screenName() const;
 
@@ -74,6 +90,10 @@ signals:
     void netWmWindowTypeChanged();
     void onAllDesktopsChanged(bool value);
     void typeChanged();
+    void xChanged(int x);
+    void yChanged(int y);
+    void widthChanged(int width);
+    void heightChanged(int height);
     void screenScaleChanged(qreal scale);
     void screenNameChanged();
 
@@ -83,13 +103,24 @@ public slots:
     void changeScale();
 
 private slots:
+    /// \brief Connect with &QQuickWindow::screenChanged() signal.
     void q_onScreenChanged(QScreen *qscreen);
+    /// \brief Connect with QWindow::xChanged() signal.
+    void q_onXChanged(int x);
+    /// \brief Connect with QWindow::yChanged() signal.
+    void q_onYChanged(int y);
+    /// \brief Connect with QWindow::widthChanged() signal.
+    void q_onWidthChanged(int width);
+    /// \brief Connect with QWindow::heightChanged() signal.
+    void q_onHeightChanged(int height);
     void onScreensChanged();
 
 private:
     QList<int> m_netWmStrutPartial;
     int m_netWmWindowType;
     int m_type;
+    QPoint m_pos;
+    QSize m_size;
     qreal m_scale;
 };
 
