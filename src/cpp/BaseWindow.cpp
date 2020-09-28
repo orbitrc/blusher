@@ -179,6 +179,9 @@ void BaseWindow::showEvent(QShowEvent *evt)
     case static_cast<int>(NetWmWindowType::Dock):
         Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Dock);
         break;
+    case static_cast<int>(NetWmWindowType::Desktop):
+        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Desktop, true);
+        break;
     default:
         break;
     }
