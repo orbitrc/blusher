@@ -59,7 +59,6 @@ Window {
     MouseArea {
       anchors.fill: parent
       onClicked: {
-        print(Object.keys(DesktopEnvironmentPlugin.screens));
         print(JSON.stringify(DesktopEnvironmentPlugin.screens));
 //        DesktopEnvironmentPlugin.screenInfoChanged("foo", "bar", "baz");
       }

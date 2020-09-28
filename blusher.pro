@@ -20,6 +20,7 @@ SOURCES += src/cpp/blusher_plugin.cpp \
     src/cpp/Menu.cpp \
     src/cpp/MenuItem.cpp \
     src/cpp/MenuView.cpp \
+    src/cpp/ScreenInfo.cpp \
     src/cpp/View.cpp
 
 HEADERS += src/cpp/blusher_plugin.h \
@@ -32,6 +33,7 @@ HEADERS += src/cpp/blusher_plugin.h \
     src/cpp/Menu.h \
     src/cpp/MenuItem.h \
     src/cpp/MenuView.h \
+    src/cpp/ScreenInfo.h \
     src/cpp/View.h
 
 RESOURCES = resources/resources.qrc

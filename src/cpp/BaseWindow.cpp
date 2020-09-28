@@ -21,7 +21,7 @@ BaseWindow::BaseWindow(QWindow *parent)
 
     QObject::connect(this, &QQuickWindow::screenChanged,
                      this, &BaseWindow::q_onScreenChanged);
-    QObject::connect(DesktopEnvironment::singleton, &DesktopEnvironment::screensChanged,
+    QObject::connect(DesktopEnvironment::singleton, &DesktopEnvironment::screenScaleChanged,
                      this, &BaseWindow::changeScale);
 }
 
@@ -195,9 +195,17 @@ void BaseWindow::showEvent(QShowEvent *evt)
 //=================
 void BaseWindow::changeScale()
 {
-    QVariantMap screens = bl::DesktopEnvironment::singleton->screens();
-    const QVariant& screen = screens[this->screenName()];
-    qreal scale = screen.toMap()["scale"].toReal();
+    ScreenInfo *screen_info = nullptr;
+    auto screen_info_list = bl::DesktopEnvironment::singleton->screens();
+
+    // Find screen info.
+    for (auto&& info: screen_info_list) {
+        if (info->name() == this->screenName()) {
+            screen_info = info;
+            break;
+        }
+    }
+    qreal scale = screen_info->scale();
     this->m_scale = scale;
     emit this->screenScaleChanged(scale);
 }
@@ -212,12 +220,22 @@ void BaseWindow::q_onScreenChanged(QScreen *qscreen)
 
     QString screen_name = qscreen->name();
 
-    QVariantMap screens = bl::DesktopEnvironment::singleton->screens();
-    if (!screens.contains(screen_name)) {
-        qDebug() << "[WARNING] Screen name \"" << screen_name << "\" does not exist.";
+    ScreenInfo *screen_info = nullptr;
+    auto screen_info_list = bl::DesktopEnvironment::singleton->screens();
+
+    // Find screen info.
+    for (auto&& info: screen_info_list) {
+        if (info->name() == screen_name) {
+            screen_info = info;
+            break;
+        }
     }
-    const QVariant& screen = screens[screen_name];
-    this->m_scale = screen.toMap()["scale"].toReal();
+
+    if (screen_info == nullptr) {
+        qDebug() << "[WARNING] Screen name \"" << screen_name << "\" does not exist.";
+        return;
+    }
+    this->m_scale = screen_info->scale();
     emit this->screenScaleChanged(this->m_scale);
 }
 
