@@ -59,7 +59,8 @@ Window {
     MouseArea {
       anchors.fill: parent
       onClicked: {
-        print(JSON.stringify(DesktopEnvironmentPlugin.screens));
+        let pos = mapToItem(root.contentItem, mouse.x, mouse.y);
+        print('(' + pos.x + ', ' + pos.y + ')');
 //        DesktopEnvironmentPlugin.screenInfoChanged("foo", "bar", "baz");
       }
     }
@@ -76,6 +77,7 @@ Window {
       print(Object.keys(DesktopEnvironment.screens));
       print(root.screenName);
       print(Process.env.BLUSHER_APP_NAME);
+      print(JSON.stringify(DesktopEnvironmentPlugin.screens));
       testMenu.open();
     }
   }
