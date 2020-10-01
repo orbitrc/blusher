@@ -44,6 +44,7 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
 
 MenuView::~MenuView()
 {
+    emit this->m_menu->closing();
 }
 
 bool MenuView::isMenuBarMenu() const

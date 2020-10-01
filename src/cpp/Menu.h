@@ -50,10 +50,18 @@ public:
     virtual void componentComplete() override;
 
 signals:
+    //===========================
+    // Property change signals
+    //===========================
     void itemsChanged();
     void typeChanged();
     void titleChanged();
     void supermenuChanged();
+
+    //========================
+    // Other signals
+    //========================
+    void closing();
 
 public slots:
 
