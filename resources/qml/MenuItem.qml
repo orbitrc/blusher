@@ -90,6 +90,11 @@ Blusher.View {
   }
   Text {
     visible: !root.menuItem.separator
+
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: 8
+
     text: menuItem.title
     font.pixelSize: 14
   }
