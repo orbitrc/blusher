@@ -11,6 +11,8 @@ Blusher.View {
   readonly property int separatorHeight: 4
   readonly property string separatorColor: "#d8d8d8"
 
+  property bool submenuOpened: false
+
   height: (!root.menuItem.separator) ? 24 : 12
 
   Rectangle {
@@ -98,6 +100,16 @@ Blusher.View {
     text: menuItem.title
     font.pixelSize: 14
   }
+  Text {
+    id: submenuIcon
+
+    visible: root.menuItem.submenu
+
+    anchors.right: parent.right
+
+    text: '>'
+    font.bold: true
+  }
   MouseArea {
     anchors.fill: parent
 
@@ -119,11 +131,23 @@ Blusher.View {
         return;
       }
 
+      // Hover state.
       rootRect.state = 'hovered';
+
+      // Submenu open.
+      if (root.menuItem.submenu && !root.submenuOpened) {
+        let pos = mapToItem(root, root.width, root.height);
+        print(pos);
+        root.menuItem.submenu.open(pos.x, pos.y);
+        root.submenuOpened = true;
+      }
     }
 
     onExited: {
-      print('exited');
+      if (root.submenuOpened) {
+        return;
+      }
+
       rootRect.state = '';
     }
   }

@@ -28,6 +28,8 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
     this->m_menuBarMenu = false;
     this->m_menuBarRect = QRectF(0, 0, 100, 10);
 
+    this->m_mouseGrabEnabled = false;
+
     this->m_menu = menu;
 
     setSource(QUrl("qrc:/qml/Menu.qml"));
@@ -40,6 +42,18 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
         blusher->setMenuBarRect(QRectF(0, 0, 0, 0));
         blusher->setMenuBarMenuItemRect(QRectF(0, 0, 0, 0));
     });
+
+    // Close supermenus when closing.
+    if (this->m_menu->type() == static_cast<int>(Menu::MenuType::Submenu)) {
+        QObject::connect(this->m_menu, &Menu::closing,
+                         this, [this]() {
+            auto supermenu = this->m_menu->supermenu();
+            if (supermenu && supermenu->menuView()) {
+                supermenu->menuView()->close();
+            }
+            supermenu->setMenuView(nullptr);
+        });
+    }
 }
 
 MenuView::~MenuView()
@@ -113,9 +127,10 @@ void MenuView::mousePressEvent(QMouseEvent *event)
 void MenuView::paintEvent(QPaintEvent *evt)
 {
     QWindow *window = windowHandle();
-    if (window) {
+    if (window && !this->m_mouseGrabEnabled) {
         window->setMouseGrabEnabled(true);
         window->setKeyboardGrabEnabled(true);
+        this->m_mouseGrabEnabled = true;
     }
 
     QQuickWidget::paintEvent(evt);

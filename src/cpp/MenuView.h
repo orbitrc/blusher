@@ -34,6 +34,8 @@ private:
     bool m_menuBarMenu;
     QRectF m_menuBarRect;
 
+    bool m_mouseGrabEnabled;
+
     Menu *m_menu;
 };
 

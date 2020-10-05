@@ -17,6 +17,8 @@ Menu::Menu(QObject *parent)
     : QObject(parent)
 {
     this->m_supermenu = nullptr;
+
+    this->m_menuView = nullptr;
 }
 
 int Menu::type() const
@@ -68,6 +70,15 @@ QQmlListProperty<MenuItem> Menu::items()
     // return QQmlListProperty<MenuItem>(this, &this->m_items);
 }
 
+MenuView* Menu::menuView()
+{
+    return this->m_menuView;
+}
+
+void Menu::setMenuView(MenuView *menuView)
+{
+    this->m_menuView = menuView;
+}
 
 MenuView* Menu::to_qmenu()
 {
@@ -122,6 +133,7 @@ void Menu::open(double x, double y)
 {
 //    Blusher::singleton->openMenu(this, x, y);
     MenuView *menuView = new MenuView(this);
+    this->setMenuView(menuView);
 
     // Connect signal.
     QObject::connect(menuView, &MenuView::closedByUser,

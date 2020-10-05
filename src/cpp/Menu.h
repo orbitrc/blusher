@@ -41,6 +41,9 @@ public:
     void setSupermenu(Menu *supermenu);
 
     QQmlListProperty<MenuItem> items();
+
+    MenuView* menuView();
+    void setMenuView(MenuView *menuView);
     MenuView* to_qmenu();
 
     Q_INVOKABLE void addItem(MenuItem *item);
@@ -70,6 +73,8 @@ private:
     QString m_title;
     QList<MenuItem*> m_items;
     Menu *m_supermenu;
+
+    MenuView *m_menuView;
 };
 
 } // namespace bl
