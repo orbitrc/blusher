@@ -20,15 +20,21 @@ public:
     QRectF menuBarRect() const;
     void setMenuBarRect(QRectF rect);
 
+    bool mouseGrabEnabled() const;
+    void setMouseGrabEnabled(bool value);
+
 protected:
-    void keyPressEvent(QKeyEvent *) override;
-    void mouseMoveEvent(QMouseEvent *) override;
-    void mousePressEvent(QMouseEvent *) override;
+    virtual void keyPressEvent(QKeyEvent *) override;
+    virtual void mouseMoveEvent(QMouseEvent *) override;
+    virtual void mousePressEvent(QMouseEvent *) override;
     virtual void paintEvent(QPaintEvent *event) override;
 
 signals:
     void closed();
     void closedByUser();
+
+private slots:
+    void onMenuLeaved();
 
 private:
     bool m_menuBarMenu;

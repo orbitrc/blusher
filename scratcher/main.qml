@@ -31,6 +31,7 @@ Window {
     MenuItem {
       title: 'Edit'
       submenu: Menu {
+        type: Menu.MenuType.Submenu
         title: 'Edit'
         MenuItem {
           title: 'Copy'
@@ -49,8 +50,12 @@ Window {
     MenuItem {
       title: 'View'
       submenu: Menu {
+        type: Menu.MenuType.Submenu
         title: 'View'
       }
+    }
+    MenuItem {
+      title: 'Help'
     }
   }
 

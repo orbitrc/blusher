@@ -34,6 +34,8 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
 
     setSource(QUrl("qrc:/qml/Menu.qml"));
     rootObject()->setProperty("menu", QVariant::fromValue(this->m_menu));
+    QObject::connect(rootObject(), SIGNAL(menuLeaved()),
+                     this, SLOT(onMenuLeaved()));
 
     // Reset menu bar rect when menu destroyed.
     Blusher *blusher = Blusher::singleton;
@@ -45,7 +47,7 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
 
     // Close supermenus when closing.
     if (this->m_menu->type() == static_cast<int>(Menu::MenuType::Submenu)) {
-        QObject::connect(this->m_menu, &Menu::closing,
+        QObject::connect(this, &MenuView::closedByUser,
                          this, [this]() {
             auto supermenu = this->m_menu->supermenu();
             if (supermenu && supermenu->menuView()) {
@@ -80,6 +82,19 @@ void MenuView::setMenuBarRect(QRectF rect)
 {
     this->m_menuBarRect = rect;
 }
+
+bool MenuView::mouseGrabEnabled() const
+{
+    return this->m_mouseGrabEnabled;
+}
+
+void MenuView::setMouseGrabEnabled(bool value)
+{
+    if (this->m_mouseGrabEnabled != value) {
+        this->m_mouseGrabEnabled = value;
+    }
+}
+
 
 void MenuView::keyPressEvent(QKeyEvent *event)
 {
@@ -134,6 +149,36 @@ void MenuView::paintEvent(QPaintEvent *evt)
     }
 
     QQuickWidget::paintEvent(evt);
+}
+
+//====================
+// Private slots
+//====================
+void MenuView::onMenuLeaved()
+{
+    // Disable mouse grab.
+    if (this->m_menu->type() == static_cast<int>(Menu::MenuType::Submenu)) {
+        QWindow *window = windowHandle();
+        if (window) {
+            window->setMouseGrabEnabled(false);
+            window->setKeyboardGrabEnabled(false);
+            this->m_mouseGrabEnabled = false;
+        }
+        // Give back mouse grab to the supermenu.
+        auto supermenu = this->m_menu->supermenu();
+        if (supermenu) {
+            auto menu_view = supermenu->menuView();
+            if (menu_view) {
+                window = menu_view->windowHandle();
+                if (window) {
+                    window->setMouseGrabEnabled(true);
+                    window->setKeyboardGrabEnabled(true);
+                    menu_view->setMouseGrabEnabled(true);
+                }
+            }
+        }
+        close();
+    }
 }
 
 } // namespace bl

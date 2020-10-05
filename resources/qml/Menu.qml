@@ -5,6 +5,8 @@ import Blusher 0.1 as Blusher
 Blusher.View {
   id: root
 
+  signal menuLeaved();
+
   property Blusher.Menu menu: null
 
   width: 150
@@ -15,18 +17,30 @@ Blusher.View {
 
     color: (root.menu === null) ? "red" : "#eaeaea"
 
-    Flow {
-      id: menuItems
+    MouseArea {
+      id: menuLeaveArea
 
-      flow: Flow.TopToBottom
-      Repeater {
-        model: (root.menu === null) ? 0 : root.menu.items.length
+      anchors.fill: parent
 
-        MenuItem {
-          menuItem: root.menu.items[index]
+      hoverEnabled: true
 
-          width: root.width
+      Flow {
+        id: menuItems
+
+        flow: Flow.TopToBottom
+        Repeater {
+          model: (root.menu === null) ? 0 : root.menu.items.length
+
+          MenuItem {
+            menuItem: root.menu.items[index]
+
+            width: root.width
+          }
         }
+      }
+
+      onExited: {
+        root.menuLeaved();
       }
     }
   }
