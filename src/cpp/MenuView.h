@@ -23,6 +23,8 @@ public:
     bool mouseGrabEnabled() const;
     void setMouseGrabEnabled(bool value);
 
+    bool is_menu_bar_child() const;
+
 protected:
     virtual void keyPressEvent(QKeyEvent *) override;
     virtual void mouseMoveEvent(QMouseEvent *) override;
@@ -34,6 +36,7 @@ signals:
     void closedByUser();
 
 private slots:
+    void onMenuEntered();
     void onMenuLeaved();
 
 private:

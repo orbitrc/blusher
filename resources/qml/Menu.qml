@@ -5,6 +5,7 @@ import Blusher 0.1 as Blusher
 Blusher.View {
   id: root
 
+  signal menuEntered();
   signal menuLeaved();
 
   property Blusher.Menu menu: null
@@ -37,6 +38,10 @@ Blusher.View {
             width: root.width
           }
         }
+      }
+
+      onEntered: {
+        root.menuEntered();
       }
 
       onExited: {

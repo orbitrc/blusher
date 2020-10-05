@@ -34,6 +34,9 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
 
     setSource(QUrl("qrc:/qml/Menu.qml"));
     rootObject()->setProperty("menu", QVariant::fromValue(this->m_menu));
+    // Connect signals for mouse grab.
+    QObject::connect(rootObject(), SIGNAL(menuEntered()),
+                     this, SLOT(onMenuEntered()));
     QObject::connect(rootObject(), SIGNAL(menuLeaved()),
                      this, SLOT(onMenuLeaved()));
 
@@ -96,6 +99,21 @@ void MenuView::setMouseGrabEnabled(bool value)
 }
 
 
+bool MenuView::is_menu_bar_child() const
+{
+    auto supermenu = this->m_menu->supermenu();
+    if (supermenu &&
+            supermenu->type() == static_cast<int>(Menu::MenuType::MenuBarMenu)) {
+        return true;
+    }
+
+    return false;
+}
+
+//========================
+// Event handlers
+//========================
+
 void MenuView::keyPressEvent(QKeyEvent *event)
 {
     // Emit signal when Esc key pressed.
@@ -142,20 +160,43 @@ void MenuView::mousePressEvent(QMouseEvent *event)
 void MenuView::paintEvent(QPaintEvent *evt)
 {
     QWindow *window = windowHandle();
+
+    // Ignore if submenu.
+    auto supermenu = this->m_menu->supermenu();
+    if ((supermenu && supermenu->type() != static_cast<int>(Menu::MenuType::MenuBarMenu)) &&
+            this->m_menu->type() == static_cast<int>(Menu::MenuType::Submenu)) {
+        return QQuickWidget::paintEvent(evt);
+    }
+
     if (window && !this->m_mouseGrabEnabled) {
         window->setMouseGrabEnabled(true);
         window->setKeyboardGrabEnabled(true);
         this->m_mouseGrabEnabled = true;
     }
 
-    QQuickWidget::paintEvent(evt);
+    return QQuickWidget::paintEvent(evt);
 }
 
 //====================
 // Private slots
 //====================
+void MenuView::onMenuEntered()
+{
+    // Enable mouse grab.
+    if (this->m_menu->type() == static_cast<int>(Menu::MenuType::Submenu)) {
+        QWindow *window = windowHandle();
+        if (window) {
+        }
+    }
+}
+
 void MenuView::onMenuLeaved()
 {
+    // Ignore menu bar child.
+    if (this->is_menu_bar_child()) {
+        return;
+    }
+
     // Disable mouse grab.
     if (this->m_menu->type() == static_cast<int>(Menu::MenuType::Submenu)) {
         QWindow *window = windowHandle();
