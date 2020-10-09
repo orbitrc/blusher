@@ -52,13 +52,7 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
     // Close supermenus when closing.
     if (this->m_menu->type() == static_cast<int>(Menu::MenuType::Submenu)) {
         QObject::connect(this, &MenuView::aboutToCloseByUser,
-                         this, [this]() {
-//            auto supermenu = this->m_menu->supermenu();
-//            if (supermenu && supermenu->menuView()) {
-//                emit supermenu->menuView()->closedByUser();
-//                supermenu->close();
-//            }
-//            supermenu->setMenuView(nullptr);
+                         this, []() {
             MenuView *menu_view = Blusher::singleton->pop_menu_view();
             while (menu_view) {
                 menu_view->menu()->close();
