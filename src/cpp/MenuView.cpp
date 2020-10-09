@@ -180,7 +180,13 @@ void MenuView::mouseMoveEvent(QMouseEvent *event)
 {
     if (Blusher::singleton->menuBarRect().contains(event->screenPos())) {
         if (!Blusher::singleton->menuBarMenuItemRect().contains(event->screenPos())) {
-            close();
+            // Clear menu view list.
+            MenuView* menu_view = Blusher::singleton->pop_menu_view();
+            while (menu_view) {
+                menu_view->menu()->close();
+
+                menu_view = Blusher::singleton->pop_menu_view();
+            }
         }
     }
 
