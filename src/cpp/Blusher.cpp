@@ -12,7 +12,6 @@ Blusher *Blusher::singleton = nullptr;
 Blusher::Blusher(QObject *parent)
     : QObject(parent)
 {
-
 }
 
 QApplication* Blusher::app() const
@@ -56,6 +55,22 @@ void Blusher::openMenu(bl::Menu *menu, double x, double y)
     QObject::connect(qmenu, &MenuView::closedByUser,
                      this, &Blusher::menuClosedByUser);
 //    qmenu->popup(QPoint(x, y));
+}
+
+void Blusher::append_menu_view(MenuView *menu_view)
+{
+    this->m_menu_views.append(menu_view);
+}
+
+MenuView* Blusher::pop_menu_view()
+{
+    MenuView *menu_view = nullptr;
+    if (!this->m_menu_views.isEmpty()) {
+        menu_view = this->m_menu_views.last();
+        this->m_menu_views.pop_back();
+    }
+
+    return menu_view;
 }
 
 } // namespace bl

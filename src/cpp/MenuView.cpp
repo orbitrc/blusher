@@ -27,6 +27,7 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
 
     this->m_menuBarMenu = false;
     this->m_menuBarRect = QRectF(0, 0, 100, 10);
+    this->m_submenu_view = nullptr;
 
     this->m_mouseGrabEnabled = false;
 
@@ -50,13 +51,20 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
 
     // Close supermenus when closing.
     if (this->m_menu->type() == static_cast<int>(Menu::MenuType::Submenu)) {
-        QObject::connect(this, &MenuView::closedByUser,
+        QObject::connect(this, &MenuView::aboutToCloseByUser,
                          this, [this]() {
-            auto supermenu = this->m_menu->supermenu();
-            if (supermenu && supermenu->menuView()) {
-                supermenu->menuView()->close();
+//            auto supermenu = this->m_menu->supermenu();
+//            if (supermenu && supermenu->menuView()) {
+//                emit supermenu->menuView()->closedByUser();
+//                supermenu->close();
+//            }
+//            supermenu->setMenuView(nullptr);
+            MenuView *menu_view = Blusher::singleton->pop_menu_view();
+            while (menu_view) {
+                menu_view->menu()->close();
+
+                menu_view = Blusher::singleton->pop_menu_view();
             }
-            supermenu->setMenuView(nullptr);
         });
     }
 }
@@ -64,6 +72,12 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
 MenuView::~MenuView()
 {
     emit this->m_menu->closing();
+}
+
+
+Menu* MenuView::menu()
+{
+    return this->m_menu;
 }
 
 bool MenuView::isMenuBarMenu() const
@@ -110,6 +124,30 @@ bool MenuView::is_menu_bar_child() const
     return false;
 }
 
+bool MenuView::is_top_level_menu_view() const
+{
+    // Context menu is top level menu.
+    if (this->m_menu->type() == static_cast<int>(Menu::MenuType::ContextualMenu)) {
+        return true;
+    }
+    // If supermenu is menu bar menu, this is a top level menu.
+    if (this->is_menu_bar_child()) {
+        return true;
+    }
+
+    return false;
+}
+
+MenuView* MenuView::submenu_view()
+{
+    return this->m_submenu_view;
+}
+
+void MenuView::set_submenu_view(MenuView *menu_view)
+{
+    this->m_submenu_view = menu_view;
+}
+
 //========================
 // Event handlers
 //========================
@@ -146,22 +184,36 @@ void MenuView::mouseMoveEvent(QMouseEvent *event)
         }
     }
 
+    // Give the mouse grab to the submenu.
+    auto submenu_view = this->m_menu->menuView()->submenu_view();
+    if (submenu_view &&
+            submenu_view->geometry().contains(static_cast<int>(event->screenPos().x()), static_cast<int>(event->screenPos().y()))
+    ) {
+        auto window = windowHandle();
+        if (window && this->mouseGrabEnabled()) {
+            window->setMouseGrabEnabled(false);
+            window->setKeyboardGrabEnabled(false);
+            this->setMouseGrabEnabled(false);
+        }
+    }
+
     QQuickWidget::mouseMoveEvent(event);
 }
 
 void MenuView::mousePressEvent(QMouseEvent *event)
 {
-    close();
+    emit this->aboutToCloseByUser();
     emit this->closedByUser();
+    this->m_menu->close();
 
-    QQuickWidget::mousePressEvent(event);
+    return QQuickWidget::mousePressEvent(event);
 }
 
 void MenuView::paintEvent(QPaintEvent *evt)
 {
     QWindow *window = windowHandle();
 
-    // Ignore if submenu.
+    // Ignore grab if submenu.
     auto supermenu = this->m_menu->supermenu();
     if ((supermenu && supermenu->type() != static_cast<int>(Menu::MenuType::MenuBarMenu)) &&
             this->m_menu->type() == static_cast<int>(Menu::MenuType::Submenu)) {
@@ -186,6 +238,9 @@ void MenuView::onMenuEntered()
     if (this->m_menu->type() == static_cast<int>(Menu::MenuType::Submenu)) {
         QWindow *window = windowHandle();
         if (window) {
+            window->setMouseGrabEnabled(true);
+            window->setKeyboardGrabEnabled(true);
+            this->setMouseGrabEnabled(true);
         }
     }
 }
@@ -218,7 +273,7 @@ void MenuView::onMenuLeaved()
                 }
             }
         }
-        close();
+//        close();
     }
 }
 

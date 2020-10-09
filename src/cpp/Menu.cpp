@@ -17,6 +17,8 @@ Menu::Menu(QObject *parent)
     : QObject(parent)
 {
     this->m_supermenu = nullptr;
+    this->m_activeIndex = -1;
+    this->m_opened = false;
 
     this->m_menuView = nullptr;
 }
@@ -68,6 +70,25 @@ QQmlListProperty<MenuItem> Menu::items()
     return QQmlListProperty<MenuItem>(this, this->m_items);
     // Above constructor is deprecated. Use below when obsolete.
     // return QQmlListProperty<MenuItem>(this, &this->m_items);
+}
+
+bool Menu::opened() const
+{
+    return this->m_opened;
+}
+
+int Menu::activeIndex() const
+{
+    return this->m_activeIndex;
+}
+
+void Menu::setActiveIndex(int index)
+{
+    if (this->m_activeIndex != index) {
+        this->m_activeIndex = index;
+
+        emit this->activeIndexChanged(index);
+    }
 }
 
 MenuView* Menu::menuView()
@@ -151,6 +172,26 @@ void Menu::open(double x, double y)
     auto height = menuView->rootObject()->property("height").toInt();
     menuView->setGeometry(screenX, screenY, width, height);
     menuView->show();
+
+    // Append to the menu view list.
+    Blusher::singleton->append_menu_view(menuView);
+
+    // Property change.
+    this->m_opened = true;
+    emit this->openedChanged(true);
+
+    // Set supermenu's submenu view if this is submenu.
+    auto supermenu = this->supermenu();
+    if (supermenu && supermenu->type() != static_cast<int>(Menu::MenuType::MenuBarMenu)) {
+        supermenu->menuView()->set_submenu_view(menuView);
+    }
+}
+
+void Menu::close()
+{
+    this->menuView()->close();
+    this->m_opened = false;
+    emit this->openedChanged(false);
 }
 
 } // namespace bl

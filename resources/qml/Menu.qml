@@ -34,6 +34,7 @@ Blusher.View {
 
           MenuItem {
             menuItem: root.menu.items[index]
+            itemIndex: index
 
             width: root.width
           }

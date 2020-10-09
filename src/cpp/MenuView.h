@@ -14,6 +14,8 @@ public:
     MenuView(Menu *menu, QWidget *parent = nullptr);
     ~MenuView();
 
+    Menu* menu();
+
     bool isMenuBarMenu() const;
     void setMenuBarMenu(bool value);
 
@@ -24,6 +26,9 @@ public:
     void setMouseGrabEnabled(bool value);
 
     bool is_menu_bar_child() const;
+    bool is_top_level_menu_view() const;
+    MenuView* submenu_view();
+    void set_submenu_view(MenuView *menu_view);
 
 protected:
     virtual void keyPressEvent(QKeyEvent *) override;
@@ -34,6 +39,7 @@ protected:
 signals:
     void closed();
     void closedByUser();
+    void aboutToCloseByUser();
 
 private slots:
     void onMenuEntered();
@@ -42,6 +48,7 @@ private slots:
 private:
     bool m_menuBarMenu;
     QRectF m_menuBarRect;
+    MenuView *m_submenu_view;
 
     bool m_mouseGrabEnabled;
 

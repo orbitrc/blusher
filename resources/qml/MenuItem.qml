@@ -11,7 +11,7 @@ Blusher.View {
   readonly property int separatorHeight: 4
   readonly property string separatorColor: "#d8d8d8"
 
-  property bool submenuOpened: false
+  property int itemIndex
 
   height: (!root.menuItem.separator) ? 24 : 12
 
@@ -132,23 +132,36 @@ Blusher.View {
       }
 
       // Hover state.
-      rootRect.state = 'hovered';
+      root.menuItem.parentMenu.activeIndex = root.itemIndex;
 
       // Submenu open.
-      if (root.menuItem.submenu && !root.submenuOpened) {
+      if (root.menuItem.submenu && !root.menuItem.submenu.opened) {
+        print('open submenu...');
         let pos = mapToItem(root, root.width, root.height);
-        print(pos);
         root.menuItem.submenu.open(pos.x, pos.y);
-        root.submenuOpened = true;
       }
     }
 
     onExited: {
-      if (root.submenuOpened) {
+      if (root.menuItem.submenu && root.menuItem.submenu.opened) {
+
         return;
       }
 
-      rootRect.state = '';
+      // Hover state.
+      root.menuItem.parentMenu.activeIndex = -1;
+    }
+  }
+
+  Connections {
+    target: root.menuItem.parentMenu
+
+    function onActiveIndexChanged(index) {
+      if (index === root.itemIndex) {
+        rootRect.state = 'hovered';
+      } else {
+        rootRect.state = '';
+      }
     }
   }
 }

@@ -18,7 +18,9 @@ class Menu : public QObject, public QQmlParserStatus
     Q_PROPERTY(int type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QQmlListProperty<bl::MenuItem> items READ items NOTIFY itemsChanged)
+    Q_PROPERTY(bool opened READ opened NOTIFY openedChanged)
     Q_PROPERTY(Menu* supermenu READ supermenu WRITE setSupermenu NOTIFY supermenuChanged)
+    Q_PROPERTY(int activeIndex READ activeIndex WRITE setActiveIndex NOTIFY activeIndexChanged)
     Q_CLASSINFO("DefaultProperty", "items")
     Q_INTERFACES(QQmlParserStatus)
 public:
@@ -42,12 +44,18 @@ public:
 
     QQmlListProperty<MenuItem> items();
 
+    bool opened() const;
+
+    int activeIndex() const;
+    void setActiveIndex(int index);
+
     MenuView* menuView();
     void setMenuView(MenuView *menuView);
     MenuView* to_qmenu();
 
     Q_INVOKABLE void addItem(MenuItem *item);
     Q_INVOKABLE void open(double x = 0, double y = 0);
+    Q_INVOKABLE void close();
 
     virtual void classBegin() override;
     virtual void componentComplete() override;
@@ -57,9 +65,11 @@ signals:
     // Property change signals
     //===========================
     void itemsChanged();
+    void openedChanged(bool value);
     void typeChanged();
     void titleChanged();
     void supermenuChanged();
+    void activeIndexChanged(int index);
 
     //========================
     // Other signals
@@ -72,7 +82,9 @@ private:
     int m_type;
     QString m_title;
     QList<MenuItem*> m_items;
+    bool m_opened;
     Menu *m_supermenu;
+    int m_activeIndex;
 
     MenuView *m_menuView;
 };

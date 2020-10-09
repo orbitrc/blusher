@@ -11,6 +11,8 @@ class QApplication;
 
 namespace bl {
 
+class MenuView;
+
 class Blusher : public QObject
 {
     Q_OBJECT
@@ -40,8 +42,15 @@ public:
     QRectF menuBarMenuItemRect() const;
     Q_INVOKABLE void setMenuBarMenuItemRect(QRectF rect);
 
+    QRect submenuViewRect() const;
+    void setSubmenuViewRect(const QRect& rect);
+
     /// \brief Open menu to given position.
     void openMenu(bl::Menu *menu, double x, double y);
+    /// \brief Append menu view to the list.
+    void append_menu_view(MenuView *menu_view);
+    /// \brief Pop last menu view from the list.
+    MenuView* pop_menu_view();
 
 signals:
     void appChanged();
@@ -56,6 +65,7 @@ private:
 
     QRectF m_menuBarRect;
     QRectF m_menuBarMenuItemRect;
+    QList<MenuView*> m_menu_views;
 };
 
 #endif // _BL_BLUSHER_H
