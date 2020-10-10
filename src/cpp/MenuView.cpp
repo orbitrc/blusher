@@ -49,18 +49,17 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
         blusher->setMenuBarMenuItemRect(QRectF(0, 0, 0, 0));
     });
 
-    // Close supermenus when closing.
-    if (this->m_menu->type() == static_cast<int>(Menu::MenuType::Submenu)) {
-        QObject::connect(this, &MenuView::aboutToCloseByUser,
-                         this, []() {
-            MenuView *menu_view = Blusher::singleton->pop_menu_view();
-            while (menu_view) {
-                menu_view->menu()->close();
+    // Close menu views when closing by user.
+    QObject::connect(this, &MenuView::aboutToCloseByUser,
+                     this, []() {
+        MenuView *menu_view = Blusher::singleton->pop_menu_view();
+        while (menu_view) {
+            menu_view->menu()->close();
+            qDebug() << " - Closing " << menu_view->menu()->title();
 
-                menu_view = Blusher::singleton->pop_menu_view();
-            }
-        });
-    }
+            menu_view = Blusher::singleton->pop_menu_view();
+        }
+    });
 }
 
 MenuView::~MenuView()
@@ -156,16 +155,32 @@ void MenuView::keyPressEvent(QKeyEvent *event)
     }
 
     // Prevent round navigation.
-    /*
     if (event->key() == Qt::Key_Down &&
-            QMenu::activeAction() == QMenu::actions().last()) {
+            this->menu()->activeIndex() == this->menu()->itemsData().length() - 1) {
         return;
     }
     if (event->key() == Qt::Key_Up &&
-            QMenu::activeAction() == QMenu::actions().first()) {
+            this->menu()->activeIndex() == 0) {
         return;
     }
-    */
+
+    // Keyboard navigation when index is -1.
+    if (event->key() == Qt::Key_Down && this->menu()->activeIndex() == -1) {
+        this->menu()->setActiveIndex(0);
+        return;
+    }
+    if (event->key() == Qt::Key_Up && this->menu()->activeIndex() == -1) {
+        this->menu()->setActiveIndex(0);
+        return;
+    }
+
+    // Keyboard navigation.
+    if (event->key() == Qt::Key_Down) {
+        this->menu()->setActiveIndex(this->menu()->activeIndex() + 1);
+    }
+    if (event->key() == Qt::Key_Up) {
+        this->menu()->setActiveIndex(this->menu()->activeIndex() - 1);
+    }
 
     QQuickWidget::keyPressEvent(event);
 }

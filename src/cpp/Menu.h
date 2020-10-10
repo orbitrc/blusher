@@ -43,6 +43,7 @@ public:
     void setSupermenu(Menu *supermenu);
 
     QQmlListProperty<MenuItem> items();
+    QList<MenuItem*> itemsData() const;
 
     bool opened() const;
 

@@ -72,6 +72,11 @@ QQmlListProperty<MenuItem> Menu::items()
     // return QQmlListProperty<MenuItem>(this, &this->m_items);
 }
 
+QList<MenuItem*> Menu::itemsData() const
+{
+    return this->m_items;
+}
+
 bool Menu::opened() const
 {
     return this->m_opened;
