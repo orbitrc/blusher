@@ -164,7 +164,7 @@ void MenuView::keyPressEvent(QKeyEvent *event)
         return;
     }
 
-    // Keyboard navigation when index is -1.
+    // Keyboard up/down navigation when index is -1.
     if (event->key() == Qt::Key_Down && this->menu()->activeIndex() == -1) {
         this->menu()->setActiveIndex(0);
         return;
@@ -174,7 +174,7 @@ void MenuView::keyPressEvent(QKeyEvent *event)
         return;
     }
 
-    // Keyboard navigation.
+    // Keyboard up/down navigation.
     if (event->key() == Qt::Key_Down) {
         this->menu()->setActiveIndex(this->menu()->activeIndex() + 1);
     }
