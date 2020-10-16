@@ -29,6 +29,7 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
     this->m_menuBarRect = QRectF(0, 0, 100, 10);
     this->m_submenu_view = nullptr;
 
+    this->m_window_grab_enabled = false;
     this->m_mouseGrabEnabled = false;
 
     this->m_menu = menu;
@@ -139,6 +140,32 @@ MenuView* MenuView::submenu_view()
 void MenuView::set_submenu_view(MenuView *menu_view)
 {
     this->m_submenu_view = menu_view;
+}
+
+bool MenuView::window_grab_enabled() const
+{
+    return this->m_window_grab_enabled;
+}
+
+void MenuView::set_window_grab_enabled(bool value)
+{
+    if (this->m_window_grab_enabled != value) {
+        this->m_window_grab_enabled = value;
+
+        if (value == false) {
+            auto window = windowHandle();
+            if (window) {
+                window->setMouseGrabEnabled(false);
+                window->setKeyboardGrabEnabled(false);
+            }
+        } else {
+            auto window = windowHandle();
+            if (window) {
+                window->setMouseGrabEnabled(true);
+                window->setKeyboardGrabEnabled(true);
+            }
+        }
+    }
 }
 
 //========================

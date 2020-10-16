@@ -29,6 +29,8 @@ public:
     bool is_top_level_menu_view() const;
     MenuView* submenu_view();
     void set_submenu_view(MenuView *menu_view);
+    bool window_grab_enabled() const;
+    void set_window_grab_enabled(bool value);
 
 protected:
     virtual void keyPressEvent(QKeyEvent *) override;
@@ -50,6 +52,7 @@ private:
     QRectF m_menuBarRect;
     MenuView *m_submenu_view;
 
+    bool m_window_grab_enabled;
     bool m_mouseGrabEnabled;
 
     Menu *m_menu;
