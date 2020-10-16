@@ -1,8 +1,7 @@
 #include "blusher_plugin.h"
 
+#include <QMetaType>
 #include <QGuiApplication>
-
-#include <blusher/Application.h>
 
 #include "View.h"
 #include "BaseWindow.h"
@@ -58,6 +57,8 @@ void BlusherPlugin::registerTypes(const char *uri)
     qmlRegisterType<bl::BaseWindow>(uri, 0, 1, "BaseWindow");
     qmlRegisterType<bl::Menu>(uri, 0, 1, "Menu");
     qmlRegisterType<bl::MenuItem>(uri, 0, 1, "MenuItem");
+
+    qRegisterMetaType<bl::BaseWindow*>("BaseWindow*");
 
     qmlRegisterUncreatableType<bl::KeyEvent>(uri, 0, 1, "KeyEvent", "");
 

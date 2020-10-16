@@ -1,12 +1,9 @@
 pragma Singleton
 import QtQuick 2.12
-import QtQuick.Window 2.12 as QtQuickWindow
-import QtQuick.Layouts 1.12
 
 //import ".."
 import Blusher 0.1
-import "Standalone" as Standalone
-import Blusher.DesktopEnvironment.Standalone 0.1
+import DesktopEnvironmentModule 0.1
 
 Item {
   id: root
@@ -31,45 +28,29 @@ Item {
   //===================
   // Properties
   //===================
-  property string name: "standalone"
+  readonly property string name: internal.name
   property var screens: DesktopEnvironmentPlugin.screens  // Need binding to change signal?
+  property var primaryScreen: DesktopEnvironmentPlugin.primaryScreen
   readonly property alias pixelsPerDp: internal.pixelsPerDp
-  readonly property alias app: internal.app
-  readonly property alias menuDelegate: internal.menuDelegate
-  readonly property alias menuBarHeight: internal.menuBarHeight
 
   readonly property alias shortcutToString: internal.shortcutToString
-
-  readonly property alias onMenuOpened: internal.onMenuOpened
-  readonly property alias onMenuClosed: internal.onMenuClosed
-
-  // States
-  readonly property alias menuOpen: internal.menuOpen
-
-  // References
-  property alias overlay: overlayLoader.item
-  property alias standaloneDeModule: standalone
 
   //====================
   // Private Properties
   //====================
   QtObject {
     id: internal
+    property string name: 'standalone'
+
     property bool menuOpen: false
     property real pixelsPerDp: 1
 
-    property var menuDelegate: null
-    property var menuItemDelegate: null
-
-    property int menuBarHeight: 0
-
-    property var onMenuOpened: function(menu) {}
-    property var onMenuClosed: function() {}
     property var shortcutToString: function(shortcut) {}
 
-
-    property string appName: ""
-    property string appVersion: ""
+    // appName and appVersion are deprecated.
+    // Using Process.env.BLUSHER_APP_NAME and Process.env.BLUSHER_APP_VERSION.
+    property string appName: "deprecated"
+    property string appVersion: "deprecated"
 
     property var onAppCursorChanged: function(cursor) {}
     property var app: QtObject {
@@ -129,26 +110,26 @@ Item {
   }
   QtObject {
     id: _menus
-    property Menu1 applicationMenu: Menu1 {
-      type: Menu1.MenuType.Submenu
+    property Menu applicationMenu: Menu {
+      type: Menu.MenuType.Submenu
       title: 'Application'
-      MenuItem1 {
+      MenuItem {
         title: "Preferences..."
       }
 
-      MenuItem1 {
+      MenuItem {
         title: "Quit"
-        action: DesktopEnvironment.app.quit
+//        action: DesktopEnvironment.app.quit
         shortcut: DesktopEnvironment.KeyModifier.Control | Qt.Key_Q
       }
     }
-    property Menu1 textEditMenu: Menu1 {
-      type: Menu1.MenuType.ContextualMenu
+    property Menu textEditMenu: Menu {
+      type: Menu.MenuType.ContextualMenu
       title: "Text"
-      MenuItem1 {
+      MenuItem {
         title: 'Copy'
       }
-      MenuItem1 {
+      MenuItem {
         title: 'Paste'
       }
     }
@@ -157,17 +138,6 @@ Item {
   //==================
   // Signals
   //==================
-
-  /// \brief  Sould emitted when the menu is opening.
-  function menuOpened(menu, x, y) {
-    root.onMenuOpened(menu, x, y);
-  }
-
-  /// \brief  Should emitted when all menus are completely closed.
-  function menuClosed() {
-    root.onMenuClosed();
-  }
-
   signal menuItemTriggered(string path)
 
   //===================
@@ -175,19 +145,8 @@ Item {
   //===================
 
   //================
-  // Items
+  // Loaders
   //================
-  Loader {
-    id: menuLoader
-  }
-
-  Loader {
-    id: overlayLoader
-  }
-
-  Loader {
-    id: deModuleLoader
-  }
 
   //==========================
   // Signal handlers
@@ -206,7 +165,6 @@ Item {
 
   Component.onDestruction: {
     print('[DesktopEnvironment.onDestruction]')
-    overlayLoader.sourceComponent = undefined
   }
 
   //=============
@@ -214,175 +172,22 @@ Item {
   //=============
 
   // Private methods
-  function _popMenu() {
-    let newMenus = []
-    root.overlay.menus[root.overlay.menus.length - 1].close();
-    for (let i = 0; i < root.overlay.menus.length - 1; ++i) {
-      newMenus.push(root.overlay.menus[i]);
-    }
-    root.overlay.menus = newMenus;
-  }
-
-  function _isMenuDescendantOf(menu, target) {
-    let it = menu;
-    while (it !== null) {
-      if (it === target) {
-        return true;
-      }
-      it = it.supermenu;
-    }
-
-    return false;
-  }
 
   function _initDesktopEnvironmentModule() {
     const dePath = Process.env.BLUSHER_DE_MODULE_PATH;
-    let deModule = null;
+    print('[DesktopEnvironment._initDesktopEnvironmentModule] dePath: ' + dePath);
 
-    if (dePath === '') {
-      deModule = standalone;
-    } else {
-      print('[DesktopEnvironment._initDesktopEnvironmentModule] dePath: ' + dePath);
-      deModuleLoader.setSource(dePath + '/DesktopEnvironmentModule/DesktopEnvironmentModule.qml');
-      deModule = deModuleLoader.item;
-    }
-
-//    internal.menuDelegate = deModule.menuDelegate;
-    internal.menuDelegate = standaloneMenuDelegate;
-
-    internal.menuBarHeight = deModule.menuBarHeight;
+    // Setup basic informations.
+    internal.name = DesktopEnvironmentModule.name;
 
     // Setup signal handlers.
-    internal.onAppCursorChanged = deModule.onAppCursorChanged;
-    internal.onMenuOpened = deModule.onMenuOpened;
-    internal.onMenuClosed = deModule.onMenuClosed;
+    internal.onAppCursorChanged = DesktopEnvironmentModule.onAppCursorChanged;
 
     // Setup public methods.
-    internal.shortcutToString = deModule.shortcutToString;
-
-    // Setup app object.
-    internal.appName = Process.env.BLUSHER_APP_NAME;
-    internal.appVersion = Process.env.BLUSHER_APP_VERSION;
+    internal.shortcutToString = DesktopEnvironmentModule.shortcutToString;
   }
 
   function _debugFunction(payload) {
     internal.pixelsPerDp += payload;
-  }
-
-  //================================
-  // Standalone implementations
-  //================================
-
-  // Standalone desktop environment module.
-  QtObject {
-    id: standalone
-
-    property var menuDelegate: standaloneMenuDelegate
-    property var menuItemDelegate: null
-
-    property int menuBarHeight: 30
-
-    property int pixelsPerDp: 1
-
-    property int decorationTopHeight: 0
-    property int decorationBottomHeight: 0
-    property int decorationLeftWidth: 0
-    property int decorationRightWidth: 0
-
-    function onAppCursorChanged(cursor) {
-      switch (cursor) {
-      case DesktopEnvironment.Auto:
-        Process.app.objectName = "BLUSHER_CURSOR_AUTO";
-        break;
-      case DesktopEnvironment.ResizeLeftRight:
-        Process.app.objectName = "BLUSHER_CURSOR_RESIZE_LEFT_RIGHT";
-        break;
-
-      case DesktopEnvironment.ResizeUpDown:
-        Process.app.objectName = "BLUSHER_CURSOR_RESIZE_UP_DOWN";
-        break;
-      default:
-        break;
-      }
-    }
-
-    function onMenuOpened(menu, x, y) {
-      if (!this.menuOpen) {
-        // Set singleton item child of currently activated window.
-        // It is important to refer the geometry of root window such as x and y.
-        root.parent = DesktopEnvironment.app.activeWindow.contentItem;
-        // Load if not loaded yet.
-        if (!overlayLoader.sourceComponent) {
-          overlayLoader.setSource('./Standalone/Overlay.qml');
-        }
-        root.overlay.show();
-
-        if (!menuLoader.sourceComponent) {
-          menuLoader.sourceComponent = standaloneMenuDelegate;
-          menuLoader.item.menu = menu;
-        }
-      } else {
-        if (menu === DesktopEnvironment.menus.applicationMenu ||
-          menu.supermenu.type === Menu.MenuType.MenuBarMenu) {
-          for (let i = root.overlay.menus.length - 1; i >= 0; --i) {
-            root._popMenu();
-          }
-        } else {
-          const lastOpenedMenu = root.overlay.menus[root.overlay.menus.length - 1];
-          if (menu.supermenu === lastOpenedMenu) {
-          } else if (root._isMenuDescendantOf(lastOpenedMenu, menu.supermenu)) {
-            root._popMenu();
-          }
-        }
-      }
-      /*
-      if (items) {
-        root.overlay.menus.push(items);
-        internal.menuOpen = true;
-      }
-      */
-    }
-
-    function onMenuClosed() {
-      for (let i = root.overlay.menus.length - 1; i >= 0; --i) {
-//        root.overlay.menus[i].close();
-      }
-      root.overlay.menus = [];
-      if (root.overlay.menuBarMenu) {
-        root.overlay.menuBarMenu.focusItem(-1);
-      }
-
-      root.overlay.close();
-      internal.menuOpen = false
-    }
-
-    function shortcutToString(shortcut) {
-      return Formatter.shortcutToString(shortcut);
-    }
-  }
-
-  // Standalone menu delegate component.
-  Component {
-    id: standaloneMenuDelegate
-    Item {
-      id: root
-
-      //===================
-      // Public properties
-      //===================
-      property Menu menu: null
-
-      Loader {
-        id: _loader
-      }
-
-      onMenuChanged: {
-        if (root.menu.type === Menu.MenuType.MenuBarMenu) {
-          _loader.setSource('Standalone/MenuBarMenuDelegate.qml', { 'menu': root.menu });
-        } else {
-          _loader.setSource('Standalone/PopUpMenuDelegate.qml', { 'menu': root.menu });
-        }
-      }
-    }
   }
 }

@@ -7,15 +7,16 @@
 
 #include "Menu.h"
 
+class QApplication;
+
 namespace bl {
 
-class Application;
+class MenuView;
 
 class Blusher : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(Application* app READ app NOTIFY appChanged)
 public:
     enum class KeyModifier {
         None    = 0x00000000, // 00000000 00000000 00000000 00000000
@@ -29,7 +30,7 @@ public:
 public:
     explicit Blusher(QObject *parent = nullptr);
 
-    Application* app() const;
+    QApplication* app() const;
     void _set_app(QObject *app);
 
     static Blusher *singleton;
@@ -41,8 +42,15 @@ public:
     QRectF menuBarMenuItemRect() const;
     Q_INVOKABLE void setMenuBarMenuItemRect(QRectF rect);
 
+    QRect submenuViewRect() const;
+    void setSubmenuViewRect(const QRect& rect);
+
     /// \brief Open menu to given position.
     void openMenu(bl::Menu *menu, double x, double y);
+    /// \brief Append menu view to the list.
+    void append_menu_view(MenuView *menu_view);
+    /// \brief Pop last menu view from the list.
+    MenuView* pop_menu_view();
 
 signals:
     void appChanged();
@@ -57,6 +65,7 @@ private:
 
     QRectF m_menuBarRect;
     QRectF m_menuBarMenuItemRect;
+    QList<MenuView*> m_menu_views;
 };
 
 #endif // _BL_BLUSHER_H

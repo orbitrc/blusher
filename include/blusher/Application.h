@@ -12,9 +12,7 @@
 // Debug
 #include <QDebug>
 
-#include <blusher/blusher_base.h>
-#include "../src/cpp/Menu.h"
-#include "../src/cpp/MenuView.h"
+#include <blusher/base.h>
 
 #ifndef BLUSHER_APP_NAME
 #define BLUSHER_APP_NAME ""
@@ -24,17 +22,18 @@
 #define BLUSHER_APP_VERSION ""
 #endif
 
+#ifndef BLUSHER_PATH
+#define BLUSHER_PATH "/usr/lib/blusher"
+#endif
+
 class QWidget;
 
 namespace bl {
 
 class Menu;
 
-class BL_EXPORT Application : public QApplication
+class Application : public QApplication
 {
-    Q_OBJECT
-
-    Q_PROPERTY(int testValue READ testValue CONSTANT)
 public:
     /// \brief  Constructor
     /// \param  argc
@@ -51,10 +50,19 @@ public:
                 QCoreApplication::exit(-1);
         }, Qt::QueuedConnection);
 
+        this->addPaths();
+
         QVariantMap process;
         QVariantMap env;
 
         this->readConf(&env);
+        // Add DE module path.
+        if (env.value("BLUSHER_DE_MODULE_PATH").toString() == "") {
+            qDebug() << "bl::Application - DE module path is empty. using standalone.\n";
+            this->m_engine.addImportPath(QString(BLUSHER_PATH) + "/qml/Blusher/Standalone");
+        } else {
+            this->m_engine.addImportPath(env.value("BLUSHER_DE_MODULE_PATH").toString());
+        }
         env.insert("BLUSHER_APP_NAME", BLUSHER_APP_NAME);
         env.insert("BLUSHER_APP_VERSION", BLUSHER_APP_VERSION);
 #ifdef BLUSHER_DEBUG
@@ -64,8 +72,6 @@ public:
         process.insert("app", QVariant::fromValue(this));
 
         this->m_engine.rootContext()->setContextProperty("Process", process);
-
-//        this->m_popUpZone = new QWidget;
     }
 
     ~Application()
@@ -78,13 +84,6 @@ public:
         return &this->m_engine;
     }
 
-    int testValue() const { return 42; }
-
-    /// \brief Get the self instance.
-    ///
-    /// \return Self singleton instance.
-    static Application* instance();
-
 signals:
     void menuClosed();
     void menuClosedByUser();
@@ -96,10 +95,8 @@ private:
     void readConf(QVariantMap *env);
     void addPaths()
     {
-#ifndef QT_DEBUG
-        this->engine()->addImportPath("/usr/lib/blusher/qml");
-        this->engine()->addPluginPath("/usr/lib");
-#endif
+        QString blusherPath = QString(BLUSHER_PATH) + "/qml";
+        this->engine()->addImportPath(blusherPath);
     }
 };
 
@@ -128,11 +125,6 @@ inline void Application::readConf(QVariantMap *env)
             this->m_engine.addImportPath(key_value[1]);
         }
     }
-}
-
-inline Application* Application::instance()
-{
-    return qobject_cast<Application*>(QApplication::instance());
 }
 
 inline int Application::exec()

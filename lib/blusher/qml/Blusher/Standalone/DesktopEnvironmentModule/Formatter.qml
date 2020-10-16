@@ -1,6 +1,7 @@
 pragma Singleton
 import QtQuick 2.12
-import ".."       // Blusher.DesktopEnvironment
+
+import Blusher 0.1
 
 QtObject {
   function shortcutToString(shortcut) {
@@ -8,9 +9,9 @@ QtObject {
     const modifiers = shortcut & 0xff000000;
     const key = shortcut & 0x00ffffff;
 
-    if (modifiers === DesktopEnvironment.KeyModifier.Shift) {
+    if (modifiers === Blusher.KeyModifier.Shift) {
       text += 'Shift';
-    } else if (modifiers === DesktopEnvironment.KeyModifier.Control) {
+    } else if (modifiers === Blusher.KeyModifier.Control) {
       text += 'Ctrl';
     }
 

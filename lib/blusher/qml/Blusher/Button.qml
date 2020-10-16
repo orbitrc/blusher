@@ -62,20 +62,20 @@ View {
     anchors.fill: parent
     color: "#9d9795"
     border.width: 0
-    radius: 5
+    radius: 5 * (root.window ? root.window.screenScale : 1)
     Rectangle {
       id: _styler
 
       anchors.fill: parent
-      anchors.rightMargin: 1
-      anchors.leftMargin: 1
-      anchors.bottomMargin: 1
-      anchors.topMargin: 1
+      anchors.rightMargin: 1 * (root.window ? root.window.screenScale : 1)
+      anchors.leftMargin: 1 * (root.window ? root.window.screenScale : 1)
+      anchors.bottomMargin: 1 * (root.window ? root.window.screenScale : 1)
+      anchors.topMargin: 1 * (root.window ? root.window.screenScale : 1)
       // Inner border
-      border.width: 1
+      border.width: 1 * (root.window ? root.window.screenScale : 1)
       border.color: "#f7f6f6"
 
-      radius: 5
+      radius: 5 * (root.window ? root.window.screenScale : 1)
       LinearGradient {
         anchors.fill: parent
         gradient: Gradient {
@@ -91,7 +91,7 @@ View {
   Text {
     id: _text
     text: root.title
-    font.pixelSize: 13 * DesktopEnvironment.pixelsPerDp
+    font.pixelSize: 13 * (root.window ? root.window.screenScale : 1)
     font.family: "Liberation Sans"
     anchors.horizontalCenter: root.horizontalCenter
     anchors.verticalCenter: root.verticalCenter

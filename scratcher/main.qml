@@ -8,7 +8,7 @@ Window {
 
   title: 'Scratcher'
   visible: true
-  width: 400
+  width: 500
   height: 400
 
   menu: Menu {
@@ -21,12 +21,17 @@ Window {
         type: Menu.MenuType.Submenu
         MenuItem {
           title: 'Quit'
+          onTriggered: {
+            print('Quit');
+            Qt.quit();
+          }
         }
       }
     }
     MenuItem {
       title: 'Edit'
       submenu: Menu {
+        type: Menu.MenuType.Submenu
         title: 'Edit'
         MenuItem {
           title: 'Copy'
@@ -45,8 +50,12 @@ Window {
     MenuItem {
       title: 'View'
       submenu: Menu {
+        type: Menu.MenuType.Submenu
         title: 'View'
       }
+    }
+    MenuItem {
+      title: 'Help'
     }
   }
 
@@ -55,8 +64,9 @@ Window {
     MouseArea {
       anchors.fill: parent
       onClicked: {
-        print(Object.keys(DesktopEnvironmentPlugin.screens));
-        DesktopEnvironmentPlugin.screenInfoChanged("foo", "bar", "baz");
+        let pos = mapToItem(root.contentItem, mouse.x, mouse.y);
+        print('(' + pos.x + ', ' + pos.y + ')');
+//        DesktopEnvironmentPlugin.screenInfoChanged("foo", "bar", "baz");
       }
     }
   }
@@ -66,16 +76,64 @@ Window {
     title: 'Button'
     onClicked: {
       print('Button clicked!');
+      print('deModule name: ' + DesktopEnvironment.name);
       print(Process.app);
       print(Blusher);
       print(Object.keys(DesktopEnvironment.screens));
       print(root.screenName);
       print(Process.env.BLUSHER_APP_NAME);
+      print(JSON.stringify(DesktopEnvironmentPlugin.screens));
+      this.width += 1;
       testMenu.open();
     }
   }
 
+  // Scale demo.
+  View {
+    x: 120
+    width: 400
+    height: 100
+    Flow {
+      anchors.fill: parent
+
+      Button {
+        title: '1'
+        width: 50
+        onClicked: {
+          DesktopEnvironmentPlugin.changeScale("eDP1", 1);
+        }
+      }
+      Button {
+        title: '1.25'
+        width: 50
+        onClicked: {
+          DesktopEnvironmentPlugin.changeScale("eDP1", 1.25);
+        }
+      }
+      Button {
+        title: '1.5'
+        width: 50
+        onClicked: {
+          DesktopEnvironmentPlugin.changeScale("eDP1", 1.5);
+        }
+      }
+      Button {
+        title: '2'
+        width: 50
+        onClicked: {
+          DesktopEnvironmentPlugin.changeScale("eDP1", 2);
+        }
+      }
+    }
+  }
+
+
   // Labels demo.
+  Label {
+    x: 340
+    text: '(' + root.x + ', ' + root.y + ') ' + root.width + 'x' + root.height
+  }
+
   View {
     id: infoArea
     y: 34
@@ -139,6 +197,60 @@ Window {
       Checkbox {
         id: checkbox2
         title: 'Check 2'
+      }
+    }
+  }
+
+  // Sliders demo.
+  Slider {
+    id: slider
+
+    x: 20
+    y: 100
+
+    start: 0
+    end: 200
+    step: 1
+    value: 50
+  }
+  Label {
+    x: 20
+    anchors.top: slider.bottom
+    text: slider.value
+  }
+
+  // Windows demo.
+  View {
+    id: windowsDemo
+    y: 180
+
+    Button {
+      title: 'Dock window'
+      onClicked: {
+        if (!windowsDemoLoader.sourceComponent) {
+          windowsDemoLoader.sourceComponent = dockWindow;
+        } else {
+          windowsDemoLoader.sourceComponent = undefined;
+        }
+      }
+    }
+
+    Loader {
+      id: windowsDemoLoader
+    }
+  }
+
+  Component {
+    id: dockWindow
+    Window {
+      visible: true
+      netWmWindowType: Window.NetWmWindowType.Dock
+
+      width: 300
+      height: 60
+
+      Label {
+        text: 'parent: ' + this.parent
       }
     }
   }

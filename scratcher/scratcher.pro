@@ -1,4 +1,4 @@
-QT = gui quick widgets
+QT = gui quick quickwidgets
 
 CONFIG += c++11
 !macx: CONFIG(debug, debug|release){
@@ -9,7 +9,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 INCLUDEPATH += ../include
 
-LIBS += -L../lib/blusher/qml/Blusher -lblusher
+LIBS +=
 
 SOURCES += \
         main.cpp
@@ -22,6 +22,7 @@ QML_IMPORT_PATH += ../lib/blusher/qml
 
 DEFINES += BLUSHER_APP_VERSION=\\\"0.1.0\\\" \
         BLUSHER_APP_NAME=\\\"Scratcher\\\" \
+        BLUSHER_PATH=\\\"../lib/blusher\\\" \
         BLUSHER_DEBUG
 
 contains(DEFINES, BLUSHER_DEBUG) {

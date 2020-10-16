@@ -1,15 +1,20 @@
 #ifndef _BL_MENU_VIEW_H
 #define _BL_MENU_VIEW_H
 
-#include <QMenu>
+#include <QQuickWidget>
 
 namespace bl {
 
-class MenuView : public QMenu
+class Menu;
+
+class MenuView : public QQuickWidget
 {
     Q_OBJECT
 public:
-    MenuView(QWidget *parent = nullptr);
+    MenuView(Menu *menu, QWidget *parent = nullptr);
+    ~MenuView();
+
+    Menu* menu();
 
     bool isMenuBarMenu() const;
     void setMenuBarMenu(bool value);
@@ -17,18 +22,40 @@ public:
     QRectF menuBarRect() const;
     void setMenuBarRect(QRectF rect);
 
+    bool mouseGrabEnabled() const;
+    void setMouseGrabEnabled(bool value);
+
+    bool is_menu_bar_child() const;
+    bool is_top_level_menu_view() const;
+    MenuView* submenu_view();
+    void set_submenu_view(MenuView *menu_view);
+    bool window_grab_enabled() const;
+    void set_window_grab_enabled(bool value);
+
 protected:
-    void keyPressEvent(QKeyEvent *) override;
-    void mouseMoveEvent(QMouseEvent *) override;
-    void mousePressEvent(QMouseEvent *) override;
+    virtual void keyPressEvent(QKeyEvent *) override;
+    virtual void mouseMoveEvent(QMouseEvent *) override;
+    virtual void mousePressEvent(QMouseEvent *) override;
+    virtual void paintEvent(QPaintEvent *event) override;
 
 signals:
     void closed();
     void closedByUser();
+    void aboutToCloseByUser();
+
+private slots:
+    void onMenuEntered();
+    void onMenuLeaved();
 
 private:
     bool m_menuBarMenu;
     QRectF m_menuBarRect;
+    MenuView *m_submenu_view;
+
+    bool m_window_grab_enabled;
+    bool m_mouseGrabEnabled;
+
+    Menu *m_menu;
 };
 
 } // namespace bl
