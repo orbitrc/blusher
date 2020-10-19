@@ -7,6 +7,7 @@ Blusher.View {
 
   signal menuEntered();
   signal menuLeaved();
+  signal itemHovered(int index);
 
   property Blusher.Menu menu: null
 
@@ -37,6 +38,10 @@ Blusher.View {
             itemIndex: index
 
             width: root.width
+
+            onItemHovered: {
+              root.itemHovered(index);
+            }
           }
         }
       }

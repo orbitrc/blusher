@@ -42,6 +42,10 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
     QObject::connect(rootObject(), SIGNAL(menuLeaved()),
                      this, SLOT(onMenuLeaved()));
 
+    // Menu item hovered signal from QML.
+    QObject::connect(rootObject(), SIGNAL(itemHovered(int)),
+                     this, SLOT(onItemHovered(int)));
+
     // Reset menu bar rect when menu destroyed.
     Blusher *blusher = Blusher::singleton;
     QObject::connect(this, &QQuickWidget::destroyed,
@@ -317,6 +321,11 @@ void MenuView::onMenuLeaved()
         }
 //        close();
     }
+}
+
+void MenuView::onItemHovered(int index)
+{
+    qDebug() << "onItemHovered" << index;
 }
 
 } // namespace bl

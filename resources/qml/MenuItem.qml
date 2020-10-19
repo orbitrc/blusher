@@ -6,6 +6,8 @@ import Blusher 0.1 as Blusher
 Blusher.View {
   id: root
 
+  signal itemHovered();
+
   property Blusher.MenuItem menuItem
 
   readonly property int separatorHeight: 4
@@ -140,6 +142,8 @@ Blusher.View {
         let pos = mapToItem(root, root.width, root.height);
         root.menuItem.submenu.open(pos.x, pos.y);
       }
+
+      itemHovered(root.itemIndex);
     }
 
     onExited: {

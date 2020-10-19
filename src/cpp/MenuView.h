@@ -46,6 +46,7 @@ signals:
 private slots:
     void onMenuEntered();
     void onMenuLeaved();
+    void onItemHovered(int index);
 
 private:
     bool m_menuBarMenu;
