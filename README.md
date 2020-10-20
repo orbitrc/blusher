@@ -45,6 +45,13 @@ Pouch
 
 Pouch is the demo app using Blusher. It is a simple virtual file manager.
 
+!This is currently not developed.
+
+Scratcher
+----------
+
+Scratcher is the Blusher demo. You can test blusher views with this app.
+
 
 Development
 ------------
