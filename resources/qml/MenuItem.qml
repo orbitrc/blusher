@@ -136,13 +136,6 @@ Blusher.View {
       // Hover state.
       root.menuItem.parentMenu.activeIndex = root.itemIndex;
 
-      // Submenu open.
-      if (root.menuItem.submenu && !root.menuItem.submenu.opened) {
-        print('open submenu...');
-        let pos = mapToItem(root, root.width, root.height);
-        root.menuItem.submenu.open(pos.x, pos.y);
-      }
-
       itemHovered(root.itemIndex);
     }
 

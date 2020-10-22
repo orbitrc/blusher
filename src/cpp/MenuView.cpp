@@ -326,6 +326,12 @@ void MenuView::onMenuLeaved()
 void MenuView::onItemHovered(int index)
 {
     qDebug() << "onItemHovered" << index;
+    auto submenu = qobject_cast<Menu*>(this->menu()->itemsData()[index]->submenu());
+    if (submenu && !submenu->opened()) {
+        qDebug() << "open submenu" << submenu;
+        int x = this->x() + this->width();
+        submenu->open(x, 0);
+    }
 }
 
 } // namespace bl
