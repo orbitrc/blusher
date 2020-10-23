@@ -213,6 +213,12 @@ void MenuView::keyPressEvent(QKeyEvent *event)
         this->menu()->setActiveIndex(this->menu()->activeIndex() - 1);
     }
 
+    // Enter key to trigger.
+    if (event->key() == Qt::Key_Return) {
+        auto index = this->menu()->activeIndex();
+        emit this->menu()->itemsData()[index]->triggered();
+    }
+
     QQuickWidget::keyPressEvent(event);
 }
 
