@@ -213,6 +213,15 @@ void MenuView::keyPressEvent(QKeyEvent *event)
         this->menu()->setActiveIndex(this->menu()->activeIndex() - 1);
     }
 
+    // Right key to open submenu.
+    if (event->key() == Qt::Key_Right) {
+        auto index = this->menu()->activeIndex();
+        auto item = this->menu()->itemsData()[index];
+        if (item->submenu() != nullptr) {
+            qDebug() << "Has submenu!";
+        }
+    }
+
     // Enter key to trigger.
     if (event->key() == Qt::Key_Return) {
         auto index = this->menu()->activeIndex();
