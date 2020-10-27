@@ -222,6 +222,13 @@ void MenuView::keyPressEvent(QKeyEvent *event)
         }
     }
 
+    // Left key to close if submenu.
+    if (event->key() == Qt::Key_Left) {
+        if (!this->is_top_level_menu_view()) {
+            qDebug() << "Close this.";
+        }
+    }
+
     // Enter key to trigger.
     if (event->key() == Qt::Key_Return) {
         auto index = this->menu()->activeIndex();
