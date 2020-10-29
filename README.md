@@ -86,3 +86,9 @@ If this macro defined, Blusher QML is running in debug mode.
 
 Do not use this for production.
 
+#### BLUSHER\_PATH
+
+type: string
+
+The path of Blusher library.
+
