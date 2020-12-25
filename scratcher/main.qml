@@ -100,28 +100,28 @@ Window {
         title: '1'
         width: 50
         onClicked: {
-          DesktopEnvironmentPlugin.changeScale("eDP1", 1);
+          DesktopEnvironmentPlugin.changeScale(DesktopEnvironment.primaryScreen.name, 1);
         }
       }
       Button {
         title: '1.25'
         width: 50
         onClicked: {
-          DesktopEnvironmentPlugin.changeScale("eDP1", 1.25);
+          DesktopEnvironmentPlugin.changeScale(DesktopEnvironment.primaryScreen.name, 1.25);
         }
       }
       Button {
         title: '1.5'
         width: 50
         onClicked: {
-          DesktopEnvironmentPlugin.changeScale("eDP1", 1.5);
+          DesktopEnvironmentPlugin.changeScale(DesktopEnvironment.primaryScreen.name, 1.5);
         }
       }
       Button {
         title: '2'
         width: 50
         onClicked: {
-          DesktopEnvironmentPlugin.changeScale("eDP1", 2);
+          DesktopEnvironmentPlugin.changeScale(DesktopEnvironment.primaryScreen.name, 2);
         }
       }
     }
