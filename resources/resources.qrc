@@ -3,4 +3,15 @@
         <file>qml/Menu.qml</file>
         <file>qml/MenuItem.qml</file>
     </qresource>
+    <qresource prefix="/blusher/">
+        <file>icons/standalone/scalable/status/mixed.svg</file>
+        <file>icons/standalone/scalable/status/checked.svg</file>
+        <file>icons/standalone/scalable/actions/go-next.svg</file>
+        <file>icons/standalone/scalable/actions/go-previous.svg</file>
+        <file>icons/standalone/scalable/actions/go-home.svg</file>
+        <file>icons/standalone/scalable/emblems/emblem-photos.svg</file>
+        <file>icons/standalone/scalable/emblems/emblem-downloads.svg</file>
+        <file>icons/standalone/scalable/emblems/video.svg</file>
+        <file>icons/standalone/scalable/emblems/emblem-documents.svg</file>
+    </qresource>
 </RCC>

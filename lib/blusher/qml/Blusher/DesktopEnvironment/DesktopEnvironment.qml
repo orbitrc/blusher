@@ -83,25 +83,25 @@ Item {
     id: _icons
     property string theme: "standalone"
     property Image goPrevious: Image {
-      source: "../../../icons/standalone/scalable/actions/go-previous.svg"
+      source: "qrc:///blusher/icons/standalone/scalable/actions/go-previous.svg"
     }
     property Image goNext: Image {
-      source: "../../../icons/standalone/scalable/actions/go-next.svg"
+      source: "qrc:///blusher/icons/standalone/scalable/actions/go-next.svg"
     }
 
     property Image goHome: Image {
-      source: "../../../icons/standalone/scalable/actions/go-home.svg"
+      source: "qrc:///blusher/icons/standalone/scalable/actions/go-home.svg"
     }
     property Image emblemDocuments: Image {
-      source: "../../../icons/standalone/scalable/emblems/emblem-documents.svg"
+      source: "qrc:///blusher/icons/standalone/scalable/emblems/emblem-documents.svg"
     }
     property Image emblemDownloads: Image {
-      source: "../../../icons/standalone/scalable/emblems/emblem-downloads.svg"
+      source: "qrc:///blusher/icons/standalone/scalable/emblems/emblem-downloads.svg"
     }
 
     // Non-standard icons.
     property Image checked: Image {
-      source: "../../../icons/standalone/scalable/status/checked.svg"
+      source: "qrc:///blusher/icons/standalone/scalable/status/checked.svg"
     }
   }
   QtObject {

@@ -37,9 +37,9 @@ View {
       function image() {
         switch (root.checkState) {
         case Checkbox.CheckState.Checked:
-          return '../../icons/standalone/scalable/status/checked.svg';
+          return 'qrc:///blusher/icons/standalone/scalable/status/checked.svg';
         case Checkbox.CheckState.Mixed:
-          return '../../icons/standalone/scalable/status/mixed.svg';
+          return 'qrc:///blusher/icons/standalone/scalable/status/mixed.svg';
         default:
           return '';
         }
