@@ -68,6 +68,7 @@ Module {
         }
 
         Property { name: "type"; type: "int" }
+        Property { name: "netWmWindowType"; type: "int" }
         Property { name: "pixelsPerDp"; type: "double"; isReadonly: true }
         Property { name: "screenName"; type: "string"; isReadonly: true }
     }
