@@ -83,7 +83,7 @@ View {
         width: _text.implicitWidth
         height: _text.implicitHeight
 
-        acceptedButtons: Qt.RightButton
+        acceptedButtons: root.selectable ? Qt.RightButton : Qt.NoButton
 
         cursorShape: (root.selectable ? Qt.IBeamCursor : Qt.ArrowCursor)
         propagateComposedEvents: true
