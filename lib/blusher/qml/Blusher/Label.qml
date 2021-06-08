@@ -70,9 +70,9 @@ View {
 
       anchors.fill: parent
       verticalAlignment: TextInput.AlignVCenter
-      leftPadding: 4
-      rightPadding: 4
-      font.pixelSize: root.font.size * DesktopEnvironment.pixelsPerDp
+      leftPadding: 4 * (root.window ? root.window.screenScale : 1)
+      rightPadding: 4 * (root.window ? root.window.screenScale : 1)
+      font.pixelSize: root.font.size * (root.window ? root.window.screenScale : 1)
       color: root.font.color
       selectionColor: "lightblue"
 
