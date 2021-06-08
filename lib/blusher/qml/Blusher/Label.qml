@@ -47,6 +47,8 @@ View {
     property alias family: _text.font.family
   }
 
+  scaleWidth: false
+
   width: root.implicitWidth
   height: 30
 
