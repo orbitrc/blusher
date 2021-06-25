@@ -11,7 +11,6 @@ View {
   // Public Properties
   //=========================
   property string text: ""
-  property alias font: _font
   //  property string fontFamily: ''
   property bool selectable: false
   property Menu menu: Menu {
@@ -46,9 +45,9 @@ View {
     property real size: 14
     property string color: "#000000"
     property alias family: _text.font.family
-    property alias pixelSize: _text.font.pixelSize
-    property alias pointSize: _text.font.pointSize
   }
+
+  scaleWidth: false
 
   width: root.implicitWidth
   height: 30
@@ -72,8 +71,8 @@ View {
       verticalAlignment: TextInput.AlignVCenter
       leftPadding: 4 * (root.window ? root.window.screenScale : 1)
       rightPadding: 4 * (root.window ? root.window.screenScale : 1)
-      font.pixelSize: root.font.size * (root.window ? root.window.screenScale : 1)
-      color: root.font.color
+      font.pixelSize: root.fontSize * (root.window ? root.window.screenScale : 1)
+      color: root.fontColor
       selectionColor: "lightblue"
 
       selectByMouse: root.selectable
