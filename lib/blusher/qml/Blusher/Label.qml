@@ -30,8 +30,8 @@ View {
     }
   }
 
-  property alias fontSize: _font.size
-  property alias fontColor: _font.color
+  property double fontSize: 14
+  property string fontColor: '#000000'
 
   property string backgroundColor: "#00000000"
 
@@ -42,15 +42,14 @@ View {
   //=========================
   QtObject {
     id: _font
-    property real size: 14
-    property string color: "#000000"
     property alias family: _text.font.family
   }
 
   scaleWidth: false
+  scaleHeight: false
 
-  width: root.implicitWidth
-  height: 30
+  width: _text.implicitWidth
+  height: _text.implicitHeight
 
   Rectangle {
     id: rectangle
