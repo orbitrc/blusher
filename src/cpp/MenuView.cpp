@@ -60,6 +60,7 @@ MenuView::MenuView(Menu *menu, QWidget *parent)
         MenuView *menu_view = Blusher::singleton->pop_menu_view();
         while (menu_view) {
             menu_view->menu()->close();
+            menu_view->menu()->setActiveIndex(-1);
             qDebug() << " - Closing " << menu_view->menu()->title();
 
             menu_view = Blusher::singleton->pop_menu_view();
