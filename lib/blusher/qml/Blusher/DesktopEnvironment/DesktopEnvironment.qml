@@ -189,7 +189,8 @@ Item {
         deModuleLoader.statusChanged.connect(_initDesktopEnvironmentModule);
       }
     } else {
-      deModuleLoader.sourceComponent = Qt.createComponent(dePath + '/DesktopEnvironmentModule.qml');
+      deModuleLoader.sourceComponent = Qt.createComponent(
+        dePath + '/DesktopEnvironmentModule/DesktopEnvironmentModule.qml');
       if (deModuleLoader.status === Component.Ready) {
         _initDesktopEnvironmentModule();
       } else {
