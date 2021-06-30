@@ -3,7 +3,6 @@ import QtQuick 2.12
 
 //import ".."
 import Blusher 0.1
-import DesktopEnvironmentModule 0.1
 
 Item {
   id: root
@@ -148,13 +147,18 @@ Item {
   // Loaders
   //================
 
+  Loader {
+    id: deModuleLoader
+  }
+
   //==========================
   // Signal handlers
   //==========================
 
   Component.onCompleted: {
-    print('[DesktopEnvironment.onCompleted]')
-    root._initDesktopEnvironmentModule();
+    print('[DesktopEnvironment.onCompleted]');
+    root._createDesktopEnvironmentModule();
+//    root._initDesktopEnvironmentModule();
 
     if (Process.env.BLUSHER_DEBUG === true) {
       print('[DesktopEnvironment] BLUSHER_DEBUG=true');
@@ -173,18 +177,40 @@ Item {
 
   // Private methods
 
+  function _createDesktopEnvironmentModule() {
+    const dePath = Process.env.BLUSHER_DE_MODULE_PATH;
+    if (dePath === '') {
+      // Using standalone.
+      deModuleLoader.sourceComponent = Qt.createComponent(
+        '../Standalone/DesktopEnvironmentModule/DesktopEnvironmentModule.qml');
+      if (deModuleLoader.status === Component.Ready) {
+        _initDesktopEnvironmentModule();
+      } else {
+        deModuleLoader.statusChanged.connect(_initDesktopEnvironmentModule);
+      }
+    } else {
+      deModuleLoader.sourceComponent = Qt.createComponent(dePath + '/DesktopEnvironmentModule.qml');
+      if (deModuleLoader.status === Component.Ready) {
+        _initDesktopEnvironmentModule();
+      } else {
+        deModuleLoader.statusChanged.connect(_initDesktopEnvironmentModule);
+      }
+    }
+  }
+
   function _initDesktopEnvironmentModule() {
     const dePath = Process.env.BLUSHER_DE_MODULE_PATH;
     print('[DesktopEnvironment._initDesktopEnvironmentModule] dePath: ' + dePath);
 
     // Setup basic informations.
-    internal.name = DesktopEnvironmentModule.name;
+    internal.name = deModuleLoader.item.name;
+    print('[DesktopEnvironment._initDesktopEnvironmentModule] name: ' + internal.name);
 
     // Setup signal handlers.
-    internal.onAppCursorChanged = DesktopEnvironmentModule.onAppCursorChanged;
+    internal.onAppCursorChanged = deModuleLoader.item.onAppCursorChanged;
 
     // Setup public methods.
-    internal.shortcutToString = DesktopEnvironmentModule.shortcutToString;
+    internal.shortcutToString = deModuleLoader.item.shortcutToString;
   }
 
   function _debugFunction(payload) {
