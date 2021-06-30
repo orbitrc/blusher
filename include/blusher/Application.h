@@ -123,6 +123,7 @@ inline void Application::readConf(QVariantMap *env)
         if (key_value[0] == "desktop_environment_path") {
             env->insert("BLUSHER_DE_MODULE_PATH", key_value[1]);
             this->m_engine.addImportPath(key_value[1]);
+            this->m_engine.addPluginPath(key_value[1]);
         }
     }
 }
