@@ -13,6 +13,7 @@ INCLUDEPATH += ./include
 SOURCES += src/cpp/blusher_plugin.cpp \
     src/cpp/BaseWindow.cpp \
     src/cpp/Blusher.cpp \
+    src/cpp/Box.cpp \
     src/cpp/DesktopEnvironment.cpp \
     src/cpp/Ewmh.cpp \
     src/cpp/HydrogenStyle.cpp \
@@ -26,6 +27,7 @@ SOURCES += src/cpp/blusher_plugin.cpp \
 HEADERS += src/cpp/blusher_plugin.h \
     src/cpp/BaseWindow.h \
     src/cpp/Blusher.h \
+    src/cpp/Box.h \
     src/cpp/DesktopEnvironment.h \
     src/cpp/Ewmh.h \
     src/cpp/HydrogenStyle.h \

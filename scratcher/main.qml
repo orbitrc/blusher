@@ -219,6 +219,19 @@ Window {
     text: slider.value
   }
 
+  Box {
+    x: 200
+    y: 150
+    width: 60
+    height: 60
+    color: 'red'
+    topLeftRadius: 2
+
+    Label {
+      text: 'bl::Box'
+    }
+  }
+
   // Windows demo.
   View {
     id: windowsDemo

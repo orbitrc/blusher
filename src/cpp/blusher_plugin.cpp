@@ -4,6 +4,7 @@
 #include <QGuiApplication>
 
 #include "View.h"
+#include "Box.h"
 #include "BaseWindow.h"
 #include "Menu.h"
 #include "MenuItem.h"
@@ -54,6 +55,7 @@ void BlusherPlugin::registerTypes(const char *uri)
 {
     // @uri Blusher
     qmlRegisterType<bl::View>(uri, 0, 1, "View");
+    qmlRegisterType<bl::Box>(uri, 0, 1, "Box");
     qmlRegisterType<bl::BaseWindow>(uri, 0, 1, "BaseWindow");
     qmlRegisterType<bl::Menu>(uri, 0, 1, "Menu");
     qmlRegisterType<bl::MenuItem>(uri, 0, 1, "MenuItem");
