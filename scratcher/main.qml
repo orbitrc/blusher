@@ -222,10 +222,13 @@ Window {
   Box {
     x: 200
     y: 150
-    width: 60
+    width: 80
     height: 60
     color: 'red'
     topLeftRadius: 10
+    bottomLeftRadius: 20
+    bottomRightRadius: 30
+    topRightRadius: 25
 
     Label {
       text: 'bl::Box'
