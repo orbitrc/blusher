@@ -225,7 +225,7 @@ Window {
     width: 60
     height: 60
     color: 'red'
-    topLeftRadius: 2
+    topLeftRadius: 10
 
     Label {
       text: 'bl::Box'

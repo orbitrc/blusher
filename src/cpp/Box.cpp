@@ -1,6 +1,7 @@
 #include "Box.h"
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QSGSimpleTextureNode>
 
 namespace bl {
@@ -102,7 +103,20 @@ QSGNode* Box::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData 
     brush.setColor(this->color());
     painter.setPen(Qt::NoPen);
     painter.setBrush(brush);
-    painter.drawRect(0, 0, View::width(), View::height());
+    if (this->m_topLeftRadius + this->m_topRightRadius + this->m_bottomLeftRadius + this->m_bottomRightRadius == 0) {
+        painter.drawRect(0, 0, View::width(), View::height());
+    } else {
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        QPainterPath path;
+        path.moveTo(this->m_topLeftRadius, 0);
+        path.cubicTo(0, 0, 0, this->m_topLeftRadius, 0, this->m_topLeftRadius);
+        path.lineTo(0, View::height());
+        path.lineTo(View::width(), View::height());
+        path.lineTo(View::height(), 0);
+        path.lineTo(View::width() - this->m_topLeftRadius, 0);
+        painter.drawPath(path);
+    }
 
     QSGTexture *texture = this->window()->createTextureFromImage(canvas);
     QSGSimpleTextureNode *node = static_cast<QSGSimpleTextureNode*>(oldNode);
