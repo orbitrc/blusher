@@ -12,6 +12,9 @@ Box::Box(QQuickItem *parent)
 
     this->m_color = Qt::white;
     this->m_topLeftRadius = 0;
+    this->m_topRightRadius = 0;
+    this->m_bottomLeftRadius = 0;
+    this->m_bottomRightRadius = 0;
 }
 
 QColor Box::color() const
@@ -39,6 +42,48 @@ void Box::setTopLeftRadius(qreal value)
         this->m_topLeftRadius = value;
 
         emit this->topLeftRadiusChanged();
+    }
+}
+
+qreal Box::topRightRadius() const
+{
+    return this->m_bottomRightRadius;
+}
+
+void Box::setTopRightRadius(qreal value)
+{
+    if (this->m_topRightRadius != value) {
+        this->m_topRightRadius = value;
+
+        emit this->topRightRadiusChanged();
+    }
+}
+
+qreal Box::bottomLeftRadius() const
+{
+    return this->m_bottomLeftRadius;
+}
+
+void Box::setBottomLeftRadius(qreal value)
+{
+    if (this->m_bottomLeftRadius != value) {
+        this->m_bottomLeftRadius = value;
+
+        emit this->bottomLeftRadiusChanged();
+    }
+}
+
+qreal Box::bottomRightRadius() const
+{
+    return this->m_bottomRightRadius;
+}
+
+void Box::setBottomRightRadius(qreal value)
+{
+    if (this->m_bottomRightRadius != value) {
+        this->m_bottomRightRadius = value;
+
+        emit this->bottomRightRadiusChanged();
     }
 }
 
