@@ -12,6 +12,7 @@ class Box : public View
     Q_OBJECT
 
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
+    Q_PROPERTY(qreal radius READ radius WRITE setRadius NOTIFY radiusChanged)
     Q_PROPERTY(qreal topLeftRadius READ topLeftRadius WRITE setTopLeftRadius NOTIFY topLeftRadiusChanged)
     Q_PROPERTY(qreal topRightRadius READ topRightRadius WRITE setTopRightRadius NOTIFY topRightRadiusChanged)
     Q_PROPERTY(qreal bottomLeftRadius READ bottomLeftRadius WRITE setBottomLeftRadius NOTIFY bottomLeftRadiusChanged)
@@ -21,6 +22,9 @@ public:
 
     QColor color() const;
     void setColor(const QColor& color);
+
+    qreal radius() const;
+    void setRadius(qreal val);
 
     qreal topLeftRadius() const;
     void setTopLeftRadius(qreal value);
@@ -39,6 +43,7 @@ protected:
 
 signals:
     void colorChanged();
+    void radiusChanged();
     void topLeftRadiusChanged();
     void topRightRadiusChanged();
     void bottomLeftRadiusChanged();
@@ -46,6 +51,7 @@ signals:
 
 private:
     QColor m_color;
+    qreal m_radius;
     qreal m_topLeftRadius;
     qreal m_topRightRadius;
     qreal m_bottomLeftRadius;

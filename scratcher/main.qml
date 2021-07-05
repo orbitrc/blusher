@@ -220,6 +220,8 @@ Window {
   }
 
   Box {
+    id: box1
+
     x: 200
     y: 150
     width: 80
@@ -233,6 +235,20 @@ Window {
     Label {
       text: 'bl::Box'
     }
+  }
+
+  Box {
+    id: box2
+
+    anchors.top: box1.top
+    anchors.left: box1.right
+    anchors.leftMargin: 10
+
+    width: 80
+    height: 60
+    color: 'blue'
+    topLeftRadius: 1  // This not affect because `radius` is set.
+    radius: 20
   }
 
   // Windows demo.

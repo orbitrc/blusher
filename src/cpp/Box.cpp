@@ -12,6 +12,7 @@ Box::Box(QQuickItem *parent)
     setFlag(QQuickItem::ItemHasContents);
 
     this->m_color = Qt::white;
+    this->m_radius = 0;
     this->m_topLeftRadius = 0;
     this->m_topRightRadius = 0;
     this->m_bottomLeftRadius = 0;
@@ -29,6 +30,20 @@ void Box::setColor(const QColor &color)
         this->m_color = color;
 
         emit this->colorChanged();
+    }
+}
+
+qreal Box::radius() const
+{
+    return this->m_radius;
+}
+
+void Box::setRadius(qreal val)
+{
+    if (this->m_radius != val) {
+        this->m_radius = val;
+
+        emit this->radiusChanged();
     }
 }
 
@@ -117,9 +132,16 @@ QSGNode* Box::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData 
     brush.setColor(this->color());
     painter.setPen(Qt::NoPen);
     painter.setBrush(brush);
-    if (this->m_topLeftRadius + this->m_topRightRadius + this->m_bottomLeftRadius + this->m_bottomRightRadius == 0) {
+    if (this->m_radius + this->m_topLeftRadius + this->m_topRightRadius + this->m_bottomLeftRadius + this->m_bottomRightRadius == 0) {
         painter.drawRect(0, 0, width, height);
     } else {
+        // Set all corners radius as radius.
+        if (this->m_radius != 0) {
+            top_left_radius = this->m_radius;
+            top_right_radius = this->m_radius;
+            bottom_left_radius = this->m_radius;
+            bottom_right_radius = this->m_radius;
+        }
         painter.setRenderHint(QPainter::Antialiasing);
 
         QPainterPath path;
