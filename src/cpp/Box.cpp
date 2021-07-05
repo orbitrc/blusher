@@ -93,7 +93,21 @@ void Box::setBottomRightRadius(qreal value)
 //===================
 QSGNode* Box::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData *)
 {
-    QImage canvas(View::width(), View::height(), QImage::Format_ARGB32);
+    qreal scale = ((this->window() != nullptr) ? this->window()->screenScale() : 1);
+    qreal width_scale = (this->scaleWidth())
+        ? ((this->window() != nullptr) ? this->window()->screenScale() : 1)
+        : 1;
+    qreal height_scale = (this->scaleHeight())
+        ? ((this->window() != nullptr) ? this->window()->screenScale() : 1)
+        : 1;
+    qreal width = View::width() * width_scale;
+    qreal height = View::height() * height_scale;
+    qreal top_left_radius = this->m_topLeftRadius * scale;
+    qreal top_right_radius = this->m_topRightRadius * scale;
+    qreal bottom_left_radius = this->m_bottomLeftRadius * scale;
+    qreal bottom_right_radius = this->m_bottomRightRadius * scale;
+
+    QImage canvas(width, height, QImage::Format_ARGB32);
     QBrush brush;
 
     canvas.fill(QColor("transparent"));
@@ -104,25 +118,25 @@ QSGNode* Box::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData 
     painter.setPen(Qt::NoPen);
     painter.setBrush(brush);
     if (this->m_topLeftRadius + this->m_topRightRadius + this->m_bottomLeftRadius + this->m_bottomRightRadius == 0) {
-        painter.drawRect(0, 0, View::width(), View::height());
+        painter.drawRect(0, 0, width, height);
     } else {
         painter.setRenderHint(QPainter::Antialiasing);
 
         QPainterPath path;
-        path.moveTo(this->m_topLeftRadius, 0);
+        path.moveTo(top_left_radius, 0);
         // Top left radius.
-        path.cubicTo(0, 0, 0, this->m_topLeftRadius, 0, this->m_topLeftRadius);
-        path.lineTo(0, View::height() - this->m_bottomLeftRadius);
+        path.cubicTo(0, 0, 0, top_left_radius, 0, top_left_radius);
+        path.lineTo(0, height - bottom_left_radius);
         // Bottom left radius.
-        path.cubicTo(0, View::height(), this->m_bottomLeftRadius, View::height(), this->m_bottomLeftRadius, View::height());
-        path.lineTo(View::width() - this->m_bottomRightRadius, View::height());
+        path.cubicTo(0, height, bottom_left_radius, height, bottom_left_radius, height);
+        path.lineTo(width - bottom_right_radius, height);
         // Bottom right radius.
 //        path.cubicTo(200, 200, 200, 200 - 20, 200, 200 - 20);
-        path.cubicTo(View::width(), View::height(), View::width(), View::height() - this->m_bottomRightRadius, View::width(), View::height() - this->m_bottomRightRadius);
-        path.lineTo(View::width(), this->m_topRightRadius);
+        path.cubicTo(width, height, width, height - bottom_right_radius, width, height - bottom_right_radius);
+        path.lineTo(width, top_right_radius);
         // Top right radius.
-        path.cubicTo(View::width(), 0, View::width() - this->m_topRightRadius, 0, View::width() - this->m_topRightRadius, 0);
-        path.lineTo(View::width() - this->m_topLeftRadius, 0);
+        path.cubicTo(width, 0, width - top_right_radius, 0, width - top_right_radius, 0);
+        path.lineTo(width - top_left_radius, 0);
         painter.drawPath(path);
     }
 
@@ -131,7 +145,7 @@ QSGNode* Box::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData 
     if (!node) {
         node = new QSGSimpleTextureNode();
     }
-    node->setRect(0, 0, View::width(), View::height());
+    node->setRect(0, 0, width, height);
     node->setTexture(texture);
 
     return node;
