@@ -1,5 +1,5 @@
-#ifndef BOX_H
-#define BOX_H
+#ifndef _BL_BOX_H
+#define _BL_BOX_H
 
 #include <QQuickPaintedItem>
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace bl
 
-#endif // BOX_H
+#endif // _BL_BOX_H
