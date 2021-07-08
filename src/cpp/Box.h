@@ -17,6 +17,8 @@ class Box : public View
     Q_PROPERTY(qreal topRightRadius READ topRightRadius WRITE setTopRightRadius NOTIFY topRightRadiusChanged)
     Q_PROPERTY(qreal bottomLeftRadius READ bottomLeftRadius WRITE setBottomLeftRadius NOTIFY bottomLeftRadiusChanged)
     Q_PROPERTY(qreal bottomRightRadius READ bottomRightRadius WRITE setBottomRightRadius NOTIFY bottomRightRadiusChanged)
+    Q_PROPERTY(qreal borderRadius READ borderRadius WRITE setBorderRadius NOTIFY borderRadiusChanged)
+    Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor NOTIFY borderColorChanged)
 public:
     Box(QQuickItem *parent = nullptr);
 
@@ -38,6 +40,12 @@ public:
     qreal bottomRightRadius() const;
     void setBottomRightRadius(qreal value);
 
+    qreal borderRadius() const;
+    void setBorderRadius(qreal radius);
+
+    QColor borderColor() const;
+    void setBorderColor(const QColor& color);
+
 protected:
     virtual QSGNode* updatePaintNode(QSGNode* oldNode, QQuickItem::UpdatePaintNodeData*);
 
@@ -48,6 +56,8 @@ signals:
     void topRightRadiusChanged();
     void bottomLeftRadiusChanged();
     void bottomRightRadiusChanged();
+    void borderRadiusChanged();
+    void borderColorChanged();
 
 private:
     QColor m_color;
@@ -56,6 +66,8 @@ private:
     qreal m_topRightRadius;
     qreal m_bottomLeftRadius;
     qreal m_bottomRightRadius;
+    qreal m_borderRadius;
+    QColor m_borderColor;
 };
 
 } // namespace bl

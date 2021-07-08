@@ -17,6 +17,8 @@ Box::Box(QQuickItem *parent)
     this->m_topRightRadius = 0;
     this->m_bottomLeftRadius = 0;
     this->m_bottomRightRadius = 0;
+    this->m_borderRadius = 0;
+    this->m_borderColor = Qt::black;
 }
 
 QColor Box::color() const
@@ -100,6 +102,34 @@ void Box::setBottomRightRadius(qreal value)
         this->m_bottomRightRadius = value;
 
         emit this->bottomRightRadiusChanged();
+    }
+}
+
+qreal Box::borderRadius() const
+{
+    return this->m_borderRadius;
+}
+
+void Box::setBorderRadius(qreal radius)
+{
+    if (this->m_borderRadius != radius) {
+        this->m_borderRadius = radius;
+
+        emit this->borderRadiusChanged();
+    }
+}
+
+QColor Box::borderColor() const
+{
+    return this->m_borderColor;
+}
+
+void Box::setBorderColor(const QColor &color)
+{
+    if (this->m_borderColor != color) {
+        this->m_borderColor = color;
+
+        emit this->borderColorChanged();
     }
 }
 
