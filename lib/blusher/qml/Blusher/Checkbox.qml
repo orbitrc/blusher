@@ -21,7 +21,7 @@ View {
 
   signal clicked()
 
-  Rectangle {
+  Box {
     id: checkArea
     width: 20
     height: 20
@@ -53,9 +53,9 @@ View {
   }
 
   Text {
-    x: checkArea.width
+    anchors.left: checkArea.right
     text: root.title
-    font.pixelSize: 14
+    font.pixelSize: 14 * (root.window ? root.window.screenScale : 1)
   }
 
   MouseArea {
