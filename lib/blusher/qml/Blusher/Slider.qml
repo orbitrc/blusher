@@ -43,17 +43,17 @@ View {
     return n;
   }
 
-  Rectangle {
+  Box {
     id: track
 
     anchors.horizontalCenter: slider.horizontalCenter
     anchors.verticalCenter: slider.verticalCenter
     width: slider.width - ((knob.width / 2) * 2)
     height: 6
-    radius: 50
+    radius: height / 2
   }
 
-  Rectangle {
+  Box {
     id: trackFilled
 
     anchors.top: track.top
