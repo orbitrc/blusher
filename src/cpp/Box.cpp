@@ -17,7 +17,7 @@ Box::Box(QQuickItem *parent)
     this->m_topRightRadius = 0;
     this->m_bottomLeftRadius = 0;
     this->m_bottomRightRadius = 0;
-    this->m_borderRadius = 0;
+    this->m_borderWidth = 0;
     this->m_borderColor = Qt::black;
 }
 
@@ -105,17 +105,17 @@ void Box::setBottomRightRadius(qreal value)
     }
 }
 
-qreal Box::borderRadius() const
+qreal Box::borderWidth() const
 {
-    return this->m_borderRadius;
+    return this->m_borderWidth;
 }
 
-void Box::setBorderRadius(qreal radius)
+void Box::setBorderWidth(qreal radius)
 {
-    if (this->m_borderRadius != radius) {
-        this->m_borderRadius = radius;
+    if (this->m_borderWidth != radius) {
+        this->m_borderWidth = radius;
 
-        emit this->borderRadiusChanged();
+        emit this->borderWidthChanged();
     }
 }
 
@@ -163,6 +163,12 @@ QSGNode* Box::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData 
     painter.setPen(Qt::NoPen);
     painter.setBrush(brush);
     if (this->m_radius + this->m_topLeftRadius + this->m_topRightRadius + this->m_bottomLeftRadius + this->m_bottomRightRadius == 0) {
+        if (this->m_borderWidth != 0) {
+            QPen pen;
+            pen.setWidth((this->m_borderWidth * 2) * scale);
+            pen.setColor(this->m_borderColor);
+            painter.setPen(pen);
+        }
         painter.drawRect(0, 0, width, height);
     } else {
         // Set all corners radius as radius.
@@ -188,8 +194,18 @@ QSGNode* Box::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData 
         path.lineTo(width, top_right_radius);
         // Top right radius.
         path.cubicTo(width, 0, width - top_right_radius, 0, width - top_right_radius, 0);
-        path.lineTo(width - top_left_radius, 0);
+        path.lineTo(top_left_radius, 0);
         painter.drawPath(path);
+
+        if (this->m_borderWidth != 0) {
+            QPainterPathStroker stroker;
+            stroker.setWidth((this->m_borderWidth * 2) * scale);
+            QPainterPath strokedPath = stroker.createStroke(path);
+            QPainterPath innerBorder = strokedPath.intersected(path);
+            brush.setColor(this->m_borderColor);
+            painter.setBrush(brush);
+            painter.drawPath(innerBorder);
+        }
     }
 
     QSGTexture *texture = this->window()->createTextureFromImage(canvas);

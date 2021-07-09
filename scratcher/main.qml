@@ -251,6 +251,22 @@ Window {
     radius: 20
   }
 
+  Box {
+    id: box3
+
+    anchors.top: box1.top
+    anchors.left: box2.right
+    anchors.leftMargin: 10
+
+    width: 80
+    height: 60
+    color: 'green'
+    topLeftRadius: 10
+    bottomLeftRadius: 10
+    borderWidth: 2
+    borderColor: '#000000'
+  }
+
   // Windows demo.
   View {
     id: windowsDemo
