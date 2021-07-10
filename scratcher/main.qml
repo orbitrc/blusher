@@ -267,24 +267,52 @@ Window {
     borderColor: '#000000'
   }
 
-  // Windows demo.
-  View {
-    id: windowsDemo
-    y: 180
+  TabView {
+    id: tabView
 
-    Button {
-      title: 'Dock window'
-      onClicked: {
-        if (!windowsDemoLoader.sourceComponent) {
-          windowsDemoLoader.sourceComponent = dockWindow;
-        } else {
-          windowsDemoLoader.sourceComponent = undefined;
+    y: 150
+    width: 200
+    height: 200
+
+    // Windows demo.
+    Tab {
+      title: 'Windows'
+
+      Component {
+        View {
+          id: windowsTabView
+
+          Button {
+            title: 'Dock window'
+            onClicked: {
+              if (!windowsDemoLoader.sourceComponent) {
+                windowsDemoLoader.sourceComponent = dockWindow;
+              } else {
+                windowsDemoLoader.sourceComponent = undefined;
+              }
+            }
+          }
+
+          Loader {
+            id: windowsDemoLoader
+          }
         }
       }
     }
+    Tab {
+      title: 'Boxes'
 
-    Loader {
-      id: windowsDemoLoader
+      Component {
+        View {
+          id: boxesTabView
+
+          Box {
+            width: 30
+            height: 20
+            color: 'red'
+          }
+        }
+      }
     }
   }
 

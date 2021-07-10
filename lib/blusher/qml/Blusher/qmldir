@@ -14,6 +14,8 @@ Label 0.1 Label.qml
 Menu1 0.1 Menu1.qml
 MenuItem1 0.1 MenuItem1.qml
 MenuBar 0.1 MenuBar.qml
+Tab 0.1 Tab.qml
+TabView 0.1 TabView.qml
 TextField 0.1 TextField.qml
 Toolbar 0.1 Toolbar.qml
 ToolbarItem 0.1 ToolbarItem.qml
