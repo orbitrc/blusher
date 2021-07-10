@@ -219,59 +219,11 @@ Window {
     text: slider.value
   }
 
-  Box {
-    id: box1
-
-    x: 200
-    y: 150
-    width: 80
-    height: 60
-    color: 'red'
-    topLeftRadius: 10
-    bottomLeftRadius: 20
-    bottomRightRadius: 30
-    topRightRadius: 25
-
-    Label {
-      text: 'bl::Box'
-    }
-  }
-
-  Box {
-    id: box2
-
-    anchors.top: box1.top
-    anchors.left: box1.right
-    anchors.leftMargin: 10
-
-    width: 80
-    height: 60
-    color: 'blue'
-    topLeftRadius: 1  // This not affect because `radius` is set.
-    radius: 20
-  }
-
-  Box {
-    id: box3
-
-    anchors.top: box1.top
-    anchors.left: box2.right
-    anchors.leftMargin: 10
-
-    width: 80
-    height: 60
-    color: 'green'
-    topLeftRadius: 10
-    bottomLeftRadius: 10
-    borderWidth: 2
-    borderColor: '#000000'
-  }
-
   TabView {
     id: tabView
 
     y: 150
-    width: 200
+    width: 400
     height: 200
 
     // Windows demo.
@@ -302,16 +254,7 @@ Window {
     Tab {
       title: 'Boxes'
 
-      Component {
-        View {
-          id: boxesTabView
-
-          Box {
-            width: 30
-            height: 20
-            color: 'red'
-          }
-        }
+      BoxesDemo {
       }
     }
   }
