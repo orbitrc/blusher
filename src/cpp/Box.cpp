@@ -189,7 +189,6 @@ QSGNode* Box::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData 
         path.cubicTo(0, height, bottom_left_radius, height, bottom_left_radius, height);
         path.lineTo(width - bottom_right_radius, height);
         // Bottom right radius.
-//        path.cubicTo(200, 200, 200, 200 - 20, 200, 200 - 20);
         path.cubicTo(width, height, width, height - bottom_right_radius, width, height - bottom_right_radius);
         path.lineTo(width, top_right_radius);
         // Top right radius.
