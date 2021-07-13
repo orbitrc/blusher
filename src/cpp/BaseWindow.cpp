@@ -99,6 +99,22 @@ void BaseWindow::setOnAllDesktops(bool value)
 #endif // BL_PLATFORM_LINUX
 }
 
+int BaseWindow::transientFor() const
+{
+    return this->m_transientFor;
+}
+
+void BaseWindow::setTransientFor(int win)
+{
+    if (this->m_transientFor != win) {
+        this->m_transientFor = win;
+
+        Ewmh::set_wm_transient_for(winId(), win);
+
+        emit this->transientForChanged(win);
+    }
+}
+
 int BaseWindow::type() const
 {
     return this->m_type;
@@ -191,6 +207,11 @@ qreal BaseWindow::screenScale() const
 QString BaseWindow::screenName() const
 {
     return this->screen()->name();
+}
+
+int BaseWindow::windowId() const
+{
+    return this->winId();
 }
 
 

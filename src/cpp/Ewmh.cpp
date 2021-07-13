@@ -202,6 +202,16 @@ void Ewmh::set_net_wm_desktop(uint32_t w, uint32_t desktop)
     xcb_disconnect(conn);
 }
 
+void Ewmh::set_wm_transient_for(uint32_t w, uint32_t parent)
+{
+    xcb_connection_t *conn = xcb_connect(NULL, NULL);
+
+    Ewmh::change_property(conn, XCB_PROP_MODE_REPLACE, w, "WM_TRANSIENT_FOR",
+        XCB_ATOM_WINDOW, 1, (void*)&parent);
+
+    xcb_disconnect(conn);
+}
+
 //=====================
 // Private functions
 //=====================

@@ -14,6 +14,7 @@ class BaseWindow : public QQuickWindow
     Q_PROPERTY(QList<int> netWmStrutPartial READ netWmStrutPartial WRITE setNetWmStrutPartial NOTIFY netWmStrutPartialChanged)
     Q_PROPERTY(int netWmWindowType READ netWmWindowType WRITE setNetWmWindowType NOTIFY netWmWindowTypeChanged)
     Q_PROPERTY(bool onAllDesktops READ onAllDesktops WRITE setOnAllDesktops NOTIFY onAllDesktopsChanged)
+    Q_PROPERTY(int transientFor READ transientFor WRITE setTransientFor NOTIFY transientForChanged)
     Q_PROPERTY(int type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(int x READ x WRITE setX NOTIFY xChanged)
     Q_PROPERTY(int y READ y WRITE setY NOTIFY yChanged)
@@ -21,6 +22,7 @@ class BaseWindow : public QQuickWindow
     Q_PROPERTY(int height READ height WRITE setHeight NOTIFY heightChanged)
     Q_PROPERTY(qreal screenScale READ screenScale NOTIFY screenScaleChanged)
     Q_PROPERTY(QString screenName READ screenName NOTIFY screenNameChanged)
+    Q_PROPERTY(int windowId READ windowId CONSTANT)
 public:
     enum class WindowType {
         DocumentWindow,
@@ -62,6 +64,9 @@ public:
     bool onAllDesktops() const;
     void setOnAllDesktops(bool value);
 
+    int transientFor() const;
+    void setTransientFor(int win);
+
     int type() const;
     void setType(int type);
 
@@ -80,6 +85,8 @@ public:
     qreal screenScale() const;
     QString screenName() const;
 
+    int windowId() const;
+
 protected:
     bool event(QEvent *) override;
     void keyPressEvent(QKeyEvent *) override;
@@ -89,6 +96,7 @@ signals:
     void netWmStrutPartialChanged(QList<int> strut);
     void netWmWindowTypeChanged();
     void onAllDesktopsChanged(bool value);
+    void transientForChanged(int windowId);
     void typeChanged();
     void xChanged(int x);
     void yChanged(int y);
@@ -118,6 +126,7 @@ private slots:
 private:
     QList<int> m_netWmStrutPartial;
     int m_netWmWindowType;
+    int m_transientFor;
     int m_type;
     QPoint m_pos;
     QSize m_size;

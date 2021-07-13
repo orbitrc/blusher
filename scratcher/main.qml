@@ -235,10 +235,27 @@ Window {
           id: windowsTabView
 
           Button {
+            id: dockWindowButton
+
             title: 'Dock window'
             onClicked: {
               if (!windowsDemoLoader.sourceComponent) {
                 windowsDemoLoader.sourceComponent = dockWindow;
+              } else {
+                windowsDemoLoader.sourceComponent = undefined;
+              }
+            }
+          }
+
+          Button {
+            id: dialogWindowButton
+
+            anchors.top: dockWindowButton.bottom
+
+            title: 'Dialog window'
+            onClicked: {
+              if (!windowsDemoLoader.sourceComponent) {
+                windowsDemoLoader.sourceComponent = dialogWindow;
               } else {
                 windowsDemoLoader.sourceComponent = undefined;
               }
@@ -270,6 +287,26 @@ Window {
 
       Label {
         text: 'parent: ' + this.parent
+      }
+    }
+  }
+
+  Component {
+    id: dialogWindow
+    Window {
+      visible: true
+      netWmWindowType: Window.NetWmWindowType.Dialog
+      transientFor: root.windowId
+
+      width: 200
+      height: 200
+
+      Label {
+        text: 'Dialog window'
+      }
+      Label {
+        y: 30
+        text: root.windowId.toString()
       }
     }
   }
