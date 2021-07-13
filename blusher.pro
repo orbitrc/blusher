@@ -11,6 +11,7 @@ VERSION = 0.1.0
 INCLUDEPATH += ./include
 
 SOURCES += src/cpp/blusher_plugin.cpp \
+    src/cpp/Anchors.cpp \
     src/cpp/BaseWindow.cpp \
     src/cpp/Blusher.cpp \
     src/cpp/Box.cpp \
@@ -25,6 +26,7 @@ SOURCES += src/cpp/blusher_plugin.cpp \
     src/cpp/View.cpp
 
 HEADERS += src/cpp/blusher_plugin.h \
+    src/cpp/Anchors.h \
     src/cpp/BaseWindow.h \
     src/cpp/Blusher.h \
     src/cpp/Box.h \

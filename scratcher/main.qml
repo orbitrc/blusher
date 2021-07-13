@@ -222,8 +222,9 @@ Window {
   TabView {
     id: tabView
 
+    x: 10
     y: 150
-    width: 400
+    width: root.width - 20
     height: 200
 
     // Windows demo.
