@@ -261,6 +261,39 @@ void BaseWindow::showEvent(QShowEvent *evt)
     case static_cast<int>(NetWmWindowType::Desktop):
         Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Desktop, true);
         break;
+    case static_cast<int>(NetWmWindowType::Toolbar):
+        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Toolbar);
+        break;
+    case static_cast<int>(NetWmWindowType::Menu):
+        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Menu);
+        break;
+    case static_cast<int>(NetWmWindowType::Utility):
+        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Utility);
+        break;
+    case static_cast<int>(NetWmWindowType::Splash):
+        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Splash);
+        break;
+    case static_cast<int>(NetWmWindowType::Dialog):
+        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Dialog);
+        break;
+    case static_cast<int>(NetWmWindowType::DropDownMenu):
+        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::DropDownMenu);
+        break;
+    case static_cast<int>(NetWmWindowType::PopUpMenu):
+        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::PopUpMenu);
+        break;
+    case static_cast<int>(NetWmWindowType::ToolTip):
+        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::ToolTip);
+        break;
+    case static_cast<int>(NetWmWindowType::Notification):
+        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Notification);
+        break;
+    case static_cast<int>(NetWmWindowType::Combo):
+        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Combo);
+        break;
+    case static_cast<int>(NetWmWindowType::Dnd):
+        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Dnd);
+        break;
     default:
         break;
     }
