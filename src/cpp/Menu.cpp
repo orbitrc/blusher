@@ -106,32 +106,6 @@ void Menu::setMenuView(MenuView *menuView)
     this->m_menuView = menuView;
 }
 
-MenuView* Menu::to_qmenu()
-{
-    MenuView *qmenu = new MenuView(this);
-    /*
-    qmenu->setTitle(this->title());
-    for (int i = 0; i < this->m_items.length(); ++i) {
-        MenuItem *item = qobject_cast<MenuItem*>(this->m_items[i]);
-        qmenu->addAction(item->to_qaction());
-    }
-    // Open empty menu cause problem on some systems: ubuntu
-    if (this->m_items.length() == 0) {
-        QAction *dummy_item = new QAction;
-        dummy_item->setEnabled(false);
-        qmenu->addAction(dummy_item);
-    }
-    // Delete after closed if it is top level menu.
-    if (this->supermenu() == nullptr ||
-            this->supermenu()->type() == static_cast<int>(Menu::MenuType::MenuBarMenu)) {
-        QObject::connect(qmenu, &QMenu::aboutToHide,
-                        qmenu, &QObject::deleteLater);
-    }
-    */
-
-    return qmenu;
-}
-
 //====================
 // QQmlParserStatus
 //====================
