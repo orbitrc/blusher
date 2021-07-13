@@ -109,7 +109,9 @@ void BaseWindow::setTransientFor(int win)
     if (this->m_transientFor != win) {
         this->m_transientFor = win;
 
-        Ewmh::set_wm_transient_for(winId(), win);
+        if (win != 0) {
+            Ewmh::set_wm_transient_for(winId(), win);
+        }
 
         emit this->transientForChanged(win);
     }
