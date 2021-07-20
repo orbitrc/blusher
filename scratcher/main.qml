@@ -133,6 +133,11 @@ Window {
     x: 340
     text: '(' + root.x + ', ' + root.y + ') ' + root.width + 'x' + root.height
   }
+  Label {
+    x: 340
+    y: 30
+    text: 'Primary Screen: ' + DesktopEnvironment.primaryScreen.x + ', ' + DesktopEnvironment.primaryScreen.y
+  }
 
   View {
     id: infoArea
