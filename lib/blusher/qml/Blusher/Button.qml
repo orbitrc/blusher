@@ -93,8 +93,7 @@ View {
     text: root.title
     font.pixelSize: 13 * (root.window ? root.window.screenScale : 1)
     font.family: "Liberation Sans"
-    anchors.horizontalCenter: root.horizontalCenter
-    anchors.verticalCenter: root.verticalCenter
+    anchors.centerIn: root
   }
 
   Rectangle {
