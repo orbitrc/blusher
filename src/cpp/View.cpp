@@ -10,6 +10,9 @@ public:
     QMetaObject::Connection anchorsFillYConnection;
     QMetaObject::Connection anchorsFillWidthConnection;
     QMetaObject::Connection anchorsFillHeightConnection;
+
+    QMetaObject::Connection anchorsCenterInXConnection;
+    QMetaObject::Connection anchorsCenterInYConnection;
 };
 
 View::View(QQuickItem *parent)
@@ -35,6 +38,8 @@ View::View(QQuickItem *parent)
     this->m_verticalCenter = AnchorLine(this);
 
     QObject::connect(&(this->m_anchors), &Anchors::fillChanged,
+                     this, &View::adjustAnchors);
+    QObject::connect(&(this->m_anchors), &Anchors::centerInChanged,
                      this, &View::adjustAnchors);
 }
 
@@ -219,6 +224,12 @@ void View::adjustAnchors()
     } else {
         this->clearAnchorsFill();
     }
+    // anchors.centerIn
+    if (this->m_anchors.centerIn() != nullptr) {
+        this->adjustAnchorsCenterIn();
+    } else {
+        this->clearAnchorsCenterIn();
+    }
 }
 
 void View::clearAnchorsFill()
@@ -260,6 +271,32 @@ void View::adjustAnchorsFill()
         QObject::connect(this->m_anchors.fill(), &QQuickItem::heightChanged,
                          this, [this]() {
         this->setHeight(this->m_anchors.fill()->height());
+    });
+}
+
+void View::clearAnchorsCenterIn()
+{
+    if (this->pImpl->anchorsCenterInXConnection) {
+        QObject::disconnect(this->pImpl->anchorsCenterInXConnection);
+    }
+    if (this->pImpl->anchorsCenterInYConnection) {
+        QObject::disconnect(this->pImpl->anchorsCenterInYConnection);
+    }
+}
+
+void View::adjustAnchorsCenterIn()
+{
+    this->clearAnchorsCenterIn();
+
+    this->pImpl->anchorsCenterInXConnection =
+        QObject::connect(this->m_anchors.centerIn(), &QQuickItem::xChanged,
+                         this, [this]() {
+        this->setX((this->m_anchors.centerIn()->width() - this->width()) / 2);
+    });
+    this->pImpl->anchorsCenterInYConnection =
+        QObject::connect(this->m_anchors.centerIn(), &QQuickItem::yChanged,
+                         this, [this]() {
+        this->setY((this->m_anchors.centerIn()->height() - this->height()) / 2);
     });
 }
 

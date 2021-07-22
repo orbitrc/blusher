@@ -75,8 +75,14 @@ signals:
 public slots:
     void scale(qreal multiple);
     void adjustAnchors();
+    /// \brief Disconnect the connections about anchors.fill.
     void clearAnchorsFill();
+    /// \brief Connect signals to slots about anchors.fill.
     void adjustAnchorsFill();
+    /// \brief Disconnect the connections about anchors.centerIn.
+    void clearAnchorsCenterIn();
+    /// \brief Connect signals to slots about anchors.centerIn.
+    void adjustAnchorsCenterIn();
 
 private slots:
     void onWindowChanged(QQuickWindow *window);
