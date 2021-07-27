@@ -3,6 +3,7 @@
 
 #include <QQuickWindow>
 
+#include "Anchors.h"
 #include "KeyEvent.h"
 
 namespace bl {
@@ -23,6 +24,8 @@ class BaseWindow : public QQuickWindow
     Q_PROPERTY(qreal screenScale READ screenScale NOTIFY screenScaleChanged)
     Q_PROPERTY(QString screenName READ screenName NOTIFY screenNameChanged)
     Q_PROPERTY(int windowId READ windowId CONSTANT)
+    Q_PROPERTY(AnchorLine top READ top CONSTANT)
+    Q_PROPERTY(AnchorLine bottom READ bottom CONSTANT)
 public:
     enum class WindowType {
         DocumentWindow,
@@ -87,6 +90,9 @@ public:
 
     int windowId() const;
 
+    AnchorLine top();
+    AnchorLine bottom();
+
 protected:
     bool event(QEvent *) override;
     void keyPressEvent(QKeyEvent *) override;
@@ -131,6 +137,7 @@ private:
     QPoint m_pos;
     QSize m_size;
     qreal m_scale;
+    Anchors m_anchors;
 };
 
 } // namespace bl

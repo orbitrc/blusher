@@ -228,7 +228,8 @@ Window {
     id: tabView
 
     x: 10
-    y: 150
+//    y: 150
+    anchors.bottom: root.bottom
     width: root.width - 20
     height: 200
 

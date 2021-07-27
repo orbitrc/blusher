@@ -83,6 +83,14 @@ public slots:
     void clearAnchorsCenterIn();
     /// \brief Connect signals to slots about anchors.centerIn.
     void adjustAnchorsCenterIn();
+    /// \brief Disconnect the connections about anchors.top and anchors.bottom.
+    void clearAnchorsTopBottom();
+    /// \brief Connect signals to slots about anchors.top and anchors.bottom.
+    void adjustAnchorsTopBottom();
+    /// \brief Disconnect the connections about anchors.left and anchors.right.
+    void clearAnchorsLeftRight();
+    /// \brief Connect signals to slots about anchors.left and anchors.right.
+    void adjustAnchorsLeftRight();
 
 private slots:
     void onWindowChanged(QQuickWindow *window);
@@ -93,10 +101,6 @@ private:
     bool m_scaleWidth;
     bool m_scaleHeight;
     Anchors m_anchors;
-    AnchorLine m_top;
-    AnchorLine m_left;
-    AnchorLine m_right;
-    AnchorLine m_bottom;
     AnchorLine m_horizontalCenter;
     AnchorLine m_verticalCenter;
 };

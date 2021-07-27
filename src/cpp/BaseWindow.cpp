@@ -22,6 +22,10 @@ BaseWindow::BaseWindow(QWindow *parent)
     this->m_size.setWidth(QQuickWindow::width());
     this->m_size.setHeight(QQuickWindow::height());
     this->m_scale = 1;
+    this->m_anchors.setTop(AnchorLine(this->contentItem()));
+    this->m_anchors.setLeft(AnchorLine(this->contentItem()));
+    this->m_anchors.setRight(AnchorLine(this->contentItem()));
+    this->m_anchors.setBottom(AnchorLine(this->contentItem()));
 
     QObject::connect(this, &QQuickWindow::screenChanged,
                      this, &BaseWindow::q_onScreenChanged);
@@ -214,6 +218,16 @@ QString BaseWindow::screenName() const
 int BaseWindow::windowId() const
 {
     return this->winId();
+}
+
+AnchorLine BaseWindow::top()
+{
+    return this->m_anchors.top();
+}
+
+AnchorLine BaseWindow::bottom()
+{
+    return this->m_anchors.bottom();
 }
 
 

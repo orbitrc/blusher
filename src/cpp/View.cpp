@@ -13,6 +13,11 @@ public:
 
     QMetaObject::Connection anchorsCenterInXConnection;
     QMetaObject::Connection anchorsCenterInYConnection;
+
+    QMetaObject::Connection anchorsTopConnection;
+    QMetaObject::Connection anchorsBottomConnection;
+    QMetaObject::Connection anchorsLeftConnection;
+    QMetaObject::Connection anchorsRightConnection;
 };
 
 View::View(QQuickItem *parent)
@@ -30,16 +35,20 @@ View::View(QQuickItem *parent)
     // Anchors.
     this->m_anchors.setHorizontalCenter(AnchorLine(this));
     this->m_anchors.setVerticalCenter(AnchorLine(this));
-    this->m_top = AnchorLine(this);
-    this->m_left = AnchorLine(this);
-    this->m_right = AnchorLine(this);
-    this->m_bottom = AnchorLine(this);
+    this->m_anchors.setTop(AnchorLine(this));
+    this->m_anchors.setLeft(AnchorLine(this));
+    this->m_anchors.setRight(AnchorLine(this));
+    this->m_anchors.setBottom(AnchorLine(this));
     this->m_horizontalCenter = AnchorLine(this);
     this->m_verticalCenter = AnchorLine(this);
 
     QObject::connect(&(this->m_anchors), &Anchors::fillChanged,
                      this, &View::adjustAnchors);
     QObject::connect(&(this->m_anchors), &Anchors::centerInChanged,
+                     this, &View::adjustAnchors);
+    QObject::connect(&(this->m_anchors), &Anchors::topChanged,
+                     this, &View::adjustAnchors);
+    QObject::connect(&(this->m_anchors), &Anchors::bottomChanged,
                      this, &View::adjustAnchors);
 }
 
@@ -158,22 +167,22 @@ Anchors* View::anchors()
 
 AnchorLine View::top()
 {
-    return this->m_top;
+    return this->m_anchors.top();
 }
 
 AnchorLine View::left()
 {
-    return this->m_left;
+    return this->m_anchors.left();
 }
 
 AnchorLine View::right()
 {
-    return this->m_right;
+    return this->m_anchors.right();
 }
 
 AnchorLine View::bottom()
 {
-    return this->m_bottom;
+    return this->m_anchors.bottom();
 }
 
 AnchorLine View::horizontalCenter()
@@ -229,6 +238,19 @@ void View::adjustAnchors()
         this->adjustAnchorsCenterIn();
     } else {
         this->clearAnchorsCenterIn();
+    }
+    // anchors.top and anchors.bottom
+    if (this->m_anchors.top().view != this) {
+        this->adjustAnchorsTopBottom();
+    } else {
+        this->m_anchors.setTop(AnchorLine(this));
+        this->clearAnchorsTopBottom();
+    }
+    if (this->m_anchors.bottom().view != this) {
+        this->adjustAnchorsTopBottom();
+    } else {
+        this->m_anchors.setBottom(AnchorLine(this));
+        this->clearAnchorsTopBottom();
     }
 }
 
@@ -299,5 +321,43 @@ void View::adjustAnchorsCenterIn()
         this->setY((this->m_anchors.centerIn()->height() - this->height()) / 2);
     });
 }
+
+void View::clearAnchorsTopBottom()
+{
+    if (this->m_anchors.top().view == this && this->pImpl->anchorsTopConnection) {
+        QObject::disconnect(this->pImpl->anchorsTopConnection);
+    }
+    if (this->m_anchors.bottom().view == this && this->pImpl->anchorsBottomConnection) {
+        QObject::disconnect(this->pImpl->anchorsBottomConnection);
+    }
+}
+
+void View::adjustAnchorsTopBottom()
+{
+    this->clearAnchorsTopBottom();
+
+    if (this->m_anchors.top().view != this) {
+        this->setY(this->m_anchors.top().view->y());
+        this->pImpl->anchorsTopConnection =
+            QObject::connect(this->m_anchors.top().view, &QQuickItem::yChanged,
+                             this, [this]() {
+            this->setY(this->m_anchors.top().view->y());
+        });
+    }
+    if (this->m_anchors.bottom().view != this) {
+        this->setY(this->m_anchors.bottom().view->height() - this->height());
+        this->pImpl->anchorsBottomConnection =
+            QObject::connect(this->m_anchors.bottom().view, &QQuickItem::heightChanged,
+                             this, [this]() {
+            this->setY(this->m_anchors.bottom().view->height() - this->height());
+        });
+    }
+}
+
+void View::clearAnchorsLeftRight()
+{}
+
+void View::adjustAnchorsLeftRight()
+{}
 
 } // namespace bl
