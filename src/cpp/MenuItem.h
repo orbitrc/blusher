@@ -46,8 +46,6 @@ public:
     Q_INVOKABLE bool isMenuBarMenuItem() const;
 
 
-    QAction* to_qaction();
-
     //===================
     // QQmlParserStatus
     //===================

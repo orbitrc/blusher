@@ -5,6 +5,7 @@ default:
 	cd build && $(QMAKE) ../blusher.pro -spec linux-g++ && make qmake_all
 	cd build && make -j8
 	cp build/libblusher.so.$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH) $(QML_PLUGIN_DIR)/libblusher.so
+	strip $(QML_PLUGIN_DIR)/libblusher.so
 
 debug:
 	mkdir -p debug

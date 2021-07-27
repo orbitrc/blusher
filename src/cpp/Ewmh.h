@@ -36,6 +36,8 @@ public:
 
     static void set_net_wm_window_type(uint32_t w, bl::BaseWindow::NetWmWindowType type, bool replace = false);
 
+    static void set_wm_transient_for(uint32_t w, uint32_t parent);
+
 private:
     static xcb_atom_t get_atom(xcb_connection_t *conn, const QString& atom);
 

@@ -49,14 +49,6 @@ void Blusher::setMenuBarMenuItemRect(QRectF rect)
     this->m_menuBarMenuItemRect = rect;
 }
 
-void Blusher::openMenu(bl::Menu *menu, double x, double y)
-{
-    MenuView *qmenu = menu->to_qmenu();
-    QObject::connect(qmenu, &MenuView::closedByUser,
-                     this, &Blusher::menuClosedByUser);
-//    qmenu->popup(QPoint(x, y));
-}
-
 void Blusher::append_menu_view(MenuView *menu_view)
 {
     this->m_menu_views.append(menu_view);

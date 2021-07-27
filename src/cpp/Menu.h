@@ -52,7 +52,6 @@ public:
 
     MenuView* menuView();
     void setMenuView(MenuView *menuView);
-    MenuView* to_qmenu();
 
     Q_INVOKABLE void addItem(MenuItem *item);
     Q_INVOKABLE void open(double x = 0, double y = 0);

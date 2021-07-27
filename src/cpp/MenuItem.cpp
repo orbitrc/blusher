@@ -113,27 +113,6 @@ bool MenuItem::isMenuBarMenuItem() const
     return false;
 }
 
-
-QAction* MenuItem::to_qaction()
-{
-    QAction *qaction = new QAction;
-    qaction->setText(this->title());
-    // Connect action.
-    QObject::connect(qaction, &QAction::triggered,
-                     this, &MenuItem::triggered);
-    // Set separator.
-    if (this->separator()) {
-        qaction->setSeparator(true);
-    }
-    // Add submenu.
-    if (this->submenu() != nullptr) {
-        Menu *submenu = qobject_cast<Menu*>(this->submenu());
-        qaction->setMenu(reinterpret_cast<QMenu*>(submenu->to_qmenu()));
-    }
-
-    return qaction;
-}
-
 //=====================
 // QQmlParserStatus
 //=====================

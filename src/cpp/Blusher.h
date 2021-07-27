@@ -45,8 +45,6 @@ public:
     QRect submenuViewRect() const;
     void setSubmenuViewRect(const QRect& rect);
 
-    /// \brief Open menu to given position.
-    void openMenu(bl::Menu *menu, double x, double y);
     /// \brief Append menu view to the list.
     void append_menu_view(MenuView *menu_view);
     /// \brief Pop last menu view from the list.

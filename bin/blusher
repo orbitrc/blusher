@@ -4,23 +4,23 @@ import sys
 import os
 import json
 
-APPIMAGETOOL_URL = 'https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage'
+APPIMAGETOOL_URL = 'https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage'
 
 def is_toolchain_installed():
-    if os.path.isfile(os.environ['HOME'] + '/.blusher-dev/appimagetool-x86_64.AppImage'):
+    if os.path.isfile(os.environ['HOME'] + '/.blusher/toolchains/appimagetool-x86_64.AppImage'):
         return True
     print('* Toolchain is not downloaded.')
     return False
 
 def install_toolchain():
     print('* Downloading toolchain...')
-    os.system('mkdir -p ' + os.environ['HOME'] + '/.blusher-dev')
+    os.system('mkdir -p ' + os.environ['HOME'] + '/.blusher/toolchains')
     print(' - Download files.')
     os.system('wget {url} -O {target}'.format(
         url=APPIMAGETOOL_URL,
-        target=os.environ['HOME'] + '/.blusher-dev/appimagetool-x86_64.AppImage'))
+        target=os.environ['HOME'] + '/.blusher/toolchains/appimagetool-x86_64.AppImage'))
     print(' - Add executable to the binary.')
-    os.system('chmod +x {}'.format(os.environ['HOME'] + '/.blusher-dev/appimagetool-x86_64.AppImage'))
+    os.system('chmod +x {}'.format(os.environ['HOME'] + '/.blusher/toolchains/appimagetool-x86_64.AppImage'))
 
 
 def get_blusher_app_struct():
