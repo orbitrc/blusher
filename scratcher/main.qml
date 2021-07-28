@@ -229,7 +229,7 @@ Window {
 
     x: 10
 //    y: 150
-    anchors.bottom: root.bottom
+    anchors.bottom: root.body.bottom
     width: root.width - 20
     height: 200
 

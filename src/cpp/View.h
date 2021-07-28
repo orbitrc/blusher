@@ -63,6 +63,9 @@ public:
     AnchorLine horizontalCenter();
     AnchorLine verticalCenter();
 
+protected:
+    virtual void componentComplete() override;
+
 signals:
     void xChanged();
     void yChanged();

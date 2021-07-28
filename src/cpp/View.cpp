@@ -195,6 +195,18 @@ AnchorLine View::verticalCenter()
     return this->m_verticalCenter;
 }
 
+//===================
+// QQmlParserStatus
+//===================
+void View::componentComplete()
+{
+    QQuickItem::componentComplete();
+
+    if (this->m_anchors.bottomAnchorView() != nullptr) {
+        this->setY(this->m_anchors.bottomAnchorView()->height() - this->height());
+    }
+}
+
 //==================
 // Public slots
 //==================
@@ -246,7 +258,7 @@ void View::adjustAnchors()
         this->m_anchors.setTop(AnchorLine(this));
         this->clearAnchorsTopBottom();
     }
-    if (this->m_anchors.bottom().view != this) {
+    if (this->m_anchors.bottomAnchorView() != this) {
         this->adjustAnchorsTopBottom();
     } else {
         this->m_anchors.setBottom(AnchorLine(this));
@@ -336,7 +348,7 @@ void View::adjustAnchorsTopBottom()
 {
     this->clearAnchorsTopBottom();
 
-    if (this->m_anchors.top().view != this) {
+    if (this->m_anchors.topAnchorView() != nullptr) {
         this->setY(this->m_anchors.top().view->y());
         this->pImpl->anchorsTopConnection =
             QObject::connect(this->m_anchors.top().view, &QQuickItem::yChanged,
@@ -344,12 +356,11 @@ void View::adjustAnchorsTopBottom()
             this->setY(this->m_anchors.top().view->y());
         });
     }
-    if (this->m_anchors.bottom().view != this) {
-        this->setY(this->m_anchors.bottom().view->height() - this->height());
+    if (this->m_anchors.bottomAnchorView() != nullptr) {
         this->pImpl->anchorsBottomConnection =
-            QObject::connect(this->m_anchors.bottom().view, &QQuickItem::heightChanged,
+            QObject::connect(this->m_anchors.bottomAnchorView(), &QQuickItem::heightChanged,
                              this, [this]() {
-            this->setY(this->m_anchors.bottom().view->height() - this->height());
+            this->setY(this->m_anchors.bottomAnchorView()->height() - this->height());
         });
     }
 }

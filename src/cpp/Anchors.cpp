@@ -22,6 +22,10 @@ Anchors::Anchors(QObject *parent)
 {
     this->m_fill = nullptr;
     this->m_centerIn = nullptr;
+    this->m_topAnchorView = nullptr;
+    this->m_leftAnchorView = nullptr;
+    this->m_rightAnchorView = nullptr;
+    this->m_bottomAnchorView = nullptr;
 }
 
 QQuickItem* Anchors::fill() const
@@ -52,6 +56,26 @@ void Anchors::setCenterIn(QQuickItem *view)
     }
 }
 
+QQuickItem* Anchors::topAnchorView()
+{
+    return this->m_topAnchorView;
+}
+
+QQuickItem* Anchors::leftAnchorView()
+{
+    return this->m_leftAnchorView;
+}
+
+QQuickItem* Anchors::rightAnchorView()
+{
+    return this->m_rightAnchorView;
+}
+
+QQuickItem* Anchors::bottomAnchorView()
+{
+    return this->m_bottomAnchorView;
+}
+
 AnchorLine Anchors::top()
 {
     return this->m_top;
@@ -59,8 +83,12 @@ AnchorLine Anchors::top()
 
 void Anchors::setTop(const AnchorLine &top)
 {
-    if (this->m_top.view != top.view) {
+    // Init.
+    if (this->m_top.view == nullptr) {
         this->m_top.view = top.view;
+    }
+    if (this->m_topAnchorView != top.view) {
+        this->m_topAnchorView = top.view;
 
         emit this->topChanged();
     }
@@ -101,8 +129,22 @@ AnchorLine Anchors::bottom()
 
 void Anchors::setBottom(const AnchorLine &bottom)
 {
-    if (this->m_bottom.view != bottom.view) {
+    // Init.
+    if (this->m_bottom.view == nullptr) {
         this->m_bottom.view = bottom.view;
+    }
+    // Clear.
+    if (this->m_bottomAnchorView != nullptr && this->m_bottom.view == bottom.view) {
+        this->m_bottomAnchorView = nullptr;
+    }
+
+    if (this->m_bottomAnchorView != bottom.view) {
+        if (bottom.view == this->m_bottom.view) {
+            // If bottom anchor line's view is THIS.
+            this->m_bottomAnchorView = nullptr;
+        } else {
+            this->m_bottomAnchorView = bottom.view;
+        }
 
         emit this->bottomChanged();
     }

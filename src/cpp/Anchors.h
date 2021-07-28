@@ -38,6 +38,11 @@ public:
     QQuickItem* centerIn() const;
     void setCenterIn(QQuickItem *view);
 
+    QQuickItem* topAnchorView();
+    QQuickItem* leftAnchorView();
+    QQuickItem* rightAnchorView();
+    QQuickItem* bottomAnchorView();
+
     AnchorLine top();
     void setTop(const AnchorLine& top);
 
@@ -73,6 +78,10 @@ signals:
 private:
     QQuickItem *m_fill;
     QQuickItem *m_centerIn;
+    QQuickItem *m_topAnchorView;
+    QQuickItem *m_leftAnchorView;
+    QQuickItem *m_rightAnchorView;
+    QQuickItem *m_bottomAnchorView;
     AnchorLine m_top;
     AnchorLine m_left;
     AnchorLine m_right;
