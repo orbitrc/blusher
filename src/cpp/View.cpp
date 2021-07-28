@@ -16,8 +16,10 @@ public:
 
     QMetaObject::Connection anchorsTopConnection;
     QMetaObject::Connection anchorsBottomConnection;
+    QMetaObject::Connection anchorsTopBottomConnection;
     QMetaObject::Connection anchorsLeftConnection;
     QMetaObject::Connection anchorsRightConnection;
+    QMetaObject::Connection anchorsLeftRightConnection;
 };
 
 View::View(QQuickItem *parent)
@@ -202,6 +204,9 @@ void View::componentComplete()
 {
     QQuickItem::componentComplete();
 
+    if (this->m_anchors.topAnchorView() != nullptr) {
+        this->setY(this->m_anchors.topAnchorView()->y());
+    }
     if (this->m_anchors.bottomAnchorView() != nullptr) {
         this->setY(this->m_anchors.bottomAnchorView()->height() - this->height());
     }
@@ -252,13 +257,13 @@ void View::adjustAnchors()
         this->clearAnchorsCenterIn();
     }
     // anchors.top and anchors.bottom
-    if (this->m_anchors.top().view != this) {
+    if (this->m_anchors.topAnchorView() != this) {
         this->adjustAnchorsTopBottom();
     } else {
         this->m_anchors.setTop(AnchorLine(this));
         this->clearAnchorsTopBottom();
     }
-    if (this->m_anchors.bottomAnchorView() != this) {
+    if (this->m_anchors.bottomAnchorView() != nullptr) {
         this->adjustAnchorsTopBottom();
     } else {
         this->m_anchors.setBottom(AnchorLine(this));
@@ -342,25 +347,41 @@ void View::clearAnchorsTopBottom()
     if (this->m_anchors.bottom().view == this && this->pImpl->anchorsBottomConnection) {
         QObject::disconnect(this->pImpl->anchorsBottomConnection);
     }
+    if (this->pImpl->anchorsTopBottomConnection) {
+        QObject::disconnect(this->pImpl->anchorsTopBottomConnection);
+    }
 }
 
 void View::adjustAnchorsTopBottom()
 {
     this->clearAnchorsTopBottom();
 
-    if (this->m_anchors.topAnchorView() != nullptr) {
-        this->setY(this->m_anchors.top().view->y());
+    // Only top anchor.
+    if (this->m_anchors.topAnchorView() != nullptr
+            && this->m_anchors.bottomAnchorView() == nullptr) {
         this->pImpl->anchorsTopConnection =
-            QObject::connect(this->m_anchors.top().view, &QQuickItem::yChanged,
+            QObject::connect(this->m_anchors.topAnchorView(), &QQuickItem::yChanged,
                              this, [this]() {
-            this->setY(this->m_anchors.top().view->y());
+            this->setY(this->m_anchors.topAnchorView()->y());
         });
     }
-    if (this->m_anchors.bottomAnchorView() != nullptr) {
+    // Only bottom anchor.
+    if (this->m_anchors.bottomAnchorView() != nullptr
+            && this->m_anchors.topAnchorView() == nullptr) {
         this->pImpl->anchorsBottomConnection =
             QObject::connect(this->m_anchors.bottomAnchorView(), &QQuickItem::heightChanged,
                              this, [this]() {
             this->setY(this->m_anchors.bottomAnchorView()->height() - this->height());
+        });
+    }
+    // Top and bottom anchors.
+    if (this->m_anchors.topAnchorView() != nullptr
+            && this->m_anchors.bottomAnchorView() != nullptr) {
+        this->pImpl->anchorsTopBottomConnection =
+            QObject::connect(this->m_anchors.topAnchorView(), &QQuickItem::heightChanged,
+                             this, [this]() {
+            this->setY(this->m_anchors.topAnchorView()->y());
+            this->setHeight(this->m_anchors.topAnchorView()->height());
         });
     }
 }
