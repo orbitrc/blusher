@@ -51,7 +51,7 @@ View::View(QQuickItem *parent)
     QObject::connect(&(this->m_anchors), &Anchors::topChanged,
                      this, &View::adjustAnchors);
     QObject::connect(&(this->m_anchors), &Anchors::bottomChanged,
-                     this, &View::adjustAnchors);
+                     this, &View::adjustAnchorsTopBottom);
 }
 
 View::~View()

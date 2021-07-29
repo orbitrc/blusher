@@ -149,6 +149,8 @@ void Anchors::setBottom(const AnchorLine &bottom)
     // Init.
     if (this->m_bottom.view == nullptr) {
         this->m_bottom.view = bottom.view;
+
+        return;
     }
     // Clear.
     if (this->m_bottomAnchorView != nullptr && this->m_bottom.view == bottom.view) {
@@ -156,9 +158,8 @@ void Anchors::setBottom(const AnchorLine &bottom)
 
         emit this->bottomChanged();
         return;
-    }
-    // Do not emit if already cleared.
-    if (this->m_bottom.view == bottom.view) {
+    } else if (this->m_bottomAnchorView == nullptr && this->m_bottom.view == bottom.view) {
+        // Do not emit if already cleared.
         return;
     }
 
