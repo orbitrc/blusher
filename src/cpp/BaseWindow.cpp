@@ -22,6 +22,7 @@ BaseWindow::BaseWindow(QWindow *parent)
     this->m_size.setWidth(QQuickWindow::width());
     this->m_size.setHeight(QQuickWindow::height());
     this->m_scale = 1;
+    this->m_menu = nullptr;
     this->m_anchors.setTop(AnchorLine(this->contentItem()));
     this->m_anchors.setLeft(AnchorLine(this->contentItem()));
     this->m_anchors.setRight(AnchorLine(this->contentItem()));
@@ -202,6 +203,20 @@ void BaseWindow::setHeight(int height)
         QQuickWindow::setHeight(height * this->screenScale());
 
         emit this->heightChanged(height);
+    }
+}
+
+Menu* BaseWindow::menu() const
+{
+    return this->m_menu;
+}
+
+void BaseWindow::setMenu(Menu *menu)
+{
+    if (this->m_menu != menu) {
+        this->m_menu = menu;
+
+        emit this->menuChanged();
     }
 }
 

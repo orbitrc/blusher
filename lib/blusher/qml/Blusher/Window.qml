@@ -10,8 +10,6 @@ BaseWindow {
 
   readonly property alias body: body
 
-  property Menu menu: null
-
   MenuBar {
     id: menuBar
     menu: root.menu

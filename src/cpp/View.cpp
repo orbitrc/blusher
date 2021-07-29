@@ -257,7 +257,7 @@ void View::adjustAnchors()
         this->clearAnchorsCenterIn();
     }
     // anchors.top and anchors.bottom
-    if (this->m_anchors.topAnchorView() != this) {
+    if (this->m_anchors.topAnchorView() != nullptr) {
         this->adjustAnchorsTopBottom();
     } else {
         this->m_anchors.setTop(AnchorLine(this));

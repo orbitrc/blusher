@@ -5,6 +5,7 @@
 
 #include "Anchors.h"
 #include "KeyEvent.h"
+#include "Menu.h"
 
 namespace bl {
 
@@ -21,6 +22,7 @@ class BaseWindow : public QQuickWindow
     Q_PROPERTY(int y READ y WRITE setY NOTIFY yChanged)
     Q_PROPERTY(int width READ width WRITE setWidth NOTIFY widthChanged)
     Q_PROPERTY(int height READ height WRITE setHeight NOTIFY heightChanged)
+    Q_PROPERTY(Menu* menu READ menu WRITE setMenu NOTIFY menuChanged)
     Q_PROPERTY(qreal screenScale READ screenScale NOTIFY screenScaleChanged)
     Q_PROPERTY(QString screenName READ screenName NOTIFY screenNameChanged)
     Q_PROPERTY(int windowId READ windowId CONSTANT)
@@ -85,6 +87,9 @@ public:
     int height() const;
     void setHeight(int height);
 
+    Menu* menu() const;
+    void setMenu(Menu* menu);
+
     qreal screenScale() const;
     QString screenName() const;
 
@@ -108,6 +113,7 @@ signals:
     void yChanged(int y);
     void widthChanged(int width);
     void heightChanged(int height);
+    void menuChanged();
     void screenScaleChanged(qreal scale);
     void screenNameChanged();
 
@@ -137,6 +143,7 @@ private:
     QPoint m_pos;
     QSize m_size;
     qreal m_scale;
+    Menu *m_menu;
     Anchors m_anchors;
 };
 
