@@ -341,10 +341,10 @@ void View::adjustAnchorsCenterIn()
 
 void View::clearAnchorsTopBottom()
 {
-    if (this->m_anchors.top().view == this && this->pImpl->anchorsTopConnection) {
+    if (this->pImpl->anchorsTopConnection) {
         QObject::disconnect(this->pImpl->anchorsTopConnection);
     }
-    if (this->m_anchors.bottom().view == this && this->pImpl->anchorsBottomConnection) {
+    if (this->pImpl->anchorsBottomConnection) {
         QObject::disconnect(this->pImpl->anchorsBottomConnection);
     }
     if (this->pImpl->anchorsTopBottomConnection) {

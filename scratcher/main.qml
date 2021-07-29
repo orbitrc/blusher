@@ -319,6 +319,20 @@ Window {
     }
   }
 
+  View {
+    id: testView
+    objectName: "testView"
+//    anchors.top: tabView.top
+    anchors.bottom: tabView.bottom
+    width: 100
+    height: 100
+
+    Rectangle {
+      anchors.fill: parent
+      color: 'red'
+    }
+  }
+
   Menu {
     id: testMenu
     type: Menu.MenuType.ContextualMenu
