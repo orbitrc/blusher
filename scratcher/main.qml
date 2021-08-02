@@ -230,7 +230,7 @@ Window {
     x: 10
 //    y: 150
     anchors.top: root.top
-    anchors.bottom: root.body.bottom
+    anchors.bottom: root.bottom
     width: root.width - 20
 //    height: 200
 
@@ -322,14 +322,18 @@ Window {
   View {
     id: testView
     objectName: "testView"
-//    anchors.top: tabView.top
-    anchors.bottom: tabView.bottom
+    anchors.top: root.body.top
+    anchors.bottom: root.body.bottom
     width: 100
     height: 100
 
     Rectangle {
       anchors.fill: parent
       color: 'red'
+      Text {
+        text: 'hello?'
+        anchors.bottom: parent.bottom
+      }
     }
   }
 
