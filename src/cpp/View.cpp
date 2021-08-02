@@ -404,15 +404,18 @@ void View::adjustAnchorsLeftRight()
 void View::_set_anchors_top_bottom()
 {
     const BaseWindow *window = qobject_cast<BaseWindow*>(this->window());
+    const QQuickItem *body = (window
+        ? window->contentItem()->childItems()[1]
+        : nullptr);
     qreal menu_bar_offset = 0;
     qreal height = 0;
-    if (window && window->contentItem() == this->m_anchors.topAnchorView()) {
+    if (window && body == this->m_anchors.topAnchorView()) {
         menu_bar_offset = 30;
         height = window->height() - menu_bar_offset;
     } else {
         height = this->m_anchors.topAnchorView()->height();
     }
-    this->setY(this->m_anchors.topAnchorView()->y());
+    this->setY(this->m_anchors.topAnchorView()->y() - menu_bar_offset);
     this->setHeight(height);
 }
 
