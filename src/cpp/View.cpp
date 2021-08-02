@@ -1,6 +1,7 @@
 #include "View.h"
 
 #include "DesktopEnvironment.h"
+#include "BaseWindow.h"
 
 namespace bl {
 
@@ -204,11 +205,17 @@ void View::componentComplete()
 {
     QQuickItem::componentComplete();
 
-    if (this->m_anchors.topAnchorView() != nullptr) {
+    if (this->m_anchors.topAnchorView() != nullptr &&
+            this->m_anchors.bottomAnchorView() == nullptr) {
         this->setY(this->m_anchors.topAnchorView()->y());
     }
-    if (this->m_anchors.bottomAnchorView() != nullptr) {
+    if (this->m_anchors.bottomAnchorView() != nullptr &&
+            this->m_anchors.topAnchorView() == nullptr) {
         this->setY(this->m_anchors.bottomAnchorView()->height() - this->height());
+    }
+    if (this->m_anchors.topAnchorView() != nullptr &&
+            this->m_anchors.bottomAnchorView() != nullptr) {
+        this->_set_anchors_top_bottom();
     }
 }
 
@@ -380,8 +387,7 @@ void View::adjustAnchorsTopBottom()
         this->pImpl->anchorsTopBottomConnection =
             QObject::connect(this->m_anchors.topAnchorView(), &QQuickItem::heightChanged,
                              this, [this]() {
-            this->setY(this->m_anchors.topAnchorView()->y());
-            this->setHeight(this->m_anchors.topAnchorView()->height());
+            this->_set_anchors_top_bottom();
         });
     }
 }
@@ -391,5 +397,23 @@ void View::clearAnchorsLeftRight()
 
 void View::adjustAnchorsLeftRight()
 {}
+
+//===========================
+// Private methods.
+//===========================
+void View::_set_anchors_top_bottom()
+{
+    const BaseWindow *window = qobject_cast<BaseWindow*>(this->window());
+    qreal menu_bar_offset = 0;
+    qreal height = 0;
+    if (window && window->contentItem() == this->m_anchors.topAnchorView()) {
+        menu_bar_offset = 30;
+        height = window->height() - menu_bar_offset;
+    } else {
+        height = this->m_anchors.topAnchorView()->height();
+    }
+    this->setY(this->m_anchors.topAnchorView()->y());
+    this->setHeight(height);
+}
 
 } // namespace bl

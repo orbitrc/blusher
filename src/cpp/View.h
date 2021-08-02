@@ -99,6 +99,9 @@ private slots:
     void onWindowChanged(QQuickWindow *window);
 
 private:
+    void _set_anchors_top_bottom();
+
+private:
     QPointF m_pos;
     QSizeF m_size;
     bool m_scaleWidth;
