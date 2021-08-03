@@ -35,6 +35,18 @@ View::View(QQuickItem *parent)
 
     QObject::connect(this, &QQuickItem::windowChanged,
                      this, &View::onWindowChanged);
+
+    // Connect signals that QQuickItem geometry changed by window manager.
+    // Not connect to setX signals because prevent circular signal chain.
+    QObject::connect(this, &QQuickItem::xChanged,
+                     this, &View::q_onXChanged);
+    QObject::connect(this, &QQuickItem::yChanged,
+                     this, &View::q_onYChanged);
+    QObject::connect(this, &QQuickItem::widthChanged,
+                     this, &View::q_onWidthChanged);
+    QObject::connect(this, &QQuickItem::heightChanged,
+                     this, &View::q_onHeightChanged);
+
     // Anchors.
     this->m_anchors.setHorizontalCenter(AnchorLine(this));
     this->m_anchors.setVerticalCenter(AnchorLine(this));
@@ -248,6 +260,35 @@ void View::onWindowChanged(QQuickWindow *window)
                          this, &View::scale);
     }
 }
+
+void View::q_onXChanged()
+{
+    this->m_pos.setX(QQuickItem::x());
+
+    emit this->xChanged();
+}
+
+void View::q_onYChanged()
+{
+    this->m_pos.setY(QQuickItem::y());
+
+    emit this->yChanged();
+}
+
+void View::q_onWidthChanged()
+{
+    this->m_size.setWidth(QQuickItem::width());
+
+    emit this->widthChanged();
+}
+
+void View::q_onHeightChanged()
+{
+    this->m_size.setHeight(QQuickItem::height());
+
+    emit this->heightChanged();
+}
+
 
 void View::adjustAnchors()
 {

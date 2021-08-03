@@ -98,6 +98,15 @@ public slots:
 private slots:
     void onWindowChanged(QQuickWindow *window);
 
+    /// \brief Connect with QQuickItem::xChanged() signal.
+    void q_onXChanged();
+    /// \brief Connect with QQuickItem::yChanged() signal.
+    void q_onYChanged();
+    /// \brief Connect with QQuickItem::widthChanged() signal.
+    void q_onWidthChanged();
+    /// \brief Connect with QQuickItem::heightChanged() signal.
+    void q_onHeightChanged();
+
 private:
     void _set_anchors_top_bottom();
 

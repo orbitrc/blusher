@@ -329,7 +329,7 @@ Window {
 
     Rectangle {
       anchors.fill: parent
-      color: 'red'
+      color: '#50ff0000'
       Text {
         text: 'hello?'
         anchors.bottom: parent.bottom
