@@ -88,8 +88,8 @@ void Anchors::setTop(const AnchorLine &top)
         this->m_top.view = top.view;
     }
     // Clear.
-    if (this->m_bottomAnchorView != nullptr && this->m_bottom.view == top.view) {
-        this->m_bottomAnchorView = nullptr;
+    if (this->m_topAnchorView != nullptr && this->m_bottom.view == top.view) {
+        this->m_topAnchorView = nullptr;
 
         emit this->topChanged();
         return;
@@ -99,7 +99,7 @@ void Anchors::setTop(const AnchorLine &top)
         return;
     }
 
-    if (this->m_bottomAnchorView != top.view) {
+    if (this->m_topAnchorView != top.view) {
         if (top.view == this->m_top.view) {
             // If top anchor line's view is THIS.
             this->m_topAnchorView = nullptr;
