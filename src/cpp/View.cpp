@@ -219,6 +219,8 @@ void View::componentComplete()
 
     // Initial anchors.fill set.
     if (this->m_anchors.fill() != nullptr) {
+        this->setX(this->m_anchors.fill()->x());
+        this->setY(this->m_anchors.fill()->y());
         this->setWidth(this->m_anchors.fill()->width());
         this->setHeight(this->m_anchors.fill()->height());
     }
