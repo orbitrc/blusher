@@ -217,6 +217,13 @@ void View::componentComplete()
 {
     QQuickItem::componentComplete();
 
+    // Initial anchors.fill set.
+    if (this->m_anchors.fill() != nullptr) {
+        this->setWidth(this->m_anchors.fill()->width());
+        this->setHeight(this->m_anchors.fill()->height());
+    }
+
+    // Initial anchors.top and anchors.bottom set.
     if (this->m_anchors.topAnchorView() != nullptr &&
             this->m_anchors.bottomAnchorView() == nullptr) {
         this->setY(this->m_anchors.topAnchorView()->y());

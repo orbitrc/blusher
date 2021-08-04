@@ -327,7 +327,7 @@ Window {
     width: 100
     height: 100
 
-    Rectangle {
+    Box {
       anchors.fill: parent
       color: '#50ff0000'
       Text {
