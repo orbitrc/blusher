@@ -118,8 +118,29 @@ AnchorLine Anchors::left()
 
 void Anchors::setLeft(const AnchorLine &left)
 {
-    if (this->m_left.view != left.view) {
+    // Init.
+    if (this->m_left.view == nullptr) {
         this->m_left.view = left.view;
+    }
+    // Clear.
+    if (this->m_leftAnchorView != nullptr && this->m_left.view == left.view) {
+        this->m_leftAnchorView = nullptr;
+
+        emit this->leftChanged();
+        return;
+    }
+    // Do not emit if already cleared.
+    if (this->m_left.view == left.view) {
+        return;
+    }
+
+    if (this->m_leftAnchorView != left.view) {
+        if (left.view == this->m_left.view) {
+            // If left anchor line's view is THIS.
+            this->m_leftAnchorView = nullptr;
+        } else {
+            this->m_leftAnchorView = left.view;
+        }
 
         emit this->leftChanged();
     }
@@ -132,8 +153,29 @@ AnchorLine Anchors::right()
 
 void Anchors::setRight(const AnchorLine &right)
 {
-    if (this->m_right.view != right.view) {
+    // Init.
+    if (this->m_right.view == nullptr) {
         this->m_right.view = right.view;
+    }
+    // Clear.
+    if (this->m_rightAnchorView != nullptr && this->m_right.view == right.view) {
+        this->m_rightAnchorView = nullptr;
+
+        emit this->rightChanged();
+        return;
+    }
+    // Do not emit if already cleared.
+    if (this->m_right.view == right.view) {
+        return;
+    }
+
+    if (this->m_rightAnchorView != right.view) {
+        if (right.view == this->m_right.view) {
+            // If right anchor line's view is THIS.
+            this->m_rightAnchorView = nullptr;
+        } else {
+            this->m_rightAnchorView = right.view;
+        }
 
         emit this->rightChanged();
     }
