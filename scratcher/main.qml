@@ -323,9 +323,9 @@ Window {
     id: testView
     objectName: "testView"
 //    anchors.top: root.body.top
-//    anchors.bottom: root.body.bottom
+    anchors.bottom: root.body.bottom
 //    anchors.left: root.body.left
-    anchors.right: root.body.right
+//    anchors.right: root.body.right
     width: 100
     height: 100
 

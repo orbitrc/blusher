@@ -429,7 +429,7 @@ void View::adjustAnchorsTopBottom()
         this->pImpl->anchorsBottomConnection =
             QObject::connect(this->m_anchors.bottomAnchorView(), &QQuickItem::heightChanged,
                              this, [this]() {
-            this->setY(this->m_anchors.bottomAnchorView()->height() - this->height());
+            this->_set_anchors_bottom();
         });
     }
     // Top and bottom anchors.
@@ -555,6 +555,14 @@ void View::_set_anchors_top()
 
 void View::_set_anchors_bottom()
 {
+    QQuickItem *anchorView = this->m_anchors.bottomAnchorView();
+    const qreal bottomMargin = this->m_anchors.bottomMargin();
+
+    if (this->m_anchors.bottomAnchor() == AnchorLine::Anchor::BottomAnchor) {
+        this->setY(anchorView->height() - this->height() - bottomMargin);
+    } else if (this->m_anchors.bottomAnchor() == AnchorLine::Anchor::TopAnchor) {
+        this->setY(anchorView->y() - this->height() - bottomMargin);
+    }
 }
 
 void View::_set_anchors_top_bottom()
