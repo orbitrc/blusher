@@ -609,8 +609,12 @@ void View::_set_anchors_right()
 
 void View::_set_anchors_left_right()
 {
-    this->setX(this->m_anchors.leftAnchorView()->x());
-    this->setWidth(this->m_anchors.leftAnchorView()->width());
+    QQuickItem *anchorView = this->m_anchors.leftAnchorView();
+    const qreal leftMargin = this->m_anchors.leftMargin();
+    const qreal rightMargin = this->m_anchors.rightMargin();
+
+    this->setX(anchorView->x() - leftMargin);
+    this->setWidth(anchorView->width() - leftMargin - rightMargin);
 }
 
 } // namespace bl
