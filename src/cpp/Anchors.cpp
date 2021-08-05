@@ -303,6 +303,20 @@ void Anchors::setVerticalCenter(const AnchorLine &vCenter)
     }
 }
 
+qreal Anchors::topMargin() const
+{
+    return this->m_topMargin;
+}
+
+void Anchors::setTopMargin(qreal topMargin)
+{
+    if (this->m_topMargin != topMargin) {
+        this->m_topMargin = topMargin;
+
+        emit this->topMarginChanged(topMargin);
+    }
+}
+
 qreal Anchors::leftMargin() const
 {
     return this->m_leftMargin;
@@ -314,6 +328,34 @@ void Anchors::setLeftMargin(qreal leftMargin)
         this->m_leftMargin = leftMargin;
 
         emit this->leftMarginChanged(leftMargin);
+    }
+}
+
+qreal Anchors::rightMargin() const
+{
+    return this->m_rightMargin;
+}
+
+void Anchors::setRightMargin(qreal rightMargin)
+{
+    if (this->m_rightMargin != rightMargin) {
+        this->m_rightMargin = rightMargin;
+
+        emit this->rightMarginChanged(rightMargin);
+    }
+}
+
+qreal Anchors::bottomMargin() const
+{
+    return this->m_bottomMargin;
+}
+
+void Anchors::setBottomMargin(qreal bottomMargin)
+{
+    if (this->m_bottomMargin != bottomMargin) {
+        this->m_bottomMargin = bottomMargin;
+
+        emit this->bottomMarginChanged(bottomMargin);
     }
 }
 

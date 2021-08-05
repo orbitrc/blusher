@@ -39,7 +39,10 @@ class Anchors : public QObject
     Q_PROPERTY(AnchorLine bottom READ bottom WRITE setBottom NOTIFY bottomChanged)
     Q_PROPERTY(AnchorLine horizontalCenter READ horizontalCenter WRITE setHorizontalCenter NOTIFY horizontalCenterChanged)
     Q_PROPERTY(AnchorLine verticalCenter READ verticalCenter WRITE setVerticalCenter NOTIFY verticalCenterChanged)
+    Q_PROPERTY(qreal topMargin READ topMargin WRITE setTopMargin NOTIFY topMarginChanged)
     Q_PROPERTY(qreal leftMargin READ leftMargin WRITE setLeftMargin NOTIFY leftMarginChanged)
+    Q_PROPERTY(qreal rightMargin READ rightMargin WRITE setRightMargin NOTIFY rightMarginChanged)
+    Q_PROPERTY(qreal bottomMargin READ bottomMargin WRITE setBottomMargin NOTIFY bottomMarginChanged)
 public:
     Anchors(QObject *parent = nullptr);
 
@@ -79,8 +82,17 @@ public:
     AnchorLine verticalCenter();
     void setVerticalCenter(const AnchorLine& vCenter);
 
+    qreal topMargin() const;
+    void setTopMargin(qreal topMargin);
+
     qreal leftMargin() const;
     void setLeftMargin(qreal leftMargin);
+
+    qreal rightMargin() const;
+    void setRightMargin(qreal rightMargin);
+
+    qreal bottomMargin() const;
+    void setBottomMargin(qreal bottomMargin);
 
 signals:
     void fillChanged();
@@ -91,7 +103,10 @@ signals:
     void bottomChanged();
     void horizontalCenterChanged();
     void verticalCenterChanged();
+    void topMarginChanged(qreal topMargin);
     void leftMarginChanged(qreal leftMargin);
+    void rightMarginChanged(qreal rightMargin);
+    void bottomMarginChanged(qreal bottomMargin);
 
 private:
     QQuickItem *m_fill;
@@ -112,7 +127,10 @@ private:
     AnchorLine m_bottom;
     AnchorLine m_horizontalCenter;
     AnchorLine m_verticalCenter;
+    qreal m_topMargin;
     qreal m_leftMargin;
+    qreal m_rightMargin;
+    qreal m_bottomMargin;
 };
 
 } // namespace bl
