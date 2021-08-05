@@ -5,9 +5,10 @@
 namespace bl {
 
 // AnchorLine.
-AnchorLine::AnchorLine(QQuickItem *view)
+AnchorLine::AnchorLine(QQuickItem *view, Anchor anchor)
 {
     this->view = view;
+    this->anchor = anchor;
 }
 
 void AnchorLine::setView(QQuickItem *view)

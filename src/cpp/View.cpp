@@ -48,12 +48,12 @@ View::View(QQuickItem *parent)
                      this, &View::q_onHeightChanged);
 
     // Anchors.
-    this->m_anchors.setHorizontalCenter(AnchorLine(this));
-    this->m_anchors.setVerticalCenter(AnchorLine(this));
-    this->m_anchors.setTop(AnchorLine(this));
-    this->m_anchors.setLeft(AnchorLine(this));
-    this->m_anchors.setRight(AnchorLine(this));
-    this->m_anchors.setBottom(AnchorLine(this));
+    this->m_anchors.setHorizontalCenter(AnchorLine(this, AnchorLine::Anchor::HorizontalCenterAnchor));
+    this->m_anchors.setVerticalCenter(AnchorLine(this, AnchorLine::Anchor::VerticalCenterAnchor));
+    this->m_anchors.setTop(AnchorLine(this, AnchorLine::Anchor::TopAnchor));
+    this->m_anchors.setLeft(AnchorLine(this, AnchorLine::Anchor::LeftAnchor));
+    this->m_anchors.setRight(AnchorLine(this, AnchorLine::Anchor::RightAnchor));
+    this->m_anchors.setBottom(AnchorLine(this, AnchorLine::Anchor::BottomAnchor));
     this->m_horizontalCenter = AnchorLine(this);
     this->m_verticalCenter = AnchorLine(this);
 

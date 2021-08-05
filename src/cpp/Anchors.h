@@ -10,11 +10,21 @@ class View;
 
 class AnchorLine : public QMetaObject {
 public:
-    AnchorLine(QQuickItem *view = nullptr);
+    enum class Anchor {
+        TopAnchor,
+        LeftAnchor,
+        RightAnchor,
+        BottomAnchor,
+        HorizontalCenterAnchor,
+        VerticalCenterAnchor,
+    };
+public:
+    AnchorLine(QQuickItem *view = nullptr, Anchor anchor = Anchor::TopAnchor);
 
     void setView(QQuickItem *view);
 
     QQuickItem *view = nullptr;
+    Anchor anchor;
 };
 
 class Anchors : public QObject
