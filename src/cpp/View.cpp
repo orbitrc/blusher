@@ -230,30 +230,24 @@ void View::componentComplete()
     }
 
     // Initial anchors.top and anchors.bottom set.
-    if (this->m_anchors.topAnchorView() != nullptr &&
-            this->m_anchors.bottomAnchorView() == nullptr) {
+    if (this->_has_only_top_anchor()) {
         this->setY(this->m_anchors.topAnchorView()->y());
     }
-    if (this->m_anchors.bottomAnchorView() != nullptr &&
-            this->m_anchors.topAnchorView() == nullptr) {
+    if (this->_has_only_bottom_anchor()) {
         this->setY(this->m_anchors.bottomAnchorView()->height() - this->height());
     }
-    if (this->m_anchors.topAnchorView() != nullptr &&
-            this->m_anchors.bottomAnchorView() != nullptr) {
+    if (this->_has_both_top_bottom_anchor()) {
         this->_set_anchors_top_bottom();
     }
 
     // Initial anchors.left and anchors.right set.
-    if (this->m_anchors.leftAnchorView() != nullptr &&
-            this->m_anchors.rightAnchorView() == nullptr) {
+    if (this->_has_only_left_anchor()) {
         this->setX(this->m_anchors.leftAnchorView()->x());
     }
-    if (this->m_anchors.rightAnchorView() != nullptr &&
-            this->m_anchors.leftAnchorView() == nullptr) {
+    if (this->_has_only_right_anchor()) {
         this->setX(this->m_anchors.rightAnchorView()->width() - this->width());
     }
-    if (this->m_anchors.leftAnchorView() != nullptr &&
-            this->m_anchors.rightAnchorView() != nullptr) {
+    if (this->_has_both_left_right_anchor()) {
         this->_set_anchors_left_right();
     }
 }
@@ -432,8 +426,7 @@ void View::adjustAnchorsTopBottom()
     this->clearAnchorsTopBottom();
 
     // Only top anchor.
-    if (this->m_anchors.topAnchorView() != nullptr
-            && this->m_anchors.bottomAnchorView() == nullptr) {
+    if (this->_has_only_top_anchor()) {
         this->pImpl->anchorsTopConnection =
             QObject::connect(this->m_anchors.topAnchorView(), &QQuickItem::yChanged,
                              this, [this]() {
@@ -441,8 +434,7 @@ void View::adjustAnchorsTopBottom()
         });
     }
     // Only bottom anchor.
-    if (this->m_anchors.bottomAnchorView() != nullptr
-            && this->m_anchors.topAnchorView() == nullptr) {
+    if (this->_has_only_bottom_anchor()) {
         this->pImpl->anchorsBottomConnection =
             QObject::connect(this->m_anchors.bottomAnchorView(), &QQuickItem::heightChanged,
                              this, [this]() {
@@ -450,8 +442,7 @@ void View::adjustAnchorsTopBottom()
         });
     }
     // Top and bottom anchors.
-    if (this->m_anchors.topAnchorView() != nullptr
-            && this->m_anchors.bottomAnchorView() != nullptr) {
+    if (this->_has_both_top_bottom_anchor()) {
         this->pImpl->anchorsTopBottomConnection =
             QObject::connect(this->m_anchors.topAnchorView(), &QQuickItem::heightChanged,
                              this, [this]() {
@@ -478,8 +469,7 @@ void View::adjustAnchorsLeftRight()
     this->clearAnchorsLeftRight();
 
     // Only left anchor.
-    if (this->m_anchors.leftAnchorView() != nullptr &&
-            this->m_anchors.rightAnchorView() == nullptr) {
+    if (this->_has_only_left_anchor()) {
         this->pImpl->anchorsLeftConnection =
             QObject::connect(this->m_anchors.leftAnchorView(), &QQuickItem::xChanged,
                              this, [this]() {
@@ -487,8 +477,7 @@ void View::adjustAnchorsLeftRight()
         });
     }
     // Only right anchor.
-    if (this->m_anchors.rightAnchorView() != nullptr &&
-            this->m_anchors.leftAnchorView() == nullptr) {
+    if (this->_has_only_right_anchor()) {
         this->pImpl->anchorsRightConnection =
             QObject::connect(this->m_anchors.rightAnchorView(), &QQuickItem::widthChanged,
                              this, [this]() {
@@ -496,8 +485,7 @@ void View::adjustAnchorsLeftRight()
         });
     }
     // Left and right anchors.
-    if (this->m_anchors.leftAnchorView() != nullptr &&
-            this->m_anchors.rightAnchorView() != nullptr) {
+    if (this->_has_both_left_right_anchor()) {
         this->pImpl->anchorsLeftRightConnection =
             QObject::connect(this->m_anchors.leftAnchorView(), &QQuickItem::widthChanged,
                              this, [this]() {
@@ -509,6 +497,66 @@ void View::adjustAnchorsLeftRight()
 //===========================
 // Private methods.
 //===========================
+
+bool View::_has_only_top_anchor()
+{
+    if (this->m_anchors.topAnchorView() != nullptr &&
+            this->m_anchors.bottomAnchorView() == nullptr) {
+        return true;
+    }
+
+    return false;
+}
+
+bool View::_has_only_bottom_anchor()
+{
+    if (this->m_anchors.bottomAnchorView() != nullptr &&
+            this->m_anchors.topAnchorView() == nullptr) {
+        return true;
+    }
+
+    return false;
+}
+
+bool View::_has_both_top_bottom_anchor()
+{
+    if (this->m_anchors.topAnchorView() != nullptr &&
+            this->m_anchors.bottomAnchorView() != nullptr) {
+        return true;
+    }
+
+    return false;
+}
+
+bool View::_has_only_left_anchor()
+{
+    if (this->m_anchors.leftAnchorView() != nullptr &&
+            this->m_anchors.rightAnchorView() == nullptr) {
+        return true;
+    }
+
+    return false;
+}
+
+bool View::_has_only_right_anchor()
+{
+    if (this->m_anchors.rightAnchorView() != nullptr &&
+            this->m_anchors.leftAnchorView() == nullptr) {
+        return true;
+    }
+
+    return false;
+}
+
+bool View::_has_both_left_right_anchor()
+{
+    if (this->m_anchors.leftAnchorView() != nullptr &&
+            this->m_anchors.rightAnchorView() != nullptr) {
+        return true;
+    }
+
+    return false;
+}
 
 void View::_set_anchors_top_bottom()
 {

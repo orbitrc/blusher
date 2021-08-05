@@ -108,6 +108,13 @@ private slots:
     void q_onHeightChanged();
 
 private:
+    bool _has_only_top_anchor();
+    bool _has_only_bottom_anchor();
+    bool _has_both_top_bottom_anchor();
+    bool _has_only_left_anchor();
+    bool _has_only_right_anchor();
+    bool _has_both_left_right_anchor();
+
     void _set_anchors_top_bottom();
     void _set_anchors_left_right();
 
