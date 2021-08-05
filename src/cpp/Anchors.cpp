@@ -187,8 +187,6 @@ void Anchors::setLeft(const AnchorLine &left)
             this->m_leftAnchor = AnchorLine::Anchor::None;
         } else {
             this->m_leftAnchorView = left.view;
-            qDebug() << "left.view: " << left.view;
-            qDebug() << "left.anchor: " << static_cast<int>(left.anchor);
             this->m_leftAnchor = left.anchor;
         }
 

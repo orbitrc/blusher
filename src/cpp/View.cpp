@@ -56,6 +56,10 @@ View::View(QQuickItem *parent)
     this->m_anchors.setBottom(AnchorLine(this, AnchorLine::Anchor::BottomAnchor));
     this->m_horizontalCenter = AnchorLine(this);
     this->m_verticalCenter = AnchorLine(this);
+    this->m_anchors.setTopMargin(0);
+    this->m_anchors.setLeftMargin(0);
+    this->m_anchors.setRightMargin(0);
+    this->m_anchors.setBottomMargin(0);
 
     QObject::connect(&(this->m_anchors), &Anchors::fillChanged,
                      this, &View::adjustAnchors);
@@ -223,8 +227,8 @@ void View::componentComplete()
 
     // Initial anchors.fill set.
     if (this->m_anchors.fill() != nullptr) {
-        this->setX(this->m_anchors.fill()->x());
-        this->setY(this->m_anchors.fill()->y());
+        this->setX(0);
+        this->setY(0);
         this->setWidth(this->m_anchors.fill()->width());
         this->setHeight(this->m_anchors.fill()->height());
     }
@@ -245,7 +249,7 @@ void View::componentComplete()
         this->_set_anchors_left();
     }
     if (this->_has_only_right_anchor()) {
-        this->setX(this->m_anchors.rightAnchorView()->width() - this->width());
+        this->_set_anchors_right();
     }
     if (this->_has_both_left_right_anchor()) {
         this->_set_anchors_left_right();
@@ -363,12 +367,12 @@ void View::adjustAnchorsFill()
     this->pImpl->anchorsFillXConnection =
         QObject::connect(this->m_anchors.fill(), &QQuickItem::xChanged,
                          this, [this]() {
-        this->setX(this->m_anchors.fill()->x());
+        this->setX(0);
     });
     this->pImpl->anchorsFillYConnection =
         QObject::connect(this->m_anchors.fill(), &QQuickItem::yChanged,
                          this, [this]() {
-        this->setY(this->m_anchors.fill()->y());
+        this->setY(0);
     });
     this->pImpl->anchorsFillWidthConnection =
         QObject::connect(this->m_anchors.fill(), &QQuickItem::widthChanged,
@@ -481,7 +485,7 @@ void View::adjustAnchorsLeftRight()
         this->pImpl->anchorsRightConnection =
             QObject::connect(this->m_anchors.rightAnchorView(), &QQuickItem::widthChanged,
                              this, [this]() {
-            this->setX(this->m_anchors.rightAnchorView()->width() - this->width());
+            this->_set_anchors_right();
         });
     }
     // Left and right anchors.
@@ -598,6 +602,14 @@ void View::_set_anchors_left()
 
 void View::_set_anchors_right()
 {
+    QQuickItem *anchorView = this->m_anchors.rightAnchorView();
+    const qreal rightMargin = this->m_anchors.rightMargin();
+
+    if (this->m_anchors.rightAnchor() == AnchorLine::Anchor::RightAnchor) {
+        this->setX(anchorView->width() - this->width() - rightMargin);
+    } else if (this->m_anchors.rightAnchor() == AnchorLine::Anchor::LeftAnchor) {
+        this->setX(anchorView->x() - anchorView->width() - rightMargin);
+    }
 }
 
 void View::_set_anchors_left_right()
