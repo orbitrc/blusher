@@ -109,6 +109,7 @@ private slots:
 
 private:
     void _set_anchors_top_bottom();
+    void _set_anchors_left_right();
 
 private:
     QPointF m_pos;

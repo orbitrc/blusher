@@ -62,9 +62,13 @@ View::View(QQuickItem *parent)
     QObject::connect(&(this->m_anchors), &Anchors::centerInChanged,
                      this, &View::adjustAnchors);
     QObject::connect(&(this->m_anchors), &Anchors::topChanged,
-                     this, &View::adjustAnchors);
+                     this, &View::adjustAnchorsTopBottom);
     QObject::connect(&(this->m_anchors), &Anchors::bottomChanged,
                      this, &View::adjustAnchorsTopBottom);
+    QObject::connect(&(this->m_anchors), &Anchors::leftChanged,
+                     this, &View::adjustAnchorsLeftRight);
+    QObject::connect(&(this->m_anchors), &Anchors::rightChanged,
+                     this, &View::adjustAnchorsLeftRight);
 }
 
 View::~View()
@@ -237,6 +241,20 @@ void View::componentComplete()
     if (this->m_anchors.topAnchorView() != nullptr &&
             this->m_anchors.bottomAnchorView() != nullptr) {
         this->_set_anchors_top_bottom();
+    }
+
+    // Initial anchors.left and anchors.right set.
+    if (this->m_anchors.leftAnchorView() != nullptr &&
+            this->m_anchors.rightAnchorView() == nullptr) {
+        this->setX(this->m_anchors.leftAnchorView()->x());
+    }
+    if (this->m_anchors.rightAnchorView() != nullptr &&
+            this->m_anchors.leftAnchorView() == nullptr) {
+        this->setX(this->m_anchors.rightAnchorView()->width() - this->width());
+    }
+    if (this->m_anchors.leftAnchorView() != nullptr &&
+            this->m_anchors.rightAnchorView() != nullptr) {
+        this->_set_anchors_left_right();
     }
 }
 
@@ -443,14 +461,55 @@ void View::adjustAnchorsTopBottom()
 }
 
 void View::clearAnchorsLeftRight()
-{}
+{
+    if (this->pImpl->anchorsLeftConnection) {
+        QObject::disconnect(this->pImpl->anchorsLeftConnection);
+    }
+    if (this->pImpl->anchorsRightConnection) {
+        QObject::disconnect(this->pImpl->anchorsRightConnection);
+    }
+    if (this->pImpl->anchorsLeftRightConnection) {
+        QObject::disconnect(this->pImpl->anchorsLeftRightConnection);
+    }
+}
 
 void View::adjustAnchorsLeftRight()
-{}
+{
+    this->clearAnchorsLeftRight();
+
+    // Only left anchor.
+    if (this->m_anchors.leftAnchorView() != nullptr &&
+            this->m_anchors.rightAnchorView() == nullptr) {
+        this->pImpl->anchorsLeftConnection =
+            QObject::connect(this->m_anchors.leftAnchorView(), &QQuickItem::xChanged,
+                             this, [this]() {
+            this->setX(this->m_anchors.leftAnchorView()->x());
+        });
+    }
+    // Only right anchor.
+    if (this->m_anchors.rightAnchorView() != nullptr &&
+            this->m_anchors.leftAnchorView() == nullptr) {
+        this->pImpl->anchorsRightConnection =
+            QObject::connect(this->m_anchors.rightAnchorView(), &QQuickItem::widthChanged,
+                             this, [this]() {
+            this->setX(this->m_anchors.rightAnchorView()->width() - this->width());
+        });
+    }
+    // Left and right anchors.
+    if (this->m_anchors.leftAnchorView() != nullptr &&
+            this->m_anchors.rightAnchorView() != nullptr) {
+        this->pImpl->anchorsLeftRightConnection =
+            QObject::connect(this->m_anchors.leftAnchorView(), &QQuickItem::widthChanged,
+                             this, [this]() {
+            this->_set_anchors_left_right();
+        });
+    }
+}
 
 //===========================
 // Private methods.
 //===========================
+
 void View::_set_anchors_top_bottom()
 {
     const BaseWindow *window = qobject_cast<BaseWindow*>(this->window());
@@ -467,6 +526,12 @@ void View::_set_anchors_top_bottom()
     }
     this->setY(this->m_anchors.topAnchorView()->y() - menu_bar_offset);
     this->setHeight(height);
+}
+
+void View::_set_anchors_left_right()
+{
+    this->setX(this->m_anchors.leftAnchorView()->x());
+    this->setWidth(this->m_anchors.leftAnchorView()->width());
 }
 
 } // namespace bl

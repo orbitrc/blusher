@@ -227,7 +227,7 @@ Window {
   TabView {
     id: tabView
 
-    x: 10
+//    x: 10
 //    y: 150
     anchors.top: root.body.top
     anchors.bottom: root.body.bottom
@@ -322,8 +322,10 @@ Window {
   View {
     id: testView
     objectName: "testView"
-    anchors.top: root.body.top
-    anchors.bottom: root.body.bottom
+//    anchors.top: root.body.top
+//    anchors.bottom: root.body.bottom
+    anchors.left: root.body.left
+    anchors.right: root.body.right
     width: 100
     height: 100
 
