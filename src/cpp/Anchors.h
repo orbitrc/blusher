@@ -11,6 +11,7 @@ class View;
 class AnchorLine : public QMetaObject {
 public:
     enum class Anchor {
+        None,
         TopAnchor,
         LeftAnchor,
         RightAnchor,
@@ -92,6 +93,12 @@ private:
     QQuickItem *m_leftAnchorView;
     QQuickItem *m_rightAnchorView;
     QQuickItem *m_bottomAnchorView;
+    AnchorLine::Anchor m_topAnchor;
+    AnchorLine::Anchor m_leftAnchor;
+    AnchorLine::Anchor m_rightAnchor;
+    AnchorLine::Anchor m_bottomAnchor;
+    AnchorLine::Anchor m_horizontalCenterAnchor;
+    AnchorLine::Anchor m_verticalCenterAnchor;
     AnchorLine m_top;
     AnchorLine m_left;
     AnchorLine m_right;

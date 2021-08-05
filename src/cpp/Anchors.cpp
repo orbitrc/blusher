@@ -27,6 +27,13 @@ Anchors::Anchors(QObject *parent)
     this->m_leftAnchorView = nullptr;
     this->m_rightAnchorView = nullptr;
     this->m_bottomAnchorView = nullptr;
+
+    this->m_topAnchor = AnchorLine::Anchor::None;
+    this->m_leftAnchor = AnchorLine::Anchor::None;
+    this->m_rightAnchor = AnchorLine::Anchor::None;
+    this->m_bottomAnchor = AnchorLine::Anchor::None;
+    this->m_horizontalCenterAnchor = AnchorLine::Anchor::None;
+    this->m_verticalCenterAnchor = AnchorLine::Anchor::None;
 }
 
 QQuickItem* Anchors::fill() const
