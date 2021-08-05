@@ -242,7 +242,7 @@ void View::componentComplete()
 
     // Initial anchors.left and anchors.right set.
     if (this->_has_only_left_anchor()) {
-        this->setX(this->m_anchors.leftAnchorView()->x());
+        this->_set_anchors_left();
     }
     if (this->_has_only_right_anchor()) {
         this->setX(this->m_anchors.rightAnchorView()->width() - this->width());
@@ -473,7 +473,7 @@ void View::adjustAnchorsLeftRight()
         this->pImpl->anchorsLeftConnection =
             QObject::connect(this->m_anchors.leftAnchorView(), &QQuickItem::xChanged,
                              this, [this]() {
-            this->setX(this->m_anchors.leftAnchorView()->x());
+            this->_set_anchors_left();
         });
     }
     // Only right anchor.
@@ -558,6 +558,14 @@ bool View::_has_both_left_right_anchor()
     return false;
 }
 
+void View::_set_anchors_top()
+{
+}
+
+void View::_set_anchors_bottom()
+{
+}
+
 void View::_set_anchors_top_bottom()
 {
     const BaseWindow *window = qobject_cast<BaseWindow*>(this->window());
@@ -574,6 +582,22 @@ void View::_set_anchors_top_bottom()
     }
     this->setY(this->m_anchors.topAnchorView()->y() - menu_bar_offset);
     this->setHeight(height);
+}
+
+void View::_set_anchors_left()
+{
+    QQuickItem *anchorView = this->m_anchors.leftAnchorView();
+    const qreal leftMargin = this->m_anchors.leftMargin();
+
+    if (this->m_anchors.leftAnchor() == AnchorLine::Anchor::LeftAnchor) {
+        this->setX(anchorView->x() + leftMargin);
+    } else if (this->m_anchors.leftAnchor() == AnchorLine::Anchor::RightAnchor) {
+        this->setX(anchorView->x() + anchorView->width() + leftMargin);
+    }
+}
+
+void View::_set_anchors_right()
+{
 }
 
 void View::_set_anchors_left_right()

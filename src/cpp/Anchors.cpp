@@ -84,6 +84,38 @@ QQuickItem* Anchors::bottomAnchorView()
     return this->m_bottomAnchorView;
 }
 
+
+AnchorLine::Anchor Anchors::topAnchor() const
+{
+    return this->m_topAnchor;
+}
+
+AnchorLine::Anchor Anchors::leftAnchor() const
+{
+    return this->m_leftAnchor;
+}
+
+AnchorLine::Anchor Anchors::rightAnchor() const
+{
+    return this->m_rightAnchor;
+}
+
+AnchorLine::Anchor Anchors::bottomAnchor() const
+{
+    return this->m_bottomAnchor;
+}
+
+AnchorLine::Anchor Anchors::horizontalCenterAnchor() const
+{
+    return this->m_horizontalCenterAnchor;
+}
+
+AnchorLine::Anchor Anchors::verticalCenterAnchor() const
+{
+    return this->m_verticalCenterAnchor;
+}
+
+
 AnchorLine Anchors::top()
 {
     return this->m_top;
@@ -94,10 +126,12 @@ void Anchors::setTop(const AnchorLine &top)
     // Init.
     if (this->m_top.view == nullptr) {
         this->m_top.view = top.view;
+        this->m_top.anchor = top.anchor;
     }
     // Clear.
     if (this->m_topAnchorView != nullptr && this->m_bottom.view == top.view) {
         this->m_topAnchorView = nullptr;
+        this->m_topAnchor = AnchorLine::Anchor::None;
 
         emit this->topChanged();
         return;
@@ -111,8 +145,10 @@ void Anchors::setTop(const AnchorLine &top)
         if (top.view == this->m_top.view) {
             // If top anchor line's view is THIS.
             this->m_topAnchorView = nullptr;
+            this->m_topAnchor = AnchorLine::Anchor::None;
         } else {
             this->m_topAnchorView = top.view;
+            this->m_topAnchor = top.anchor;
         }
 
         emit this->topChanged();
@@ -129,10 +165,12 @@ void Anchors::setLeft(const AnchorLine &left)
     // Init.
     if (this->m_left.view == nullptr) {
         this->m_left.view = left.view;
+        this->m_left.anchor = left.anchor;
     }
     // Clear.
     if (this->m_leftAnchorView != nullptr && this->m_left.view == left.view) {
         this->m_leftAnchorView = nullptr;
+        this->m_leftAnchor = AnchorLine::Anchor::None;
 
         emit this->leftChanged();
         return;
@@ -146,8 +184,12 @@ void Anchors::setLeft(const AnchorLine &left)
         if (left.view == this->m_left.view) {
             // If left anchor line's view is THIS.
             this->m_leftAnchorView = nullptr;
+            this->m_leftAnchor = AnchorLine::Anchor::None;
         } else {
             this->m_leftAnchorView = left.view;
+            qDebug() << "left.view: " << left.view;
+            qDebug() << "left.anchor: " << static_cast<int>(left.anchor);
+            this->m_leftAnchor = left.anchor;
         }
 
         emit this->leftChanged();
@@ -164,10 +206,12 @@ void Anchors::setRight(const AnchorLine &right)
     // Init.
     if (this->m_right.view == nullptr) {
         this->m_right.view = right.view;
+        this->m_right.anchor = right.anchor;
     }
     // Clear.
     if (this->m_rightAnchorView != nullptr && this->m_right.view == right.view) {
         this->m_rightAnchorView = nullptr;
+        this->m_rightAnchor = AnchorLine::Anchor::None;
 
         emit this->rightChanged();
         return;
@@ -181,8 +225,10 @@ void Anchors::setRight(const AnchorLine &right)
         if (right.view == this->m_right.view) {
             // If right anchor line's view is THIS.
             this->m_rightAnchorView = nullptr;
+            this->m_rightAnchor = AnchorLine::Anchor::None;
         } else {
             this->m_rightAnchorView = right.view;
+            this->m_rightAnchor = right.anchor;
         }
 
         emit this->rightChanged();
@@ -199,12 +245,14 @@ void Anchors::setBottom(const AnchorLine &bottom)
     // Init.
     if (this->m_bottom.view == nullptr) {
         this->m_bottom.view = bottom.view;
+        this->m_bottom.anchor = bottom.anchor;
 
         return;
     }
     // Clear.
     if (this->m_bottomAnchorView != nullptr && this->m_bottom.view == bottom.view) {
         this->m_bottomAnchorView = nullptr;
+        this->m_bottomAnchor = AnchorLine::Anchor::None;
 
         emit this->bottomChanged();
         return;
@@ -217,8 +265,10 @@ void Anchors::setBottom(const AnchorLine &bottom)
         if (bottom.view == this->m_bottom.view) {
             // If bottom anchor line's view is THIS.
             this->m_bottomAnchorView = nullptr;
+            this->m_bottomAnchor = AnchorLine::Anchor::None;
         } else {
             this->m_bottomAnchorView = bottom.view;
+            this->m_bottomAnchor = bottom.anchor;
         }
 
         emit this->bottomChanged();

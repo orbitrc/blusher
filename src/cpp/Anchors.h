@@ -20,7 +20,7 @@ public:
         VerticalCenterAnchor,
     };
 public:
-    AnchorLine(QQuickItem *view = nullptr, Anchor anchor = Anchor::TopAnchor);
+    AnchorLine(QQuickItem *view = nullptr, Anchor anchor = Anchor::None);
 
     void setView(QQuickItem *view);
 
@@ -53,6 +53,13 @@ public:
     QQuickItem* leftAnchorView();
     QQuickItem* rightAnchorView();
     QQuickItem* bottomAnchorView();
+
+    AnchorLine::Anchor topAnchor() const;
+    AnchorLine::Anchor leftAnchor() const;
+    AnchorLine::Anchor rightAnchor() const;
+    AnchorLine::Anchor bottomAnchor() const;
+    AnchorLine::Anchor horizontalCenterAnchor() const;
+    AnchorLine::Anchor verticalCenterAnchor() const;
 
     AnchorLine top();
     void setTop(const AnchorLine& top);

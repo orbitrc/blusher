@@ -115,7 +115,11 @@ private:
     bool _has_only_right_anchor();
     bool _has_both_left_right_anchor();
 
+    void _set_anchors_top();
+    void _set_anchors_bottom();
     void _set_anchors_top_bottom();
+    void _set_anchors_left();
+    void _set_anchors_right();
     void _set_anchors_left_right();
 
 private:
