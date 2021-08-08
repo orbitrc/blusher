@@ -612,10 +612,16 @@ void View::_set_anchors_top_bottom()
 void View::_set_anchors_left()
 {
     QQuickItem *anchorView = this->m_anchors.leftAnchorView();
+    QQuickItem *parent = this->parentItem();
     const qreal leftMargin = this->m_anchors.leftMargin();
 
     if (this->m_anchors.leftAnchor() == AnchorLine::Anchor::LeftAnchor) {
-        this->setX(anchorView->x() + leftMargin);
+        if (parent == anchorView) {
+            // If anchored item is parent item, start x from 0.
+            this->setX(0 + leftMargin);
+        } else {
+            this->setX(anchorView->x() + leftMargin);
+        }
     } else if (this->m_anchors.leftAnchor() == AnchorLine::Anchor::RightAnchor) {
         this->setX(anchorView->x() + anchorView->width() + leftMargin);
     }

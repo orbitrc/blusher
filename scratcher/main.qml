@@ -227,9 +227,11 @@ Window {
   TabView {
     id: tabView
 
-    anchors.top: root.body.top
-    anchors.bottom: root.body.bottom
-    width: root.width - 20
+    anchors.fill: root.body
+    anchors.topMargin: 40
+    anchors.leftMargin: 20
+    anchors.rightMargin: 20
+    anchors.bottomMargin: 20
 
     // Windows demo.
     Tab {
