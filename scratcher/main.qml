@@ -227,12 +227,9 @@ Window {
   TabView {
     id: tabView
 
-//    x: 10
-//    y: 150
     anchors.top: root.body.top
     anchors.bottom: root.body.bottom
     width: root.width - 20
-//    height: 200
 
     // Windows demo.
     Tab {
@@ -322,8 +319,12 @@ Window {
   View {
     id: testView
     objectName: "testView"
-    anchors.top: root.body.top
+    anchors.fill: root.body
+//    anchors.top: root.body.top
     anchors.topMargin: 10
+    anchors.leftMargin: 20
+    anchors.rightMargin: 30
+    anchors.bottomMargin: 40
 //    anchors.bottom: root.body.bottom
 //    anchors.left: root.body.left
 //    anchors.right: root.body.right
@@ -335,9 +336,22 @@ Window {
       color: '#50ff0000'
       Text {
         text: 'hello?'
-        anchors.bottom: parent.bottom
       }
     }
+  }
+  // Top and left margin test.
+  Box {
+    width: 20
+    height: 10
+    color: 'green'
+  }
+  // Bottom and right margin test.
+  Box {
+    anchors.bottom: root.body.bottom
+    anchors.right: root.body.right
+    width: 30
+    height: 40
+    color: 'green'
   }
 
   Menu {

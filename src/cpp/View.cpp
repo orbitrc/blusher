@@ -227,10 +227,15 @@ void View::componentComplete()
 
     // Initial anchors.fill set.
     if (this->m_anchors.fill() != nullptr) {
-        this->setX(0);
-        this->setY(0);
-        this->setWidth(this->m_anchors.fill()->width());
-        this->setHeight(this->m_anchors.fill()->height());
+        const qreal topMargin = this->m_anchors.topMargin();
+        const qreal leftMargin = this->m_anchors.leftMargin();
+        const qreal rightMargin = this->m_anchors.rightMargin();
+        const qreal bottomMargin = this->m_anchors.bottomMargin();
+
+        this->setX(0 + leftMargin);
+        this->setY(0 + topMargin);
+        this->setWidth(this->m_anchors.fill()->width() - leftMargin - rightMargin);
+        this->setHeight(this->m_anchors.fill()->height() - topMargin - bottomMargin);
     }
 
     // Initial anchors.top and anchors.bottom set.
@@ -351,25 +356,30 @@ void View::adjustAnchorsFill()
 {
     this->clearAnchorsFill();
 
+    const qreal topMargin = this->m_anchors.topMargin();
+    const qreal leftMargin = this->m_anchors.leftMargin();
+    const qreal rightMargin = this->m_anchors.rightMargin();
+    const qreal bottomMargin = this->m_anchors.bottomMargin();
+
     this->pImpl->anchorsFillXConnection =
         QObject::connect(this->m_anchors.fill(), &QQuickItem::xChanged,
-                         this, [this]() {
-        this->setX(0);
+                         this, [this, leftMargin]() {
+        this->setX(0 + leftMargin);
     });
     this->pImpl->anchorsFillYConnection =
         QObject::connect(this->m_anchors.fill(), &QQuickItem::yChanged,
-                         this, [this]() {
-        this->setY(0);
+                         this, [this, topMargin]() {
+        this->setY(0 + topMargin);
     });
     this->pImpl->anchorsFillWidthConnection =
         QObject::connect(this->m_anchors.fill(), &QQuickItem::widthChanged,
-                         this, [this]() {
-        this->setWidth(this->m_anchors.fill()->width());
+                         this, [this, leftMargin, rightMargin]() {
+        this->setWidth(this->m_anchors.fill()->width() - leftMargin - rightMargin);
     });
     this->pImpl->anchorsFillHeightConnection =
         QObject::connect(this->m_anchors.fill(), &QQuickItem::heightChanged,
-                         this, [this]() {
-        this->setHeight(this->m_anchors.fill()->height());
+                         this, [this, topMargin, bottomMargin]() {
+        this->setHeight(this->m_anchors.fill()->height() - topMargin - bottomMargin);
     });
 }
 
