@@ -235,10 +235,10 @@ void View::componentComplete()
 
     // Initial anchors.top and anchors.bottom set.
     if (this->_has_only_top_anchor()) {
-        this->setY(this->m_anchors.topAnchorView()->y());
+        this->_set_anchors_top();
     }
     if (this->_has_only_bottom_anchor()) {
-        this->setY(this->m_anchors.bottomAnchorView()->height() - this->height());
+        this->_set_anchors_bottom();
     }
     if (this->_has_both_top_bottom_anchor()) {
         this->_set_anchors_top_bottom();
@@ -421,7 +421,7 @@ void View::adjustAnchorsTopBottom()
         this->pImpl->anchorsTopConnection =
             QObject::connect(this->m_anchors.topAnchorView(), &QQuickItem::yChanged,
                              this, [this]() {
-            this->setY(this->m_anchors.topAnchorView()->y());
+            this->_set_anchors_top();
         });
     }
     // Only bottom anchor.
@@ -551,6 +551,22 @@ bool View::_has_both_left_right_anchor()
 
 void View::_set_anchors_top()
 {
+    const BaseWindow *window = qobject_cast<BaseWindow*>(this->window());
+    const QQuickItem *body = (window
+        ? window->contentItem()->childItems()[1]
+        : nullptr);
+   const QQuickItem *anchorView = this->m_anchors.topAnchorView();
+   const qreal topMargin = this->m_anchors.topMargin();
+   qreal menuBarOffset = 0;
+
+   if (this->m_anchors.topAnchor() == AnchorLine::Anchor::TopAnchor) {
+       if (window && body == anchorView) {
+           menuBarOffset = 30;
+       }
+       this->setY(anchorView->y() - menuBarOffset + topMargin);
+   } else if (this->m_anchors.topAnchor() == AnchorLine::Anchor::BottomAnchor) {
+       this->setY(anchorView->y() + this->height() + topMargin);
+   }
 }
 
 void View::_set_anchors_bottom()
