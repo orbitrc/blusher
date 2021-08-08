@@ -228,7 +228,7 @@ Window {
     id: tabView
 
     anchors.fill: root.body
-    anchors.topMargin: 40
+    anchors.topMargin: 120
     anchors.leftMargin: 20
     anchors.rightMargin: 20
     anchors.bottomMargin: 20
