@@ -321,15 +321,8 @@ Window {
   View {
     id: testView
     objectName: "testView"
-    anchors.fill: root.body
-//    anchors.top: root.body.top
-    anchors.topMargin: 10
-    anchors.leftMargin: 20
-    anchors.rightMargin: 30
-    anchors.bottomMargin: 40
-//    anchors.bottom: root.body.bottom
-//    anchors.left: root.body.left
-//    anchors.right: root.body.right
+    anchors.horizontalCenter: root.body.horizontalCenter
+    anchors.verticalCenter: root.body.verticalCenter
     width: 100
     height: 100
 
@@ -340,20 +333,6 @@ Window {
         text: 'hello?'
       }
     }
-  }
-  // Top and left margin test.
-  Box {
-    width: 20
-    height: 10
-    color: 'green'
-  }
-  // Bottom and right margin test.
-  Box {
-    anchors.bottom: root.body.bottom
-    anchors.right: root.body.right
-    width: 30
-    height: 40
-    color: 'green'
   }
 
   Menu {
