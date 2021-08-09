@@ -21,6 +21,9 @@ public:
     QMetaObject::Connection anchorsLeftConnection;
     QMetaObject::Connection anchorsRightConnection;
     QMetaObject::Connection anchorsLeftRightConnection;
+
+    QMetaObject::Connection anchorsHorizontalCenterConnection;
+    QMetaObject::Connection anchorsVerticalCenterConnection;
 };
 
 View::View(QQuickItem *parent)
@@ -71,6 +74,10 @@ View::View(QQuickItem *parent)
                      this, &View::adjustAnchorsLeftRight);
     QObject::connect(&(this->m_anchors), &Anchors::rightChanged,
                      this, &View::adjustAnchorsLeftRight);
+    QObject::connect(&(this->m_anchors), &Anchors::horizontalCenterChanged,
+                     this, &View::adjustAnchorsHorizontalCenter);
+    QObject::connect(&(this->m_anchors), &Anchors::verticalCenterChanged,
+                     this, &View::adjustAnchorsVerticalCenter);
 }
 
 View::~View()
@@ -262,6 +269,7 @@ void View::componentComplete()
     if (this->m_anchors.horizontalCenterAnchorView() != nullptr) {
         this->_set_anchors_horizontal_center();
     }
+    // Initial anchors.verticalCenter set.
     if (this->m_anchors.verticalCenterAnchorView() != nullptr) {
         this->_set_anchors_vertical_center();
     }
@@ -497,6 +505,45 @@ void View::adjustAnchorsLeftRight()
             QObject::connect(this->m_anchors.leftAnchorView(), &QQuickItem::widthChanged,
                              this, [this]() {
             this->_set_anchors_left_right();
+        });
+    }
+}
+
+void View::clearAnchorsHorizontalCenter()
+{
+    if (this->pImpl->anchorsHorizontalCenterConnection) {
+        QObject::disconnect(this->pImpl->anchorsHorizontalCenterConnection);
+    }
+}
+
+void View::adjustAnchorsHorizontalCenter()
+{
+    this->clearAnchorsHorizontalCenter();
+
+    if (this->m_anchors.horizontalCenterAnchorView() != nullptr) {
+        this->pImpl->anchorsHorizontalCenterConnection =
+            QObject::connect(this->m_anchors.horizontalCenterAnchorView(), &QQuickItem::widthChanged,
+                             this, [this]() {
+            this->_set_anchors_horizontal_center();
+        });
+    }
+}
+
+void View::clearAnchorsVerticalCenter()
+{
+    if (this->pImpl->anchorsVerticalCenterConnection) {
+        QObject::disconnect(this->pImpl->anchorsVerticalCenterConnection);
+    }
+}
+
+void View::adjustAnchorsVerticalCenter()
+{
+    this->clearAnchorsVerticalCenter();
+
+    if (this->m_anchors.verticalCenterAnchorView() != nullptr) {
+        QObject::connect(this->m_anchors.verticalCenterAnchorView(), &QQuickItem::heightChanged,
+                         this, [this]() {
+            this->_set_anchors_vertical_center();
         });
     }
 }

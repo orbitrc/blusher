@@ -94,6 +94,14 @@ public slots:
     void clearAnchorsLeftRight();
     /// \brief Connect signals to slots about anchors.left and anchors.right.
     void adjustAnchorsLeftRight();
+    /// \brief Disconnect the connection about anchors.horizontalCenter.
+    void clearAnchorsHorizontalCenter();
+    /// \brief Connect signal to slot about anchors.horizontalCenter.
+    void adjustAnchorsHorizontalCenter();
+    /// \brief Disconnect the connection about anchors.verticalCenter.
+    void clearAnchorsVerticalCenter();
+    /// \brief Connect signal to slot about anchors.verticalCenter.
+    void adjustAnchorsVerticalCenter();
 
 private slots:
     void onWindowChanged(QQuickWindow *window);
