@@ -27,6 +27,8 @@ Anchors::Anchors(QObject *parent)
     this->m_leftAnchorView = nullptr;
     this->m_rightAnchorView = nullptr;
     this->m_bottomAnchorView = nullptr;
+    this->m_horizontalCenterAnchorView = nullptr;
+    this->m_verticalCenterAnchorView = nullptr;
 
     this->m_topAnchor = AnchorLine::Anchor::None;
     this->m_leftAnchor = AnchorLine::Anchor::None;
@@ -82,6 +84,16 @@ QQuickItem* Anchors::rightAnchorView()
 QQuickItem* Anchors::bottomAnchorView()
 {
     return this->m_bottomAnchorView;
+}
+
+QQuickItem* Anchors::horizontalCenterAnchorView()
+{
+    return this->m_horizontalCenterAnchorView;
+}
+
+QQuickItem* Anchors::verticalCenterAnchorView()
+{
+    return this->m_verticalCenterAnchorView;
 }
 
 
@@ -280,8 +292,36 @@ AnchorLine Anchors::horizontalCenter()
 
 void Anchors::setHorizontalCenter(const AnchorLine& hCenter)
 {
-    if (this->m_horizontalCenter.view != hCenter.view) {
+    // Init.
+    if (this->m_horizontalCenter.view == nullptr) {
         this->m_horizontalCenter.view = hCenter.view;
+        this->m_horizontalCenter.anchor = hCenter.anchor;
+
+        return;
+    }
+    // Clear.
+    if (this->m_horizontalCenterAnchorView != nullptr &&
+            this->m_horizontalCenter.view == hCenter.view) {
+        this->m_horizontalCenterAnchorView = nullptr;
+        this->m_horizontalCenterAnchor = AnchorLine::Anchor::None;
+
+        emit this->horizontalCenterChanged();
+        return;
+    } else if (this->m_horizontalCenterAnchorView == nullptr &&
+            this->m_horizontalCenter.view == hCenter.view) {
+        // Do not emit if already cleared.
+        return;
+    }
+
+    if (this->m_horizontalCenterAnchorView != hCenter.view) {
+        if (hCenter.view == this->m_horizontalCenter.view) {
+            // If horizontalCenter anchor line's view is THIS.
+            this->m_horizontalCenterAnchorView = nullptr;
+            this->m_horizontalCenterAnchor = AnchorLine::Anchor::None;
+        } else {
+            this->m_horizontalCenterAnchorView = hCenter.view;
+            this->m_horizontalCenterAnchor = hCenter.anchor;
+        }
 
         emit this->horizontalCenterChanged();
     }
@@ -294,8 +334,36 @@ AnchorLine Anchors::verticalCenter()
 
 void Anchors::setVerticalCenter(const AnchorLine &vCenter)
 {
-    if (this->m_verticalCenter.view != vCenter.view) {
+    // Init.
+    if (this->m_verticalCenter.view == nullptr) {
         this->m_verticalCenter.view = vCenter.view;
+        this->m_verticalCenter.anchor = vCenter.anchor;
+
+        return;
+    }
+    // Clear.
+    if (this->m_verticalCenterAnchorView != nullptr &&
+            this->m_verticalCenter.view == vCenter.view) {
+        this->m_verticalCenterAnchorView = nullptr;
+        this->m_verticalCenterAnchor = AnchorLine::Anchor::None;
+
+        emit this->verticalCenterChanged();
+        return;
+    } else if (this->m_verticalCenterAnchorView == nullptr &&
+            this->m_verticalCenter.view == vCenter.view) {
+        // Do not emit if already cleared.
+        return;
+    }
+
+    if (this->m_verticalCenterAnchorView != vCenter.view) {
+        if (vCenter.view == this->m_verticalCenter.view) {
+            // If verticalCenter anchor line's view is THIS.
+            this->m_verticalCenterAnchorView = nullptr;
+            this->m_verticalCenterAnchor = AnchorLine::Anchor::None;
+        } else {
+            this->m_verticalCenterAnchorView = vCenter.view;
+            this->m_verticalCenterAnchor = vCenter.anchor;
+        }
 
         emit this->verticalCenterChanged();
     }

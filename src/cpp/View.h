@@ -121,6 +121,8 @@ private:
     void _set_anchors_left();
     void _set_anchors_right();
     void _set_anchors_left_right();
+    void _set_anchors_horizontal_center();
+    void _set_anchors_vertical_center();
 
 private:
     QPointF m_pos;
@@ -128,8 +130,6 @@ private:
     bool m_scaleWidth;
     bool m_scaleHeight;
     Anchors m_anchors;
-    AnchorLine m_horizontalCenter;
-    AnchorLine m_verticalCenter;
 };
 
 } // namespace bl

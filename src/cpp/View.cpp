@@ -54,8 +54,6 @@ View::View(QQuickItem *parent)
     this->m_anchors.setLeft(AnchorLine(this, AnchorLine::Anchor::LeftAnchor));
     this->m_anchors.setRight(AnchorLine(this, AnchorLine::Anchor::RightAnchor));
     this->m_anchors.setBottom(AnchorLine(this, AnchorLine::Anchor::BottomAnchor));
-    this->m_horizontalCenter = AnchorLine(this);
-    this->m_verticalCenter = AnchorLine(this);
     this->m_anchors.setTopMargin(0);
     this->m_anchors.setLeftMargin(0);
     this->m_anchors.setRightMargin(0);
@@ -210,12 +208,12 @@ AnchorLine View::bottom()
 
 AnchorLine View::horizontalCenter()
 {
-    return this->m_horizontalCenter;
+    return this->m_anchors.horizontalCenter();
 }
 
 AnchorLine View::verticalCenter()
 {
-    return this->m_verticalCenter;
+    return this->m_anchors.verticalCenter();
 }
 
 //===================
@@ -258,6 +256,14 @@ void View::componentComplete()
     }
     if (this->_has_both_left_right_anchor()) {
         this->_set_anchors_left_right();
+    }
+
+    // Initial anchors.horizontalCenter set.
+    if (this->m_anchors.horizontalCenterAnchorView() != nullptr) {
+        this->_set_anchors_horizontal_center();
+    }
+    if (this->m_anchors.verticalCenterAnchorView() != nullptr) {
+        this->_set_anchors_vertical_center();
     }
 }
 
@@ -647,6 +653,24 @@ void View::_set_anchors_left_right()
 
     this->setX(anchorView->x() - leftMargin);
     this->setWidth(anchorView->width() - leftMargin - rightMargin);
+}
+
+void View::_set_anchors_horizontal_center()
+{
+    QQuickItem *anchorView = this->m_anchors.horizontalCenterAnchorView();
+
+    if (this->m_anchors.horizontalCenterAnchor() == AnchorLine::Anchor::HorizontalCenterAnchor) {
+        this->setX((anchorView->width() - this->width()) / 2);
+    }
+}
+
+void View::_set_anchors_vertical_center()
+{
+    QQuickItem *anchorView = this->m_anchors.verticalCenterAnchorView();
+
+    if (this->m_anchors.verticalCenterAnchor() == AnchorLine::Anchor::VerticalCenterAnchor) {
+        this->setY((anchorView->height() - this->height()) / 2);
+    }
 }
 
 } // namespace bl

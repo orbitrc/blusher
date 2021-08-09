@@ -56,6 +56,8 @@ public:
     QQuickItem* leftAnchorView();
     QQuickItem* rightAnchorView();
     QQuickItem* bottomAnchorView();
+    QQuickItem* horizontalCenterAnchorView();
+    QQuickItem* verticalCenterAnchorView();
 
     AnchorLine::Anchor topAnchor() const;
     AnchorLine::Anchor leftAnchor() const;
@@ -115,6 +117,8 @@ private:
     QQuickItem *m_leftAnchorView;
     QQuickItem *m_rightAnchorView;
     QQuickItem *m_bottomAnchorView;
+    QQuickItem *m_horizontalCenterAnchorView;
+    QQuickItem *m_verticalCenterAnchorView;
     AnchorLine::Anchor m_topAnchor;
     AnchorLine::Anchor m_leftAnchor;
     AnchorLine::Anchor m_rightAnchor;
