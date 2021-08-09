@@ -227,9 +227,11 @@ Window {
   TabView {
     id: tabView
 
-    y: 150
-    width: 400
-    height: 200
+    anchors.fill: root.body
+    anchors.topMargin: 120
+    anchors.leftMargin: 20
+    anchors.rightMargin: 20
+    anchors.bottomMargin: 20
 
     // Windows demo.
     Tab {
@@ -312,6 +314,23 @@ Window {
       Label {
         y: 30
         text: root.windowId.toString()
+      }
+    }
+  }
+
+  View {
+    id: testView
+    objectName: "testView"
+    anchors.horizontalCenter: root.body.horizontalCenter
+    anchors.verticalCenter: root.body.verticalCenter
+    width: 100
+    height: 100
+
+    Box {
+      anchors.fill: parent
+      color: '#50ff0000'
+      Text {
+        text: 'hello?'
       }
     }
   }

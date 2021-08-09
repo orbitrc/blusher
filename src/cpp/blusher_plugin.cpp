@@ -9,6 +9,7 @@
 #include "Menu.h"
 #include "MenuItem.h"
 #include "KeyEvent.h"
+#include "Anchors.h"
 
 #include "Blusher.h"
 #include "DesktopEnvironment.h"
@@ -61,8 +62,10 @@ void BlusherPlugin::registerTypes(const char *uri)
     qmlRegisterType<bl::MenuItem>(uri, 0, 1, "MenuItem");
 
     qRegisterMetaType<bl::BaseWindow*>("BaseWindow*");
+    qRegisterMetaType<bl::AnchorLine>("AnchorLine");
 
     qmlRegisterUncreatableType<bl::KeyEvent>(uri, 0, 1, "KeyEvent", "");
+    qmlRegisterUncreatableType<bl::Anchors>(uri, 0, 1, "Anchors", "");
 
     qmlRegisterSingletonType<bl::Blusher>("Blusher", 0, 1, "Blusher", blusher_blusher_singleton_provider);
     qmlRegisterSingletonType<bl::DesktopEnvironment>("Blusher", 0, 1, "DesktopEnvironmentPlugin", blusher_desktop_environment_singleton_provider);

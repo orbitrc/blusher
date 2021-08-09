@@ -19,6 +19,15 @@ Box::Box(QQuickItem *parent)
     this->m_bottomRightRadius = 0;
     this->m_borderWidth = 0;
     this->m_borderColor = Qt::black;
+
+    QObject::connect(this, &Box::widthChanged,
+                     this, [this]() {
+        update();
+    });
+    QObject::connect(this, &Box::heightChanged,
+                     this, [this]() {
+        update();
+    });
 }
 
 QColor Box::color() const
@@ -138,6 +147,9 @@ void Box::setBorderColor(const QColor &color)
 //===================
 QSGNode* Box::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData *)
 {
+    if (this->width() == 0 || this->height() == 0) {
+        return oldNode;
+    }
     qreal scale = ((this->window() != nullptr) ? this->window()->screenScale() : 1);
     qreal width_scale = (this->scaleWidth())
         ? ((this->window() != nullptr) ? this->window()->screenScale() : 1)
