@@ -53,7 +53,7 @@ View {
   }
 
   Text {
-    anchors.left: checkArea.right
+    x: checkArea.width
     text: root.title
     font.pixelSize: 14 * (root.window ? root.window.screenScale : 1)
   }
