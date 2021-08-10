@@ -51,6 +51,7 @@ View {
     width: slider.width - ((knob.width / 2) * 2)
     height: 6
     radius: height / 2
+    color: '#b3b3b3'
   }
 
   Box {
@@ -93,6 +94,7 @@ View {
   Rectangle {
     anchors.fill: parent
     color: "#55ff0000"
+    visible: false
   }
 
   Component.onCompleted: {

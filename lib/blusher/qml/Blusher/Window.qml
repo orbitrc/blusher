@@ -10,6 +10,8 @@ BaseWindow {
 
   readonly property alias body: body
 
+  color: '#d6d1ce'
+
   MenuBar {
     id: menuBar
     menu: root.menu

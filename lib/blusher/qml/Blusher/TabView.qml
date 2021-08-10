@@ -18,9 +18,10 @@ View {
     width: root.width
     height: root.height - 10
 
-    radius: 5
-    borderWidth: 1
-    borderColor: '#000000'
+    radius: 6
+//    borderWidth: 1
+//    borderColor: '#000000'
+    color: '#c6c6c6'
   }
 
   View {

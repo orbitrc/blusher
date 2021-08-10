@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>BoxesDemo.qml</file>
+        <file>SlidersDemo.qml</file>
     </qresource>
 </RCC>

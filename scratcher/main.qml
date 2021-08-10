@@ -206,24 +206,6 @@ Window {
     }
   }
 
-  // Sliders demo.
-  Slider {
-    id: slider
-
-    x: 20
-    y: 100
-
-    start: 0
-    end: 200
-    step: 1
-    value: 50
-  }
-  Label {
-    x: 20
-    anchors.top: slider.bottom
-    text: slider.value
-  }
-
   TabView {
     id: tabView
 
@@ -281,6 +263,12 @@ Window {
       BoxesDemo {
       }
     }
+    Tab {
+      title: 'Sliders'
+
+      SlidersDemo {
+      }
+    }
   }
 
   Component {
@@ -321,6 +309,7 @@ Window {
   View {
     id: testView
     objectName: "testView"
+    visible: false
     anchors.horizontalCenter: root.body.horizontalCenter
     anchors.verticalCenter: root.body.verticalCenter
     width: 100
