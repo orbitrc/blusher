@@ -4,3 +4,4 @@ VERSION_MINOR = 1
 VERSION_PATCH = 0
 VERSION = 0.1.0
 QML_PLUGIN_DIR = lib/blusher/qml/Blusher
+CPP_HEADERS_DIR = src/cpp

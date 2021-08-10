@@ -18,6 +18,7 @@ install:
 	cp -r lib/blusher /usr/lib/blusher
 	rm -rf /usr/include/blusher
 	cp -r include/blusher /usr/include/blusher
+	cp $(CPP_HEADERS_DIR)/*.h /usr/include/blusher/
 
 clean:
 	rm -rf build
