@@ -1,6 +1,8 @@
 import QtQuick 2.12
 
-Item {
+import Blusher 0.1
+
+View {
   id: root
 
   clip: true
@@ -13,7 +15,7 @@ Item {
   Component.onCompleted: {
   }
 
-  Item {
+  View {
     id: contentArea
     children: root.childItems
     width: contentArea.childrenRect.width
@@ -37,16 +39,16 @@ Item {
       contentArea.y = newY;
     }
 
-    Rectangle {
+    Box {
       id: verticalTrack
 
-      anchors.right: parent.right
+      x: parent.width - width
       visible: (root.height <= contentArea.height)
       width: 10
       height: root.height
       color: "#55dedede"
 
-      Rectangle {
+      Box {
         id: verticalKnob
 
         width: 8

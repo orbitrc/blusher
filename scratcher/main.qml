@@ -269,6 +269,12 @@ Window {
       SlidersDemo {
       }
     }
+    Tab {
+      title: 'Scroll view'
+
+      ScrollViewDemo {
+      }
+    }
   }
 
   Component {

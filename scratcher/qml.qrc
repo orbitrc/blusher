@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>BoxesDemo.qml</file>
         <file>SlidersDemo.qml</file>
+        <file>ScrollViewDemo.qml</file>
     </qresource>
 </RCC>

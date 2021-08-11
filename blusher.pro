@@ -58,6 +58,7 @@ DISTFILES += \
     lib/blusher/qml/Blusher/Button.qml \
     lib/blusher/qml/Blusher/Label.qml \
     lib/blusher/qml/Blusher/MenuBar.qml \
+    lib/blusher/qml/Blusher/ScrollView.qml \
     lib/blusher/qml/Blusher/Toolbar.qml \
     lib/blusher/qml/Blusher/ToolbarItem.qml \
     lib/blusher/qml/Blusher/DesktopEnvironment/DesktopEnvironment.qml \
