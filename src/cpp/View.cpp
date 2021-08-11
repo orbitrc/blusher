@@ -630,7 +630,7 @@ void View::_set_anchors_top()
        }
        this->setY(anchorView->y() - menuBarOffset + topMargin);
    } else if (this->m_anchors.topAnchor() == AnchorLine::Anchor::BottomAnchor) {
-       this->setY(anchorView->y() + this->height() + topMargin);
+       this->setY(anchorView->y() + anchorView->height() + topMargin);
    }
 }
 

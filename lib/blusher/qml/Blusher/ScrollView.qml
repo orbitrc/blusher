@@ -64,6 +64,6 @@ View {
   }
 
   function minimumContentY() {
-    return -100;
+    return contentArea.height - root.height;
   }
 }
