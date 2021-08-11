@@ -11,53 +11,53 @@ Window {
   width: 500
   height: 400
 
-//  menu: Menu {
-//    title: 'Application Menu'
-//    type: Menu.MenuType.MenuBarMenu
-//    MenuItem {
-//      title: 'File'
-//      submenu: Menu {
-//        title: 'File'
-//        type: Menu.MenuType.Submenu
-//        MenuItem {
-//          title: 'Quit'
-//          onTriggered: {
-//            print('Quit');
-//            Qt.quit();
-//          }
-//        }
-//      }
-//    }
-//    MenuItem {
-//      title: 'Edit'
-//      submenu: Menu {
-//        type: Menu.MenuType.Submenu
-//        title: 'Edit'
-//        MenuItem {
-//          title: 'Copy'
-//        }
-//        MenuItem {
-//          title: 'Paste'
-//        }
-//        MenuItem {
-//          separator: true
-//        }
-//        MenuItem {
-//          title: 'Select All'
-//        }
-//      }
-//    }
-//    MenuItem {
-//      title: 'View'
-//      submenu: Menu {
-//        type: Menu.MenuType.Submenu
-//        title: 'View'
-//      }
-//    }
-//    MenuItem {
-//      title: 'Help'
-//    }
-//  }
+  menu: Menu {
+    title: 'Application Menu'
+    type: Menu.MenuType.MenuBarMenu
+    MenuItem {
+      title: 'File'
+      submenu: Menu {
+        title: 'File'
+        type: Menu.MenuType.Submenu
+        MenuItem {
+          title: 'Quit'
+          onTriggered: {
+            print('Quit');
+            Qt.quit();
+          }
+        }
+      }
+    }
+    MenuItem {
+      title: 'Edit'
+      submenu: Menu {
+        type: Menu.MenuType.Submenu
+        title: 'Edit'
+        MenuItem {
+          title: 'Copy'
+        }
+        MenuItem {
+          title: 'Paste'
+        }
+        MenuItem {
+          separator: true
+        }
+        MenuItem {
+          title: 'Select All'
+        }
+      }
+    }
+    MenuItem {
+      title: 'View'
+      submenu: Menu {
+        type: Menu.MenuType.Submenu
+        title: 'View'
+      }
+    }
+    MenuItem {
+      title: 'Help'
+    }
+  }
 
   View {
     anchors.fill: parent
