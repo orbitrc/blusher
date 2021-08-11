@@ -61,6 +61,7 @@ void BlusherPlugin::registerTypes(const char *uri)
     qmlRegisterType<bl::Menu>(uri, 0, 1, "Menu");
     qmlRegisterType<bl::MenuItem>(uri, 0, 1, "MenuItem");
 
+    qRegisterMetaType<bl::Menu*>("Menu*");
     qRegisterMetaType<bl::BaseWindow*>("BaseWindow*");
     qRegisterMetaType<bl::AnchorLine>("AnchorLine");
 
