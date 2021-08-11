@@ -624,7 +624,9 @@ void View::_set_anchors_top()
 
    if (this->m_anchors.topAnchor() == AnchorLine::Anchor::TopAnchor) {
        if (window && body == anchorView) {
-           menuBarOffset = 30;
+           if (window->menu() != nullptr) {
+               menuBarOffset = 30;
+           }
        }
        this->setY(anchorView->y() - menuBarOffset + topMargin);
    } else if (this->m_anchors.topAnchor() == AnchorLine::Anchor::BottomAnchor) {
@@ -653,7 +655,9 @@ void View::_set_anchors_top_bottom()
     qreal menu_bar_offset = 0;
     qreal height = 0;
     if (window && body == this->m_anchors.topAnchorView()) {
-        menu_bar_offset = 30;
+        if (window->menu() != nullptr) {
+            menu_bar_offset = 30;
+        }
         height = window->height() - menu_bar_offset;
     } else {
         height = this->m_anchors.topAnchorView()->height();
