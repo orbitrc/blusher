@@ -738,7 +738,7 @@ void View::_set_anchors_vertical_center()
         if (window && body == anchorView && window->menu() != nullptr) {
             menu_bar_offset = 30;
         }
-        this->setY(menu_bar_offset - anchorView->y() + ((anchorView->height() - this->height()) / 2));
+        this->setY(anchorView->y() - menu_bar_offset + ((anchorView->height() - this->height()) / 2));
     }
 }
 
