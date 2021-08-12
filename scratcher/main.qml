@@ -326,6 +326,13 @@ Window {
       Text {
         text: 'hello?'
       }
+
+      Box {
+        anchors.verticalCenter: parent.verticalCenter
+        width: 50
+        height: 50
+        color: 'cyan'
+      }
     }
   }
 

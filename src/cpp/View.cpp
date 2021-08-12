@@ -727,10 +727,18 @@ void View::_set_anchors_horizontal_center()
 
 void View::_set_anchors_vertical_center()
 {
+    const BaseWindow *window = qobject_cast<BaseWindow*>(this->window());
+    const QQuickItem *body = (window
+        ? window->contentItem()->childItems()[1]
+        : nullptr);
+    qreal menu_bar_offset = 0;
     QQuickItem *anchorView = this->m_anchors.verticalCenterAnchorView();
 
     if (this->m_anchors.verticalCenterAnchor() == AnchorLine::Anchor::VerticalCenterAnchor) {
-        this->setY(anchorView->y() + ((anchorView->height() - this->height()) / 2));
+        if (window && body == anchorView && window->menu() != nullptr) {
+            menu_bar_offset = 30;
+        }
+        this->setY(menu_bar_offset - anchorView->y() + ((anchorView->height() - this->height()) / 2));
     }
 }
 
