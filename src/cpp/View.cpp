@@ -18,7 +18,9 @@ public:
     QMetaObject::Connection anchorsTopConnection;
     QMetaObject::Connection anchorsBottomConnection;
     QMetaObject::Connection anchorsTopBottomConnection;
-    QMetaObject::Connection anchorsLeftConnection;
+
+    QMetaObject::Connection anchorsLeftXConnection;
+    QMetaObject::Connection anchorsLeftWidthConnection;
     QMetaObject::Connection anchorsRightConnection;
     QMetaObject::Connection anchorsLeftRightConnection;
 
@@ -468,8 +470,11 @@ void View::adjustAnchorsTopBottom()
 
 void View::clearAnchorsLeftRight()
 {
-    if (this->pImpl->anchorsLeftConnection) {
-        QObject::disconnect(this->pImpl->anchorsLeftConnection);
+    if (this->pImpl->anchorsLeftXConnection) {
+        QObject::disconnect(this->pImpl->anchorsLeftXConnection);
+    }
+    if (this->pImpl->anchorsLeftWidthConnection) {
+        QObject::disconnect(this->pImpl->anchorsLeftWidthConnection);
     }
     if (this->pImpl->anchorsRightConnection) {
         QObject::disconnect(this->pImpl->anchorsRightConnection);
@@ -485,8 +490,13 @@ void View::adjustAnchorsLeftRight()
 
     // Only left anchor.
     if (this->_has_only_left_anchor()) {
-        this->pImpl->anchorsLeftConnection =
+        this->pImpl->anchorsLeftXConnection =
             QObject::connect(this->m_anchors.leftAnchorView(), &QQuickItem::xChanged,
+                             this, [this]() {
+            this->_set_anchors_left();
+        });
+        this->pImpl->anchorsLeftWidthConnection =
+            QObject::connect(this->m_anchors.leftAnchorView(), &QQuickItem::widthChanged,
                              this, [this]() {
             this->_set_anchors_left();
         });
