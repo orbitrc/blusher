@@ -315,8 +315,7 @@ Window {
   View {
     id: testView
     objectName: "testView"
-    visible: false
-    anchors.horizontalCenter: root.body.horizontalCenter
+    visible: true
     anchors.verticalCenter: root.body.verticalCenter
     width: 100
     height: 100

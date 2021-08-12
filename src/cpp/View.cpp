@@ -721,7 +721,7 @@ void View::_set_anchors_horizontal_center()
     QQuickItem *anchorView = this->m_anchors.horizontalCenterAnchorView();
 
     if (this->m_anchors.horizontalCenterAnchor() == AnchorLine::Anchor::HorizontalCenterAnchor) {
-        this->setX((anchorView->width() - this->width()) / 2);
+        this->setX(anchorView->x() + ((anchorView->width() - this->width()) / 2));
     }
 }
 
@@ -730,7 +730,7 @@ void View::_set_anchors_vertical_center()
     QQuickItem *anchorView = this->m_anchors.verticalCenterAnchorView();
 
     if (this->m_anchors.verticalCenterAnchor() == AnchorLine::Anchor::VerticalCenterAnchor) {
-        this->setY((anchorView->height() - this->height()) / 2);
+        this->setY(anchorView->y() + ((anchorView->height() - this->height()) / 2));
     }
 }
 
