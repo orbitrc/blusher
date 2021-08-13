@@ -54,7 +54,7 @@ View {
         width: 8
         radius: 4
         height: root.knobHeight()
-        y: -contentArea.y
+        y: root.verticalKnobY()
         color: "cyan"
       }
     }
@@ -62,6 +62,12 @@ View {
 
   function knobHeight() {
     return 80;
+  }
+
+  function verticalKnobY() {
+    const y = (-contentArea.y + root.knobHeight()) % root.knobHeight();
+    console.log(y);
+    return y;
   }
 
   function minimumContentY() {
