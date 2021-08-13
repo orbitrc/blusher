@@ -28,6 +28,10 @@ Box::Box(QQuickItem *parent)
                      this, [this]() {
         update();
     });
+    QObject::connect(this, &Box::colorChanged,
+                     this, [this]() {
+        update();
+    });
 }
 
 QColor Box::color() const
