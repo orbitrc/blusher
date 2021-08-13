@@ -28,5 +28,12 @@ Component {
       height: 30
       color: 'orange'
     }
+    Box {
+      id: box4
+      anchors.top: box3.bottom
+      width: 100
+      height: 70
+      color: 'green'
+    }
   }
 }

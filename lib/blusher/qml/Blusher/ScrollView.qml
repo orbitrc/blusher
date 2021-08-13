@@ -52,6 +52,7 @@ View {
         id: verticalKnob
 
         width: 8
+        radius: 4
         height: root.knobHeight()
         y: -contentArea.y
         color: "cyan"
@@ -64,6 +65,6 @@ View {
   }
 
   function minimumContentY() {
-    return contentArea.height - root.height;
+    return root.height - contentArea.height;
   }
 }
