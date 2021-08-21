@@ -61,11 +61,14 @@ View {
   }
 
   function knobHeight() {
-    return 80;
+    return 60;
   }
 
   function verticalKnobY() {
-    const y = (-contentArea.y + root.knobHeight()) % root.knobHeight();
+    if (contentArea.y === 0) {
+      return 0;
+    }
+    const y = (-contentArea.y / (contentArea.height - root.height)) * (root.height - knobHeight());
     console.log(y);
     return y;
   }
