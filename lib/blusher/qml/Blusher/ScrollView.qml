@@ -12,6 +12,11 @@ View {
   property bool vertical: true
   property bool horizontal: false
 
+  //================
+  // Constants
+  //================
+  readonly property double minimumKnobHeight: 30
+
   Component.onCompleted: {
   }
 
@@ -61,7 +66,11 @@ View {
   }
 
   function knobHeight() {
-    return 60;
+    const height = root.height - 40;
+    if (height < root.minimumKnobHeight) {
+      return root.minimumKnobHeight;
+    }
+    return height;
   }
 
   function verticalKnobY() {
