@@ -281,7 +281,7 @@ Window {
     id: dockWindow
     Window {
       visible: true
-      netWmWindowType: Window.NetWmWindowType.Dock
+      type: Window.WindowType.Dock
 
       width: 300
       height: 60
@@ -296,7 +296,7 @@ Window {
     id: dialogWindow
     Window {
       visible: true
-      netWmWindowType: Window.NetWmWindowType.Dialog
+      type: Window.WindowType.Dialog
       transientFor: root.windowId
 
       width: 200
