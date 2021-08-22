@@ -1,9 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/Menu.qml</file>
-        <file>qml/MenuItem.qml</file>
+        <file>qml/MenuOld.qml</file>
+        <file>qml/MenuItemView.qml</file>
+        <file>qml/MenuWindow.qml</file>
     </qresource>
-    <qresource prefix="/blusher/">
+    <qresource prefix="/blusher">
         <file>icons/standalone/scalable/status/mixed.svg</file>
         <file>icons/standalone/scalable/status/checked.svg</file>
         <file>icons/standalone/scalable/actions/go-next.svg</file>

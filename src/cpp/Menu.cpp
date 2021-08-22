@@ -4,6 +4,8 @@
 #include <QQuickItem>
 #include <QScreen>
 #include <QWindow>
+#include <QQmlEngine>
+#include <QQmlContext>
 
 #include <QDebug>
 
@@ -21,6 +23,7 @@ Menu::Menu(QObject *parent)
     this->m_opened = false;
 
     this->m_menuView = nullptr;
+    this->m_menuWindow = nullptr;
 }
 
 int Menu::type() const
@@ -132,12 +135,19 @@ void Menu::addItem(MenuItem *item)
 void Menu::open(double x, double y)
 {
 //    Blusher::singleton->openMenu(this, x, y);
-    MenuView *menuView = new MenuView(this);
-    this->setMenuView(menuView);
+
+    QQmlContext *context = QQmlEngine::contextForObject(this);
+    QQmlComponent component(context->engine(), QUrl("qrc:/qml/MenuWindow.qml"));
+    this->m_menuWindow = component.create(context);
+    this->m_menuWindow->setParent(this);
+
+    this->m_menuWindow->setProperty("menu", QVariant::fromValue(this));
 
     // Connect signal.
+    /*
     QObject::connect(menuView, &MenuView::closedByUser,
                      Blusher::singleton, &Blusher::menuClosedByUser);
+    */
 
     // Set geometry.
     int screenX = x;
@@ -147,13 +157,13 @@ void Menu::open(double x, double y)
         screenX += window->screen()->geometry().x();
         screenY += window->screen()->geometry().y();
     }
-    auto width = menuView->rootObject()->property("width").toInt();
-    auto height = menuView->rootObject()->property("height").toInt();
-    menuView->setGeometry(screenX, screenY, width, height);
-    menuView->show();
+    this->m_menuWindow->setProperty("x", screenX);
+    this->m_menuWindow->setProperty("y", screenY);
 
     // Append to the menu view list.
+    /*
     Blusher::singleton->append_menu_view(menuView);
+    */
 
     // Property change.
     this->m_opened = true;
@@ -162,7 +172,9 @@ void Menu::open(double x, double y)
     // Set supermenu's submenu view if this is submenu.
     auto supermenu = this->supermenu();
     if (supermenu && supermenu->type() != static_cast<int>(Menu::MenuType::MenuBarMenu)) {
+        /*
         supermenu->menuView()->set_submenu_view(menuView);
+        */
     }
 }
 

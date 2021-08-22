@@ -87,6 +87,7 @@ private:
     int m_activeIndex;
 
     MenuView *m_menuView;
+    QObject *m_menuWindow;
 };
 
 } // namespace bl

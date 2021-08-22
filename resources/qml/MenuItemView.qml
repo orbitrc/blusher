@@ -1,14 +1,14 @@
 import QtQuick 2.12
 import QtGraphicalEffects 1.0
 
-import Blusher 0.1 as Blusher
+import Blusher 0.1
 
-Blusher.View {
+View {
   id: root
 
   signal itemHovered();
 
-  property Blusher.MenuItem menuItem
+  property MenuItem menuItem
 
   readonly property int separatorHeight: 4
   readonly property string separatorColor: "#d8d8d8"
@@ -17,7 +17,7 @@ Blusher.View {
 
   height: (!root.menuItem.separator) ? 24 : 12
 
-  Rectangle {
+  Box {
     id: rootRect
     anchors.fill: parent
     color: "#eaeaea"
@@ -92,7 +92,7 @@ Blusher.View {
       color: root.separatorColor
     }
   }
-  Text {
+  Label {
     visible: !root.menuItem.separator
 
     anchors.verticalCenter: parent.verticalCenter
@@ -100,9 +100,9 @@ Blusher.View {
     anchors.leftMargin: 8
 
     text: menuItem.title
-    font.pixelSize: 14
+    fontSize: 14
   }
-  Text {
+  Label {
     id: submenuIcon
 
     visible: root.menuItem.submenu
@@ -110,7 +110,7 @@ Blusher.View {
     anchors.right: parent.right
 
     text: '>'
-    font.bold: true
+//    font.bold: true
   }
   MouseArea {
     anchors.fill: parent
