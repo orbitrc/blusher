@@ -369,7 +369,7 @@ void BaseWindow::changeScale()
             break;
         }
     }
-    qreal scale = screen_info->scale();
+    qreal scale = screen_info ? screen_info->scale() : 1;
     this->m_scale = scale;
 
     // Scale window size.
