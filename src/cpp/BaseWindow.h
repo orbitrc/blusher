@@ -14,7 +14,6 @@ class BaseWindow : public QQuickWindow
     Q_OBJECT
 
     Q_PROPERTY(QList<int> netWmStrutPartial READ netWmStrutPartial WRITE setNetWmStrutPartial NOTIFY netWmStrutPartialChanged)
-    Q_PROPERTY(int netWmWindowType READ netWmWindowType WRITE setNetWmWindowType NOTIFY netWmWindowTypeChanged)
     Q_PROPERTY(bool onAllDesktops READ onAllDesktops WRITE setOnAllDesktops NOTIFY onAllDesktopsChanged)
     Q_PROPERTY(int transientFor READ transientFor WRITE setTransientFor NOTIFY transientForChanged)
     Q_PROPERTY(int type READ type WRITE setType NOTIFY typeChanged)
@@ -30,16 +29,6 @@ class BaseWindow : public QQuickWindow
     Q_PROPERTY(AnchorLine bottom READ bottom CONSTANT)
 public:
     enum class WindowType {
-        DocumentWindow,
-        AppWindow,
-        Panel,
-        Dialog,
-        Alert,
-        Menu,
-    };
-    Q_ENUM(WindowType)
-
-    enum class NetWmWindowType {
         Desktop,
         Dock,
         Toolbar,
@@ -55,16 +44,13 @@ public:
         Dnd,
         Normal,
     };
-    Q_ENUM(NetWmWindowType)
+    Q_ENUM(WindowType)
 
 public:
     explicit BaseWindow(QWindow *parent = nullptr);
 
     QList<int> netWmStrutPartial() const;
     void setNetWmStrutPartial(QList<int> value);
-
-    int netWmWindowType() const;
-    void setNetWmWindowType(int type);
 
     bool onAllDesktops() const;
     void setOnAllDesktops(bool value);
@@ -105,7 +91,6 @@ protected:
 
 signals:
     void netWmStrutPartialChanged(QList<int> strut);
-    void netWmWindowTypeChanged();
     void onAllDesktopsChanged(bool value);
     void transientForChanged(int windowId);
     void typeChanged();
@@ -137,7 +122,6 @@ private slots:
 
 private:
     QList<int> m_netWmStrutPartial;
-    int m_netWmWindowType;
     int m_transientFor;
     int m_type;
     QPoint m_pos;

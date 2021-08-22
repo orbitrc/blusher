@@ -15,8 +15,7 @@ BaseWindow::BaseWindow(QWindow *parent)
     : QQuickWindow(parent)
 {
     this->m_netWmStrutPartial = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    this->m_netWmWindowType = static_cast<int>(BaseWindow::NetWmWindowType::Normal);
-    this->m_type = static_cast<int>(BaseWindow::WindowType::AppWindow);
+    this->m_type = static_cast<int>(BaseWindow::WindowType::Normal);
     this->m_pos.setX(QQuickWindow::x());
     this->m_pos.setY(QQuickWindow::y());
     this->m_size.setWidth(QQuickWindow::width());
@@ -60,20 +59,6 @@ void BaseWindow::setNetWmStrutPartial(QList<int> value)
 #endif // BL_BLATFORM_LINUX
 
         emit this->netWmStrutPartialChanged(value);
-    }
-}
-
-int BaseWindow::netWmWindowType() const
-{
-    return this->m_netWmWindowType;
-}
-
-void BaseWindow::setNetWmWindowType(int type)
-{
-    if (this->m_netWmWindowType != type) {
-        this->m_netWmWindowType = type;
-
-        emit this->netWmWindowTypeChanged();
     }
 }
 
@@ -301,50 +286,50 @@ void BaseWindow::keyPressEvent(QKeyEvent *event)
 void BaseWindow::showEvent(QShowEvent *evt)
 {
 #ifdef BL_PLATFORM_LINUX
-    if (this->m_netWmWindowType == static_cast<int>(NetWmWindowType::Normal)) {
+    if (this->m_type == static_cast<int>(WindowType::Normal)) {
         return QQuickWindow::showEvent(evt);
     }
 
     // Set _NET_WM_WINDOW_TYPE.
-    switch (this->netWmWindowType()) {
-    case static_cast<int>(NetWmWindowType::Dock):
-        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Dock);
+    switch (this->type()) {
+    case static_cast<int>(WindowType::Dock):
+        Ewmh::set_net_wm_window_type(winId(), WindowType::Dock);
         break;
-    case static_cast<int>(NetWmWindowType::Desktop):
-        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Desktop, true);
+    case static_cast<int>(WindowType::Desktop):
+        Ewmh::set_net_wm_window_type(winId(), WindowType::Desktop, true);
         break;
-    case static_cast<int>(NetWmWindowType::Toolbar):
-        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Toolbar);
+    case static_cast<int>(WindowType::Toolbar):
+        Ewmh::set_net_wm_window_type(winId(), WindowType::Toolbar);
         break;
-    case static_cast<int>(NetWmWindowType::Menu):
-        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Menu);
+    case static_cast<int>(WindowType::Menu):
+        Ewmh::set_net_wm_window_type(winId(), WindowType::Menu);
         break;
-    case static_cast<int>(NetWmWindowType::Utility):
-        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Utility);
+    case static_cast<int>(WindowType::Utility):
+        Ewmh::set_net_wm_window_type(winId(), WindowType::Utility);
         break;
-    case static_cast<int>(NetWmWindowType::Splash):
-        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Splash);
+    case static_cast<int>(WindowType::Splash):
+        Ewmh::set_net_wm_window_type(winId(), WindowType::Splash);
         break;
-    case static_cast<int>(NetWmWindowType::Dialog):
-        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Dialog);
+    case static_cast<int>(WindowType::Dialog):
+        Ewmh::set_net_wm_window_type(winId(), WindowType::Dialog);
         break;
-    case static_cast<int>(NetWmWindowType::DropDownMenu):
-        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::DropDownMenu);
+    case static_cast<int>(WindowType::DropDownMenu):
+        Ewmh::set_net_wm_window_type(winId(), WindowType::DropDownMenu);
         break;
-    case static_cast<int>(NetWmWindowType::PopUpMenu):
-        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::PopUpMenu);
+    case static_cast<int>(WindowType::PopUpMenu):
+        Ewmh::set_net_wm_window_type(winId(), WindowType::PopUpMenu);
         break;
-    case static_cast<int>(NetWmWindowType::ToolTip):
-        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::ToolTip);
+    case static_cast<int>(WindowType::ToolTip):
+        Ewmh::set_net_wm_window_type(winId(), WindowType::ToolTip);
         break;
-    case static_cast<int>(NetWmWindowType::Notification):
-        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Notification);
+    case static_cast<int>(WindowType::Notification):
+        Ewmh::set_net_wm_window_type(winId(), WindowType::Notification);
         break;
-    case static_cast<int>(NetWmWindowType::Combo):
-        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Combo);
+    case static_cast<int>(WindowType::Combo):
+        Ewmh::set_net_wm_window_type(winId(), WindowType::Combo);
         break;
-    case static_cast<int>(NetWmWindowType::Dnd):
-        Ewmh::set_net_wm_window_type(winId(), NetWmWindowType::Dnd);
+    case static_cast<int>(WindowType::Dnd):
+        Ewmh::set_net_wm_window_type(winId(), WindowType::Dnd);
         break;
     default:
         break;
