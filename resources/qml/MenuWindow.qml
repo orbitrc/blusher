@@ -62,6 +62,16 @@ Window {
     }
   }
 
+  onKeyPressed: {
+    if (event.key === Qt.Key_Escape) {
+      console.log('esc');
+    }
+  }
+
+  onMouseMoved: {
+    console.log(event);
+  }
+
   /// Calculate total menu height.
   function menuHeight() {
     // For prevent QWidget with 0x0 size, set default size.

@@ -101,6 +101,7 @@ public:
 protected:
     bool event(QEvent *) override;
     void keyPressEvent(QKeyEvent *) override;
+    void mouseMoveEvent(QMouseEvent *) override;
     void showEvent(QShowEvent *) override;
 
 signals:
@@ -118,6 +119,7 @@ signals:
     void screenNameChanged();
 
     void keyPressed(KeyEvent *event);
+    void mouseMoved(QMouseEvent *event);
 
 public slots:
     void changeScale();

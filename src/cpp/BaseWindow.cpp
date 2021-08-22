@@ -298,6 +298,13 @@ void BaseWindow::keyPressEvent(QKeyEvent *event)
     QQuickWindow::keyPressEvent(event);
 }
 
+void BaseWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    emit this->mouseMoved(event);
+
+    QQuickWindow::mouseMoveEvent(event);
+}
+
 void BaseWindow::showEvent(QShowEvent *evt)
 {
 #ifdef BL_PLATFORM_LINUX
