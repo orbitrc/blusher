@@ -32,9 +32,9 @@ public:
 
     static void set_net_wm_strut_partial(uint32_t w, QList<int> strut);
 
-    static QList<bl::BaseWindow::NetWmWindowType> get_net_wm_window_type(uint32_t w);
+    static QList<bl::BaseWindow::WindowType> get_net_wm_window_type(uint32_t w);
 
-    static void set_net_wm_window_type(uint32_t w, bl::BaseWindow::NetWmWindowType type, bool replace = false);
+    static void set_net_wm_window_type(uint32_t w, bl::BaseWindow::WindowType type, bool replace = false);
 
     static void set_wm_transient_for(uint32_t w, uint32_t parent);
 

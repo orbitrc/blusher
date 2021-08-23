@@ -8,7 +8,7 @@ Ewmh::Ewmh()
 {
 }
 
-QList<bl::BaseWindow::NetWmWindowType> Ewmh::get_net_wm_window_type(uint32_t w)
+QList<bl::BaseWindow::WindowType> Ewmh::get_net_wm_window_type(uint32_t w)
 {
     xcb_connection_t *conn = xcb_connect(NULL, NULL);
 
@@ -32,38 +32,38 @@ QList<bl::BaseWindow::NetWmWindowType> Ewmh::get_net_wm_window_type(uint32_t w)
     size_t len = xcb_get_property_value_length(reply);
     void *val = xcb_get_property_value(reply);
 
-    using NetWmWindowType = bl::BaseWindow::NetWmWindowType;
-    QList<bl::BaseWindow::NetWmWindowType> list;
+    using WindowType = bl::BaseWindow::WindowType;
+    QList<bl::BaseWindow::WindowType> list;
     for (size_t i = 0; i < len; ++i) {
         xcb_atom_t type = ((xcb_atom_t*)val)[i];
         if (type == net_wm_window_type_desktop) {
-            list.append(NetWmWindowType::Desktop);
+            list.append(WindowType::Desktop);
         } else if (type == net_wm_window_type_dock) {
-            list.append(NetWmWindowType::Dock);
+            list.append(WindowType::Dock);
         } else if (type == net_wm_window_type_toolbar) {
-            list.append(NetWmWindowType::Toolbar);
+            list.append(WindowType::Toolbar);
         } else if (type == net_wm_window_type_menu) {
-            list.append(NetWmWindowType::Menu);
+            list.append(WindowType::Menu);
         } else if (type == net_wm_window_type_utility) {
-            list.append(NetWmWindowType::Utility);
+            list.append(WindowType::Utility);
         } else if (type == net_wm_window_type_splash) {
-            list.append(NetWmWindowType::Splash);
+            list.append(WindowType::Splash);
         } else if (type == net_wm_window_type_dialog) {
-            list.append(NetWmWindowType::Dialog);
+            list.append(WindowType::Dialog);
         } else if (type == net_wm_window_type_drop_down_menu) {
-            list.append(NetWmWindowType::DropDownMenu);
+            list.append(WindowType::DropDownMenu);
         } else if (type == net_wm_window_type_pop_up_menu) {
-            list.append(NetWmWindowType::PopUpMenu);
+            list.append(WindowType::PopUpMenu);
         } else if (type == net_wm_window_type_tool_tip) {
-            list.append(NetWmWindowType::ToolTip);
+            list.append(WindowType::ToolTip);
         } else if (type == net_wm_window_type_notification) {
-            list.append(NetWmWindowType::Notification);
+            list.append(WindowType::Notification);
         } else if (type == net_wm_window_type_combo) {
-            list.append(NetWmWindowType::Combo);
+            list.append(WindowType::Combo);
         } else if (type == net_wm_window_type_dnd) {
-            list.append(NetWmWindowType::Dnd);
+            list.append(WindowType::Dnd);
         } else if (type == net_wm_window_type_normal) {
-            list.append(NetWmWindowType::Normal);
+            list.append(WindowType::Normal);
         }
     }
 
@@ -73,55 +73,55 @@ QList<bl::BaseWindow::NetWmWindowType> Ewmh::get_net_wm_window_type(uint32_t w)
     return list;
 }
 
-void Ewmh::set_net_wm_window_type(uint32_t w, bl::BaseWindow::NetWmWindowType type, bool replace)
+void Ewmh::set_net_wm_window_type(uint32_t w, bl::BaseWindow::WindowType type, bool replace)
 {
     xcb_connection_t *conn = xcb_connect(NULL, NULL);
 
     uint8_t mode = (replace ? XCB_PROP_MODE_REPLACE : XCB_PROP_MODE_PREPEND);
 
-    using NetWmWindowType = bl::BaseWindow::NetWmWindowType;
+    using WindowType = bl::BaseWindow::WindowType;
     const char *type_str;
     switch (type) {
-    case NetWmWindowType::Desktop:
+    case WindowType::Desktop:
         type_str = "_NET_WM_WINDOW_TYPE_DESKTOP";
         break;
-    case NetWmWindowType::Dock:
+    case WindowType::Dock:
         type_str = "_NET_WM_WINDOW_TYPE_DOCK";
         break;
-    case NetWmWindowType::Toolbar:
+    case WindowType::Toolbar:
         type_str = "_NET_WM_WINDOW_TYPE_TOOLBAR";
         break;
-    case NetWmWindowType::Menu:
+    case WindowType::Menu:
         type_str = "_NET_WM_WINDOW_TYPE_MENU";
         break;
-    case NetWmWindowType::Utility:
+    case WindowType::Utility:
         type_str = "_NET_WM_WINDOW_TYPE_UTILITY";
         break;
-    case NetWmWindowType::Splash:
+    case WindowType::Splash:
         type_str = "_NET_WM_WINDOW_TYPE_SPLASH";
         break;
-    case NetWmWindowType::Dialog:
+    case WindowType::Dialog:
         type_str = "_NET_WM_WINDOW_TYPE_DIALOG";
         break;
-    case NetWmWindowType::DropDownMenu:
+    case WindowType::DropDownMenu:
         type_str = "_NET_WM_WINDOW_TYPE_DROPDOWN_MENU";
         break;
-    case NetWmWindowType::PopUpMenu:
+    case WindowType::PopUpMenu:
         type_str = "_NET_WM_WINDOW_TYPE_POPUP_MENU";
         break;
-    case NetWmWindowType::ToolTip:
+    case WindowType::ToolTip:
         type_str = "_NET_WM_WINDOW_TYPE_TOOLTIP";
         break;
-    case NetWmWindowType::Notification:
+    case WindowType::Notification:
         type_str = "_NET_WM_WINDOW_TYPE_NOTIFICATION";
         break;
-    case NetWmWindowType::Combo:
+    case WindowType::Combo:
         type_str = "_NET_WM_WINDOW_TYPE_COMBO";
         break;
-    case NetWmWindowType::Dnd:
+    case WindowType::Dnd:
         type_str = "_NET_WM_WINDOW_TYPE_DND";
         break;
-    case NetWmWindowType::Normal:
+    case WindowType::Normal:
         type_str = "_NET_WM_WINDOW_TYPE_NORMAL";
         break;
     }
