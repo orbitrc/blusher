@@ -13,7 +13,6 @@ Window {
 
   flags: Qt.FramelessWindowHint
   type: Window.WindowType.Menu
-  netWmWindowType: Window.NetWmWindowType.Menu
 
   visible: true
 
