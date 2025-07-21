@@ -1,0 +1,116 @@
+@_implementationOnly import Swingby
+
+public enum SurfaceRole {
+    case toplevel
+    case popup
+}
+
+public enum SurfaceResizeEdge {
+    case top
+    case bottom
+    case left
+    case right
+    case topLeft
+    case topRight
+    case bottomLeft
+    case bottomRight
+}
+
+public class Surface {
+    private var _sbDesktopSurface: OpaquePointer? = nil
+    private var _parent: Surface? = nil
+
+    // TODO: Change this to internal when the test done.
+    public var rootViewPointer: OpaquePointer {
+        get {
+            let sbSurface = sb_desktop_surface_surface(_sbDesktopSurface)
+            let sbRootView = sb_surface_root_view(sbSurface)
+
+            return sbRootView!
+        }
+    }
+
+    public var rootViewColor: Color {
+        get {
+            // TODO: Impl.
+            return Color(r: 255, g: 255, b: 255, a: 255)
+        }
+        set(newValue) {
+            var sbColor = sb_color_t(
+                r: newValue.r,
+                g: newValue.g,
+                b: newValue.b,
+                a: newValue.a
+            )
+
+            withUnsafePointer(to: &sbColor) { ptr in
+                sb_view_set_color(rootViewPointer, ptr)
+            }
+        }
+    }
+
+    public var Size: SizeI {
+        get {
+            let sbSurface = sb_desktop_surface_surface(_sbDesktopSurface)
+            let sbSize = UnsafeMutablePointer(mutating: sb_surface_size(sbSurface))
+
+            let width: Float = sb_size_width(sbSize)
+            let height: Float = sb_size_height(sbSize)
+
+            return SizeI(width: UInt64(width), height: UInt64(height))
+        }
+        set {
+            let sbSurface = sb_desktop_surface_surface(_sbDesktopSurface)
+
+            var sbSize = sb_size_t(
+                width: Float(newValue.width),
+                height: Float(newValue.height)
+            )
+
+            withUnsafePointer(to: &sbSize) { ptr in
+                sb_surface_set_size(sbSurface, ptr)
+            }
+        }
+    }
+
+    public let role: SurfaceRole
+
+    public init(role: SurfaceRole, _ parent: Surface? = nil) {
+        self.role = role
+        _parent = parent
+
+        let sbRole = role == .toplevel
+            ? SB_DESKTOP_SURFACE_ROLE_TOPLEVEL
+            : SB_DESKTOP_SURFACE_ROLE_POPUP
+        _sbDesktopSurface = sb_desktop_surface_new(sbRole)
+
+        if _parent != nil {
+            // sb_desktop_surface_set_parent()
+        }
+    }
+
+    public func close() {
+        if role == .toplevel {
+            sb_desktop_surface_toplevel_close(_sbDesktopSurface)
+        }
+    }
+
+    public func resize(_ resizeEdge: SurfaceResizeEdge) {
+        if role != .toplevel {
+            return
+        }
+
+        let sbEdge = switch resizeEdge {
+            case .top: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_TOP
+            case .bottom: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_BOTTOM
+            // TODO: Entire cases.
+            default: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_BOTTOM_RIGHT
+        }
+
+        sb_desktop_surface_toplevel_resize(_sbDesktopSurface, sbEdge)
+    }
+
+    public func show() {
+        sb_desktop_surface_show(_sbDesktopSurface)
+    }
+}
