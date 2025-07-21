@@ -12,6 +12,8 @@ public enum WindowResizeEdge {
 }
 
 public class Window: Surface {
+    private var _decorationView: View!
+    private var _shadow: WindowShadow!
     private var _bodyView: View!
     private var _body: Widget!
 
@@ -25,18 +27,36 @@ public class Window: Surface {
         get {
             return SizeI(width: super.size.width, height: super.size.height)
         }
+        set {
+            super.size = SizeI(width: newValue.width, height: newValue.height)
+        }
     }
 
     public init() {
         super.init(role: .toplevel)
 
-        rootViewColor = Color(r: 0, g: 0, b: 0, a: 128)
+        // Decorations.
+        let decoViewRect = Rect(x: 0.0, y: 0.0, width: 50.0, height: 50.0)
+        _decorationView = View(parentPointer: rootViewPointer,
+            surface: self,
+            geometry: decoViewRect)
+        _decorationView.color = Color(r: 0, g: 0, b: 0, a: 0)
 
-        let bodyViewRect = Rect(x: 0.0, y: 0.0, width: 50.0, height: 50.0)
+        // - Shadow.
+        _shadow = WindowShadow(decoration: _decorationView)
+
+        rootViewColor = Color(r: 0, g: 0, b: 0, a: 0)
+
+        // Body.
+        let bodyViewRect = Rect(x: 0.0, y: 0.0, width: 100.0, height: 100.0)
         _bodyView = View(parentPointer: rootViewPointer,
             surface: self,
             geometry: bodyViewRect)
         _body = Widget(parentView: _bodyView)
+
+        updateSurfaceSize()
+        updateBodyGeometry()
+        updateShadowGeometry()
     }
 
     public func startResize(from edge: WindowResizeEdge) {
@@ -52,5 +72,34 @@ public class Window: Surface {
         }
 
         super.resize(surfaceEdge)
+    }
+
+    private func updateSurfaceSize() {
+        let surfaceSize = SizeI(
+            width: UInt64(body.size.width + (_shadow.thickness * 2)),
+            height: UInt64(body.size.height + (_shadow.thickness * 2))
+        )
+        self.surfaceSize = surfaceSize
+    }
+
+    private func updateBodyGeometry() {
+        let newGeo = Rect(
+            x: _shadow.thickness,
+            y: _shadow.thickness,
+            width: Float(surfaceSize.width) - (_shadow.thickness * 2),
+            height: Float(surfaceSize.height) - (_shadow.thickness * 2)
+        )
+
+        _bodyView.geometry = newGeo
+        _body.geometry = Rect(x: 0.0, y: 0.0, width: newGeo.width, height: newGeo.height)
+    }
+
+    private func updateShadowGeometry() {
+        _shadow.geometry = Rect(
+            x: 0.0,
+            y: 0.0,
+            width: Float(surfaceSize.width),
+            height: Float(surfaceSize.height)
+        )
     }
 }

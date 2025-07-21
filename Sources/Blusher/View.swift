@@ -28,20 +28,38 @@ open class View {
         }
     }
 
-    public var size: Size {
+    public var geometry: Rect {
         get {
-            // TODO: Impl.
-            return Size(width: 0.0, height: 0.0)
+            let sbRect = sb_view_geometry(_sbView)
+            let x = sbRect!.pointee.pos.x
+            let y = sbRect!.pointee.pos.y
+            let width = sbRect!.pointee.size.width
+            let height = sbRect!.pointee.size.height
+
+            return Rect(x: x, y: y, width: width, height: height)
         }
-        set(newValue) {
-            var sbGeo = sb_rect_t(
-                pos: sb_point_t(x: 0.0, y: 0.0),
-                size: sb_size_t(width: newValue.width, height: newValue.height)
+        set {
+            var sbRect = sb_rect_t(
+                pos: sb_point_t(x: newValue.pos.x, y: newValue.pos.y),
+                size: sb_size_t(width: newValue.size.width, height: newValue.size.height)
             )
 
-            withUnsafePointer(to: &sbGeo) { ptr in
+            withUnsafePointer(to: &sbRect) { ptr in
                 sb_view_set_geometry(_sbView, ptr)
             }
+        }
+    }
+
+    public var size: Size {
+        get {
+            return Size(width: geometry.size.width, height: geometry.size.height)
+        }
+        set(newValue) {
+            let geo = Rect(
+                x: geometry.pos.x, y: geometry.pos.y,
+                width: newValue.width, height: newValue.height
+            )
+            geometry = geo
         }
     }
 
