@@ -33,3 +33,15 @@ public struct Rect {
         }
     }
 }
+
+public struct RectI {
+    public var pos: PointI = PointI(x: 0, y: 0)
+    public var size: SizeI = SizeI(width: 0, height: 0)
+
+    public init(x: Int64, y: Int64, width: UInt64, height: UInt64) {
+        pos.x = x
+        pos.y = y
+        size.width = width
+        size.height = height
+    }
+}

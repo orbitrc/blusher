@@ -49,7 +49,7 @@ public class Surface {
         }
     }
 
-    public var Size: SizeI {
+    public var size: SizeI {
         get {
             let sbSurface = sb_desktop_surface_surface(_sbDesktopSurface)
             let sbSize = UnsafeMutablePointer(mutating: sb_surface_size(sbSurface))
@@ -69,6 +69,23 @@ public class Surface {
 
             withUnsafePointer(to: &sbSize) { ptr in
                 sb_surface_set_size(sbSurface, ptr)
+            }
+        }
+    }
+
+    public var wmGeometry: RectI {
+        get {
+            // TODO: Impl.
+            return RectI(x: 0, y: 0, width: 0, height: 0)
+        }
+        set {
+            var sbRect = sb_rect_t(
+                pos: sb_point_t(x: Float(newValue.pos.x), y: Float(newValue.pos.y)),
+                size: sb_size_t(width: Float(newValue.size.width), height: Float(newValue.size.height))
+            )
+
+            withUnsafePointer(to: &sbRect) { ptr in
+                sb_desktop_surface_set_wm_geometry(_sbDesktopSurface, ptr)
             }
         }
     }

@@ -21,6 +21,12 @@ public class Window: Surface {
         }
     }
 
+    public var surfaceSize: SizeI {
+        get {
+            return SizeI(width: super.size.width, height: super.size.height)
+        }
+    }
+
     public init() {
         super.init(role: .toplevel)
 
