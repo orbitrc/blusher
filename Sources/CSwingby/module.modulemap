@@ -1,5 +1,5 @@
 module Swingby [system] {
-    header "/usr/include/swingby/swingby.h"
+    header "CSwingby.h"
     link "swingby"
     export *
 }
