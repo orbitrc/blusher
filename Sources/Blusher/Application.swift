@@ -1,5 +1,3 @@
-import Foundation
-
 @_implementationOnly import Swingby
 
 public class Application {
@@ -7,16 +5,14 @@ public class Application {
 
     public init(_ args: [String]) {
         let argc = Int32(args.count)
-        let cArgs: [UnsafeMutablePointer<CChar>?] = args.map { strdup($0) } + [nil]
+        let cArgs: [UnsafeMutablePointer<CChar>?] = args.map {
+            $0.withCString { UnsafeMutablePointer(mutating: $0) }
+        }
 
         cArgs.withUnsafeBufferPointer { buffer in
             let argv = UnsafeMutablePointer(mutating: buffer.baseAddress)
             let result = sb_application_new(argc, argv)
             _sbApplication = result
-        }
-
-        for ptr in cArgs where ptr != nil {
-            free(ptr)
         }
     }
 

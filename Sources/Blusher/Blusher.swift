@@ -1,7 +1,4 @@
-import Foundation
-
 @_implementationOnly import Swingby
-
 
 func sb_test() {
     let args = CommandLine.arguments
