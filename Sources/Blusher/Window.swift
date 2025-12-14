@@ -14,6 +14,7 @@ public enum WindowResizeEdge {
 public class Window: Surface {
     private var _decorationView: View!
     private var _shadow: WindowShadow!
+    private var _resize: WindowResize!
     private var _bodyView: View!
     private var _body: Widget!
 
@@ -45,6 +46,9 @@ public class Window: Surface {
         // - Shadow.
         _shadow = WindowShadow(decoration: _decorationView)
 
+        // - Resize
+        _resize = WindowResize(decoration: _decorationView)
+
         rootViewColor = Color(r: 0, g: 0, b: 0, a: 0)
 
         // Body.
@@ -57,6 +61,7 @@ public class Window: Surface {
         updateSurfaceSize()
         updateBodyGeometry()
         updateShadowGeometry()
+        updateResizeGeometry()
     }
 
     public func startResize(from edge: WindowResizeEdge) {
@@ -100,6 +105,20 @@ public class Window: Surface {
             y: 0.0,
             width: Float(surfaceSize.width),
             height: Float(surfaceSize.height)
+        )
+    }
+
+    private func updateResizeGeometry() {
+        let x = _shadow.thickness - (_resize.thickness)
+        let y = _shadow.thickness - (_resize.thickness)
+        let width = _shadow.size.width - (_shadow.thickness * 2) + (_resize.thickness * 2);
+        let height = _shadow.size.height - (_shadow.thickness * 2) + (_resize.thickness * 2);
+
+        _resize.geometry = Rect(
+            x: x,
+            y: y,
+            width: width,
+            height: height
         )
     }
 }

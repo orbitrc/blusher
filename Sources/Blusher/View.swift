@@ -126,6 +126,15 @@ open class View {
             _pointerLeaveEventListener, userData)
 
         // Pointer move event.
+        _pointerMoveEventListener = { sbEvent, userData in
+            if let userData = userData {
+                let instance = Unmanaged<View>.fromOpaque(userData).takeUnretainedValue()
+
+                instance.callPointerMoveEvent(sbEvent)
+            }
+        } as EventListener
+        sb_view_add_event_listener(_sbView, SB_EVENT_TYPE_POINTER_MOVE,
+            _pointerMoveEventListener, userData)
 
         // Pointer press event.
         _pointerPressEventListener = { sbEvent, userData in
@@ -160,7 +169,13 @@ open class View {
     }
 
     private func callPointerMoveEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {
-        //
+        let sbPos = sb_event_pointer_position(sbEvent)
+        let x = sb_point_x(sbPos)
+        let y = sb_point_y(sbPos)
+        let event = PointerEvent(type: .pointerMove)
+        event.position.x = x
+        event.position.y = y
+        pointerMoveEvent(event)
     }
 
     private func callPointerPressEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {
