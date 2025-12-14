@@ -5,6 +5,8 @@ public enum EventType {
     case pointerLeave
     case pointerMove
     case pointerPress
+    case pointerRelease
+    case pointerClick
     case resize
 }
 

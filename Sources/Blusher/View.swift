@@ -8,6 +8,8 @@ open class View {
     private var _pointerLeaveEventListener: EventListener!
     private var _pointerMoveEventListener: EventListener!
     private var _pointerPressEventListener: EventListener!
+    private var _pointerReleaseEventListener: EventListener!
+    private var _pointerClickEventListener: EventListener!
 
     public var color: Color {
         get {
@@ -47,6 +49,19 @@ open class View {
             withUnsafePointer(to: &sbRect) { ptr in
                 sb_view_set_geometry(_sbView, ptr)
             }
+        }
+    }
+
+    public var position: Point {
+        get {
+            return Point(x: geometry.pos.x, y: geometry.pos.y)
+        }
+        set {
+            let geo = Rect(
+                x: newValue.x, y: newValue.y,
+                width: geometry.size.width, height: geometry.size.height
+            )
+            geometry = geo
         }
     }
 
@@ -146,6 +161,28 @@ open class View {
         } as EventListener
         sb_view_add_event_listener(_sbView, SB_EVENT_TYPE_POINTER_PRESS,
             _pointerPressEventListener, userData)
+
+        // Pointer release event.
+        _pointerReleaseEventListener = { sbEvent, userData in
+            if let userData = userData {
+                let instance = Unmanaged<View>.fromOpaque(userData).takeUnretainedValue()
+
+                instance.callPointerReleaseEvent(sbEvent)
+            }
+        } as EventListener
+        sb_view_add_event_listener(_sbView, SB_EVENT_TYPE_POINTER_RELEASE,
+            _pointerReleaseEventListener, userData)
+
+        // Pointer click event.
+        _pointerClickEventListener = { sbEvent, userData in
+            if let userData = userData {
+                let instance = Unmanaged<View>.fromOpaque(userData).takeUnretainedValue()
+
+                instance.callPointerClickEvent(sbEvent)
+            }
+        } as EventListener
+        sb_view_add_event_listener(_sbView, SB_EVENT_TYPE_POINTER_CLICK,
+            _pointerClickEventListener, userData)
     }
 
     private func callPointerEnterEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {
@@ -199,6 +236,48 @@ open class View {
         pointerPressEvent(event)
     }
 
+    private func callPointerReleaseEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {
+        let sbButton = sb_event_pointer_button(sbEvent)
+        let button: PointerButton = switch sbButton {
+            case SB_POINTER_BUTTON_NONE: .none
+            case SB_POINTER_BUTTON_LEFT: .left
+            case SB_POINTER_BUTTON_RIGHT: .right
+            case SB_POINTER_BUTTON_MIDDLE: .middle
+            default: .none
+        }
+
+        let sbPos = sb_event_pointer_position(sbEvent)
+        let x = sb_point_x(sbPos)
+        let y = sb_point_y(sbPos)
+
+        let event = PointerEvent(type: .pointerRelease)
+        event.button = button
+        event.position.x = x
+        event.position.y = y
+        pointerReleaseEvent(event)
+    }
+
+    private func callPointerClickEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {
+        let sbButton = sb_event_pointer_button(sbEvent)
+        let button: PointerButton = switch sbButton {
+            case SB_POINTER_BUTTON_NONE: .none
+            case SB_POINTER_BUTTON_LEFT: .left
+            case SB_POINTER_BUTTON_RIGHT: .right
+            case SB_POINTER_BUTTON_MIDDLE: .middle
+            default: .none
+        }
+
+        let sbPos = sb_event_pointer_position(sbEvent)
+        let x = sb_point_x(sbPos)
+        let y = sb_point_y(sbPos)
+
+        let event = PointerEvent(type: .pointerClick)
+        event.button = button
+        event.position.x = x
+        event.position.y = y
+        pointerClickEvent(event)
+    }
+
     open func pointerEnterEvent(_ event: PointerEvent) {
         //
     }
@@ -213,5 +292,11 @@ open class View {
 
     open func pointerPressEvent(_ event: PointerEvent) {
         //
+    }
+
+    open func pointerReleaseEvent(_ event: PointerEvent) {
+    }
+
+    open func pointerClickEvent(_ event: PointerEvent) {
     }
 }
