@@ -134,6 +134,10 @@ public class Surface {
         }
     }
 
+    public func move() {
+        sb_desktop_surface_toplevel_move(_sbDesktopSurface)
+    }
+
     public func resize(_ resizeEdge: SurfaceResizeEdge) {
         if role != .toplevel {
             return

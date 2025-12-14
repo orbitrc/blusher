@@ -15,6 +15,7 @@ public class Window: Surface {
     private var _decorationView: View!
     private var _shadow: WindowShadow!
     private var _resize: WindowResize!
+    private var _titleBar: TitleBar!
     private var _bodyView: View!
     private var _body: Widget!
 
@@ -58,6 +59,9 @@ public class Window: Surface {
         // - Resize
         _resize = WindowResize(decoration: _decorationView)
 
+        // - Title bar.
+        _titleBar = TitleBar(decoration: _decorationView)
+
         rootViewColor = Color(r: 0, g: 0, b: 0, a: 0)
 
         // Body.
@@ -71,6 +75,11 @@ public class Window: Surface {
         updateBodyGeometry()
         updateShadowGeometry()
         updateResizeGeometry()
+        updateTitleBarGeometry()
+    }
+
+    public func startMove() {
+        super.move()
     }
 
     public func startResize(from edge: WindowResizeEdge) {
@@ -94,14 +103,20 @@ public class Window: Surface {
             height: UInt64(body.size.height + (_shadow.thickness * 2))
         )
         self.surfaceSize = surfaceSize
+
+        // Fit decoration view size to surface.
+        _decorationView.size = Size(
+            width: Float(surfaceSize.width),
+            height: Float(surfaceSize.height)
+        )
     }
 
     private func updateBodyGeometry() {
         let newGeo = Rect(
             x: _shadow.thickness,
-            y: _shadow.thickness,
+            y: _shadow.thickness + _titleBar.thickness,
             width: Float(surfaceSize.width) - (_shadow.thickness * 2),
-            height: Float(surfaceSize.height) - (_shadow.thickness * 2)
+            height: Float(surfaceSize.height) - (_shadow.thickness * 2) - _titleBar.thickness
         )
 
         _bodyView.geometry = newGeo
@@ -138,6 +153,15 @@ public class Window: Surface {
             y: y,
             width: width,
             height: height
+        )
+    }
+
+    private func updateTitleBarGeometry() {
+        _titleBar.geometry = Rect(
+            x: _shadow.thickness,
+            y: _shadow.thickness,
+            width: _shadow.size.width,
+            height: _titleBar.thickness
         )
     }
 
