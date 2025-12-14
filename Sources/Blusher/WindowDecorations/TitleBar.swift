@@ -24,7 +24,13 @@ public class TitleBarButton: Widget {
         }
     }
 
+    public override func pointerPressEvent(_ event: PointerEvent) {
+        event.propagation = false
+    }
+
     public override func pointerClickEvent(_ event: PointerEvent) {
+        event.propagation = false
+
         switch action {
         case .close:
             window.close()

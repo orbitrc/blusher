@@ -233,6 +233,7 @@ open class View {
         event.button = button
         event.position.x = x
         event.position.y = y
+        event.swingbyEvent = sbEvent
         pointerPressEvent(event)
     }
 
@@ -254,6 +255,7 @@ open class View {
         event.button = button
         event.position.x = x
         event.position.y = y
+        event.swingbyEvent = sbEvent
         pointerReleaseEvent(event)
     }
 
@@ -275,6 +277,7 @@ open class View {
         event.button = button
         event.position.x = x
         event.position.y = y
+        event.swingbyEvent = sbEvent
         pointerClickEvent(event)
     }
 
