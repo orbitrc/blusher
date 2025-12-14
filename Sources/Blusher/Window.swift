@@ -33,6 +33,15 @@ public class Window: Surface {
         }
     }
 
+    public var windowGeometry: RectI {
+        get {
+            return super.wmGeometry
+        }
+        set {
+            super.wmGeometry = newValue
+        }
+    }
+
     public init() {
         super.init(role: .toplevel)
 
@@ -99,6 +108,16 @@ public class Window: Surface {
         _body.geometry = Rect(x: 0.0, y: 0.0, width: newGeo.width, height: newGeo.height)
     }
 
+    private func updateWindowGeometry() {
+        let newGeo = RectI(
+            x: Int64(_shadow.thickness),
+            y: Int64(_shadow.thickness),
+            width: 100,
+            height: 100
+        )
+        // TODO.
+    }
+
     private func updateShadowGeometry() {
         _shadow.geometry = Rect(
             x: 0.0,
@@ -120,5 +139,16 @@ public class Window: Surface {
             width: width,
             height: height
         )
+    }
+
+    override public func resizingEvent(_ event: ResizeEvent) {
+        print("Resizing - now \(event.size.width)x\(event.size.height)")
+
+        surfaceSize = SizeI(
+            width: UInt64(event.size.width),
+            height: UInt64(event.size.height)
+        )
+
+        updateShadowGeometry()
     }
 }

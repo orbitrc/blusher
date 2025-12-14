@@ -5,6 +5,7 @@ public enum EventType {
     case pointerLeave
     case pointerMove
     case pointerPress
+    case resize
 }
 
 typealias EventListener = @convention(c) (

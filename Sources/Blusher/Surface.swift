@@ -20,6 +20,8 @@ public class Surface {
     private var _sbDesktopSurface: OpaquePointer? = nil
     private var _parent: Surface? = nil
 
+    private var _resizingEventListener: EventListener!
+
     // TODO: Change this to internal when the test done.
     public var rootViewPointer: OpaquePointer {
         get {
@@ -90,6 +92,24 @@ public class Surface {
         }
     }
 
+    public var inputGeometry: RectI {
+        get {
+            // TODO: Impl.
+            return RectI(x: 0, y: 0, width: 0, height: 0)
+        }
+        set {
+            var sbRect = sb_rect_t(
+                pos: sb_point_t(x: Float(newValue.pos.x), y: Float(newValue.pos.y)),
+                size: sb_size_t(width: Float(newValue.size.width), height: Float(newValue.size.height))
+            )
+
+            withUnsafeMutablePointer(to: &sbRect) { ptr in
+                let sbSurface = sb_desktop_surface_surface(_sbDesktopSurface)
+                sb_surface_set_input_geometry(sbSurface, ptr)
+            }
+        }
+    }
+
     public let role: SurfaceRole
 
     public init(role: SurfaceRole, _ parent: Surface? = nil) {
@@ -104,6 +124,8 @@ public class Surface {
         if _parent != nil {
             // sb_desktop_surface_set_parent()
         }
+
+        addEventListeners()
     }
 
     public func close() {
@@ -129,5 +151,41 @@ public class Surface {
 
     public func show() {
         sb_desktop_surface_show(_sbDesktopSurface)
+    }
+
+    private func addEventListeners() {
+        let userData = Unmanaged.passUnretained(self).toOpaque()
+
+        // Resizing event.
+        _resizingEventListener = { sbEvent, userData in
+            if let userData = userData {
+                let instance = Unmanaged<Surface>.fromOpaque(userData).takeUnretainedValue()
+
+                instance.callResizingEvent(sbEvent)
+            }
+        } as EventListener
+        sb_desktop_surface_add_event_listener(_sbDesktopSurface, SB_EVENT_TYPE_RESIZE,
+            _resizingEventListener, userData)
+    }
+
+    private func callResizingEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {
+        let sbOldSize = sb_event_resize_old_size(sbEvent)
+        let sbSize = sb_event_resize_size(sbEvent)
+
+        let oldSize = Size(
+            width: sb_size_width(UnsafeMutablePointer(mutating: sbOldSize)),
+            height: sb_size_height(UnsafeMutablePointer(mutating: sbOldSize))
+        )
+        let size = Size(
+            width: sb_size_width(UnsafeMutablePointer(mutating: sbSize)),
+            height: sb_size_height(UnsafeMutablePointer(mutating: sbSize))
+        )
+
+        let event = ResizeEvent(oldSize: oldSize, size: size)
+        resizingEvent(event)
+    }
+
+    open func resizingEvent(_ event: ResizeEvent) {
+        //
     }
 }
