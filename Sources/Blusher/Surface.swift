@@ -16,9 +16,9 @@ public enum SurfaceResizeEdge {
     case bottomRight
 }
 
-public class Surface {
+public class UISurface {
     private var _sbDesktopSurface: OpaquePointer? = nil
-    private var _parent: Surface? = nil
+    private var _parent: UISurface? = nil
 
     private var _resizingEventListener: EventListener!
 
@@ -112,7 +112,7 @@ public class Surface {
 
     public let role: SurfaceRole
 
-    public init(role: SurfaceRole, _ parent: Surface? = nil) {
+    public init(role: SurfaceRole, _ parent: UISurface? = nil) {
         self.role = role
         _parent = parent
 
@@ -163,7 +163,7 @@ public class Surface {
         // Resizing event.
         _resizingEventListener = { sbEvent, userData in
             if let userData = userData {
-                let instance = Unmanaged<Surface>.fromOpaque(userData).takeUnretainedValue()
+                let instance = Unmanaged<UISurface>.fromOpaque(userData).takeUnretainedValue()
 
                 instance.callResizingEvent(sbEvent)
             }
@@ -191,5 +191,40 @@ public class Surface {
 
     open func resizingEvent(_ event: ResizeEvent) {
         //
+    }
+}
+
+public protocol Surface {
+    associatedtype Body : Surface
+
+    @SurfaceBuilder
+    var body: Body { get }
+}
+
+public struct EmptySurface: Surface {
+    public var body: some Surface {
+        self
+    }
+
+    public init() {
+    }
+}
+
+@resultBuilder
+public struct SurfaceBuilder {
+    public static func buildBlock<Content>(_ content: Content) -> Content where Content : Surface {
+        content
+    }
+}
+
+public struct ToplevelSurface<Content>: Surface where Content : View {
+    public var content: Content
+
+    public init(@ViewBuilder _ content: () -> Content) {
+        self.content = content()
+    }
+
+    public var body: some Surface {
+        EmptySurface()
     }
 }

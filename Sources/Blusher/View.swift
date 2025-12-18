@@ -1,8 +1,8 @@
 @_implementationOnly import Swingby
 
-open class View {
+open class UIView {
     private var _sbView: OpaquePointer?
-    private var _surface: Surface!
+    private var _surface: UISurface!
 
     private var _pointerEnterEventListener: EventListener!
     private var _pointerLeaveEventListener: EventListener!
@@ -78,13 +78,13 @@ open class View {
         }
     }
 
-    public var surface: Surface {
+    public var surface: UISurface {
         get {
             return _surface
         }
     }
 
-    public init(parent: View, geometry: Rect) {
+    public init(parent: UIView, geometry: Rect) {
         let sbParent = parent._sbView
         var sbRect = sb_rect_t(
             pos: sb_point_t(x: geometry.x, y: geometry.y),
@@ -100,7 +100,7 @@ open class View {
         addEventListeners()
     }
 
-    internal init(parentPointer: OpaquePointer, surface: Surface, geometry: Rect) {
+    internal init(parentPointer: OpaquePointer, surface: UISurface, geometry: Rect) {
         var sbRect = sb_rect_t(
             pos: sb_point_t(x: geometry.x, y: geometry.y),
             size: sb_size_t(width: geometry.width, height: geometry.height)
@@ -121,7 +121,7 @@ open class View {
         // Pointer enter event.
         _pointerEnterEventListener = { sbEvent, userData in
             if let userData = userData {
-                let instance = Unmanaged<View>.fromOpaque(userData).takeUnretainedValue()
+                let instance = Unmanaged<UIView>.fromOpaque(userData).takeUnretainedValue()
 
                 instance.callPointerEnterEvent(sbEvent)
             }
@@ -132,7 +132,7 @@ open class View {
         // Pointer leave event.
         _pointerLeaveEventListener = { sbEvent, userData in
             if let userData = userData {
-                let instance = Unmanaged<View>.fromOpaque(userData).takeUnretainedValue()
+                let instance = Unmanaged<UIView>.fromOpaque(userData).takeUnretainedValue()
 
                 instance.callPointerLeaveEvent(sbEvent)
             }
@@ -143,7 +143,7 @@ open class View {
         // Pointer move event.
         _pointerMoveEventListener = { sbEvent, userData in
             if let userData = userData {
-                let instance = Unmanaged<View>.fromOpaque(userData).takeUnretainedValue()
+                let instance = Unmanaged<UIView>.fromOpaque(userData).takeUnretainedValue()
 
                 instance.callPointerMoveEvent(sbEvent)
             }
@@ -154,7 +154,7 @@ open class View {
         // Pointer press event.
         _pointerPressEventListener = { sbEvent, userData in
             if let userData = userData {
-                let instance = Unmanaged<View>.fromOpaque(userData).takeUnretainedValue()
+                let instance = Unmanaged<UIView>.fromOpaque(userData).takeUnretainedValue()
 
                 instance.callPointerPressEvent(sbEvent)
             }
@@ -165,7 +165,7 @@ open class View {
         // Pointer release event.
         _pointerReleaseEventListener = { sbEvent, userData in
             if let userData = userData {
-                let instance = Unmanaged<View>.fromOpaque(userData).takeUnretainedValue()
+                let instance = Unmanaged<UIView>.fromOpaque(userData).takeUnretainedValue()
 
                 instance.callPointerReleaseEvent(sbEvent)
             }
@@ -176,7 +176,7 @@ open class View {
         // Pointer click event.
         _pointerClickEventListener = { sbEvent, userData in
             if let userData = userData {
-                let instance = Unmanaged<View>.fromOpaque(userData).takeUnretainedValue()
+                let instance = Unmanaged<UIView>.fromOpaque(userData).takeUnretainedValue()
 
                 instance.callPointerClickEvent(sbEvent)
             }
@@ -301,5 +301,116 @@ open class View {
     }
 
     open func pointerClickEvent(_ event: PointerEvent) {
+    }
+}
+
+internal protocol _TupleView {
+    func getChildren() -> [any View]
+}
+
+public struct TupleView<T>: View {
+    public var value: T
+
+    public var body: some View {
+        EmptyView()
+    }
+
+    public init(_ value: T) {
+        self.value = value
+    }
+}
+
+extension TupleView: _TupleView {
+    func getChildren() -> [any View] {
+        let mirror = Mirror(reflecting: self.value)
+        return mirror.children.compactMap { $0.value as? any View }
+    }
+}
+
+extension Never: View {
+    public typealias Body = Never
+
+    public var body: Never {
+        fatalError("Never body.")
+    }
+}
+
+public struct EmptyView: View {
+    public typealias Body = Never
+
+    public var body: Never {
+        fatalError("EmptyView has no body")
+    }
+
+    public init() {
+    }
+}
+
+@resultBuilder
+public struct ViewBuilder {
+    public static func buildBlock() -> EmptyView {
+        EmptyView()
+    }
+
+    public static func buildBlock<Content>(_ content: Content) -> Content where Content : View {
+        content
+    }
+
+    public static func buildBlock<C0: View, C1: View>(_ c0: C0, _ c1: C1) -> TupleView<(C0, C1)> {
+        TupleView((c0, c1))
+    }
+}
+
+public protocol View {
+    associatedtype Body : View
+
+    @ViewBuilder
+    var body: Body { get }
+
+    var geometry: Rect { get }
+    var color: Color { get }
+
+    func geometry(_ geometry: Rect) -> Self
+
+    func color(_ color: Color) -> Self
+}
+
+extension View {
+    public var geometry: Rect {
+        // Dummy value.
+        Rect(x: 0.0, y: 0.0, width: 10.0, height: 10.0)
+    }
+
+    public var color: Color {
+        // Dummy value.
+        Color(r: 0, g: 0, b: 0, a: 0)
+    }
+
+    public func geometry(_ geometry: Rect) -> Self {
+        self
+    }
+
+    public func color(_ color: Color) -> Self {
+        self
+    }
+}
+
+class ViewRenderer {
+    func render(view: any View, surface: UISurface, parent: OpaquePointer?) {
+        if let container = view as? _TupleView {
+            for child in container.getChildren() {
+                render(view: child, surface: surface, parent: parent)
+            }
+        } else if let viewData = view as? any View {
+            let uiView = UIView(
+                parentPointer: parent!,
+                surface: surface,
+                geometry: viewData.geometry
+            )
+
+            render(view: view.body, surface: surface, parent: parent)
+        } else if view is Never {
+            return
+        }
     }
 }

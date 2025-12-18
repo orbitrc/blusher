@@ -19,7 +19,7 @@ public class WindowResize: Widget, WindowDecoration {
 
         override func pointerMoveEvent(_ event: PointerEvent) {
             if _pressed {
-                _window.startResize(from: _edge)
+                // _window.startResize(from: _edge)
                 _pressed = false
             }
 
@@ -31,7 +31,7 @@ public class WindowResize: Widget, WindowDecoration {
 
     private var _bottomRightEdge: Edge!
 
-    public init(decoration: View) {
+    public init(decoration: UIView) {
         super.init(parentView: decoration)
 
         // Edges.

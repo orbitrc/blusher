@@ -53,7 +53,7 @@ public class TitleBar: Widget, WindowDecoration {
     private var _minimizeButton: TitleBarButton!
     private var _maximizeRestoreButton: TitleBarButton!
 
-    public init(decoration: View) {
+    public init(decoration: UIView) {
         super.init(parentView: decoration)
 
         // Title bar buttons.
@@ -77,7 +77,7 @@ public class TitleBar: Widget, WindowDecoration {
 
     public override func pointerMoveEvent(_ event: PointerEvent) {
         if _pressed {
-            window.startMove()
+            // window.startMove()
             _pressed = false
         }
 

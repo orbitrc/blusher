@@ -11,13 +11,16 @@ public enum WindowResizeEdge {
     case bottomRight
 }
 
-public class Window: Surface {
-    private var _decorationView: View!
+
+public class Window: UISurface {
+    private var _decorationView: UIView!
     private var _shadow: WindowShadow!
     private var _resize: WindowResize!
     private var _titleBar: TitleBar!
-    private var _bodyView: View!
+    private var _bodyView: UIView!
     private var _body: Widget!
+}
+    /*
 
     public var body: Widget {
         get {
@@ -176,3 +179,4 @@ public class Window: Surface {
         updateShadowGeometry()
     }
 }
+*/
