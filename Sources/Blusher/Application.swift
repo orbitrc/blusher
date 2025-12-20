@@ -52,18 +52,37 @@ extension Application {
         var _app: UIApplication = UIApplication(args)
 
         let instance = Self()
-        let _ = instance.body
+        let body = instance.body
 
-        if instance.body is EmptySurface {
+        if body is EmptySurface {
+            // Body is empty.
             // Do nothing.
+        } else if body is _TupleVisible{
+            // Body is multiple surfaces.
+
+            // uiSurface.show()
+            // SurfaceManager.shared.register(uiSurface)
         } else {
-            let surface = UISurface(role: .toplevel)
+            // Body is single surface.
+            let surface = body
+
+            let uiSurface = UISurface(role: .toplevel)
 
             let renderer = ViewRenderer()
-            renderer.render(view: instance.body.body as! any View, surface: surface, parent: surface.rootViewPointer)
 
-            surface.show()
-            SurfaceManager.shared.register(surface)
+            if surface.body is any View {
+                print("Single View!")
+                renderer.render(
+                    view: surface.body as! any View,
+                    surface: uiSurface,
+                    parent: uiSurface.rootViewPointer
+                )
+            } else if surface.body is _TupleView {
+                print("Multiple Views!")
+            }
+
+            uiSurface.show()
+            SurfaceManager.shared.register(uiSurface)
         }
 
         let ret = _app.exec()

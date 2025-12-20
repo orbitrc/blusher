@@ -32,6 +32,10 @@ public class UISurface {
         }
     }
 
+    internal var cPointer: OpaquePointer? {
+        self._sbDesktopSurface
+    }
+
     public var rootViewColor: Color {
         get {
             // TODO: Impl.
@@ -194,8 +198,8 @@ public class UISurface {
     }
 }
 
-public protocol Surface {
-    associatedtype Body : Surface
+public protocol Surface: Visible {
+    associatedtype Body : Visible
 
     @SurfaceBuilder
     var body: Body { get }
@@ -212,19 +216,23 @@ public struct EmptySurface: Surface {
 
 @resultBuilder
 public struct SurfaceBuilder {
-    public static func buildBlock<Content>(_ content: Content) -> Content where Content : Surface {
+    public static func buildBlock<Content: Visible>(_ content: Content) -> Content {
         content
+    }
+
+    public static func buildBlock<C0: Visible, C1: Visible>(_ c0: C0, _ c1: C1) -> TupleVisible<(C0, C1)> {
+        TupleVisible((c0, c1))
     }
 }
 
-public struct ToplevelSurface<Content>: Surface where Content : View {
+public struct ToplevelSurface<Content: Visible>: Surface {
     public var content: Content
 
     public init(@ViewBuilder _ content: () -> Content) {
         self.content = content()
     }
 
-    public var body: some Surface {
-        EmptySurface()
+    public var body: Content {
+        content
     }
 }

@@ -3,6 +3,7 @@
 open class UIView {
     private var _sbView: OpaquePointer?
     private var _surface: UISurface!
+    private var _parent: UIView?
 
     private var _pointerEnterEventListener: EventListener!
     private var _pointerLeaveEventListener: EventListener!
@@ -10,6 +11,14 @@ open class UIView {
     private var _pointerPressEventListener: EventListener!
     private var _pointerReleaseEventListener: EventListener!
     private var _pointerClickEventListener: EventListener!
+
+    internal var cPointer: OpaquePointer? {
+        _sbView
+    }
+
+    public var parent: UIView? {
+        _parent
+    }
 
     public var color: Color {
         get {
@@ -96,6 +105,7 @@ open class UIView {
         }
 
         _surface = parent._surface
+        _parent = parent
 
         addEventListeners()
     }
@@ -111,6 +121,7 @@ open class UIView {
         }
 
         _surface = surface
+        _parent = nil
 
         addEventListeners()
     }
@@ -361,7 +372,7 @@ public struct ViewBuilder {
     }
 }
 
-public protocol View {
+public protocol View: Visible {
     associatedtype Body : View
 
     @ViewBuilder
@@ -408,7 +419,8 @@ class ViewRenderer {
                 geometry: viewData.geometry
             )
 
-            render(view: view.body, surface: surface, parent: parent)
+            uiView.geometry = viewData.geometry
+            uiView.color = viewData.color
         } else if view is Never {
             return
         }
