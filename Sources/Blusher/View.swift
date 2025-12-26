@@ -392,34 +392,9 @@ struct ChildrenModifiedView<Content: View, Children: View>: View {
     }
 }
 
-//==================
-// Event Modifiers
-//==================
-struct PointerEnterModifiedView<Content: View>: View, PointerEnterEventProvider {
-    var content: Content
-    var pointerEnterEvent: ((PointerEvent) -> Void)?
-
-    var body: some View {
-        content
-    }
-}
-
 extension View {
     public func children(@ViewBuilder _ content: () -> some View) -> some View {
         ChildrenModifiedView(content: self, children: content())
-    }
-
-    //===============
-    // Events
-    //===============
-    public func onPointerEnter(_ event: @escaping (PointerEvent) -> Void) -> some View {
-        return PointerEnterModifiedView(content: self, pointerEnterEvent: event)
-    }
-
-    public func onPointerLeave(_ event: @escaping (PointerEvent) -> Void) -> Self {
-        var copy = self
-        // copy.pointerLeaveEvent = event
-        return copy
     }
 }
 
@@ -439,6 +414,7 @@ class ViewRenderer {
 
         if let modifier = view as? _PropertyModifiedView {
             modifier.apply(&store)
+            print(store)
 
             render(
                 view: modifier.innerContent,
@@ -481,8 +457,9 @@ class ViewRenderer {
 
         uiView.geometry = store[GeometryKey.self]
         uiView.color = store[ColorKey.self]
-        print(" Color: \(store[ColorKey.self])")
-        // uiView._pointerEnterHandler = builder.pointerEnterHandler
+        if let handler = store[PointerEnterKey.self] {
+            uiView._pointerEnterHandler = handler
+        }
 
         return uiView
     }

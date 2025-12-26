@@ -17,7 +17,7 @@ struct GeometryKey: PropertyKey {
 }
 
 extension View {
-    func geometry(_ geometry: Rect) -> some View {
+    public func geometry(_ geometry: Rect) -> some View {
         self.modifier { store in
             store[GeometryKey.self] = geometry
         }
@@ -40,6 +40,26 @@ extension View {
     public func color(_ color: Color) -> some View {
         self.modifier { store in
             store[ColorKey.self] = color
+        }
+    }
+}
+
+//=============
+// Event
+//=============
+
+struct PointerEnterKey: PropertyKey {
+    typealias Value = ((PointerEvent) -> Void)?
+
+    static var defaultValue: Value {
+        nil
+    }
+}
+
+extension View {
+    public func onPointerEnter(_ handler: ((PointerEvent) -> Void)?) -> some View {
+        self.modifier { store in
+            store[PointerEnterKey.self] = handler
         }
     }
 }
