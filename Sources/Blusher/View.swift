@@ -12,6 +12,8 @@ open class UIView {
     private var _pointerReleaseEventListener: EventListener!
     private var _pointerClickEventListener: EventListener!
 
+    internal var _pointerEnterHandler: ((PointerEvent) -> Void)? = nil
+
     internal var cPointer: OpaquePointer? {
         _sbView
     }
@@ -105,6 +107,7 @@ open class UIView {
         }
 
         _surface = parent._surface
+        _surface.children.append(self)
         _parent = parent
 
         addEventListeners()
@@ -121,6 +124,7 @@ open class UIView {
         }
 
         _surface = surface
+        _surface.children.append(self)
         _parent = nil
 
         addEventListeners()
@@ -293,7 +297,7 @@ open class UIView {
     }
 
     open func pointerEnterEvent(_ event: PointerEvent) {
-        //
+        _pointerEnterHandler?(event)
     }
 
     open func pointerLeaveEvent(_ event: PointerEvent) {
@@ -316,7 +320,7 @@ open class UIView {
 }
 
 internal protocol _TupleView {
-    func getChildren() -> [any View]
+    func getViews() -> [any View]
 }
 
 public struct TupleView<T>: View {
@@ -332,7 +336,7 @@ public struct TupleView<T>: View {
 }
 
 extension TupleView: _TupleView {
-    func getChildren() -> [any View] {
+    func getViews() -> [any View] {
         let mirror = Mirror(reflecting: self.value)
         return mirror.children.compactMap { $0.value as? any View }
     }
@@ -377,52 +381,121 @@ public protocol View: Visible {
 
     @ViewBuilder
     var body: Body { get }
+}
 
-    var geometry: Rect { get }
-    var color: Color { get }
+struct ChildrenModifiedView<Content: View, Children: View>: View {
+    let content: Content
+    let children: Children
 
-    func geometry(_ geometry: Rect) -> Self
+    var body: some View {
+        content
+    }
+}
 
-    func color(_ color: Color) -> Self
+//==================
+// Event Modifiers
+//==================
+struct PointerEnterModifiedView<Content: View>: View, PointerEnterEventProvider {
+    var content: Content
+    var pointerEnterEvent: ((PointerEvent) -> Void)?
+
+    var body: some View {
+        content
+    }
 }
 
 extension View {
-    public var geometry: Rect {
-        // Dummy value.
-        Rect(x: 0.0, y: 0.0, width: 10.0, height: 10.0)
+    public func children(@ViewBuilder _ content: () -> some View) -> some View {
+        ChildrenModifiedView(content: self, children: content())
     }
 
-    public var color: Color {
-        // Dummy value.
-        Color(r: 0, g: 0, b: 0, a: 0)
+    //===============
+    // Events
+    //===============
+    public func onPointerEnter(_ event: @escaping (PointerEvent) -> Void) -> some View {
+        return PointerEnterModifiedView(content: self, pointerEnterEvent: event)
     }
 
-    public func geometry(_ geometry: Rect) -> Self {
-        self
-    }
-
-    public func color(_ color: Color) -> Self {
-        self
+    public func onPointerLeave(_ event: @escaping (PointerEvent) -> Void) -> Self {
+        var copy = self
+        // copy.pointerLeaveEvent = event
+        return copy
     }
 }
 
 class ViewRenderer {
-    func render(view: any View, surface: UISurface, parent: OpaquePointer?) {
-        if let container = view as? _TupleView {
-            for child in container.getChildren() {
-                render(view: child, surface: surface, parent: parent)
-            }
-        } else if let viewData = view as? any View {
-            let uiView = UIView(
-                parentPointer: parent!,
-                surface: surface,
-                geometry: viewData.geometry
-            )
+    struct Builder {
+        var geometry: Rect = Rect(x: 0.0, y: 0.0, width: 0.0, height: 0.0)
+        var color: Color = Color(r: 255, g: 255, b: 255, a: 255)
+        var pointerEnterHandler: ((PointerEvent) -> Void)? = nil
+        var pointerLeaveHandler: ((PointerEvent) -> Void)? = nil
+        var parent: UIView? = nil
+        var rootViewPointer: OpaquePointer? = nil
 
-            uiView.geometry = viewData.geometry
-            uiView.color = viewData.color
-        } else if view is Never {
+        init() {
+        }
+    }
+
+    var uiSurface: UISurface
+
+    init(uiSurface: UISurface) {
+        self.uiSurface = uiSurface
+    }
+
+    func render(view: any View, store: PropertyStore, parentUIView: UIView?, rootViewPointer: OpaquePointer? = nil) {
+        var store = store
+
+        if view is Never {
             return
         }
+
+        if let modifier = view as? _PropertyModifiedView {
+            modifier.apply(&store)
+
+            render(
+                view: modifier.innerContent,
+                store: store,
+                parentUIView: parentUIView,
+                rootViewPointer: rootViewPointer
+            )
+
+            return
+        }
+
+        if let container = view as? _TupleView {
+            for child in container.getViews() {
+                // render(view: child, parent: uiView.parent)
+            }
+        } else {
+            if rootViewPointer != nil {
+                var _ = renderSelf(view, store, nil, rootViewPointer)
+            } else {
+                var _ = renderSelf(view, store, parentUIView, nil)
+            }
+        }
+
+        if let modifier = view as? PointerEnterEventProvider {
+            // builder.pointerEnterHandler = modifier.pointerEnterEvent
+            // render(view: view.body, builder: builder)
+            // return
+        }
+    }
+
+    func renderSelf(
+        _ view: any View,
+        _ store: PropertyStore,
+        _ parent: UIView?,
+        _ rootViewPointer: OpaquePointer?
+    ) -> UIView {
+        let uiView = rootViewPointer != nil
+            ? UIView(parentPointer: rootViewPointer!, surface: self.uiSurface, geometry: store[GeometryKey.self])
+            : UIView(parent: parent!, geometry: store[GeometryKey.self])
+
+        uiView.geometry = store[GeometryKey.self]
+        uiView.color = store[ColorKey.self]
+        print(" Color: \(store[ColorKey.self])")
+        // uiView._pointerEnterHandler = builder.pointerEnterHandler
+
+        return uiView
     }
 }

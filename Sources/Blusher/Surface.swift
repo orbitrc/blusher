@@ -36,6 +36,8 @@ public class UISurface {
         self._sbDesktopSurface
     }
 
+    public var children: [UIView] = []
+
     public var rootViewColor: Color {
         get {
             // TODO: Impl.
