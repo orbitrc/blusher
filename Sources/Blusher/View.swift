@@ -424,18 +424,6 @@ extension View {
 }
 
 class ViewRenderer {
-    struct Builder {
-        var geometry: Rect = Rect(x: 0.0, y: 0.0, width: 0.0, height: 0.0)
-        var color: Color = Color(r: 255, g: 255, b: 255, a: 255)
-        var pointerEnterHandler: ((PointerEvent) -> Void)? = nil
-        var pointerLeaveHandler: ((PointerEvent) -> Void)? = nil
-        var parent: UIView? = nil
-        var rootViewPointer: OpaquePointer? = nil
-
-        init() {
-        }
-    }
-
     var uiSurface: UISurface
 
     init(uiSurface: UISurface) {

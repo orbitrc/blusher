@@ -72,9 +72,6 @@ extension Application {
 
             if surface.body is any View {
                 print("Single View!")
-                var builder = ViewRenderer.Builder()
-                builder.parent = nil
-                builder.rootViewPointer = uiSurface.rootViewPointer
 
                 renderer.render(
                     view: surface.body as! any View,
