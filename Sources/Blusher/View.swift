@@ -400,12 +400,14 @@ extension View {
 
 class ViewRenderer {
     var uiSurface: UISurface
+    var rootView: any View
 
-    init(uiSurface: UISurface) {
+    init(uiSurface: UISurface, view: any View) {
         self.uiSurface = uiSurface
+        self.rootView = view
     }
 
-    func render(view: any View, store: PropertyStore, parentUIView: UIView?, rootViewPointer: OpaquePointer? = nil) {
+    func render(view: any View, store: PropertyStore, parentUIView: UIView?) {
         var store = store
 
         if view is Never {
@@ -419,8 +421,7 @@ class ViewRenderer {
             render(
                 view: modifier.innerContent,
                 store: store,
-                parentUIView: parentUIView,
-                rootViewPointer: rootViewPointer
+                parentUIView: parentUIView
             )
 
             return
@@ -431,29 +432,27 @@ class ViewRenderer {
                 render(
                     view: iter,
                     store: store,
-                    parentUIView: parentUIView,
-                    rootViewPointer: rootViewPointer
+                    parentUIView: parentUIView
                 )
             }
 
             return
         } else {
-            if rootViewPointer != nil {
-                var _ = renderSelf(view, store, nil, rootViewPointer)
-            } else {
-                var _ = renderSelf(view, store, parentUIView, nil)
-            }
+            var _ = renderSelf(view, store, parentUIView)
         }
     }
 
     func renderSelf(
         _ view: any View,
         _ store: PropertyStore,
-        _ parent: UIView?,
-        _ rootViewPointer: OpaquePointer?
+        _ parent: UIView?
     ) -> UIView {
-        let uiView = rootViewPointer != nil
-            ? UIView(parentPointer: rootViewPointer!, surface: self.uiSurface, geometry: store[GeometryKey.self])
+        let uiView = parent == nil
+            ? UIView(
+                parentPointer: self.uiSurface.rootViewPointer,
+                surface: self.uiSurface,
+                geometry: store[GeometryKey.self]
+            )
             : UIView(parent: parent!, geometry: store[GeometryKey.self])
 
         uiView.geometry = store[GeometryKey.self]

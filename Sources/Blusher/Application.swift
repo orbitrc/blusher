@@ -68,7 +68,7 @@ extension Application {
 
             let uiSurface = UISurface(role: .toplevel)
 
-            let renderer = ViewRenderer(uiSurface: uiSurface)
+            let renderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
 
             if surface.body is any View {
                 print("Single View!")
@@ -76,8 +76,7 @@ extension Application {
                 renderer.render(
                     view: surface.body as! any View,
                     store: PropertyStore(),
-                    parentUIView: nil,
-                    rootViewPointer: uiSurface.rootViewPointer
+                    parentUIView: nil
                 )
             } else if surface.body is _TupleView {
                 print("Multiple Views!")
