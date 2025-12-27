@@ -15,6 +15,6 @@ struct ExampleApp: Application {
     }
 
     public static func main() {
-        self.applicationMain()
+        let _ = self.applicationMain()
     }
 }

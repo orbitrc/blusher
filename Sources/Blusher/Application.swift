@@ -46,10 +46,10 @@ public protocol Application {
 
 extension Application {
     @MainActor
-    public static func applicationMain() {
+    public static func applicationMain() -> Int {
         let args = CommandLine.arguments
 
-        var _app: UIApplication = UIApplication(args)
+        let app: UIApplication = UIApplication(args)
 
         let instance = Self()
         let body = instance.body
@@ -87,6 +87,8 @@ extension Application {
             SurfaceManager.shared.register(uiSurface)
         }
 
-        let ret = _app.exec()
+        let ret = app.exec()
+
+        return ret
     }
 }
