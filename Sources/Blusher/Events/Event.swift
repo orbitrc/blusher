@@ -38,7 +38,3 @@ public class Event {
         self.type = type
     }
 }
-
-protocol PointerEnterEventProvider {
-    var pointerEnterEvent: ((PointerEvent) -> Void)? { get }
-}

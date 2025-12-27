@@ -437,12 +437,6 @@ class ViewRenderer {
                 var _ = renderSelf(view, store, parentUIView, nil)
             }
         }
-
-        if let modifier = view as? PointerEnterEventProvider {
-            // builder.pointerEnterHandler = modifier.pointerEnterEvent
-            // render(view: view.body, builder: builder)
-            // return
-        }
     }
 
     func renderSelf(
