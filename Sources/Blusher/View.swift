@@ -426,10 +426,17 @@ class ViewRenderer {
             return
         }
 
-        if let container = view as? _TupleView {
-            for child in container.getViews() {
-                // render(view: child, parent: uiView.parent)
+        if let tupleView = view as? _TupleView {
+            for iter in tupleView.getViews() {
+                render(
+                    view: iter,
+                    store: store,
+                    parentUIView: parentUIView,
+                    rootViewPointer: rootViewPointer
+                )
             }
+
+            return
         } else {
             if rootViewPointer != nil {
                 var _ = renderSelf(view, store, nil, rootViewPointer)
