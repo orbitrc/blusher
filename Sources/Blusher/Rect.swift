@@ -34,6 +34,12 @@ public struct Rect {
     }
 }
 
+extension Rect: CustomStringConvertible {
+    public var description: String {
+        return "Blusher.Rect(\(x), \(y) \(width)x\(height))"
+    }
+}
+
 public struct RectI {
     public var pos: PointI = PointI(x: 0, y: 0)
     public var size: SizeI = SizeI(width: 0, height: 0)

@@ -374,6 +374,10 @@ public struct ViewBuilder {
     public static func buildBlock<C0: View, C1: View>(_ c0: C0, _ c1: C1) -> TupleView<(C0, C1)> {
         TupleView((c0, c1))
     }
+
+    public static func buildBlock<C0: View, C1: View, C2: View>(_ c0: C0, _ c1: C1, _ c2: C2) -> TupleView<(C0, C1, C2)> {
+        TupleView((c0, c1, c2))
+    }
 }
 
 public protocol View: Visible {
@@ -416,7 +420,6 @@ class ViewRenderer {
 
         if let modifier = view as? _PropertyModifiedView {
             modifier.apply(&store)
-            print(store)
 
             render(
                 view: modifier.innerContent,
@@ -430,7 +433,7 @@ class ViewRenderer {
         if let tupleView = view as? _TupleView {
             for iter in tupleView.getViews() {
                 render(
-                    view: iter,
+                    view: (iter is _PropertyModifiedView) ? iter : iter.body,
                     store: store,
                     parentUIView: parentUIView
                 )
@@ -447,6 +450,7 @@ class ViewRenderer {
         _ store: PropertyStore,
         _ parent: UIView?
     ) -> UIView {
+        print(" Actual renderSelf - store: \(store)")
         let uiView = parent == nil
             ? UIView(
                 parentPointer: self.uiSurface.rootViewPointer,
