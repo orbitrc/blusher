@@ -70,16 +70,25 @@ extension Application {
 
             let renderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
 
-            if surface.body is any View {
-                print("Single View!")
+            if surface.body is _TupleView {
+                print("Multiple Views!")
 
+                if let tupleViews = surface.body as? _TupleView {
+                    for iter in tupleViews.getViews() {
+                        renderer.render(
+                            view: iter,
+                            store: PropertyStore(),
+                            parentUIView: nil
+                        )
+                    }
+                }
+            } else if surface.body is any View {
+                print("Single View!")
                 renderer.render(
                     view: surface.body as! any View,
                     store: PropertyStore(),
                     parentUIView: nil
                 )
-            } else if surface.body is _TupleView {
-                print("Multiple Views!")
             }
 
             uiSurface.show()
