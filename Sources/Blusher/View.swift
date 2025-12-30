@@ -411,47 +411,70 @@ class ViewRenderer {
         self.rootView = view
     }
 
-    func render(view: any View, store: PropertyStore, parentUIView: UIView?) {
+    func visit(
+        view: any View,
+        store: PropertyStore,
+        parentUIView: UIView?,
+        action: (any View, PropertyStore, UIView?) -> UIView
+    ) {
         var store = store
 
-        if view is Never {
-            return
+        print(" - Visiting: \(type(of: view))")
+        //
+        let mirror = Mirror(reflecting: view)
+        for child in mirror.children {
+            if let state = child.value as? _State {
+                print("State found!")
+                state.setOnChange {
+                    self.updateHandler()
+                }
+            }
         }
 
+        // Stop if empty view.
+        // if view is EmptyView {
+        //     print("Empty view. Stop.")
+        //     return
+        // }
+
+        // Process modified view.
         if let modifier = view as? _PropertyModifiedView {
             modifier.apply(&store)
 
-            render(
+            visit(
                 view: modifier.innerContent,
                 store: store,
-                parentUIView: parentUIView
+                parentUIView: parentUIView,
+                action: action
             )
 
             return
         }
 
+        // Process tuple view.
         if let tupleView = view as? _TupleView {
             for iter in tupleView.getViews() {
-                render(
-                    view: (iter is _PropertyModifiedView) ? iter : iter.body,
+                visit(
+                    view: (iter is _PropertyModifiedView) ? iter : iter,
                     store: store,
-                    parentUIView: parentUIView
+                    parentUIView: parentUIView,
+                    action: action
                 )
             }
 
             return
+        } else if view.body is EmptyView {
+            let _ = action(view, store, parentUIView)
+
+            // visit(view: view.body, store: store, parentUIView: uiView, action: action)
         } else {
-            var _ = renderSelf(view, store, parentUIView)
+            visit(view: view.body, store: store, parentUIView: parentUIView, action: action)
         }
     }
 
-    func renderSelf(
-        _ view: any View,
-        _ store: PropertyStore,
-        _ parent: UIView?
-    ) -> UIView {
-        print(" Actual renderSelf - store: \(store)")
-        let uiView = parent == nil
+    func render(view: any View, store: PropertyStore, parentUIView: UIView?) {
+        visit(view: view, store: store, parentUIView: parentUIView) { view, store, parent in
+            let uiView = parent == nil
             ? UIView(
                 parentPointer: self.uiSurface.rootViewPointer,
                 surface: self.uiSurface,
@@ -459,12 +482,31 @@ class ViewRenderer {
             )
             : UIView(parent: parent!, geometry: store[GeometryKey.self])
 
-        uiView.geometry = store[GeometryKey.self]
-        uiView.color = store[ColorKey.self]
-        if let handler = store[PointerEnterKey.self] {
-            uiView._pointerEnterHandler = handler
-        }
+            uiView.geometry = store[GeometryKey.self]
+            uiView.color = store[ColorKey.self]
+            if let handler = store[PointerEnterKey.self] {
+                uiView._pointerEnterHandler = handler
+            }
 
-        return uiView
+            return uiView
+        }
+    }
+
+    func update(view: any View, store: PropertyStore, parentUIView: UIView?) {
+        var index = 0
+        visit(view: view, store: store, parentUIView: parentUIView) { view, store, parent in
+            let uiView = uiSurface.children[index]
+
+            uiView.geometry = store[GeometryKey.self]
+            uiView.color = store[ColorKey.self]
+
+            index += 1
+
+            return uiView
+        }
+    }
+
+    func updateHandler() {
+        update(view: self.rootView, store: PropertyStore(), parentUIView: nil)
     }
 }

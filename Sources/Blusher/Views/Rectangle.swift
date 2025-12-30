@@ -6,7 +6,8 @@ public struct Rectangle: View {
     }
 
     public var body: some View {
-        modifier(self.defaultAction)
+        EmptyView()
+        // modifier(self.defaultAction)
     }
 
     public init() {
