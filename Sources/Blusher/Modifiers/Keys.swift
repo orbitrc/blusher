@@ -24,6 +24,14 @@ extension View {
     }
 }
 
+struct SizeIKey: PropertyKey {
+    typealias Value = SizeI
+
+    static var defaultValue: SizeI {
+        SizeI(width: 100, height: 100)
+    }
+}
+
 //============
 // Color
 //============

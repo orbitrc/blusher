@@ -238,3 +238,30 @@ public struct ToplevelSurface<Content: Visible>: Surface {
         content
     }
 }
+
+public struct ToplevelProxy {
+    private weak var uiSurface: UISurface?
+
+    init(_ uiSurface: UISurface) {
+        self.uiSurface = uiSurface
+    }
+
+    public func startMove() {
+        self.uiSurface?.move()
+    }
+
+    public func startResize(_ edge: SurfaceResizeEdge) {
+        self.uiSurface?.resize(edge)
+    }
+}
+
+enum ToplevelStorage {
+    @TaskLocal static var _uiSurface: UISurface?
+}
+
+extension ToplevelSurface {
+    public static var current: ToplevelProxy? {
+        guard let uiSurface = ToplevelStorage._uiSurface else { return nil }
+        return ToplevelProxy(uiSurface)
+    }
+}
