@@ -22,6 +22,8 @@ public class UISurface {
 
     private var _resizingEventListener: EventListener!
 
+    internal var _resizingHandler: ((ResizeEvent) -> Void)? = nil
+
     // TODO: Change this to internal when the test done.
     public var rootViewPointer: OpaquePointer {
         get {
@@ -196,7 +198,9 @@ public class UISurface {
     }
 
     open func resizingEvent(_ event: ResizeEvent) {
-        //
+        ToplevelStorage._uiSurface = self
+        _resizingHandler?(event)
+        ToplevelStorage._uiSurface = nil
     }
 }
 
@@ -239,7 +243,7 @@ public struct ToplevelSurface<Content: Visible>: Surface {
     }
 }
 
-public struct ToplevelProxy {
+public struct SurfaceProxy {
     private weak var uiSurface: UISurface?
 
     init(_ uiSurface: UISurface) {
@@ -256,12 +260,14 @@ public struct ToplevelProxy {
 }
 
 enum ToplevelStorage {
-    @TaskLocal static var _uiSurface: UISurface?
+    nonisolated(unsafe) static var _uiSurface: UISurface? = nil
 }
 
-extension ToplevelSurface {
-    public static var current: ToplevelProxy? {
+public class SurfaceHandle {
+    public static var current: SurfaceProxy? {
         guard let uiSurface = ToplevelStorage._uiSurface else { return nil }
-        return ToplevelProxy(uiSurface)
+        return SurfaceProxy(uiSurface)
     }
+
+    private init() {}
 }

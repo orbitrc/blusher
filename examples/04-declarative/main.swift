@@ -10,6 +10,9 @@ struct BlueRectangle: View {
             .onPointerEnter { _ in
                 blue = 100
             }
+            .onPointerMove { _ in
+                SurfaceHandle.current?.startMove()
+            }
     }
 }
 

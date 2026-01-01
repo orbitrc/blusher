@@ -13,6 +13,11 @@ open class UIView {
     private var _pointerClickEventListener: EventListener!
 
     internal var _pointerEnterHandler: ((PointerEvent) -> Void)? = nil
+    internal var _pointerLeaveHandler: ((PointerEvent) -> Void)? = nil
+    internal var _pointerMoveHandler: ((PointerEvent) -> Void)? = nil
+    internal var _pointerPressHandler: ((PointerEvent) -> Void)? = nil
+    internal var _pointerReleaseHandler: ((PointerEvent) -> Void)? = nil
+    internal var _pointerClickHandler: ((PointerEvent) -> Void)? = nil
 
     internal var cPointer: OpaquePointer? {
         _sbView
@@ -297,7 +302,9 @@ open class UIView {
     }
 
     open func pointerEnterEvent(_ event: PointerEvent) {
+        ToplevelStorage._uiSurface = self._surface
         _pointerEnterHandler?(event)
+        ToplevelStorage._uiSurface = nil
     }
 
     open func pointerLeaveEvent(_ event: PointerEvent) {
@@ -305,7 +312,9 @@ open class UIView {
     }
 
     open func pointerMoveEvent(_ event: PointerEvent) {
-        //
+        ToplevelStorage._uiSurface = self._surface
+        _pointerMoveHandler?(event)
+        ToplevelStorage._uiSurface = nil
     }
 
     open func pointerPressEvent(_ event: PointerEvent) {
@@ -484,9 +493,12 @@ class ViewRenderer {
 
             uiView.geometry = store[GeometryKey.self]
             uiView.color = store[ColorKey.self]
-            if let handler = store[PointerEnterKey.self] {
-                uiView._pointerEnterHandler = handler
-            }
+            bindHandler(for: PointerEnterKey.self, in: store, to: &uiView._pointerEnterHandler)
+            bindHandler(for: PointerLeaveKey.self, in: store, to: &uiView._pointerLeaveHandler)
+            bindHandler(for: PointerMoveKey.self, in: store, to: &uiView._pointerMoveHandler)
+            bindHandler(for: PointerPressKey.self, in: store, to: &uiView._pointerPressHandler)
+            bindHandler(for: PointerReleaseKey.self, in: store, to: &uiView._pointerReleaseHandler)
+            bindHandler(for: PointerClickKey.self, in: store, to: &uiView._pointerClickHandler)
 
             return uiView
         }
@@ -508,5 +520,13 @@ class ViewRenderer {
 
     func updateHandler() {
         update(view: self.rootView, store: PropertyStore(), parentUIView: nil)
+    }
+
+    private func bindHandler<K: PropertyKey>(
+        for key: K.Type,
+        in store: PropertyStore,
+        to target: inout K.Value
+    ) {
+        target = store[key]
     }
 }

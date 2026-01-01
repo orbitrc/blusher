@@ -64,10 +64,76 @@ struct PointerEnterKey: PropertyKey {
     }
 }
 
+struct PointerLeaveKey: PropertyKey {
+    typealias Value = ((PointerEvent) -> Void)?
+
+    static var defaultValue: Value {
+        nil
+    }
+}
+
+struct PointerMoveKey: PropertyKey {
+    typealias Value = ((PointerEvent) -> Void)?
+
+    static var defaultValue: Value {
+        nil
+    }
+}
+
+struct PointerPressKey: PropertyKey {
+    typealias Value = ((PointerEvent) -> Void)?
+
+    static var defaultValue: Value {
+        nil
+    }
+}
+
+struct PointerReleaseKey: PropertyKey {
+    typealias Value = ((PointerEvent) -> Void)?
+
+    static var defaultValue: Value { nil }
+}
+
+struct PointerClickKey: PropertyKey {
+    typealias Value = ((PointerEvent) -> Void)?
+
+    static var defaultValue: Value { nil }
+}
+
 extension View {
     public func onPointerEnter(_ handler: ((PointerEvent) -> Void)?) -> some View {
         self.modifier { store in
             store[PointerEnterKey.self] = handler
+        }
+    }
+
+    public func onPointerLeave(_ handler: ((PointerEvent) -> Void)?) -> some View {
+        self.modifier { store in
+            store[PointerLeaveKey.self] = handler
+        }
+    }
+
+    public func onPointerMove(_ handler: ((PointerEvent) -> Void)?) -> some View {
+        self.modifier { store in
+            store[PointerMoveKey.self] = handler
+        }
+    }
+
+    public func onPointerPress(_ handler: ((PointerEvent) -> Void)?) -> some View {
+        self.modifier { store in
+            store[PointerPressKey.self] = handler
+        }
+    }
+
+    public func onPointerRelease(_ handler: ((PointerEvent) -> Void)?) -> some View {
+        self.modifier { store in
+            store[PointerReleaseKey.self] = handler
+        }
+    }
+
+    public func onPointerClick(_ handler: ((PointerEvent) -> Void)?) -> some View {
+        self.modifier { store in
+            store[PointerClickKey.self] = handler
         }
     }
 }
