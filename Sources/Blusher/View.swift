@@ -219,7 +219,7 @@ open class UIView {
         let sbPos = sb_event_pointer_position(sbEvent)
         let x = sb_point_x(sbPos)
         let y = sb_point_y(sbPos)
-        let event = PointerEvent(type: .pointerEnter)
+        let event = PointerEvent(type: .pointerLeave)
         event.position.x = x
         event.position.y = y
         pointerLeaveEvent(event)
