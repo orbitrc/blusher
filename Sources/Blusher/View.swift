@@ -318,7 +318,9 @@ open class UIView {
     }
 
     open func pointerPressEvent(_ event: PointerEvent) {
-        //
+        ToplevelStorage._uiSurface = self._surface
+        _pointerPressHandler?(event)
+        ToplevelStorage._uiSurface = nil
     }
 
     open func pointerReleaseEvent(_ event: PointerEvent) {

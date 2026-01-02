@@ -30,6 +30,8 @@ public struct Window<Content: View>: Surface {
 
     public var body: some Surface {
         ToplevelSurface {
+            WindowShadow()
+            TitleBar()
             content
         }
     }

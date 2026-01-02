@@ -8,10 +8,7 @@ struct BlueRectangle: View {
             .geometry(Rect(x: 50.0, y: 10.0, width: 30.0, height: 30.0))
             .color(Color(r: 0, g: 0, b: blue, a: 255))
             .onPointerEnter { _ in
-                blue = 100
-            }
-            .onPointerMove { _ in
-                SurfaceHandle.current?.startMove()
+                blue -= 20
             }
     }
 }
