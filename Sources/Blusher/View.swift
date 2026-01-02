@@ -522,6 +522,7 @@ class ViewRenderer {
         update(view: self.rootView, store: PropertyStore(), parentUIView: nil)
     }
 
+    /// A helper function for bind event handlers.
     private func bindHandler<K: PropertyKey>(
         for key: K.Type,
         in store: PropertyStore,

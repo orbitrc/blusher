@@ -12,7 +12,7 @@ public enum WindowResizeEdge {
 }
 
 
-public class Window: UISurface {
+public class UIWindow: UISurface {
     private var _decorationView: UIView!
     private var _shadow: WindowShadow!
     private var _resize: WindowResize!
@@ -20,6 +20,21 @@ public class Window: UISurface {
     private var _bodyView: UIView!
     private var _body: Widget!
 }
+
+public struct Window<Content: View>: Surface {
+    private var content: Content
+
+    public init(@ViewBuilder _ content: () -> Content) {
+        self.content = content()
+    }
+
+    public var body: some Surface {
+        ToplevelSurface {
+            content
+        }
+    }
+}
+
     /*
 
     public var body: Widget {

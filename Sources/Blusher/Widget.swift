@@ -11,9 +11,9 @@ open class Widget: UIView {
         super.init(parent: parentView, geometry: initialRect)
     }
 
-    public var window: Window {
+    public var window: UIWindow {
         get {
-            return super.surface as! Window
+            return super.surface as! UIWindow
         }
     }
 }

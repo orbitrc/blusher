@@ -54,9 +54,22 @@ extension Application {
         let instance = Self()
         let body = instance.body
 
+        print("if body is... \(body)")
         if body is EmptySurface {
             // Body is empty.
             // Do nothing.
+        } else if body.body is any Surface {
+            print("body.body is any Surface")
+            let surface = body.body as? any Surface
+
+            let uiSurface = UISurface(role: .toplevel)
+
+            let renderer = ViewRenderer(uiSurface: uiSurface, view: surface?.body as! any View)
+
+            let _ = renderViews(surface?.body as! any View, renderer)
+            uiSurface.show()
+
+            SurfaceManager.shared.register(uiSurface)
         } else if body is _TupleVisible{
             // Body is multiple surfaces.
 
@@ -98,5 +111,32 @@ extension Application {
         let ret = app.exec()
 
         return ret
+    }
+}
+
+internal extension Application {
+    static func renderViews(_ body: any View, _ renderer: ViewRenderer) -> UISurface {
+        if body is _TupleView {
+            print("Multiple Views!")
+
+            if let tupleViews = body as? _TupleView {
+                for iter in tupleViews.getViews() {
+                    renderer.render(
+                        view: iter,
+                        store: PropertyStore(),
+                        parentUIView: nil
+                    )
+                }
+            }
+        } else if body is any View {
+            print("Single View!")
+            renderer.render(
+                view: body as! any View,
+                store: PropertyStore(),
+                parentUIView: nil
+            )
+        }
+
+        return renderer.uiSurface
     }
 }

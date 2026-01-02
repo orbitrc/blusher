@@ -1,10 +1,10 @@
 public class WindowResize: Widget, WindowDecoration {
     class Edge: Widget {
         private var _edge: WindowResizeEdge!
-        private var _window: Window!
+        private var _window: UIWindow!
         private var _pressed: Bool = false
 
-        init(edge: WindowResizeEdge, parent: Widget, window: Window) {
+        init(edge: WindowResizeEdge, parent: Widget, window: UIWindow) {
             super.init(parent: parent)
 
             _edge = edge

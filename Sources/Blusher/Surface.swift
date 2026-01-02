@@ -5,7 +5,7 @@ public enum SurfaceRole {
     case popup
 }
 
-public enum SurfaceResizeEdge {
+public enum ResizeEdge {
     case top
     case bottom
     case left
@@ -146,7 +146,7 @@ public class UISurface {
         sb_desktop_surface_toplevel_move(_sbDesktopSurface)
     }
 
-    public func resize(_ resizeEdge: SurfaceResizeEdge) {
+    public func resize(_ resizeEdge: ResizeEdge) {
         if role != .toplevel {
             return
         }
@@ -229,6 +229,10 @@ public struct SurfaceBuilder {
     public static func buildBlock<C0: Visible, C1: Visible>(_ c0: C0, _ c1: C1) -> TupleVisible<(C0, C1)> {
         TupleVisible((c0, c1))
     }
+
+    public static func buildBlock<C0: Visible, C1: Visible, C2: Visible>(_ c0: C0, _ c1: C1, _ c2: C2) -> TupleVisible<(C0, C1, C2)> {
+        TupleVisible((c0, c1, c2))
+    }
 }
 
 public struct ToplevelSurface<Content: Visible>: Surface {
@@ -254,7 +258,7 @@ public struct SurfaceProxy {
         self.uiSurface?.move()
     }
 
-    public func startResize(_ edge: SurfaceResizeEdge) {
+    public func startResize(_ edge: ResizeEdge) {
         self.uiSurface?.resize(edge)
     }
 }
