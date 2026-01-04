@@ -42,7 +42,7 @@ public struct Window<Content: View>: Surface {
                 .geometry(Rect(x: 50.0, y: 50.0, width: 30.0, height: 30.0))
                 .color(Color(r: 100, g: 0, b: 0, a: 255))
                 .onPointerPress { _ in
-                    width += 10
+                    SurfaceHandle.current?.startResize(.bottomRight)
                 }
             content
         }

@@ -194,10 +194,10 @@ public class UISurface {
         )
 
         let event = ResizeEvent(oldSize: oldSize, size: size)
-        resizingEvent(event)
+        resizeRequestEvent(event)
     }
 
-    open func resizingEvent(_ event: ResizeEvent) {
+    open func resizeRequestEvent(_ event: ResizeEvent) {
         ToplevelStorage._uiSurface = self
         _resizeRequestHandler?(event)
         ToplevelStorage._uiSurface = nil
