@@ -26,6 +26,7 @@ public struct Window<Content: View>: Surface {
 
     @State var surfaceSize: SizeI = SizeI(width: 300, height: 200)
     @State var resizeGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+    @State var width: UInt64 = 300  // TODO: This is the value for just a test.
 
     public init(@ViewBuilder _ content: () -> Content) {
         self.content = content()
@@ -37,6 +38,12 @@ public struct Window<Content: View>: Surface {
             WindowResize()
                 .geometry(resizeGeometry)
             TitleBar()
+            Rectangle()
+                .geometry(Rect(x: 50.0, y: 50.0, width: 30.0, height: 30.0))
+                .color(Color(r: 100, g: 0, b: 0, a: 255))
+                .onPointerPress { _ in
+                    width += 10
+                }
             content
         }
         .size(surfaceSize)

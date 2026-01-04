@@ -106,7 +106,7 @@ class SurfaceManager {
 
     private func update(surface: any Surface, store: PropertyStore) {
         print(" - SurfaceManager.update()")
-        visit(surface: rootSurface, store: PropertyStore()) { surface, store in
+        visit(surface: rootSurface, store: store) { surface, store in
             let uiSurface = _surfaces[0]
 
             uiSurface.size = store[SizeIKey.self]
