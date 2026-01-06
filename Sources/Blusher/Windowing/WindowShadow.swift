@@ -1,5 +1,8 @@
 public struct WindowShadow: View, WindowDecoration {
-    public var thickness: Float = 40.0
+    public static var thickness: Float {
+        get { 40.0 }
+        set { return }
+    }
 
     @State public var geometry: Rect = Rect(x: 0.0, y: 0.0, width: 100.0, height: 100.0)
 

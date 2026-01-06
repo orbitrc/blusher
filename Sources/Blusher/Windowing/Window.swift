@@ -25,6 +25,7 @@ public struct Window<Content: View>: Surface {
     private var content: Content
 
     @State var surfaceSize: SizeI = SizeI(width: 300, height: 200)
+    @State var resizeGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
 
     public init(@ViewBuilder _ content: () -> Content) {
         self.content = content()
@@ -33,10 +34,29 @@ public struct Window<Content: View>: Surface {
     public var body: some Surface {
         ToplevelSurface {
             WindowShadow()
+            WindowResize()
+                .geometry(resizeGeometry)
             TitleBar()
             content
         }
         .size(surfaceSize)
+        .onResizeRequest { event in
+            surfaceSize = SizeI(
+                width: UInt64(event.size.width),
+                height: UInt64(event.size.height)
+            )
+
+            updateResizeGeometry()
+        }
+    }
+
+    private func updateResizeGeometry() {
+        resizeGeometry = Rect(
+            x: WindowShadow.thickness - WindowResize.thickness,
+            y: WindowShadow.thickness - WindowResize.thickness,
+            width: Float(surfaceSize.width) - WindowShadow.thickness,
+            height: Float(surfaceSize.height) - WindowShadow.thickness
+        )
     }
 }
 

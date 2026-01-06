@@ -45,13 +45,16 @@ public class TitleBarButton: Widget {
 }
 
 public struct TitleBar: View, WindowDecoration {
-    public var thickness: Float = 30.0
+    public static var thickness: Float {
+        get { 30.0 }
+        set { return }
+    }
 
     @State private var _pressed: Bool = false
 
     public var body: some View {
         Rectangle()
-            .geometry(Rect(x: 10.0, y: 10.0, width: 90.0, height: thickness))
+            .geometry(Rect(x: 10.0, y: 10.0, width: 90.0, height: 30.0))
             .color(Color(r: 128, g: 128, b: 128, a: 255))
             .onPointerPress { _ in
                 _pressed = true

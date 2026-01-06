@@ -1,7 +1,7 @@
 internal class StateBox<T> {
     var value: T {
         didSet {
-            print("StateBox<T>::value::didSet. onChange: \(onChange == nil)")
+            print("StateBox<T>::value::didSet. onChange: \(onChange == nil ? "nil" : "something")")
             onChange?()
         }
     }

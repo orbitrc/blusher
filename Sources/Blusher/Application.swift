@@ -78,12 +78,17 @@ class SurfaceManager {
             if let inputGeometry = store[InputGeometryKey.self] {
                 uiSurface.inputGeometry = inputGeometry
             }
+            if let handler = store[ResizeRequestKey.self] {
+                uiSurface._resizeRequestHandler = handler
+            }
 
-            let renderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
-            let _ = SurfaceManager.renderViews(surface.body as! any View, renderer)
+            if let body = surface.body as? any View {
+                let renderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
+                let _ = SurfaceManager.renderViews(surface.body as! any View, renderer)
 
-            _surfaces.append(uiSurface)
-            uiSurface.show()
+                _surfaces.append(uiSurface)
+                uiSurface.show()
+            }
 
             return uiSurface
         }
@@ -97,6 +102,7 @@ class SurfaceManager {
     }
 
     private func updateHandler() {
+        print("updateHandler")
         let _ = update(surface: rootSurface, store: PropertyStore())
     }
 
@@ -149,9 +155,9 @@ extension Application {
         if body is EmptySurface {
             // Body is empty.
             // Do nothing.
-        } else if body.body is any Surface {
+        } else if body is any Surface {
             print("body.body is any Surface")
-            let surface = body.body as? any Surface
+            let surface = body as? any Surface
 
             if let s = surface {
                 let uiSurface = SurfaceManager.shared.createSurface(s)
