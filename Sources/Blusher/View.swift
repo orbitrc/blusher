@@ -434,7 +434,7 @@ class ViewRenderer {
     ) {
         var store = store
 
-        print(" - Visiting: \(type(of: view))")
+        // print(" - Visiting: \(type(of: view))")
         //
         let mirror = Mirror(reflecting: view)
         for child in mirror.children {
@@ -488,6 +488,7 @@ class ViewRenderer {
     }
 
     func render(view: any View, store: PropertyStore, parentUIView: UIView?) {
+        print(" - ViewRenderer.render()")
         visit(view: view, store: store, parentUIView: parentUIView) { view, store, parent in
             let uiView = parent == nil
             ? UIView(
@@ -511,6 +512,7 @@ class ViewRenderer {
     }
 
     func update(view: any View, store: PropertyStore, parentUIView: UIView?) {
+        print(" - ViewRenderer.update()")
         var index = 0
         visit(view: view, store: store, parentUIView: parentUIView) { view, store, parent in
             let uiView = uiSurface.children[index]

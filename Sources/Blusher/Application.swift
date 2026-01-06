@@ -32,11 +32,10 @@ class SurfaceManager {
     private init() {
     }
 
-    func createSurface(_ surface: any Surface) -> UISurface {
+    func createSurface(root surface: any Surface) {
         rootSurface = surface
 
-        let uiSurface = initialize(surface: surface, store: PropertyStore())
-        return uiSurface
+        initialize(surface: rootSurface, store: PropertyStore())
     }
 
     private func visit(
@@ -62,10 +61,23 @@ class SurfaceManager {
             return
         }
 
-        let _ = action(surface, store)
+        if surface.body is any Surface {
+            print("Surface body is another surface.")
+            visit(surface: surface.body as! any Surface, store: store, action: action)
+
+            return
+        } else if surface.body is any View {
+            print("Surface body is now a view!")
+            let _ = action(surface, store)
+        }
+
+        // if surface.body is any View {
+        //     let _ = action(surface, store)
+        // }
+        // let _ = action(surface, store)
     }
 
-    private func initialize(surface: any Surface, store: PropertyStore) -> UISurface {
+    private func initialize(surface: any Surface, store: PropertyStore) {
         visit(surface: surface, store: store) { surface, store in
             // TODO: Do Not hard-code the role as toplevel.
             let uiSurface = UISurface(role: .toplevel)
@@ -82,28 +94,30 @@ class SurfaceManager {
                 uiSurface._resizeRequestHandler = handler
             }
 
-            if let body = surface.body as? any View {
-                let renderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
-                let _ = SurfaceManager.renderViews(surface.body as! any View, renderer)
+            let renderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
+            let _ = SurfaceManager.renderViews(surface.body as! any View, renderer)
 
-                _surfaces.append(uiSurface)
-                uiSurface.show()
-            }
+            _surfaces.append(uiSurface)
+            uiSurface.show()
 
             return uiSurface
         }
-
-        return _surfaces[0]
     }
 
-    private func update(surface: any Surface, store: PropertyStore) -> UISurface {
-        print("TODO: Implement SurfaceManager.update")
-        return _surfaces[0]
+    private func update(surface: any Surface, store: PropertyStore) {
+        print(" - SurfaceManager.update()")
+        visit(surface: rootSurface, store: PropertyStore()) { surface, store in
+            let uiSurface = _surfaces[0]
+
+            uiSurface.size = store[SizeIKey.self]
+
+            return uiSurface
+        }
     }
 
     private func updateHandler() {
         print("updateHandler")
-        let _ = update(surface: rootSurface, store: PropertyStore())
+        update(surface: rootSurface, store: PropertyStore())
     }
 
     static func renderViews(_ body: any View, _ renderer: ViewRenderer) -> UISurface {
@@ -150,48 +164,24 @@ extension Application {
 
         let instance = Self()
         let body = instance.body
+        let surface = body
 
-        print("if body is... \(body)")
-        if body is EmptySurface {
+        print("if surface is... \(surface)")
+        if surface is EmptySurface {
             // Body is empty.
             // Do nothing.
-        } else if body is any Surface {
-            print("body.body is any Surface")
-            let surface = body as? any Surface
-
-            if let s = surface {
-                let uiSurface = SurfaceManager.shared.createSurface(s)
-
-                // let _ = renderViews(s.body as! any View, renderer)
-            }
-
-            /*
-            let uiSurface = UISurface(role: .toplevel)
-
-            let renderer = ViewRenderer(uiSurface: uiSurface, view: surface?.body as! any View)
-
-            let _ = renderViews(surface?.body as! any View, renderer)
-            uiSurface.show()
-
-            SurfaceManager.shared.register(uiSurface)
-            */
         } else if body is _TupleVisible{
             // Body is multiple surfaces.
 
             // uiSurface.show()
             // SurfaceManager.shared.register(uiSurface)
+        } else if surface.body is any Surface {
+            print("Body is another surface")
+            SurfaceManager.shared.createSurface(root: surface)
         } else {
+            print("Body maybe a view")
             // Body is single surface.
-            let surface = body
-
-            let uiSurface = UISurface(role: .toplevel)
-
-            let renderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
-
-            // let _ = renderViews(surface.body as! any View, renderer)
-
-            uiSurface.show()
-            // SurfaceManager.shared.register(uiSurface)
+            SurfaceManager.shared.createSurface(root: surface)
         }
 
         let ret = app.exec()
