@@ -20,9 +20,9 @@ public class UISurface {
     private var _sbDesktopSurface: OpaquePointer? = nil
     private var _parent: UISurface? = nil
 
-    private var _resizingEventListener: EventListener!
+    private var _resizeRequestEventListener: EventListener!
 
-    internal var _resizingHandler: ((ResizeEvent) -> Void)? = nil
+    internal var _resizeRequestHandler: ((ResizeEvent) -> Void)? = nil
 
     // TODO: Change this to internal when the test done.
     public var rootViewPointer: OpaquePointer {
@@ -169,7 +169,7 @@ public class UISurface {
         let userData = Unmanaged.passUnretained(self).toOpaque()
 
         // Resizing event.
-        _resizingEventListener = { sbEvent, userData in
+        _resizeRequestEventListener = { sbEvent, userData in
             if let userData = userData {
                 let instance = Unmanaged<UISurface>.fromOpaque(userData).takeUnretainedValue()
 
@@ -177,7 +177,7 @@ public class UISurface {
             }
         } as EventListener
         sb_desktop_surface_add_event_listener(_sbDesktopSurface, SB_EVENT_TYPE_RESIZE,
-            _resizingEventListener, userData)
+            _resizeRequestEventListener, userData)
     }
 
     private func callResizingEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {
@@ -199,7 +199,7 @@ public class UISurface {
 
     open func resizingEvent(_ event: ResizeEvent) {
         ToplevelStorage._uiSurface = self
-        _resizingHandler?(event)
+        _resizeRequestHandler?(event)
         ToplevelStorage._uiSurface = nil
     }
 }

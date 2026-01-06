@@ -38,3 +38,15 @@ extension Surface {
         }
     }
 }
+
+//=================
+// Event Handlers
+//=================
+
+extension Surface {
+    public func onResizeRequest(_ handler: ((ResizeEvent) -> Void)?) -> some Surface {
+        self.modifier { store in
+            store[ResizeRequestKey.self] = handler
+        }
+    }
+}

@@ -100,6 +100,12 @@ struct PointerClickKey: PropertyKey {
     static var defaultValue: Value { nil }
 }
 
+struct ResizeRequestKey: PropertyKey {
+    typealias Value = ((ResizeEvent) -> Void)?
+
+    static var defaultValue: Value { nil }
+}
+
 extension View {
     public func onPointerEnter(_ handler: ((PointerEvent) -> Void)?) -> some View {
         self.modifier { store in

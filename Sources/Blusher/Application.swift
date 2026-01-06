@@ -27,11 +27,54 @@ class SurfaceManager {
 
     private var _surfaces: [UISurface] = []
 
+    internal var rootSurface: any Surface = EmptySurface()
+
     private init() {
     }
 
-    func register(_ surface: UISurface) {
-        _surfaces.append(surface)
+    func createSurface(_ surface: any Surface) -> UISurface {
+        rootSurface = surface
+
+        let uiSurface = initialize(surface: surface, store: PropertyStore())
+        return uiSurface
+    }
+
+    private func visit(
+        surface: any Surface,
+        store: PropertyStore,
+        action: (any Surface, PropertyStore) -> UISurface
+    ) {
+        var store = store
+
+        if let modifier = surface as? _PropertyModifiedSurface {
+            modifier.apply(&store)
+
+            visit(surface: modifier.innerContent, store: store, action: action)
+
+            return
+        }
+
+        let _ = action(surface, store)
+    }
+
+    private func initialize(surface: any Surface, store: PropertyStore) -> UISurface {
+        visit(surface: surface, store: store) { surface, store in
+            // TODO: Do Not hard-code the role as toplevel.
+            let uiSurface = UISurface(role: .toplevel)
+
+            // let viewRenderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
+
+            _surfaces.append(uiSurface)
+            uiSurface.show()
+
+            return uiSurface
+        }
+
+        return _surfaces[0]
+    }
+
+    private func update(surface: any Surface, store: PropertyStore) -> UISurface {
+        return _surfaces[0]
     }
 }
 
@@ -62,6 +105,15 @@ extension Application {
             print("body.body is any Surface")
             let surface = body.body as? any Surface
 
+            if let s = surface {
+                let uiSurface = SurfaceManager.shared.createSurface(s)
+
+                let renderer = ViewRenderer(uiSurface: uiSurface, view: s.body as! any View)
+
+                let _ = renderViews(s.body as! any View, renderer)
+            }
+
+            /*
             let uiSurface = UISurface(role: .toplevel)
 
             let renderer = ViewRenderer(uiSurface: uiSurface, view: surface?.body as! any View)
@@ -70,6 +122,7 @@ extension Application {
             uiSurface.show()
 
             SurfaceManager.shared.register(uiSurface)
+            */
         } else if body is _TupleVisible{
             // Body is multiple surfaces.
 
@@ -86,7 +139,7 @@ extension Application {
             let _ = renderViews(surface.body as! any View, renderer)
 
             uiSurface.show()
-            SurfaceManager.shared.register(uiSurface)
+            // SurfaceManager.shared.register(uiSurface)
         }
 
         let ret = app.exec()
