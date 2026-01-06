@@ -46,6 +46,14 @@ class SurfaceManager {
     ) {
         var store = store
 
+        // Bind `@State`s.`
+        let mirror = Mirror(reflecting: surface)
+        for child in mirror.children {
+            if let state = child.value as? _State {
+                state.setOnChange(self.updateHandler)
+            }
+        }
+
         if let modifier = surface as? _PropertyModifiedSurface {
             modifier.apply(&store)
 
@@ -63,6 +71,16 @@ class SurfaceManager {
             let uiSurface = UISurface(role: .toplevel)
 
             // let viewRenderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
+            uiSurface.size = store[SizeIKey.self]
+            if let wmGeometry = store[WMGeometryKey.self] {
+                uiSurface.wmGeometry = wmGeometry
+            }
+            if let inputGeometry = store[InputGeometryKey.self] {
+                uiSurface.inputGeometry = inputGeometry
+            }
+
+            let renderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
+            let _ = SurfaceManager.renderViews(surface.body as! any View, renderer)
 
             _surfaces.append(uiSurface)
             uiSurface.show()
@@ -74,7 +92,37 @@ class SurfaceManager {
     }
 
     private func update(surface: any Surface, store: PropertyStore) -> UISurface {
+        print("TODO: Implement SurfaceManager.update")
         return _surfaces[0]
+    }
+
+    private func updateHandler() {
+        let _ = update(surface: rootSurface, store: PropertyStore())
+    }
+
+    static func renderViews(_ body: any View, _ renderer: ViewRenderer) -> UISurface {
+        if body is _TupleView {
+            print("Multiple Views!")
+
+            if let tupleViews = body as? _TupleView {
+                for iter in tupleViews.getViews() {
+                    renderer.render(
+                        view: iter,
+                        store: PropertyStore(),
+                        parentUIView: nil
+                    )
+                }
+            }
+        } else if body is any View {
+            print("Single View!")
+            renderer.render(
+                view: body as! any View,
+                store: PropertyStore(),
+                parentUIView: nil
+            )
+        }
+
+        return renderer.uiSurface
     }
 }
 
@@ -108,9 +156,7 @@ extension Application {
             if let s = surface {
                 let uiSurface = SurfaceManager.shared.createSurface(s)
 
-                let renderer = ViewRenderer(uiSurface: uiSurface, view: s.body as! any View)
-
-                let _ = renderViews(s.body as! any View, renderer)
+                // let _ = renderViews(s.body as! any View, renderer)
             }
 
             /*
@@ -136,7 +182,7 @@ extension Application {
 
             let renderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
 
-            let _ = renderViews(surface.body as! any View, renderer)
+            // let _ = renderViews(surface.body as! any View, renderer)
 
             uiSurface.show()
             // SurfaceManager.shared.register(uiSurface)
@@ -145,32 +191,5 @@ extension Application {
         let ret = app.exec()
 
         return ret
-    }
-}
-
-internal extension Application {
-    static func renderViews(_ body: any View, _ renderer: ViewRenderer) -> UISurface {
-        if body is _TupleView {
-            print("Multiple Views!")
-
-            if let tupleViews = body as? _TupleView {
-                for iter in tupleViews.getViews() {
-                    renderer.render(
-                        view: iter,
-                        store: PropertyStore(),
-                        parentUIView: nil
-                    )
-                }
-            }
-        } else if body is any View {
-            print("Single View!")
-            renderer.render(
-                view: body as! any View,
-                store: PropertyStore(),
-                parentUIView: nil
-            )
-        }
-
-        return renderer.uiSurface
     }
 }

@@ -143,3 +143,19 @@ extension View {
         }
     }
 }
+
+//==================
+// Surface
+//==================
+
+struct WMGeometryKey: PropertyKey {
+    typealias Value = RectI?
+
+    static var defaultValue: Value { nil }
+}
+
+struct InputGeometryKey: PropertyKey {
+    typealias Value = RectI?
+
+    static var defaultValue: Value { nil }
+}

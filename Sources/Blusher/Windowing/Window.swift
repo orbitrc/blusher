@@ -24,6 +24,8 @@ public class UIWindow: UISurface {
 public struct Window<Content: View>: Surface {
     private var content: Content
 
+    @State var surfaceSize: SizeI = SizeI(width: 300, height: 200)
+
     public init(@ViewBuilder _ content: () -> Content) {
         self.content = content()
     }
@@ -34,6 +36,7 @@ public struct Window<Content: View>: Surface {
             TitleBar()
             content
         }
+        .size(surfaceSize)
     }
 }
 

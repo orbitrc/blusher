@@ -27,14 +27,30 @@ extension Surface {
     }
 }
 
-//=========
-// Size
-//=========
+//===============
+// Geometry
+//===============
 
 extension Surface {
     public func size(_ size: SizeI) -> some Surface {
         self.modifier { store in
             store[SizeIKey.self] = size
+        }
+    }
+}
+
+extension Surface {
+    public func wmGeometry(_ geometry: RectI) -> some Surface {
+        self.modifier { store in
+            store[WMGeometryKey.self] = geometry
+        }
+    }
+}
+
+extension Surface {
+    public func inputGeometry(_ geometry: RectI) -> some Surface {
+        self.modifier { store in
+            store[InputGeometryKey.self] = geometry
         }
     }
 }
