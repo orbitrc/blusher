@@ -28,6 +28,7 @@ struct WindowApp: Application {
                 .color(Color(r: 0, g: 255, b: 0, a: 255))
             BlueRectangle()
         }
+        .size(SizeI(width: 300, height: 200))
     }
 
     public static func main() {
