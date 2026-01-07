@@ -443,7 +443,6 @@ class ViewRenderer {
         let mirror = Mirror(reflecting: view)
         for child in mirror.children {
             if let state = child.value as? _State {
-                print("State found!")
                 state.setOnChange {
                     self.updateHandler()
                 }

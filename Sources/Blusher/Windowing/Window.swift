@@ -30,6 +30,8 @@ public struct Window<Content: View>: Surface {
 
     public init(@ViewBuilder _ content: () -> Content) {
         self.content = content()
+
+        updateResizeGeometry()
     }
 
     public var body: some Surface {
@@ -61,8 +63,8 @@ public struct Window<Content: View>: Surface {
         resizeGeometry = Rect(
             x: WindowShadow.thickness - WindowResize.thickness,
             y: WindowShadow.thickness - WindowResize.thickness,
-            width: Float(surfaceSize.width) - WindowShadow.thickness,
-            height: Float(surfaceSize.height) - WindowShadow.thickness
+            width: Float(surfaceSize.width) - WindowShadow.thickness * 2,
+            height: Float(surfaceSize.height) - WindowShadow.thickness * 2
         )
     }
 }

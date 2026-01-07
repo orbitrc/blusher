@@ -26,6 +26,7 @@ class SurfaceManager {
     static let shared: SurfaceManager = SurfaceManager()
 
     private var _surfaces: [UISurface] = []
+    private var _viewRenderer: ViewRenderer!
 
     internal var rootSurface: any Surface = EmptySurface()
 
@@ -49,7 +50,10 @@ class SurfaceManager {
         let mirror = Mirror(reflecting: surface)
         for child in mirror.children {
             if let state = child.value as? _State {
-                state.setOnChange(self.updateHandler)
+                state.setOnChange {
+                    print(" Value \(child.label) changed!")
+                    self.updateHandler()
+                }
             }
         }
 
@@ -94,8 +98,8 @@ class SurfaceManager {
                 uiSurface._resizeRequestHandler = handler
             }
 
-            let renderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
-            let _ = SurfaceManager.renderViews(surface.body as! any View, renderer)
+            _viewRenderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
+            let _ = SurfaceManager.renderViews(surface.body as! any View, _viewRenderer)
 
             _surfaces.append(uiSurface)
             uiSurface.show()
@@ -111,12 +115,16 @@ class SurfaceManager {
 
             uiSurface.size = store[SizeIKey.self]
 
+            if let rootView = surface.body as? any View {
+                _viewRenderer.rootView = rootView
+                _viewRenderer.updateHandler()
+            }
+
             return uiSurface
         }
     }
 
     private func updateHandler() {
-        print("updateHandler")
         update(surface: rootSurface, store: PropertyStore())
     }
 
