@@ -4,43 +4,48 @@ public enum TitleBarButtonAction {
     case maximizeRestore
 }
 
-public class TitleBarButton: Widget {
+public struct TitleBarButton: View {
     var action: TitleBarButtonAction = .close
+    var buttonColor: Color!
 
-    public init(action: TitleBarButtonAction, parent: Widget) {
-        super.init(parent: parent)
+    nonisolated(unsafe) static let closeColor = Color(r: 255, g: 0, b: 0, a: 255)
+    nonisolated(unsafe) static let minimizeColor = Color(r: 255, g: 255, b: 0, a: 255)
+    nonisolated(unsafe) static let maximizeRestoreColor = Color(r: 0, g: 255, b: 0, a: 255)
 
+    public init(action: TitleBarButtonAction) {
         self.action = action
 
-        size = Size(width: 24.0, height: 24.0)
-
         switch action {
         case .close:
-            color = Color(r: 255, g: 0, b: 0, a: 255)
+            buttonColor = TitleBarButton.closeColor
         case .minimize:
-            color = Color(r: 255, g: 255, b: 0, a: 255)
+            buttonColor = TitleBarButton.minimizeColor
         case .maximizeRestore:
-            color = Color(r: 0, g: 255, b: 0, a: 255)
+            buttonColor = TitleBarButton.maximizeRestoreColor
         }
+
+        // size = Size(width: 24.0, height: 24.0)
     }
 
-    public override func pointerPressEvent(_ event: PointerEvent) {
-        event.propagation = false
-    }
-
-    public override func pointerClickEvent(_ event: PointerEvent) {
-        event.propagation = false
-
-        switch action {
-        case .close:
-            window.close()
-        case .minimize:
-            // window.minimize()
-            break
-        case .maximizeRestore:
-            // window.maximizeRestore()
-            break
-        }
+    public var body: some View {
+        Rectangle()
+            .color(buttonColor)
+            .onPointerPress { event in
+                event.propagation = false
+            }
+            .onPointerClick { event in
+                switch action {
+                case .close:
+                    // SurfaceHandle.current?
+                    break
+                case .minimize:
+                    // window.minimize()
+                    break
+                case .maximizeRestore:
+                    // window.maximizeRestore()
+                    break
+                }
+            }
     }
 }
 
@@ -54,7 +59,6 @@ public struct TitleBar: View, WindowDecoration {
 
     public var body: some View {
         Rectangle()
-            .geometry(Rect(x: 10.0, y: 10.0, width: 90.0, height: 30.0))
             .color(Color(r: 128, g: 128, b: 128, a: 255))
             .onPointerPress { _ in
                 _pressed = true
@@ -65,6 +69,12 @@ public struct TitleBar: View, WindowDecoration {
                     _pressed = false
                 }
             }
+        TitleBarButton(action: .close)
+            .geometry(Rect(x: 3.0, y: 3.0, width: 24.0, height: 24.0))
+        TitleBarButton(action: .minimize)
+            .geometry(Rect(x: 30.0, y: 3.0, width: 24.0, height: 24.0))
+        TitleBarButton(action: .maximizeRestore)
+            .geometry(Rect(x: 60.0, y: 3.0, width: 24.0, height: 24.0))
     }
 }
 

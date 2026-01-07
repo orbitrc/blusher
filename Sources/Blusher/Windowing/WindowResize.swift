@@ -9,11 +9,11 @@ public struct WindowResize: View, WindowDecoration {
             .color(Color(r: 80, g: 80, b: 255, a: 255))
     }
 
-    public func geometry(_ geometry: Rect) -> some View {
-        modifier { store in
-            store[GeometryKey.self] = geometry
-        }
-    }
+    // public func geometry(_ geometry: Rect) -> some View {
+    //     modifier { store in
+    //         store[GeometryKey.self] = geometry
+    //     }
+    // }
 }
 
 /*

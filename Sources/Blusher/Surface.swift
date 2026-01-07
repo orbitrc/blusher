@@ -133,6 +133,8 @@ public class UISurface {
             // sb_desktop_surface_set_parent()
         }
 
+        rootViewColor = Color(r: 0, g: 0, b: 0, a: 0)
+
         addEventListeners()
     }
 

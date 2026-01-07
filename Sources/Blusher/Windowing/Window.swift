@@ -26,20 +26,25 @@ public struct Window<Content: View>: Surface {
 
     @State var surfaceSize: SizeI = SizeI(width: 300, height: 200)
     @State var resizeGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
-    @State var width: UInt64 = 300  // TODO: This is the value for just a test.
+    @State var titleBarGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 0.0, height: 0.0)
 
     public init(@ViewBuilder _ content: () -> Content) {
         self.content = content()
 
         updateResizeGeometry()
+        updateTitleBarGeometry()
     }
 
     public var body: some Surface {
         ToplevelSurface {
             WindowShadow()
+                .geometry(
+                    Rect(x: 0.0, y: 0.0, width: Float(surfaceSize.width), height: Float(surfaceSize.height))
+                )
             WindowResize()
                 .geometry(resizeGeometry)
             TitleBar()
+                .geometry(titleBarGeometry)
             Rectangle()
                 .geometry(Rect(x: 50.0, y: 50.0, width: 30.0, height: 30.0))
                 .color(Color(r: 100, g: 0, b: 0, a: 255))
@@ -56,6 +61,7 @@ public struct Window<Content: View>: Surface {
             )
 
             updateResizeGeometry()
+            updateTitleBarGeometry()
         }
     }
 
@@ -65,6 +71,15 @@ public struct Window<Content: View>: Surface {
             y: WindowShadow.thickness - WindowResize.thickness,
             width: Float(surfaceSize.width) - WindowShadow.thickness * 2,
             height: Float(surfaceSize.height) - WindowShadow.thickness * 2
+        )
+    }
+
+    private func updateTitleBarGeometry() {
+        titleBarGeometry = Rect(
+            x: WindowShadow.thickness + 1.0,
+            y: WindowShadow.thickness + 1.0,
+            width: resizeGeometry.width,
+            height: TitleBar.thickness
         )
     }
 }
