@@ -53,6 +53,18 @@ extension View {
 }
 
 //=============
+// Shape
+//=============
+
+struct RadiusKey: PropertyKey {
+    typealias Value = Radius
+
+    static var defaultValue: Value {
+        Radius(all: 0.0)
+    }
+}
+
+//=============
 // Event
 //=============
 

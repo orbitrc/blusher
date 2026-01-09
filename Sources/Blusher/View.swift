@@ -94,6 +94,25 @@ open class UIView {
         }
     }
 
+    public var radius: Radius {
+        get {
+            // TODO: Implement!
+            return Radius(all: 0.0)
+        }
+        set {
+            var sbRadius = sb_view_radius_t(
+                top_left: newValue.topLeft,
+                top_right: newValue.topRight,
+                bottom_right: newValue.bottomRight,
+                bottom_left: newValue.bottomLeft
+            )
+
+            withUnsafePointer(to: &sbRadius) { ptr in
+                sb_view_set_radius(_sbView, ptr)
+            }
+        }
+    }
+
     public var surface: UISurface {
         get {
             return _surface
@@ -411,6 +430,22 @@ public protocol View: Visible {
     var body: Body { get }
 }
 
+//===============
+// Modifiers
+//===============
+
+extension View {
+    public func radius(_ radius: Radius) -> some View {
+        self.modifier { store in
+            store[RadiusKey.self] = radius
+        }
+    }
+}
+
+//==============
+// Renderer
+//==============
+
 class ViewRenderer {
     var uiSurface: UISurface
     var rootView: any View
@@ -502,6 +537,7 @@ class ViewRenderer {
 
             uiView.geometry = store[GeometryKey.self]
             uiView.color = store[ColorKey.self]
+            uiView.radius = store[RadiusKey.self]
             bindHandler(for: PointerEnterKey.self, in: store, to: &uiView._pointerEnterHandler)
             bindHandler(for: PointerLeaveKey.self, in: store, to: &uiView._pointerLeaveHandler)
             bindHandler(for: PointerMoveKey.self, in: store, to: &uiView._pointerMoveHandler)

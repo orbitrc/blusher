@@ -30,6 +30,7 @@ public struct TitleBarButton: View {
     public var body: some View {
         Rectangle()
             .color(buttonColor)
+            .radius(Radius(all: 50.0))
             .onPointerPress { event in
                 event.propagation = false
             }
