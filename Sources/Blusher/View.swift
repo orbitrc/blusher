@@ -420,7 +420,7 @@ class ViewRenderer {
         store: PropertyStore,
         parentUIView: UIView?,
         action: (any View, PropertyStore, UIView?) -> UIView
-    ) {
+    ) -> UIView? {
         var store = store
 
         // print(" - Visiting: \(type(of: view))")
@@ -434,50 +434,59 @@ class ViewRenderer {
             }
         }
 
-        // Stop if empty view.
-        // if view is EmptyView {
-        //     print("Empty view. Stop.")
-        //     return
-        // }
-
-        // Process modified view.
-        if let modifier = view as? _PropertyModifiedView {
-            modifier.apply(&store)
-
-            visit(
-                view: modifier.innerContent,
+        // Process children views.
+        if let childrenModifier = view as? _ChildrenModifiedView {
+            let uiView = visit(
+                view: childrenModifier.innerContent,
                 store: store,
                 parentUIView: parentUIView,
                 action: action
             )
 
-            return
+            let _ = visit(
+                view: childrenModifier.childrenContent,
+                store: store,
+                parentUIView: uiView,
+                action: action
+            )
+
+            return uiView
+        }
+
+        // Process modified view.
+        if let modifier = view as? _PropertyModifiedView {
+            modifier.apply(&store)
+
+            return visit(
+                view: modifier.innerContent,
+                store: store,
+                parentUIView: parentUIView,
+                action: action
+            )
         }
 
         // Process tuple view.
         if let tupleView = view as? _TupleView {
             for iter in tupleView.getViews() {
-                visit(
+                let _ = visit(
                     view: (iter is _PropertyModifiedView) ? iter : iter,
                     store: store,
                     parentUIView: parentUIView,
                     action: action
                 )
             }
-
-            return
         } else if view.body is EmptyView {
-            let _ = action(view, store, parentUIView)
-
-            // visit(view: view.body, store: store, parentUIView: uiView, action: action)
+            return action(view, store, parentUIView)
         } else {
-            visit(view: view.body, store: store, parentUIView: parentUIView, action: action)
+            return visit(view: view.body, store: store, parentUIView: parentUIView, action: action)
         }
+
+        return parentUIView
     }
 
     func render(view: any View, store: PropertyStore, parentUIView: UIView?) {
         print(" - ViewRenderer.render()")
-        visit(view: view, store: store, parentUIView: parentUIView) { view, store, parent in
+        let _ = visit(view: view, store: store, parentUIView: parentUIView) { view, store, parent in
             let uiView = parent == nil
             ? UIView(
                 parentPointer: self.uiSurface.rootViewPointer,
@@ -502,7 +511,7 @@ class ViewRenderer {
     func update(view: any View, store: PropertyStore, parentUIView: UIView?) {
         print(" - ViewRenderer.update()")
         var index = 0
-        visit(view: view, store: store, parentUIView: parentUIView) { view, store, parent in
+        let _ = visit(view: view, store: store, parentUIView: parentUIView) { view, store, parent in
             let uiView = uiSurface.children[index]
 
             uiView.geometry = store[GeometryKey.self]

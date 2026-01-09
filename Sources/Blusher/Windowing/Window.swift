@@ -46,7 +46,7 @@ public struct Window<Content: View>: Surface {
             TitleBar()
                 .geometry(titleBarGeometry)
             Rectangle()
-                .geometry(Rect(x: 50.0, y: 50.0, width: 30.0, height: 30.0))
+                .geometry(Rect(x: 150.0, y: 150.0, width: 30.0, height: 30.0))
                 .color(Color(r: 100, g: 0, b: 0, a: 255))
                 .onPointerPress { _ in
                     SurfaceHandle.current?.startResize(.bottomRight)
