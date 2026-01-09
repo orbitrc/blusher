@@ -406,21 +406,6 @@ public protocol View: Visible {
     var body: Body { get }
 }
 
-struct ChildrenModifiedView<Content: View, Children: View>: View {
-    let content: Content
-    let children: Children
-
-    var body: some View {
-        content
-    }
-}
-
-extension View {
-    public func children(@ViewBuilder _ content: () -> some View) -> some View {
-        ChildrenModifiedView(content: self, children: content())
-    }
-}
-
 class ViewRenderer {
     var uiSurface: UISurface
     var rootView: any View
