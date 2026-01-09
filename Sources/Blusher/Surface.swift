@@ -284,6 +284,10 @@ public struct SurfaceProxy {
         self.uiSurface = uiSurface
     }
 
+    public func close() {
+        self.uiSurface?.close()
+    }
+
     public func startMove() {
         self.uiSurface?.move()
     }

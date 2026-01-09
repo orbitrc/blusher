@@ -36,7 +36,7 @@ public struct TitleBarButton: View {
             .onPointerClick { event in
                 switch action {
                 case .close:
-                    // SurfaceHandle.current?
+                    SurfaceHandle.current?.close()
                     break
                 case .minimize:
                     // window.minimize()
@@ -69,12 +69,14 @@ public struct TitleBar: View, WindowDecoration {
                     _pressed = false
                 }
             }
-        TitleBarButton(action: .close)
-            .geometry(Rect(x: 3.0, y: 3.0, width: 24.0, height: 24.0))
-        TitleBarButton(action: .minimize)
-            .geometry(Rect(x: 30.0, y: 3.0, width: 24.0, height: 24.0))
-        TitleBarButton(action: .maximizeRestore)
-            .geometry(Rect(x: 60.0, y: 3.0, width: 24.0, height: 24.0))
+            .children {
+                TitleBarButton(action: .close)
+                    .geometry(Rect(x: 3.0, y: 3.0, width: 24.0, height: 24.0))
+                TitleBarButton(action: .minimize)
+                    .geometry(Rect(x: 30.0, y: 3.0, width: 24.0, height: 24.0))
+                TitleBarButton(action: .maximizeRestore)
+                    .geometry(Rect(x: 60.0, y: 3.0, width: 24.0, height: 24.0))
+            }
     }
 }
 
