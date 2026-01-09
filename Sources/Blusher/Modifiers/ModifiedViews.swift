@@ -30,3 +30,35 @@ extension View {
         PropertyModifiedView(content: self, action: action)
     }
 }
+
+//=============
+// Children
+//=============
+
+protocol _ChildrenModifiedView {
+    var innerContent: any View { get }
+    var childrenContent: any View { get }
+}
+
+struct ChildrenModifiedView<Content: View, Children: View>: View, _ChildrenModifiedView {
+    let content: Content
+    let children: Children
+
+    var body: some View {
+        content
+    }
+
+    var innerContent: any View {
+        content
+    }
+
+    var childrenContent: any View {
+        children
+    }
+}
+
+extension View {
+    public func children(@ViewBuilder _ content: () -> some View) -> some View {
+        ChildrenModifiedView(content: self, children: content())
+    }
+}
