@@ -308,7 +308,9 @@ open class UIView {
     }
 
     open func pointerLeaveEvent(_ event: PointerEvent) {
-        //
+        ToplevelStorage._uiSurface = self._surface
+        _pointerEnterHandler?(event)
+        ToplevelStorage._uiSurface = nil
     }
 
     open func pointerMoveEvent(_ event: PointerEvent) {
@@ -327,6 +329,9 @@ open class UIView {
     }
 
     open func pointerClickEvent(_ event: PointerEvent) {
+        ToplevelStorage._uiSurface = self._surface
+        _pointerClickHandler?(event)
+        ToplevelStorage._uiSurface = nil
     }
 }
 
