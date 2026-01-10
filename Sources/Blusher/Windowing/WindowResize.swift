@@ -1,6 +1,6 @@
 public struct WindowResize: View, WindowDecoration {
     public static var thickness: Float {
-        get { 5.0 }
+        get { 8.0 }
         set { return }
     }
 

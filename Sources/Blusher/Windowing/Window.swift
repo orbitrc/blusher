@@ -5,6 +5,7 @@ public struct Window<Content: View>: Surface {
 
     @State var surfaceSize: SizeI = SizeI(width: 300, height: 200)
     @State var resizeGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+    @State var borderGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
     @State var titleBarGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 0.0, height: 0.0)
     @State var bodyGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
 
@@ -12,6 +13,7 @@ public struct Window<Content: View>: Surface {
         self.content = content()
 
         updateResizeGeometry()
+        updateBorderGeometry()
         updateTitleBarGeometry()
         updateBodyGeometry()
     }
@@ -24,14 +26,16 @@ public struct Window<Content: View>: Surface {
                 )
             WindowResize()
                 .geometry(resizeGeometry)
+            WindowBorder()
+                .geometry(borderGeometry)
             TitleBar()
                 .geometry(titleBarGeometry)
-            Rectangle()
-                .geometry(Rect(x: 150.0, y: 150.0, width: 30.0, height: 30.0))
-                .color(Color(r: 100, g: 0, b: 0, a: 255))
-                .onPointerPress { _ in
-                    SurfaceHandle.current?.startResize(.bottomRight)
-                }
+            // Rectangle()
+            //     .geometry(Rect(x: 150.0, y: 150.0, width: 30.0, height: 30.0))
+            //     .color(Color(r: 100, g: 0, b: 0, a: 255))
+            //     .onPointerPress { _ in
+            //         SurfaceHandle.current?.startResize(.bottomRight)
+            //     }
             Rectangle()
                 .color(Color(r: 255, g: 255, b: 255, a: 255))
                 .geometry(bodyGeometry)
@@ -47,6 +51,7 @@ public struct Window<Content: View>: Surface {
             )
 
             updateResizeGeometry()
+            updateBorderGeometry()
             updateTitleBarGeometry()
             updateBodyGeometry()
         }
@@ -58,6 +63,15 @@ public struct Window<Content: View>: Surface {
             y: WindowShadow.thickness - WindowResize.thickness,
             width: Float(surfaceSize.width) - (WindowShadow.thickness * 2) + (WindowResize.thickness * 2),
             height: Float(surfaceSize.height) - (WindowShadow.thickness * 2) + (WindowResize.thickness * 2)
+        )
+    }
+
+    private func updateBorderGeometry() {
+        borderGeometry = Rect(
+            x: resizeGeometry.x + WindowResize.thickness - WindowBorder.thickness,
+            y: resizeGeometry.y + WindowResize.thickness - WindowBorder.thickness,
+            width: resizeGeometry.width - (WindowResize.thickness * 2) + (WindowBorder.thickness * 2),
+            height: resizeGeometry.height - (WindowResize.thickness * 2) + (WindowBorder.thickness * 2)
         )
     }
 
@@ -75,7 +89,7 @@ public struct Window<Content: View>: Surface {
             x: WindowShadow.thickness,
             y: WindowShadow.thickness + TitleBar.thickness,
             width: Float(surfaceSize.width) - (WindowShadow.thickness * 2),
-            height: Float(surfaceSize.height) - (WindowShadow.thickness * 2) - TitleBar.thickness + 1.0
+            height: Float(surfaceSize.height) - (WindowShadow.thickness * 2) - TitleBar.thickness
         )
     }
 }
