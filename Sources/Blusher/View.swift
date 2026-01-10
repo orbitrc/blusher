@@ -463,6 +463,7 @@ extension View {
 class ViewRenderer {
     var uiSurface: UISurface
     var rootView: any View
+    var stateBounded: Bool = false
 
     init(uiSurface: UISurface, view: any View) {
         self.uiSurface = uiSurface
@@ -479,13 +480,16 @@ class ViewRenderer {
 
         // print(" - Visiting: \(type(of: view))")
         //
-        let mirror = Mirror(reflecting: view)
-        for child in mirror.children {
-            if let state = child.value as? _State {
-                state.setOnChange {
-                    self.updateHandler()
+        if !stateBounded {
+            let mirror = Mirror(reflecting: view)
+            for child in mirror.children {
+                if let state = child.value as? _State {
+                    state.setOnChange {
+                        self.updateHandler()
+                    }
                 }
             }
+            stateBounded = true
         }
 
         // Process children views.
