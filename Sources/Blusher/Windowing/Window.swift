@@ -1,38 +1,19 @@
 @_implementationOnly import Swingby
 
-public enum WindowResizeEdge {
-    case top
-    case bottom
-    case left
-    case right
-    case topLeft
-    case topRight
-    case bottomLeft
-    case bottomRight
-}
-
-
-public class UIWindow: UISurface {
-    private var _decorationView: UIView!
-    private var _shadow: WindowShadow!
-    private var _resize: WindowResize!
-    private var _titleBar: TitleBar!
-    private var _bodyView: UIView!
-    private var _body: Widget!
-}
-
 public struct Window<Content: View>: Surface {
     private var content: Content
 
     @State var surfaceSize: SizeI = SizeI(width: 300, height: 200)
     @State var resizeGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
     @State var titleBarGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 0.0, height: 0.0)
+    @State var bodyGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
 
     public init(@ViewBuilder _ content: () -> Content) {
         self.content = content()
 
         updateResizeGeometry()
         updateTitleBarGeometry()
+        updateBodyGeometry()
     }
 
     public var body: some Surface {
@@ -51,7 +32,12 @@ public struct Window<Content: View>: Surface {
                 .onPointerPress { _ in
                     SurfaceHandle.current?.startResize(.bottomRight)
                 }
-            content
+            Rectangle()
+                .color(Color(r: 255, g: 255, b: 255, a: 255))
+                .geometry(bodyGeometry)
+                .children {
+                    content
+                }
         }
         .size(surfaceSize)
         .onResizeRequest { event in
@@ -62,6 +48,7 @@ public struct Window<Content: View>: Surface {
 
             updateResizeGeometry()
             updateTitleBarGeometry()
+            updateBodyGeometry()
         }
     }
 
@@ -69,37 +56,31 @@ public struct Window<Content: View>: Surface {
         resizeGeometry = Rect(
             x: WindowShadow.thickness - WindowResize.thickness,
             y: WindowShadow.thickness - WindowResize.thickness,
-            width: Float(surfaceSize.width) - WindowShadow.thickness * 2,
-            height: Float(surfaceSize.height) - WindowShadow.thickness * 2
+            width: Float(surfaceSize.width) - (WindowShadow.thickness * 2) + (WindowResize.thickness * 2),
+            height: Float(surfaceSize.height) - (WindowShadow.thickness * 2) + (WindowResize.thickness * 2)
         )
     }
 
     private func updateTitleBarGeometry() {
         titleBarGeometry = Rect(
-            x: WindowShadow.thickness + 1.0,
-            y: WindowShadow.thickness + 1.0,
-            width: resizeGeometry.width,
+            x: WindowShadow.thickness,
+            y: WindowShadow.thickness,
+            width: resizeGeometry.width - (WindowResize.thickness * 2),
             height: TitleBar.thickness
+        )
+    }
+
+    private func updateBodyGeometry() {
+        bodyGeometry = Rect(
+            x: WindowShadow.thickness,
+            y: WindowShadow.thickness + TitleBar.thickness,
+            width: Float(surfaceSize.width) - (WindowShadow.thickness * 2),
+            height: Float(surfaceSize.height) - (WindowShadow.thickness * 2) - TitleBar.thickness + 1.0
         )
     }
 }
 
     /*
-
-    public var body: Widget {
-        get {
-            return _body
-        }
-    }
-
-    public var surfaceSize: SizeI {
-        get {
-            return SizeI(width: super.size.width, height: super.size.height)
-        }
-        set {
-            super.size = SizeI(width: newValue.width, height: newValue.height)
-        }
-    }
 
     public var windowGeometry: RectI {
         get {
@@ -198,29 +179,6 @@ public struct Window<Content: View>: Surface {
             height: 100
         )
         // TODO.
-    }
-
-    private func updateShadowGeometry() {
-        _shadow.geometry = Rect(
-            x: 0.0,
-            y: 0.0,
-            width: Float(surfaceSize.width),
-            height: Float(surfaceSize.height)
-        )
-    }
-
-    private func updateResizeGeometry() {
-        let x = _shadow.thickness - (_resize.thickness)
-        let y = _shadow.thickness - (_resize.thickness)
-        let width = _shadow.size.width - (_shadow.thickness * 2) + (_resize.thickness * 2);
-        let height = _shadow.size.height - (_shadow.thickness * 2) + (_resize.thickness * 2);
-
-        _resize.geometry = Rect(
-            x: x,
-            y: y,
-            width: width,
-            height: height
-        )
     }
 
     private func updateTitleBarGeometry() {
