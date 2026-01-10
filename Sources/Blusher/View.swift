@@ -5,6 +5,7 @@ open class UIView {
     private var _surface: UISurface!
     private var _parent: UIView?
 
+    private var _clip: Bool = false
     private var _color: Color = Color(r: 0, g: 0, b: 0, a: 255)
     private var _geometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
 
@@ -28,6 +29,16 @@ open class UIView {
 
     public var parent: UIView? {
         _parent
+    }
+
+    public var clip: Bool {
+        get { _clip }
+        set {
+            if _clip == newValue {
+                return
+            }
+            sb_view_set_clip(_sbView, newValue)
+        }
     }
 
     public var color: Color {
@@ -148,6 +159,8 @@ open class UIView {
         _surface.children.append(self)
         _parent = parent
 
+        clip = true
+
         addEventListeners()
     }
 
@@ -164,6 +177,8 @@ open class UIView {
         _surface = surface
         _surface.children.append(self)
         _parent = nil
+
+        clip = true
 
         addEventListeners()
     }
