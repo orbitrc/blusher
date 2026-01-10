@@ -1,4 +1,4 @@
-public struct Color {
+public struct Color: Equatable {
     public var r: UInt8
     public var g: UInt8
     public var b: UInt8

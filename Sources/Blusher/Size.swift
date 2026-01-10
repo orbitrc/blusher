@@ -1,4 +1,4 @@
-public struct Size {
+public struct Size: Equatable {
     public var width: Float
     public var height: Float
 
@@ -8,7 +8,7 @@ public struct Size {
     }
 }
 
-public struct SizeI {
+public struct SizeI: Equatable {
     public var width: UInt64
     public var height: UInt64
 

@@ -5,6 +5,9 @@ open class UIView {
     private var _surface: UISurface!
     private var _parent: UIView?
 
+    private var _color: Color = Color(r: 0, g: 0, b: 0, a: 255)
+    private var _geometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+
     private var _pointerEnterEventListener: EventListener!
     private var _pointerLeaveEventListener: EventListener!
     private var _pointerMoveEventListener: EventListener!
@@ -29,10 +32,15 @@ open class UIView {
 
     public var color: Color {
         get {
-            // TODO: Impl.
-            return Color(r: 0, g: 0, b: 0, a: 255)
+            return _color
         }
         set(newValue) {
+            if _color == newValue {
+                return
+            }
+
+            _color = newValue
+
             var sbColor = sb_color_t(
                 r: newValue.r,
                 g: newValue.g,
@@ -57,6 +65,12 @@ open class UIView {
             return Rect(x: x, y: y, width: width, height: height)
         }
         set {
+            if _geometry == newValue {
+                return
+            }
+
+            _geometry = newValue
+
             var sbRect = sb_rect_t(
                 pos: sb_point_t(x: newValue.pos.x, y: newValue.pos.y),
                 size: sb_size_t(width: newValue.size.width, height: newValue.size.height)
