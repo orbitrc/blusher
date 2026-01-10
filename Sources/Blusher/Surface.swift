@@ -156,8 +156,12 @@ public class UISurface {
         let sbEdge = switch resizeEdge {
             case .top: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_TOP
             case .bottom: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_BOTTOM
-            // TODO: Entire cases.
-            default: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_BOTTOM_RIGHT
+            case .left: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_LEFT
+            case .right: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_RIGHT
+            case .topLeft: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_TOP_LEFT
+            case .topRight: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_TOP_RIGHT
+            case .bottomLeft: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_BOTTOM_LEFT
+            case .bottomRight: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_BOTTOM_RIGHT
         }
 
         sb_desktop_surface_toplevel_resize(_sbDesktopSurface, sbEdge)
