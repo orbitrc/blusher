@@ -25,7 +25,7 @@ struct WindowApp: Application {
                 }
             Rectangle()
                 .geometry(Rect(x: 30.0, y: 10.0, width: 30.0, height: 30.0))
-                .color(Color(r: 0, g: 255, b: 0, a: 255))
+                .color(Color(r: 0, g: 0, b: 0, a: 255))
             BlueRectangle()
         }
         .size(SizeI(width: 300, height: 200))

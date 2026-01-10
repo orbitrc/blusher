@@ -6,7 +6,7 @@ open class UIView {
     private var _parent: UIView?
 
     private var _clip: Bool = false
-    private var _color: Color = Color(r: 0, g: 0, b: 0, a: 255)
+    private var _color: Color = Color(r: 0, g: 0, b: 0, a: 0)
     private var _geometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
 
     private var _pointerEnterEventListener: EventListener!
