@@ -61,6 +61,7 @@ public struct TitleBar: View, WindowDecoration {
     public var body: some View {
         Rectangle()
             .color(Color(r: 128, g: 128, b: 128, a: 255))
+            .radius(Radius(topLeft: 8.0, topRight: 8.0, bottomRight: 0.0, bottomLeft: 0.0))
             .onPointerPress { _ in
                 _pressed = true
             }

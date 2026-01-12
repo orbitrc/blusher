@@ -45,6 +45,7 @@ public struct Window<Content: View>: Surface {
             //     }
             Rectangle()
                 .color(Color(r: 255, g: 255, b: 255, a: 255))
+                .radius(Radius(topLeft: 0.0, topRight: 0.0, bottomRight: 8.0, bottomLeft: 8.0))
                 .geometry(bodyGeometry)
                 .children {
                     content
