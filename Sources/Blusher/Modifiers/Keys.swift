@@ -64,6 +64,14 @@ struct RadiusKey: PropertyKey {
     }
 }
 
+struct CursorShapeKey: PropertyKey {
+    typealias Value = CursorShape
+
+    static var defaultValue: Value {
+        .default
+    }
+}
+
 //=============
 // Filters
 //=============

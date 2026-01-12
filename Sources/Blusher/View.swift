@@ -8,6 +8,7 @@ open class UIView {
     private var _clip: Bool = false
     private var _color: Color = Color(r: 0, g: 0, b: 0, a: 0)
     private var _geometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+    private var _cursorShape: CursorShape = .default
 
     private var _pointerEnterEventListener: EventListener!
     private var _pointerLeaveEventListener: EventListener!
@@ -135,6 +136,22 @@ open class UIView {
             withUnsafePointer(to: &sbRadius) { ptr in
                 sb_view_set_radius(_sbView, ptr)
             }
+        }
+    }
+
+    public var cursorShape: CursorShape {
+        get {
+            _cursorShape
+        }
+        set {
+            if _cursorShape == newValue {
+                return
+            }
+
+            _cursorShape = newValue
+
+            let sbCursorShape = CursorShape.toSwingbyCursorShape(newValue)
+            sb_view_set_cursor_shape(_sbView, sbCursorShape)
         }
     }
 
@@ -514,6 +531,14 @@ extension View {
     }
 }
 
+extension View {
+    public func cursorShape(_ cursorShape: CursorShape) -> some View {
+        self.modifier { store in
+            store[CursorShapeKey.self] = cursorShape
+        }
+    }
+}
+
 //==============
 // Renderer
 //==============
@@ -614,6 +639,7 @@ class ViewRenderer {
             uiView.geometry = store[GeometryKey.self]
             uiView.color = store[ColorKey.self]
             uiView.radius = store[RadiusKey.self]
+            uiView.cursorShape = store[CursorShapeKey.self]
             // Filters.
             for filter in store[FiltersKey.self] {
                 uiView.addFilter(filter)
