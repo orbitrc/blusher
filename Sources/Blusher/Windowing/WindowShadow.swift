@@ -6,6 +6,6 @@ public struct WindowShadow: View, WindowDecoration {
 
     public var body: some View {
         Rectangle()
-            .color(Color(r: 128, g: 128, b: 128, a: 128))
+            .color(.black)
     }
 }

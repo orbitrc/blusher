@@ -65,6 +65,18 @@ struct RadiusKey: PropertyKey {
 }
 
 //=============
+// Filters
+//=============
+
+struct FiltersKey: PropertyKey {
+    typealias Value = [Filter]
+
+    static var defaultValue: Value {
+        []
+    }
+}
+
+//=============
 // Event
 //=============
 

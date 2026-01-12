@@ -183,6 +183,41 @@ open class UIView {
         addEventListeners()
     }
 
+    public func addFilter(_ filter: Filter) {
+        let sbFilterType = switch filter.type {
+            case .blur:
+                SB_FILTER_TYPE_BLUR
+            case .dropShadow:
+                SB_FILTER_TYPE_DROP_SHADOW
+        }
+
+        let sbFilter = sb_filter_new(sbFilterType)
+
+        if let blur = filter as? Blur {
+            sb_filter_blur_set_radius(sbFilter, blur.radius)
+
+            sb_view_add_filter(_sbView, sbFilter)
+        } else if let dropShadow = filter as? DropShadow {
+            var offset = sb_point_t(x: dropShadow.offset.x, y: dropShadow.offset.y)
+            var color = sb_color_t(
+                r: dropShadow.color.r,
+                g: dropShadow.color.g,
+                b: dropShadow.color.b,
+                a: dropShadow.color.a
+            )
+
+            withUnsafePointer(to: &offset) { ptr in
+                sb_filter_drop_shadow_set_offset(sbFilter, ptr)
+            }
+            sb_filter_drop_shadow_set_radius(sbFilter, dropShadow.radius)
+            withUnsafePointer(to: &color) { ptr in
+                sb_filter_drop_shadow_set_color(sbFilter, ptr)
+            }
+
+            sb_view_add_filter(_sbView, sbFilter)
+        }
+    }
+
     private func addEventListeners() {
         let userData = Unmanaged.passUnretained(self).toOpaque()
 
@@ -471,6 +506,14 @@ extension View {
     }
 }
 
+extension View {
+    public func filters(_ filters: [Filter]) -> some View {
+        self.modifier { store in
+            store[FiltersKey.self] = filters
+        }
+    }
+}
+
 //==============
 // Renderer
 //==============
@@ -567,9 +610,15 @@ class ViewRenderer {
             )
             : UIView(parent: parent!, geometry: store[GeometryKey.self])
 
+            // Basic appearance.
             uiView.geometry = store[GeometryKey.self]
             uiView.color = store[ColorKey.self]
             uiView.radius = store[RadiusKey.self]
+            // Filters.
+            for filter in store[FiltersKey.self] {
+                uiView.addFilter(filter)
+            }
+            // Events.
             bindHandler(for: PointerEnterKey.self, in: store, to: &uiView._pointerEnterHandler)
             bindHandler(for: PointerLeaveKey.self, in: store, to: &uiView._pointerLeaveHandler)
             bindHandler(for: PointerMoveKey.self, in: store, to: &uiView._pointerMoveHandler)

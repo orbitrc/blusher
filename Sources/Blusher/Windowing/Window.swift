@@ -22,8 +22,15 @@ public struct Window<Content: View>: Surface {
         ToplevelSurface {
             WindowShadow()
                 .geometry(
-                    Rect(x: 0.0, y: 0.0, width: Float(surfaceSize.width), height: Float(surfaceSize.height))
+                    Rect(
+                        // TODO: The values are not accurate.
+                        x: WindowShadow.thickness, y: WindowShadow.thickness,
+                        width: Float(borderGeometry.width), height: Float(borderGeometry.height)
+                    )
                 )
+                .filters([
+                    DropShadow(offset: Point(x: 0.0, y: 0.0), radius: 15.0, color: .black)
+                ])
             WindowResize()
                 .geometry(resizeGeometry)
             WindowBorder()
