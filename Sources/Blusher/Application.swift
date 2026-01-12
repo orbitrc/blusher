@@ -106,6 +106,7 @@ class SurfaceManager {
 
             return uiSurface
         }
+        _viewRenderer.stateBounded = true
     }
 
     private func update(surface: any Surface, store: PropertyStore) {

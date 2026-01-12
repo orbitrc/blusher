@@ -357,7 +357,7 @@ open class UIView {
 
     open func pointerLeaveEvent(_ event: PointerEvent) {
         ToplevelStorage._uiSurface = self._surface
-        _pointerEnterHandler?(event)
+        _pointerLeaveHandler?(event)
         ToplevelStorage._uiSurface = nil
     }
 
@@ -504,7 +504,6 @@ class ViewRenderer {
                     }
                 }
             }
-            stateBounded = true
         }
 
         // Process children views.
