@@ -1,8 +1,8 @@
 import Blusher
 
-let app = Application(CommandLine.arguments)
+let app = ApplicationHandle(CommandLine.arguments)
 
-let surface = Surface(role: .toplevel)
+let surface = SurfaceHandle(role: .toplevel)
 
 surface.show()
 
