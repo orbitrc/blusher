@@ -5,7 +5,7 @@ public enum SurfaceRole {
     case popup
 }
 
-public enum SurfaceResizeEdge {
+public enum ResizeEdge {
     case top
     case bottom
     case left
@@ -16,11 +16,13 @@ public enum SurfaceResizeEdge {
     case bottomRight
 }
 
-public class Surface {
+public class SurfaceHandle {
     private var _sbDesktopSurface: OpaquePointer? = nil
-    private var _parent: Surface? = nil
+    private var _parent: SurfaceHandle? = nil
 
-    private var _resizingEventListener: EventListener!
+    private var _resizeRequestEventListener: EventListener!
+
+    internal var _resizeRequestHandler: ((ResizeEvent) -> Void)? = nil
 
     // TODO: Change this to internal when the test done.
     public var rootViewPointer: OpaquePointer {
@@ -31,6 +33,12 @@ public class Surface {
             return sbRootView!
         }
     }
+
+    internal var cPointer: OpaquePointer? {
+        self._sbDesktopSurface
+    }
+
+    public var children: [ViewHandle] = []
 
     public var rootViewColor: Color {
         get {
@@ -112,7 +120,7 @@ public class Surface {
 
     public let role: SurfaceRole
 
-    public init(role: SurfaceRole, _ parent: Surface? = nil) {
+    public init(role: SurfaceRole, _ parent: SurfaceHandle? = nil) {
         self.role = role
         _parent = parent
 
@@ -124,6 +132,8 @@ public class Surface {
         if _parent != nil {
             // sb_desktop_surface_set_parent()
         }
+
+        rootViewColor = Color(r: 0, g: 0, b: 0, a: 0)
 
         addEventListeners()
     }
@@ -138,7 +148,7 @@ public class Surface {
         sb_desktop_surface_toplevel_move(_sbDesktopSurface)
     }
 
-    public func resize(_ resizeEdge: SurfaceResizeEdge) {
+    public func resize(_ resizeEdge: ResizeEdge) {
         if role != .toplevel {
             return
         }
@@ -146,8 +156,12 @@ public class Surface {
         let sbEdge = switch resizeEdge {
             case .top: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_TOP
             case .bottom: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_BOTTOM
-            // TODO: Entire cases.
-            default: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_BOTTOM_RIGHT
+            case .left: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_LEFT
+            case .right: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_RIGHT
+            case .topLeft: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_TOP_LEFT
+            case .topRight: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_TOP_RIGHT
+            case .bottomLeft: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_BOTTOM_LEFT
+            case .bottomRight: SB_DESKTOP_SURFACE_TOPLEVEL_RESIZE_EDGE_BOTTOM_RIGHT
         }
 
         sb_desktop_surface_toplevel_resize(_sbDesktopSurface, sbEdge)
@@ -161,15 +175,15 @@ public class Surface {
         let userData = Unmanaged.passUnretained(self).toOpaque()
 
         // Resizing event.
-        _resizingEventListener = { sbEvent, userData in
+        _resizeRequestEventListener = { sbEvent, userData in
             if let userData = userData {
-                let instance = Unmanaged<Surface>.fromOpaque(userData).takeUnretainedValue()
+                let instance = Unmanaged<SurfaceHandle>.fromOpaque(userData).takeUnretainedValue()
 
                 instance.callResizingEvent(sbEvent)
             }
         } as EventListener
         sb_desktop_surface_add_event_listener(_sbDesktopSurface, SB_EVENT_TYPE_RESIZE,
-            _resizingEventListener, userData)
+            _resizeRequestEventListener, userData)
     }
 
     private func callResizingEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {
@@ -186,10 +200,112 @@ public class Surface {
         )
 
         let event = ResizeEvent(oldSize: oldSize, size: size)
-        resizingEvent(event)
+        resizeRequestEvent(event)
     }
 
-    open func resizingEvent(_ event: ResizeEvent) {
-        //
+    open func resizeRequestEvent(_ event: ResizeEvent) {
+        ToplevelStorage._uiSurface = self
+        _resizeRequestHandler?(event)
+        ToplevelStorage._uiSurface = nil
     }
+
+    public static var current: SurfaceProxy? {
+        guard let uiSurface = ToplevelStorage._uiSurface else { return nil }
+        return SurfaceProxy(uiSurface)
+    }
+}
+
+public protocol Surface: Visible {
+    associatedtype Body : Visible
+
+    @SurfaceBuilder
+    var body: Body { get }
+}
+
+public struct EmptySurface: Surface {
+    public var body: some Surface {
+        self
+    }
+
+    public init() {
+    }
+}
+
+@resultBuilder
+public struct SurfaceBuilder {
+    public static func buildBlock<Content: Visible>(_ content: Content) -> Content {
+        content
+    }
+
+    public static func buildBlock<C0: Visible, C1: Visible>(_ c0: C0, _ c1: C1) -> TupleVisible<(C0, C1)> {
+        TupleVisible((c0, c1))
+    }
+
+    public static func buildBlock<C0: Visible, C1: Visible, C2: Visible>(_ c0: C0, _ c1: C1, _ c2: C2) -> TupleVisible<(C0, C1, C2)> {
+        TupleVisible((c0, c1, c2))
+    }
+
+    public static func buildBlock<C0: Visible, C1: Visible, C2: Visible, C3: Visible>(_ c0: C0, _ c1: C1, _ c2: C2, _ c3: C3) -> TupleVisible<(C0, C1, C2, C3)> {
+        TupleVisible((c0, c1, c2, c3))
+    }
+
+    public static func buildBlock<C0: Visible, C1: Visible, C2: Visible, C3: Visible, C4: Visible>(_ c0: C0, _ c1: C1, _ c2: C2, _ c3: C3, _ c4: C4) -> TupleVisible<(C0, C1, C2, C3, C4)> {
+        TupleVisible((c0, c1, c2, c3, c4))
+    }
+
+    public static func buildBlock<C0: Visible, C1: Visible, C2: Visible, C3: Visible, C4: Visible, C5: Visible>(_ c0: C0, _ c1: C1, _ c2: C2, _ c3: C3, _ c4: C4, _ c5: C5) -> TupleVisible<(C0, C1, C2, C3, C4, C5)> {
+        TupleVisible((c0, c1, c2, c3, c4, c5))
+    }
+
+    public static func buildBlock<C0: Visible, C1: Visible, C2: Visible, C3: Visible, C4: Visible, C5: Visible, C6: Visible>(_ c0: C0, _ c1: C1, _ c2: C2, _ c3: C3, _ c4: C4, _ c5: C5, _ c6: C6) -> TupleVisible<(C0, C1, C2, C3, C4, C5, C6)> {
+        TupleVisible((c0, c1, c2, c3, c4, c5, c6))
+    }
+
+    public static func buildBlock<C0: Visible, C1: Visible, C2: Visible, C3: Visible, C4: Visible, C5: Visible, C6: Visible, C7: Visible>(_ c0: C0, _ c1: C1, _ c2: C2, _ c3: C3, _ c4: C4, _ c5: C5, _ c6: C6, _ c7: C7) -> TupleVisible<(C0, C1, C2, C3, C4, C5, C6, C7)> {
+        TupleVisible((c0, c1, c2, c3, c4, c5, c6, c7))
+    }
+
+    public static func buildBlock<C0: Visible, C1: Visible, C2: Visible, C3: Visible, C4: Visible, C5: Visible, C6: Visible, C7: Visible, C8: Visible>(_ c0: C0, _ c1: C1, _ c2: C2, _ c3: C3, _ c4: C4, _ c5: C5, _ c6: C6, _ c7: C7, _ c8: C8) -> TupleVisible<(C0, C1, C2, C3, C4, C5, C6, C7, C8)> {
+        TupleVisible((c0, c1, c2, c3, c4, c5, c6, c7, c8))
+    }
+
+    public static func buildBlock<C0: Visible, C1: Visible, C2: Visible, C3: Visible, C4: Visible, C5: Visible, C6: Visible, C7: Visible, C8: Visible, C9: Visible>(_ c0: C0, _ c1: C1, _ c2: C2, _ c3: C3, _ c4: C4, _ c5: C5, _ c6: C6, _ c7: C7, _ c8: C8, _ c9: C9) -> TupleVisible<(C0, C1, C2, C3, C4, C5, C6, C7, C8, C9)> {
+        TupleVisible((c0, c1, c2, c3, c4, c5, c6, c7, c8, c9))
+    }
+}
+
+public struct ToplevelSurface<Content: Visible>: Surface {
+    public var content: Content
+
+    public init(@ViewBuilder _ content: () -> Content) {
+        self.content = content()
+    }
+
+    public var body: Content {
+        content
+    }
+}
+
+public struct SurfaceProxy {
+    private weak var uiSurface: SurfaceHandle?
+
+    init(_ uiSurface: SurfaceHandle) {
+        self.uiSurface = uiSurface
+    }
+
+    public func close() {
+        self.uiSurface?.close()
+    }
+
+    public func startMove() {
+        self.uiSurface?.move()
+    }
+
+    public func startResize(_ edge: ResizeEdge) {
+        self.uiSurface?.resize(edge)
+    }
+}
+
+enum ToplevelStorage {
+    nonisolated(unsafe) static var _uiSurface: SurfaceHandle? = nil
 }

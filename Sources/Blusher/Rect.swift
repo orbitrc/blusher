@@ -1,4 +1,4 @@
-public struct Rect {
+public struct Rect: Equatable {
     public var pos: Point = Point(x: 0.0, y: 0.0)
     public var size: Size = Size(width: 0.0, height: 0.0)
 
@@ -34,7 +34,13 @@ public struct Rect {
     }
 }
 
-public struct RectI {
+extension Rect: CustomStringConvertible {
+    public var description: String {
+        return "Blusher.Rect(\(x), \(y) \(width)x\(height))"
+    }
+}
+
+public struct RectI: Equatable {
     public var pos: PointI = PointI(x: 0, y: 0)
     public var size: SizeI = SizeI(width: 0, height: 0)
 
