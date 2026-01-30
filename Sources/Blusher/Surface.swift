@@ -16,9 +16,9 @@ public enum ResizeEdge {
     case bottomRight
 }
 
-public class UISurface {
+public class SurfaceHandle {
     private var _sbDesktopSurface: OpaquePointer? = nil
-    private var _parent: UISurface? = nil
+    private var _parent: SurfaceHandle? = nil
 
     private var _resizeRequestEventListener: EventListener!
 
@@ -38,7 +38,7 @@ public class UISurface {
         self._sbDesktopSurface
     }
 
-    public var children: [UIView] = []
+    public var children: [ViewHandle] = []
 
     public var rootViewColor: Color {
         get {
@@ -120,7 +120,7 @@ public class UISurface {
 
     public let role: SurfaceRole
 
-    public init(role: SurfaceRole, _ parent: UISurface? = nil) {
+    public init(role: SurfaceRole, _ parent: SurfaceHandle? = nil) {
         self.role = role
         _parent = parent
 
@@ -177,7 +177,7 @@ public class UISurface {
         // Resizing event.
         _resizeRequestEventListener = { sbEvent, userData in
             if let userData = userData {
-                let instance = Unmanaged<UISurface>.fromOpaque(userData).takeUnretainedValue()
+                let instance = Unmanaged<SurfaceHandle>.fromOpaque(userData).takeUnretainedValue()
 
                 instance.callResizingEvent(sbEvent)
             }
@@ -207,6 +207,11 @@ public class UISurface {
         ToplevelStorage._uiSurface = self
         _resizeRequestHandler?(event)
         ToplevelStorage._uiSurface = nil
+    }
+
+    public static var current: SurfaceProxy? {
+        guard let uiSurface = ToplevelStorage._uiSurface else { return nil }
+        return SurfaceProxy(uiSurface)
     }
 }
 
@@ -282,9 +287,9 @@ public struct ToplevelSurface<Content: Visible>: Surface {
 }
 
 public struct SurfaceProxy {
-    private weak var uiSurface: UISurface?
+    private weak var uiSurface: SurfaceHandle?
 
-    init(_ uiSurface: UISurface) {
+    init(_ uiSurface: SurfaceHandle) {
         self.uiSurface = uiSurface
     }
 
@@ -302,14 +307,5 @@ public struct SurfaceProxy {
 }
 
 enum ToplevelStorage {
-    nonisolated(unsafe) static var _uiSurface: UISurface? = nil
-}
-
-public class SurfaceHandle {
-    public static var current: SurfaceProxy? {
-        guard let uiSurface = ToplevelStorage._uiSurface else { return nil }
-        return SurfaceProxy(uiSurface)
-    }
-
-    private init() {}
+    nonisolated(unsafe) static var _uiSurface: SurfaceHandle? = nil
 }

@@ -1,9 +1,9 @@
 @_implementationOnly import Swingby
 
-open class UIView {
+open class ViewHandle {
     private var _sbView: OpaquePointer?
-    private var _surface: UISurface!
-    private var _parent: UIView?
+    private var _surface: SurfaceHandle!
+    private var _parent: ViewHandle?
 
     private var _clip: Bool = false
     private var _color: Color = Color(r: 0, g: 0, b: 0, a: 0)
@@ -28,7 +28,7 @@ open class UIView {
         _sbView
     }
 
-    public var parent: UIView? {
+    public var parent: ViewHandle? {
         _parent
     }
 
@@ -155,13 +155,13 @@ open class UIView {
         }
     }
 
-    public var surface: UISurface {
+    public var surface: SurfaceHandle {
         get {
             return _surface
         }
     }
 
-    public init(parent: UIView, geometry: Rect) {
+    public init(parent: ViewHandle, geometry: Rect) {
         let sbParent = parent._sbView
         var sbRect = sb_rect_t(
             pos: sb_point_t(x: geometry.x, y: geometry.y),
@@ -181,7 +181,7 @@ open class UIView {
         addEventListeners()
     }
 
-    internal init(parentPointer: OpaquePointer, surface: UISurface, geometry: Rect) {
+    internal init(parentPointer: OpaquePointer, surface: SurfaceHandle, geometry: Rect) {
         var sbRect = sb_rect_t(
             pos: sb_point_t(x: geometry.x, y: geometry.y),
             size: sb_size_t(width: geometry.width, height: geometry.height)
@@ -241,7 +241,7 @@ open class UIView {
         // Pointer enter event.
         _pointerEnterEventListener = { sbEvent, userData in
             if let userData = userData {
-                let instance = Unmanaged<UIView>.fromOpaque(userData).takeUnretainedValue()
+                let instance = Unmanaged<ViewHandle>.fromOpaque(userData).takeUnretainedValue()
 
                 instance.callPointerEnterEvent(sbEvent)
             }
@@ -252,7 +252,7 @@ open class UIView {
         // Pointer leave event.
         _pointerLeaveEventListener = { sbEvent, userData in
             if let userData = userData {
-                let instance = Unmanaged<UIView>.fromOpaque(userData).takeUnretainedValue()
+                let instance = Unmanaged<ViewHandle>.fromOpaque(userData).takeUnretainedValue()
 
                 instance.callPointerLeaveEvent(sbEvent)
             }
@@ -263,7 +263,7 @@ open class UIView {
         // Pointer move event.
         _pointerMoveEventListener = { sbEvent, userData in
             if let userData = userData {
-                let instance = Unmanaged<UIView>.fromOpaque(userData).takeUnretainedValue()
+                let instance = Unmanaged<ViewHandle>.fromOpaque(userData).takeUnretainedValue()
 
                 instance.callPointerMoveEvent(sbEvent)
             }
@@ -274,7 +274,7 @@ open class UIView {
         // Pointer press event.
         _pointerPressEventListener = { sbEvent, userData in
             if let userData = userData {
-                let instance = Unmanaged<UIView>.fromOpaque(userData).takeUnretainedValue()
+                let instance = Unmanaged<ViewHandle>.fromOpaque(userData).takeUnretainedValue()
 
                 instance.callPointerPressEvent(sbEvent)
             }
@@ -285,7 +285,7 @@ open class UIView {
         // Pointer release event.
         _pointerReleaseEventListener = { sbEvent, userData in
             if let userData = userData {
-                let instance = Unmanaged<UIView>.fromOpaque(userData).takeUnretainedValue()
+                let instance = Unmanaged<ViewHandle>.fromOpaque(userData).takeUnretainedValue()
 
                 instance.callPointerReleaseEvent(sbEvent)
             }
@@ -296,7 +296,7 @@ open class UIView {
         // Pointer click event.
         _pointerClickEventListener = { sbEvent, userData in
             if let userData = userData {
-                let instance = Unmanaged<UIView>.fromOpaque(userData).takeUnretainedValue()
+                let instance = Unmanaged<ViewHandle>.fromOpaque(userData).takeUnretainedValue()
 
                 instance.callPointerClickEvent(sbEvent)
             }
@@ -544,11 +544,11 @@ extension View {
 //==============
 
 class ViewRenderer {
-    var uiSurface: UISurface
+    var uiSurface: SurfaceHandle
     var rootView: any View
     var stateBounded: Bool = false
 
-    init(uiSurface: UISurface, view: any View) {
+    init(uiSurface: SurfaceHandle, view: any View) {
         self.uiSurface = uiSurface
         self.rootView = view
     }
@@ -556,9 +556,9 @@ class ViewRenderer {
     func visit(
         view: any View,
         store: PropertyStore,
-        parentUIView: UIView?,
-        action: (any View, PropertyStore, UIView?) -> UIView
-    ) -> UIView? {
+        parentViewHandle: ViewHandle?,
+        action: (any View, PropertyStore, ViewHandle?) -> ViewHandle
+    ) -> ViewHandle? {
         var store = store
 
         // print(" - Visiting: \(type(of: view))")
@@ -576,21 +576,21 @@ class ViewRenderer {
 
         // Process children views.
         if let childrenModifier = view as? _ChildrenModifiedView {
-            let uiView = visit(
+            let viewHandle = visit(
                 view: childrenModifier.innerContent,
                 store: store,
-                parentUIView: parentUIView,
+                parentViewHandle: parentViewHandle,
                 action: action
             )
 
             let _ = visit(
                 view: childrenModifier.childrenContent,
                 store: store,
-                parentUIView: uiView,
+                parentViewHandle: viewHandle,
                 action: action
             )
 
-            return uiView
+            return viewHandle
         }
 
         // Process modified view.
@@ -600,7 +600,7 @@ class ViewRenderer {
             return visit(
                 view: modifier.innerContent,
                 store: store,
-                parentUIView: parentUIView,
+                parentViewHandle: parentViewHandle,
                 action: action
             )
         }
@@ -611,68 +611,68 @@ class ViewRenderer {
                 let _ = visit(
                     view: (iter is _PropertyModifiedView) ? iter : iter,
                     store: store,
-                    parentUIView: parentUIView,
+                    parentViewHandle: parentViewHandle,
                     action: action
                 )
             }
         } else if view.body is EmptyView {
-            return action(view, store, parentUIView)
+            return action(view, store, parentViewHandle)
         } else {
-            return visit(view: view.body, store: store, parentUIView: parentUIView, action: action)
+            return visit(view: view.body, store: store, parentViewHandle: parentViewHandle, action: action)
         }
 
-        return parentUIView
+        return parentViewHandle
     }
 
-    func render(view: any View, store: PropertyStore, parentUIView: UIView?) {
+    func render(view: any View, store: PropertyStore, parentViewHandle: ViewHandle?) {
         print(" - ViewRenderer.render()")
-        let _ = visit(view: view, store: store, parentUIView: parentUIView) { view, store, parent in
-            let uiView = parent == nil
-            ? UIView(
+        let _ = visit(view: view, store: store, parentViewHandle: parentViewHandle) { view, store, parent in
+            let viewHandle = parent == nil
+            ? ViewHandle(
                 parentPointer: self.uiSurface.rootViewPointer,
                 surface: self.uiSurface,
                 geometry: store[GeometryKey.self]
             )
-            : UIView(parent: parent!, geometry: store[GeometryKey.self])
+            : ViewHandle(parent: parent!, geometry: store[GeometryKey.self])
 
             // Basic appearance.
-            uiView.geometry = store[GeometryKey.self]
-            uiView.color = store[ColorKey.self]
-            uiView.radius = store[RadiusKey.self]
-            uiView.cursorShape = store[CursorShapeKey.self]
+            viewHandle.geometry = store[GeometryKey.self]
+            viewHandle.color = store[ColorKey.self]
+            viewHandle.radius = store[RadiusKey.self]
+            viewHandle.cursorShape = store[CursorShapeKey.self]
             // Filters.
             for filter in store[FiltersKey.self] {
-                uiView.addFilter(filter)
+                viewHandle.addFilter(filter)
             }
             // Events.
-            bindHandler(for: PointerEnterKey.self, in: store, to: &uiView._pointerEnterHandler)
-            bindHandler(for: PointerLeaveKey.self, in: store, to: &uiView._pointerLeaveHandler)
-            bindHandler(for: PointerMoveKey.self, in: store, to: &uiView._pointerMoveHandler)
-            bindHandler(for: PointerPressKey.self, in: store, to: &uiView._pointerPressHandler)
-            bindHandler(for: PointerReleaseKey.self, in: store, to: &uiView._pointerReleaseHandler)
-            bindHandler(for: PointerClickKey.self, in: store, to: &uiView._pointerClickHandler)
+            bindHandler(for: PointerEnterKey.self, in: store, to: &viewHandle._pointerEnterHandler)
+            bindHandler(for: PointerLeaveKey.self, in: store, to: &viewHandle._pointerLeaveHandler)
+            bindHandler(for: PointerMoveKey.self, in: store, to: &viewHandle._pointerMoveHandler)
+            bindHandler(for: PointerPressKey.self, in: store, to: &viewHandle._pointerPressHandler)
+            bindHandler(for: PointerReleaseKey.self, in: store, to: &viewHandle._pointerReleaseHandler)
+            bindHandler(for: PointerClickKey.self, in: store, to: &viewHandle._pointerClickHandler)
 
-            return uiView
+            return viewHandle
         }
     }
 
-    func update(view: any View, store: PropertyStore, parentUIView: UIView?) {
+    func update(view: any View, store: PropertyStore, parentViewHandle: ViewHandle?) {
         print(" - ViewRenderer.update()")
         var index = 0
-        let _ = visit(view: view, store: store, parentUIView: parentUIView) { view, store, parent in
-            let uiView = uiSurface.children[index]
+        let _ = visit(view: view, store: store, parentViewHandle: parentViewHandle) { view, store, parent in
+            let viewHandle = uiSurface.children[index]
 
-            uiView.geometry = store[GeometryKey.self]
-            uiView.color = store[ColorKey.self]
+            viewHandle.geometry = store[GeometryKey.self]
+            viewHandle.color = store[ColorKey.self]
 
             index += 1
 
-            return uiView
+            return viewHandle
         }
     }
 
     func updateHandler() {
-        update(view: self.rootView, store: PropertyStore(), parentUIView: nil)
+        update(view: self.rootView, store: PropertyStore(), parentViewHandle: nil)
     }
 
     /// A helper function for bind event handlers.

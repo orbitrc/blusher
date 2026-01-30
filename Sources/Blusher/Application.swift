@@ -1,6 +1,6 @@
 @_implementationOnly import Swingby
 
-public class UIApplication {
+public class ApplicationHandle {
     private var _sbApplication: OpaquePointer? = nil
 
     public init(_ args: [String]) {
@@ -25,7 +25,7 @@ public class UIApplication {
 class SurfaceManager {
     static let shared: SurfaceManager = SurfaceManager()
 
-    private var _surfaces: [UISurface] = []
+    private var _surfaces: [SurfaceHandle] = []
     private var _viewRenderer: ViewRenderer!
 
     internal var rootSurface: any Surface = EmptySurface()
@@ -42,7 +42,7 @@ class SurfaceManager {
     private func visit(
         surface: any Surface,
         store: PropertyStore,
-        action: (any Surface, PropertyStore) -> UISurface
+        action: (any Surface, PropertyStore) -> SurfaceHandle
     ) {
         var store = store
 
@@ -84,7 +84,7 @@ class SurfaceManager {
     private func initialize(surface: any Surface, store: PropertyStore) {
         visit(surface: surface, store: store) { surface, store in
             // TODO: Do Not hard-code the role as toplevel.
-            let uiSurface = UISurface(role: .toplevel)
+            let uiSurface = SurfaceHandle(role: .toplevel)
 
             // let viewRenderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
             uiSurface.size = store[SizeIKey.self]
@@ -129,7 +129,7 @@ class SurfaceManager {
         update(surface: rootSurface, store: PropertyStore())
     }
 
-    static func renderViews(_ body: any View, _ renderer: ViewRenderer) -> UISurface {
+    static func renderViews(_ body: any View, _ renderer: ViewRenderer) -> SurfaceHandle {
         if body is _TupleView {
             print("Multiple Views!")
 
@@ -138,7 +138,7 @@ class SurfaceManager {
                     renderer.render(
                         view: iter,
                         store: PropertyStore(),
-                        parentUIView: nil
+                        parentViewHandle: nil
                     )
                 }
             }
@@ -147,7 +147,7 @@ class SurfaceManager {
             renderer.render(
                 view: body as! any View,
                 store: PropertyStore(),
-                parentUIView: nil
+                parentViewHandle: nil
             )
         }
 
@@ -169,7 +169,7 @@ extension Application {
     public static func applicationMain() -> Int {
         let args = CommandLine.arguments
 
-        let app: UIApplication = UIApplication(args)
+        let app: ApplicationHandle = ApplicationHandle(args)
 
         let instance = Self()
         let body = instance.body
