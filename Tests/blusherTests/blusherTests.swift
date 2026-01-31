@@ -18,3 +18,11 @@ import Testing
 
     #expect(white != black)
 }
+
+@Test func fileSystem() async throws {
+    let file = FileSystem.File.open("Package.swift", "rb")
+    let bytes = file.readAll()
+    file.close()
+
+    let _ = bytes
+}
