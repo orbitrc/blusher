@@ -1,12 +1,19 @@
 @_implementationOnly import Swingby
 
+public enum ViewRenderType {
+    case singleColor
+    case image
+}
+
 open class ViewHandle {
     private var _sbView: OpaquePointer?
     private var _surface: SurfaceHandle!
     private var _parent: ViewHandle?
 
+    private var _renderType: ViewRenderType = .singleColor
     private var _clip: Bool = false
     private var _color: Color = Color(r: 0, g: 0, b: 0, a: 0)
+    private var _image: ImageHandle? = nil
     private var _geometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
     private var _cursorShape: CursorShape = .default
 
@@ -38,7 +45,25 @@ open class ViewHandle {
             if _clip == newValue {
                 return
             }
+            _clip = newValue
+
             sb_view_set_clip(_sbView, newValue)
+        }
+    }
+
+    public var renderType: ViewRenderType {
+        get { _renderType }
+        set {
+            if _renderType == newValue {
+                return
+            }
+            _renderType = newValue
+
+            let sbType = switch _renderType {
+                case .singleColor: SB_VIEW_FILL_TYPE_SINGLE_COLOR
+                case .image: SB_VIEW_FILL_TYPE_IMAGE
+            }
+            sb_view_set_fill_type(_sbView, sbType)
         }
     }
 
@@ -62,6 +87,21 @@ open class ViewHandle {
 
             withUnsafePointer(to: &sbColor) { ptr in
                 sb_view_set_color(_sbView, ptr)
+            }
+        }
+    }
+
+    public var image: ImageHandle? {
+        get { _image }
+        set {
+            if let image = newValue {
+                _image = image
+
+                sb_view_set_image(_sbView, image._sbImage)
+            } else {
+                _image = nil
+
+                sb_view_set_image(_sbView, nil)
             }
         }
     }
@@ -175,6 +215,25 @@ open class ViewHandle {
         _surface = parent._surface
         _surface.children.append(self)
         _parent = parent
+
+        clip = true
+
+        addEventListeners()
+    }
+
+    public init(surface: SurfaceHandle, geometry: Rect) {
+        var sbRect = sb_rect_t(
+            pos: sb_point_t(x: geometry.x, y: geometry.y),
+            size: sb_size_t(width: geometry.width, height: geometry.height)
+        )
+
+        withUnsafePointer(to: &sbRect) { ptr in
+            _sbView = sb_view_new(surface.rootViewPointer, ptr)
+        }
+
+        _surface = surface
+        _surface.children.append(self)
+        _parent = nil
 
         clip = true
 
