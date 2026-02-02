@@ -182,8 +182,11 @@ public class SurfaceHandle {
                 instance.callResizingEvent(sbEvent)
             }
         } as EventListener
-        sb_desktop_surface_add_event_listener(_sbDesktopSurface, SB_EVENT_TYPE_RESIZE,
-            _resizeRequestEventListener, userData)
+        sb_desktop_surface_add_event_listener(_sbDesktopSurface,
+            SB_EVENT_TYPE_RESIZE_REQUEST,
+            _resizeRequestEventListener,
+            userData
+        )
     }
 
     private func callResizingEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {

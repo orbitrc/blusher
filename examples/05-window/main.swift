@@ -27,6 +27,8 @@ struct WindowApp: Application {
                 .geometry(Rect(x: 30.0, y: 10.0, width: 30.0, height: 30.0))
                 .color(Color(r: 0, g: 0, b: 0, a: 255))
             BlueRectangle()
+            Image(path: "swingby.png")
+                .geometry(Rect(x: 10.0, y: 10.0, width: 340.0, height: 150.0))
         }
         .size(SizeI(width: 300, height: 200))
     }

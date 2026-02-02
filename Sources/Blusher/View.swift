@@ -703,6 +703,12 @@ class ViewRenderer {
             for filter in store[FiltersKey.self] {
                 viewHandle.addFilter(filter)
             }
+            // Image.
+            if let imageView = view as? Image {
+                viewHandle.renderType = .image
+                let file = FileSystem.File.open(imageView.path!, "rb")
+                viewHandle.image = ImageHandle(from: file.readAll())
+            }
             // Events.
             bindHandler(for: PointerEnterKey.self, in: store, to: &viewHandle._pointerEnterHandler)
             bindHandler(for: PointerLeaveKey.self, in: store, to: &viewHandle._pointerLeaveHandler)
