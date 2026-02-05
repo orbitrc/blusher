@@ -27,6 +27,8 @@ struct WindowResizeEdge: View {
 }
 
 public struct WindowResize: View, WindowDecoration {
+    @Binding var size: Size
+
     public static var thickness: Float {
         get { 8.0 }
         set { return }
@@ -38,6 +40,13 @@ public struct WindowResize: View, WindowDecoration {
             .children {
                 WindowResizeEdge(at: .topLeft)
                     .geometry(Rect(x: 0.0, y: 0.0, width: 10.0, height: 10.0))
+                WindowResizeEdge(at: .top)
+                    .geometry(Rect(
+                        x: WindowResize.thickness,
+                        y: 0.0,
+                        width: size.width - (WindowResize.thickness * 2),
+                        height: WindowResize.thickness
+                    ))
             }
     }
 

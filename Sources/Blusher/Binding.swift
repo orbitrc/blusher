@@ -1,3 +1,4 @@
+@propertyWrapper
 public struct Binding<T> {
     public let get: () -> T
     public let set: (T) -> Void

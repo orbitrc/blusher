@@ -5,6 +5,7 @@ public struct Window<Content: View>: Surface {
 
     @State var surfaceSize: SizeI = SizeI(width: 300, height: 200)
     @State var resizeGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+    @State var resizeSize: Size = Size(width: 10.0, height: 10.0)
     @State var borderGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
     @State var titleBarGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 0.0, height: 0.0)
     @State var bodyGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
@@ -31,7 +32,7 @@ public struct Window<Content: View>: Surface {
                 .filters([
                     DropShadow(offset: Point(x: 0.0, y: 0.0), radius: 15.0, color: .black)
                 ])
-            WindowResize()
+            WindowResize(size: $resizeSize)
                 .geometry(resizeGeometry)
             WindowBorder()
                 .geometry(borderGeometry)
@@ -72,6 +73,7 @@ public struct Window<Content: View>: Surface {
             width: Float(surfaceSize.width) - (WindowShadow.thickness * 2) + (WindowResize.thickness * 2),
             height: Float(surfaceSize.height) - (WindowShadow.thickness * 2) + (WindowResize.thickness * 2)
         )
+        resizeSize = resizeGeometry.size
     }
 
     private func updateBorderGeometry() {
