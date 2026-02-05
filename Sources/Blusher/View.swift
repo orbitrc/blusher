@@ -706,8 +706,11 @@ class ViewRenderer {
             // Image.
             if let imageView = view as? Image {
                 viewHandle.renderType = .image
-                let file = FileSystem.File.open(imageView.path!, "rb")
-                viewHandle.image = ImageHandle(from: file.readAll())
+                if viewHandle.image == nil {
+                    let file = FileSystem.File.open(imageView.path!, "rb")
+                    viewHandle.image = ImageHandle(from: file.readAll())
+                    file.close()
+                }
             }
             // Events.
             bindHandler(for: PointerEnterKey.self, in: store, to: &viewHandle._pointerEnterHandler)
