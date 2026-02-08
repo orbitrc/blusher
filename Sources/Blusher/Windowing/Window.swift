@@ -4,19 +4,55 @@ public struct Window<Content: View>: Surface {
     private var content: Content
 
     @State var surfaceSize: SizeI = SizeI(width: 300, height: 200)
-    @State var resizeGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+    // @State var resizeGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
     @State var resizeSize: Size = Size(width: 10.0, height: 10.0)
-    @State var borderGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
-    @State var titleBarGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 0.0, height: 0.0)
-    @State var bodyGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+    // @State var borderGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+    // @State var titleBarGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 0.0, height: 0.0)
+    // @State var bodyGeometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+
+    var resizeGeometry: Rect {
+        Rect(
+            x: WindowShadow.thickness - WindowResize.thickness,
+            y: WindowShadow.thickness - WindowResize.thickness,
+            width: Float(surfaceSize.width) - (WindowShadow.thickness * 2) + (WindowResize.thickness * 2),
+            height: Float(surfaceSize.height) - (WindowShadow.thickness * 2) + (WindowResize.thickness * 2)
+        )
+    }
+
+    var borderGeometry: Rect {
+        Rect(
+            x: resizeGeometry.x + WindowResize.thickness - WindowBorder.thickness,
+            y: resizeGeometry.y + WindowResize.thickness - WindowBorder.thickness,
+            width: resizeGeometry.width - (WindowResize.thickness * 2) + (WindowBorder.thickness * 2),
+            height: resizeGeometry.height - (WindowResize.thickness * 2) + (WindowBorder.thickness * 2)
+        )
+    }
+
+    var titleBarGeometry: Rect {
+        Rect(
+            x: WindowShadow.thickness,
+            y: WindowShadow.thickness,
+            width: resizeGeometry.width - (WindowResize.thickness * 2),
+            height: TitleBar.thickness
+        )
+    }
+
+    var bodyGeometry: Rect {
+        Rect(
+            x: WindowShadow.thickness,
+            y: WindowShadow.thickness + TitleBar.thickness,
+            width: Float(surfaceSize.width) - (WindowShadow.thickness * 2),
+            height: Float(surfaceSize.height) - (WindowShadow.thickness * 2) - TitleBar.thickness
+        )
+    }
 
     public init(@ViewBuilder _ content: () -> Content) {
         self.content = content()
 
         updateResizeGeometry()
-        updateBorderGeometry()
-        updateTitleBarGeometry()
-        updateBodyGeometry()
+        // updateBorderGeometry()
+        // updateTitleBarGeometry()
+        // updateBodyGeometry()
     }
 
     public var body: some Surface {
@@ -60,47 +96,11 @@ public struct Window<Content: View>: Surface {
             )
 
             updateResizeGeometry()
-            updateBorderGeometry()
-            updateTitleBarGeometry()
-            updateBodyGeometry()
         }
     }
 
     private func updateResizeGeometry() {
-        resizeGeometry = Rect(
-            x: WindowShadow.thickness - WindowResize.thickness,
-            y: WindowShadow.thickness - WindowResize.thickness,
-            width: Float(surfaceSize.width) - (WindowShadow.thickness * 2) + (WindowResize.thickness * 2),
-            height: Float(surfaceSize.height) - (WindowShadow.thickness * 2) + (WindowResize.thickness * 2)
-        )
         resizeSize = resizeGeometry.size
-    }
-
-    private func updateBorderGeometry() {
-        borderGeometry = Rect(
-            x: resizeGeometry.x + WindowResize.thickness - WindowBorder.thickness,
-            y: resizeGeometry.y + WindowResize.thickness - WindowBorder.thickness,
-            width: resizeGeometry.width - (WindowResize.thickness * 2) + (WindowBorder.thickness * 2),
-            height: resizeGeometry.height - (WindowResize.thickness * 2) + (WindowBorder.thickness * 2)
-        )
-    }
-
-    private func updateTitleBarGeometry() {
-        titleBarGeometry = Rect(
-            x: WindowShadow.thickness,
-            y: WindowShadow.thickness,
-            width: resizeGeometry.width - (WindowResize.thickness * 2),
-            height: TitleBar.thickness
-        )
-    }
-
-    private func updateBodyGeometry() {
-        bodyGeometry = Rect(
-            x: WindowShadow.thickness,
-            y: WindowShadow.thickness + TitleBar.thickness,
-            width: Float(surfaceSize.width) - (WindowShadow.thickness * 2),
-            height: Float(surfaceSize.height) - (WindowShadow.thickness * 2) - TitleBar.thickness
-        )
     }
 }
 
