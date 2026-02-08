@@ -1,6 +1,7 @@
 @_implementationOnly import Swingby
 
 public enum EventType {
+    case nextTick
     case pointerEnter
     case pointerLeave
     case pointerMove

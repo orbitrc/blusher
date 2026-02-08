@@ -1,8 +1,11 @@
 internal class StateBox<T> {
     var value: T {
         didSet {
-            print("StateBox<T>::value::didSet. onChange: \(onChange == nil ? "nil" : "something")")
-            onChange?()
+            if ApplicationHandle.shared.rebuildReady {
+                print("StateBox<T>::value::didSet. onChange: \(onChange == nil ? "nil" : "something")")
+                onChange?()
+                ApplicationHandle.shared.rebuildReady = false
+            }
         }
     }
 
