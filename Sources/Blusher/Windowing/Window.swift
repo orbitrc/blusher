@@ -74,12 +74,6 @@ public struct Window<Content: View>: Surface {
                 .geometry(borderGeometry)
             TitleBar()
                 .geometry(titleBarGeometry)
-            // Rectangle()
-            //     .geometry(Rect(x: 150.0, y: 150.0, width: 30.0, height: 30.0))
-            //     .color(Color(r: 100, g: 0, b: 0, a: 255))
-            //     .onPointerPress { _ in
-            //         SurfaceHandle.current?.startResize(.bottomRight)
-            //     }
             Rectangle()
                 .color(Color(r: 255, g: 255, b: 255, a: 255))
                 .radius(Radius(topLeft: 0.0, topRight: 0.0, bottomRight: 8.0, bottomLeft: 8.0))

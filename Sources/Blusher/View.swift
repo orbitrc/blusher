@@ -16,6 +16,7 @@ open class ViewHandle {
     private var _image: ImageHandle? = nil
     private var _geometry: Rect = Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
     private var _cursorShape: CursorShape = .default
+    private var _layoutConstraint: LayoutConstraint? = nil
 
     private var _pointerEnterEventListener: EventListener!
     private var _pointerLeaveEventListener: EventListener!
@@ -131,6 +132,8 @@ open class ViewHandle {
             withUnsafePointer(to: &sbRect) { ptr in
                 sb_view_set_geometry(_sbView, ptr)
             }
+
+            layingOut()
         }
     }
 
@@ -201,6 +204,11 @@ open class ViewHandle {
         }
     }
 
+    public var layoutConstraint: LayoutConstraint? {
+        get { _layoutConstraint }
+        set { _layoutConstraint = newValue }
+    }
+
     public init(parent: ViewHandle, geometry: Rect) {
         let sbParent = parent._sbView
         var sbRect = sb_rect_t(
@@ -229,25 +237,6 @@ open class ViewHandle {
 
         withUnsafePointer(to: &sbRect) { ptr in
             _sbView = sb_view_new(surface.rootViewPointer, ptr)
-        }
-
-        _surface = surface
-        _surface.children.append(self)
-        _parent = nil
-
-        clip = true
-
-        addEventListeners()
-    }
-
-    internal init(parentPointer: OpaquePointer, surface: SurfaceHandle, geometry: Rect) {
-        var sbRect = sb_rect_t(
-            pos: sb_point_t(x: geometry.x, y: geometry.y),
-            size: sb_size_t(width: geometry.width, height: geometry.height)
-        )
-
-        withUnsafePointer(to: &sbRect) { ptr in
-            _sbView = sb_view_new(parentPointer, ptr)
         }
 
         _surface = surface
@@ -291,6 +280,13 @@ open class ViewHandle {
             }
 
             sb_view_add_filter(_sbView, sbFilter)
+        }
+    }
+
+    internal func layingOut() {
+        // Calculate the child nodes based on the layout.
+        if let layoutConstraint = layoutConstraint {
+            layoutConstraint.constraintFunction(self)
         }
     }
 
@@ -633,8 +629,40 @@ class ViewRenderer {
             }
         }
 
+        // Process layouts.
+        if let layout = view as? any Layout {
+            // Layout itself.
+            let viewHandle = visit(
+                view: layout.selfContent,
+                store: store,
+                parentViewHandle: parentViewHandle,
+                action: action
+            )
+            viewHandle?.layoutConstraint = LayoutConstraint(
+                rootNode: viewHandle!,
+                childNodes: [],
+                constraintFunction: layout.constraintFunction
+            )
+
+            // Layout children.
+            if let children = layout.childrenContent as? _TupleView {
+                for iter in children.getViews() {
+                    let viewHandleChild = visit(
+                        view: iter,
+                        store: store,
+                        parentViewHandle: viewHandle!,
+                        action: action
+                    )
+                    viewHandle?.layoutConstraint?.childNodes.append(viewHandleChild!)
+                }
+            }
+            viewHandle?.layingOut()
+
+            return viewHandle
+        }
+
         // Process children views.
-        if let childrenModifier = view as? _ChildrenModifiedView {
+        if let childrenModifier: any _ChildrenModifiedView = view as? _ChildrenModifiedView {
             let viewHandle = visit(
                 view: childrenModifier.innerContent,
                 store: store,
@@ -687,12 +715,11 @@ class ViewRenderer {
         print(" - ViewRenderer.render()")
         let _ = visit(view: view, store: store, parentViewHandle: parentViewHandle) { view, store, parent in
             let viewHandle = parent == nil
-            ? ViewHandle(
-                parentPointer: self.uiSurface.rootViewPointer,
-                surface: self.uiSurface,
-                geometry: store[GeometryKey.self]
-            )
-            : ViewHandle(parent: parent!, geometry: store[GeometryKey.self])
+                ? ViewHandle(
+                    surface: self.uiSurface,
+                    geometry: store[GeometryKey.self]
+                )
+                : ViewHandle(parent: parent!, geometry: store[GeometryKey.self])
 
             // Basic appearance.
             viewHandle.geometry = store[GeometryKey.self]

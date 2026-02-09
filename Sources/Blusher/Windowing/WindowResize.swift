@@ -49,10 +49,4 @@ public struct WindowResize: View, WindowDecoration {
                     ))
             }
     }
-
-    // public func geometry(_ geometry: Rect) -> some View {
-    //     modifier { store in
-    //         store[GeometryKey.self] = geometry
-    //     }
-    // }
 }

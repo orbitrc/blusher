@@ -125,27 +125,26 @@ class SurfaceManager {
     private func initialize(surface: any Surface, store: PropertyStore) {
         visit(surface: surface, store: store) { surface, store in
             // TODO: Do Not hard-code the role as toplevel.
-            let uiSurface = SurfaceHandle(role: .toplevel)
+            let surfaceHandle = SurfaceHandle(role: .toplevel)
 
-            // let viewRenderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
-            uiSurface.size = store[SizeIKey.self]
+            surfaceHandle.size = store[SizeIKey.self]
             if let wmGeometry = store[WMGeometryKey.self] {
-                uiSurface.wmGeometry = wmGeometry
+                surfaceHandle.wmGeometry = wmGeometry
             }
             if let inputGeometry = store[InputGeometryKey.self] {
-                uiSurface.inputGeometry = inputGeometry
+                surfaceHandle.inputGeometry = inputGeometry
             }
             if let handler = store[ResizeRequestKey.self] {
-                uiSurface._resizeRequestHandler = handler
+                surfaceHandle._resizeRequestHandler = handler
             }
 
-            _viewRenderer = ViewRenderer(uiSurface: uiSurface, view: surface.body as! any View)
+            _viewRenderer = ViewRenderer(uiSurface: surfaceHandle, view: surface.body as! any View)
             let _ = SurfaceManager.renderViews(surface.body as! any View, _viewRenderer)
 
-            _surfaces.append(uiSurface)
-            uiSurface.show()
+            _surfaces.append(surfaceHandle)
+            surfaceHandle.show()
 
-            return uiSurface
+            return surfaceHandle
         }
         _viewRenderer.stateBounded = true
     }
