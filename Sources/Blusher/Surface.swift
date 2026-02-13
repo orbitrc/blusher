@@ -19,8 +19,10 @@ public enum ResizeEdge {
 public class SurfaceHandle {
     private var _sbDesktopSurface: OpaquePointer? = nil
     private var _parent: SurfaceHandle? = nil
+    private var _scale: Int = 1
 
     private var _resizeRequestEventListener: EventListener!
+    private var _preferredScaleEventListener: EventListener!
 
     internal var _resizeRequestHandler: ((ResizeEvent) -> Void)? = nil
 
@@ -118,6 +120,19 @@ public class SurfaceHandle {
         }
     }
 
+    public var scale: Int {
+        get {
+            _scale
+        }
+        set {
+            if _scale == newValue { return }
+            _scale = newValue
+
+            let sbSurface = sb_desktop_surface_surface(_sbDesktopSurface)
+            sb_surface_set_scale(sbSurface, UInt32(_scale))
+        }
+    }
+
     public let role: SurfaceRole
 
     public init(role: SurfaceRole, _ parent: SurfaceHandle? = nil) {
@@ -187,6 +202,20 @@ public class SurfaceHandle {
             _resizeRequestEventListener,
             userData
         )
+
+        // Preferred scale event.
+        _preferredScaleEventListener = { sbEvent, userData in
+            if let userData = userData {
+                let instance = Unmanaged<SurfaceHandle>.fromOpaque(userData).takeUnretainedValue()
+
+                instance.callPreferredScaleEvent(sbEvent)
+            }
+        } as EventListener
+        sb_surface_add_event_listener(sb_desktop_surface_surface(_sbDesktopSurface),
+            SB_EVENT_TYPE_PREFERRED_SCALE,
+            _preferredScaleEventListener,
+            userData
+        )
     }
 
     private func callResizingEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {
@@ -206,9 +235,22 @@ public class SurfaceHandle {
         resizeRequestEvent(event)
     }
 
+    private func callPreferredScaleEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {
+        let sbScale = sb_event_scale_scale(sbEvent)
+        let event = ScaleEvent(scale: Int(sbScale))
+        preferredScaleEvent(event)
+    }
+
     open func resizeRequestEvent(_ event: ResizeEvent) {
         ToplevelStorage._uiSurface = self
         _resizeRequestHandler?(event)
+        ToplevelStorage._uiSurface = nil
+    }
+
+    open func preferredScaleEvent(_ event: ScaleEvent) {
+        ToplevelStorage._uiSurface = self
+        // _preferredScaleHandler?(event)
+        self.scale = event.scale
         ToplevelStorage._uiSurface = nil
     }
 

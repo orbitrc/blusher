@@ -9,6 +9,7 @@ public enum EventType {
     case pointerRelease
     case pointerClick
     case resize
+    case preferredScale
 }
 
 typealias EventListener = @convention(c) (
