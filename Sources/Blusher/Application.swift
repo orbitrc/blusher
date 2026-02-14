@@ -92,7 +92,7 @@ class SurfaceManager {
         for child in mirror.children {
             if let state = child.value as? _State {
                 state.setOnChange {
-                    print(" Value \(child.label) changed!")
+                    print(" Value \(child.label ?? "nil") changed!")
                     self.updateHandler()
                 }
             }
@@ -115,11 +115,6 @@ class SurfaceManager {
             print("Surface body is now a view!")
             let _ = action(surface, store)
         }
-
-        // if surface.body is any View {
-        //     let _ = action(surface, store)
-        // }
-        // let _ = action(surface, store)
     }
 
     private func initialize(surface: any Surface, store: PropertyStore) {
@@ -152,16 +147,22 @@ class SurfaceManager {
     private func update(surface: any Surface, store: PropertyStore) {
         print(" - SurfaceManager.update()")
         visit(surface: rootSurface, store: store) { surface, store in
-            let uiSurface = _surfaces[0]
+            let surfaceHandle = _surfaces[0]
 
-            uiSurface.size = store[SizeIKey.self]
+            surfaceHandle.size = store[SizeIKey.self]
+            if let wmGeometry = store[WMGeometryKey.self] {
+                surfaceHandle.wmGeometry = wmGeometry
+            }
+            if let inputGeometry = store[InputGeometryKey.self] {
+                surfaceHandle.inputGeometry = inputGeometry
+            }
 
             if let rootView = surface.body as? any View {
                 _viewRenderer.rootView = rootView
                 _viewRenderer.updateHandler()
             }
 
-            return uiSurface
+            return surfaceHandle
         }
     }
 
@@ -182,10 +183,10 @@ class SurfaceManager {
                     )
                 }
             }
-        } else if body is any View {
+        } else {
             print("Single View!")
             renderer.render(
-                view: body as! any View,
+                view: body,
                 store: PropertyStore(),
                 parentViewHandle: nil
             )

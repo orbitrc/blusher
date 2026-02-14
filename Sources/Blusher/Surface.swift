@@ -19,7 +19,9 @@ public enum ResizeEdge {
 public class SurfaceHandle {
     private var _sbDesktopSurface: OpaquePointer? = nil
     private var _parent: SurfaceHandle? = nil
+    private var _wmGeometry: RectI? = nil
     private var _scale: Int = 1
+    private var _visible: Bool = false
 
     private var _resizeRequestEventListener: EventListener!
     private var _preferredScaleEventListener: EventListener!
@@ -91,13 +93,19 @@ public class SurfaceHandle {
             return RectI(x: 0, y: 0, width: 0, height: 0)
         }
         set {
-            var sbRect = sb_rect_t(
-                pos: sb_point_t(x: Float(newValue.pos.x), y: Float(newValue.pos.y)),
-                size: sb_size_t(width: Float(newValue.size.width), height: Float(newValue.size.height))
-            )
+            if _wmGeometry == newValue { return }
 
-            withUnsafePointer(to: &sbRect) { ptr in
-                sb_desktop_surface_set_wm_geometry(_sbDesktopSurface, ptr)
+            _wmGeometry = newValue
+
+            if _visible {
+                var sbRect = sb_rect_t(
+                    pos: sb_point_t(x: Float(newValue.pos.x), y: Float(newValue.pos.y)),
+                    size: sb_size_t(width: Float(newValue.size.width), height: Float(newValue.size.height))
+                )
+
+                withUnsafePointer(to: &sbRect) { ptr in
+                    sb_desktop_surface_set_wm_geometry(_sbDesktopSurface, ptr)
+                }
             }
         }
     }
@@ -184,6 +192,26 @@ public class SurfaceHandle {
 
     public func show() {
         sb_desktop_surface_show(_sbDesktopSurface)
+
+        _visible = true
+
+        // wmGeometry must set after .show() called.
+        if _visible && _wmGeometry != nil {
+            var sbRect = sb_rect_t(
+                pos: sb_point_t(
+                    x: Float(_wmGeometry!.pos.x),
+                    y: Float(_wmGeometry!.pos.y)
+                ),
+                size: sb_size_t(
+                    width: Float(_wmGeometry!.size.width),
+                    height: Float(_wmGeometry!.size.height)
+                )
+            )
+
+            withUnsafePointer(to: &sbRect) { ptr in
+                sb_desktop_surface_set_wm_geometry(_sbDesktopSurface, ptr)
+            }
+        }
     }
 
     private func addEventListeners() {

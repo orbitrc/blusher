@@ -46,6 +46,24 @@ public struct Window<Content: View>: Surface {
         )
     }
 
+    var wmGeometry: RectI {
+        let x = Int64(borderGeometry.x)
+        let y = Int64(borderGeometry.y)
+        let width = UInt64(borderGeometry.width)
+        let height = UInt64(borderGeometry.height)
+
+        return RectI(x: x, y: y, width: width, height: height)
+    }
+
+    var inputGeometry: RectI {
+        let x = Int64(resizeGeometry.x)
+        let y = Int64(resizeGeometry.y)
+        let width = UInt64(resizeGeometry.width)
+        let height = UInt64(resizeGeometry.height)
+
+        return RectI(x: x, y: y, width: width, height: height)
+    }
+
     public init(@ViewBuilder _ content: () -> Content) {
         self.content = content()
 
@@ -83,10 +101,15 @@ public struct Window<Content: View>: Surface {
                 }
         }
         .size(surfaceSize)
+        .wmGeometry(wmGeometry)
+        .inputGeometry(inputGeometry)
         .onResizeRequest { event in
+            let offsetWidth = surfaceSize.width - wmGeometry.size.width
+            let offsetHeight = surfaceSize.height - wmGeometry.size.height
+
             surfaceSize = SizeI(
-                width: UInt64(event.size.width),
-                height: UInt64(event.size.height)
+                width: UInt64(event.size.width) + offsetWidth,
+                height: UInt64(event.size.height) + offsetHeight
             )
 
             updateResizeGeometry()
