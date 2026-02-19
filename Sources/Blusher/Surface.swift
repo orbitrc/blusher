@@ -47,7 +47,7 @@ public class SurfaceHandle {
     public var rootViewColor: Color {
         get {
             // TODO: Impl.
-            return Color(r: 255, g: 255, b: 255, a: 255)
+            return Color(r: 1.0, g: 1.0, b: 1.0, a: 1.0)
         }
         set(newValue) {
             var sbColor = sb_color_t(
@@ -156,7 +156,7 @@ public class SurfaceHandle {
             // sb_desktop_surface_set_parent()
         }
 
-        rootViewColor = Color(r: 0, g: 0, b: 0, a: 0)
+        rootViewColor = Color(r: 0.0, g: 0.0, b: 0.0, a: 0.0)
 
         addEventListeners()
     }

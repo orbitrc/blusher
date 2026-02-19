@@ -18,7 +18,7 @@ struct WindowResizeEdge: View {
 
     var body: some View {
         Rectangle()
-            .color(Color(r: 255, g: 0, b: 0, a: 150))
+            .color(Color(r256: 255, g: 0, b: 0, a: 150))
             .cursorShape(_cursorShape)
             .onPointerPress { _ in
                 SurfaceHandle.current?.startResize(_edge)
@@ -36,7 +36,7 @@ public struct WindowResize: View, WindowDecoration {
 
     public var body: some View {
         Rectangle()
-            .color(Color(r: 80, g: 80, b: 255, a: 255))
+            .color(Color(r256: 80, g: 80, b: 255, a: 255))
             .children {
                 WindowResizeEdge(at: .topLeft)
                     .geometry(Rect(x: 0.0, y: 0.0, width: 10.0, height: 10.0))

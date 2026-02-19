@@ -8,9 +8,9 @@ public struct TitleBarButton: View {
     var action: TitleBarButtonAction = .close
     var buttonColor: Color!
 
-    nonisolated(unsafe) static let closeColor = Color(r: 255, g: 0, b: 0, a: 255)
-    nonisolated(unsafe) static let minimizeColor = Color(r: 255, g: 255, b: 0, a: 255)
-    nonisolated(unsafe) static let maximizeRestoreColor = Color(r: 0, g: 255, b: 0, a: 255)
+    nonisolated(unsafe) static let closeColor = Color(r: 1.0, g: 0.0, b: 0.0, a: 1.0)
+    nonisolated(unsafe) static let minimizeColor = Color(r: 1.0, g: 1.0, b: 0.0, a: 1.0)
+    nonisolated(unsafe) static let maximizeRestoreColor = Color(r: 0.0, g: 1.0, b: 0.0, a: 1.0)
 
     public init(action: TitleBarButtonAction) {
         self.action = action
@@ -60,7 +60,7 @@ public struct TitleBar: View, WindowDecoration {
 
     public var body: some View {
         Rectangle()
-            .color(Color(r: 128, g: 128, b: 128, a: 255))
+            .color(Color(r: 0.5, g: 0.5, b: 0.5, a: 1.0))
             .radius(Radius(topLeft: 8.0, topRight: 8.0, bottomRight: 0.0, bottomLeft: 0.0))
             .onPointerPress { _ in
                 _pressed = true
