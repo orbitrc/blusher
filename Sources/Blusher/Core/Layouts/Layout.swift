@@ -8,11 +8,11 @@ public protocol Layout: Visible {
 
     var childrenContent: any View { get }
 
-    func constraintFunction(_: ViewHandle) -> Void
+    func constraintFunction(_: BView) -> Void
 }
 
 public struct LayoutConstraint {
-    var rootNode: ViewHandle
-    var childNodes: [ViewHandle]
-    var constraintFunction: ((ViewHandle) -> Void)
+    var rootNode: BView
+    var childNodes: [BView]
+    var constraintFunction: ((BView) -> Void)
 }

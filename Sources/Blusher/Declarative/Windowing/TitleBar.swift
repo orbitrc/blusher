@@ -37,7 +37,7 @@ public struct TitleBarButton: View {
             .onPointerClick { event in
                 switch action {
                 case .close:
-                    SurfaceHandle.current?.close()
+                    BSurface.current?.close()
                     break
                 case .minimize:
                     // window.minimize()
@@ -67,7 +67,7 @@ public struct TitleBar: View, WindowDecoration {
             }
             .onPointerMove { _ in
                 if _pressed == true {
-                    SurfaceHandle.current?.startMove()
+                    BSurface.current?.startMove()
                     _pressed = false
                 }
             }

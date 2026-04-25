@@ -1,72 +1,8 @@
-@_implementationOnly import Swingby
-
-
-public class ApplicationHandle {
-    nonisolated(unsafe) public static var shared: ApplicationHandle!
-
-    private var _sbApplication: OpaquePointer? = nil
-
-    private var _nextTickEventListener: EventListener!
-
-    internal var _nextTickHandler: ((Event) -> Void)? = nil
-
-    public var rebuildReady: Bool = false
-
-    public init(_ args: [String]) {
-        let argc = Int32(args.count)
-        let cArgs: [UnsafeMutablePointer<CChar>?] = args.map {
-            $0.withCString { UnsafeMutablePointer(mutating: $0) }
-        }
-
-        cArgs.withUnsafeBufferPointer { buffer in
-            let argv = UnsafeMutablePointer(mutating: buffer.baseAddress)
-            let result = sb_application_new(argc, argv)
-            _sbApplication = result
-        }
-
-        addEventListeners()
-
-        ApplicationHandle.shared = self
-    }
-
-    public func exec() -> Int {
-        return Int(sb_application_exec(_sbApplication))
-    }
-
-    private func addEventListeners() {
-        let userData = Unmanaged.passUnretained(self).toOpaque()
-
-        // Next tick event.
-        _nextTickEventListener = { sbEvent, userData in
-            if let userData = userData {
-                let instance = Unmanaged<ApplicationHandle>.fromOpaque(userData).takeUnretainedValue()
-
-                instance.callNextTickEvent(sbEvent)
-            }
-        } as EventListener
-        sb_application_add_event_listener(_sbApplication,
-            SB_EVENT_TYPE_NEXT_TICK,
-            _nextTickEventListener,
-            userData
-        )
-    }
-
-    private func callNextTickEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {
-        let event = Event(of: .nextTick)
-        nextTickEvent(event)
-    }
-
-    open func nextTickEvent(_ event: Event) {
-        rebuildReady = true
-        _nextTickHandler?(event)
-    }
-}
-
 @MainActor
 class SurfaceManager {
     static let shared: SurfaceManager = SurfaceManager()
 
-    private var _surfaces: [SurfaceHandle] = []
+    private var _surfaces: [BSurface] = []
     private var _viewRenderer: ViewRenderer!
 
     internal var rootSurface: any Surface = EmptySurface()
@@ -83,7 +19,7 @@ class SurfaceManager {
     private func visit(
         surface: any Surface,
         store: PropertyStore,
-        action: (any Surface, PropertyStore) -> SurfaceHandle
+        action: (any Surface, PropertyStore) -> BSurface
     ) {
         var store = store
 
@@ -120,7 +56,7 @@ class SurfaceManager {
     private func initialize(surface: any Surface, store: PropertyStore) {
         visit(surface: surface, store: store) { surface, store in
             // TODO: Do Not hard-code the role as toplevel.
-            let surfaceHandle = SurfaceHandle(role: .toplevel)
+            let surfaceHandle = BSurface(role: .toplevel)
 
             surfaceHandle.size = store[SizeIKey.self]
             if let wmGeometry = store[WMGeometryKey.self] {
@@ -170,7 +106,7 @@ class SurfaceManager {
         update(surface: rootSurface, store: PropertyStore())
     }
 
-    static func renderViews(_ body: any View, _ renderer: ViewRenderer) -> SurfaceHandle {
+    static func renderViews(_ body: any View, _ renderer: ViewRenderer) -> BSurface {
         if body is _TupleView {
             print("Multiple Views!")
 
@@ -210,7 +146,7 @@ extension Application {
     public static func applicationMain() -> Int {
         let args = CommandLine.arguments
 
-        let app: ApplicationHandle = ApplicationHandle(args)
+        let app: BApplication = BApplication(args)
 
         let instance = Self()
         let body = instance.body

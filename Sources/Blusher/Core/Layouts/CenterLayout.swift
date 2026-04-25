@@ -17,7 +17,7 @@ public struct CenterLayout<Content: View>: Layout, View {
         content
     }
 
-    public func constraintFunction(_ root: ViewHandle) -> Void {
+    public func constraintFunction(_ root: BView) -> Void {
         print("constraintFunction!")
         if root.layoutConstraint == nil { return }
 

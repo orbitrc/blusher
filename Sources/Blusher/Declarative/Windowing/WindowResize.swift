@@ -21,7 +21,7 @@ struct WindowResizeEdge: View {
             .color(Color(r256: 255, g: 0, b: 0, a: 150))
             .cursorShape(_cursorShape)
             .onPointerPress { _ in
-                SurfaceHandle.current?.startResize(_edge)
+                BSurface.current?.startResize(_edge)
             }
     }
 }
