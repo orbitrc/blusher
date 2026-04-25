@@ -60,11 +60,20 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .systemLibrary(
             name: "CSwingby",
-            path: "Sources/CSwingby",
+            path: "Sources/CSwingby"
+        ),
+        .systemLibrary(
+            name: "CFontconfig",
+            path: "Sources/CFontconfig"
+        ),
+        .systemLibrary(
+            name: "CPango",
+            path: "Sources/CPango",
+            pkgConfig: "pango"
         ),
         .target(
             name: "Blusher",
-            dependencies: ["CSwingby"],
+            dependencies: ["CSwingby", "CFontconfig", "CPango"],
             swiftSettings: [
                 .unsafeFlags(["-enable-library-evolution"]),
                 .unsafeFlags(swingbyConf.includePathFlags),
