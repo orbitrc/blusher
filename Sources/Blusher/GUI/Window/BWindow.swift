@@ -1,0 +1,269 @@
+public class BWindow: BSurface {
+    public var surfaceSize: SizeI {
+        get { super.size }
+        set { super.size = newValue }
+    }
+
+    private var _shadow: BWindowShadow!
+    private var _resize: BWindowResize!
+    private var _border: BWindowBorder!
+    private var _titleBar: BTitleBar!
+    private var _body: BView!
+
+    public var body: BView {
+        return _body
+    }
+
+    private var _wmGeometry: RectI {
+        let x = Int64(_borderGeometry.x)
+        let y = Int64(_borderGeometry.y)
+        let width = UInt64(_borderGeometry.width)
+        let height = UInt64(_borderGeometry.height)
+
+        return RectI(x: x, y: y, width: width, height: height)
+    }
+
+    private var _inputGeometry: RectI {
+        let x = Int64(_resizeGeometry.x)
+        let y = Int64(_resizeGeometry.y)
+        let width = UInt64(_resizeGeometry.width)
+        let height = UInt64(_resizeGeometry.height)
+
+        return RectI(x: x, y: y, width: width, height: height)
+    }
+
+    private var _resizeGeometry: Rect {
+        Rect(
+            x: WindowShadow.thickness - WindowResize.thickness,
+            y: WindowShadow.thickness - WindowResize.thickness,
+            width: Float(surfaceSize.width) - (WindowShadow.thickness * 2) + (WindowResize.thickness * 2),
+            height: Float(surfaceSize.height) - (WindowShadow.thickness * 2) + (WindowResize.thickness * 2)
+        )
+    }
+
+    private var _borderGeometry: Rect {
+        Rect(
+            x: _resizeGeometry.x + WindowResize.thickness - WindowBorder.thickness,
+            y: _resizeGeometry.y + WindowResize.thickness - WindowBorder.thickness,
+            width: _resizeGeometry.width - (WindowResize.thickness * 2) + (WindowBorder.thickness * 2),
+            height: _resizeGeometry.height - (WindowResize.thickness * 2) + (WindowBorder.thickness * 2)
+        )
+    }
+
+    private var _titleBarGeometry: Rect {
+        Rect(
+            x: WindowShadow.thickness,
+            y: WindowShadow.thickness,
+            width: _bodyGeometry.size.width - (WindowResize.thickness * 2), // TODO: _body.size.width (X)
+            height: TitleBar.thickness
+        )
+    }
+
+    private var _bodyGeometry: Rect {
+        Rect(
+            x: WindowShadow.thickness,
+            y: WindowShadow.thickness + TitleBar.thickness,
+            width: Float(surfaceSize.width) - (WindowShadow.thickness * 2),
+            height: Float(surfaceSize.height) - (WindowShadow.thickness * 2) - TitleBar.thickness
+        )
+    }
+
+    public init(_ parent: BWindow? = nil) {
+        super.init(role: .toplevel, parent)
+
+        // Set window shadow.
+        _shadow = BWindowShadow(self)
+        _shadow.geometry = Rect(
+            x: 0.0,
+            y: 0.0,
+            width: Float(self.surfaceSize.width),
+            height: Float(self.surfaceSize.height)
+        )
+
+        // Set window resize area.
+        _resize = BWindowResize(self)
+        _resize.geometry = _resizeGeometry
+        _resize.updateEdges()
+
+        // Set window border.
+        _border = BWindowBorder(self)
+        _border.geometry = _borderGeometry
+
+        // Set window title bar.
+        _titleBar = BTitleBar(self)
+        _titleBar.geometry = _titleBarGeometry
+
+        // Window's body.
+        _body = BView(surface: self, geometry: _bodyGeometry)
+    }
+
+    public override func resizeRequestEvent(_ event: ResizeEvent) {
+        self.surfaceSize = SizeI(width: UInt64(event.size.width), height: UInt64(event.size.height))
+        _shadow.size = Size(
+            width: Float(self.surfaceSize.width),
+            height: Float(self.surfaceSize.height)
+        )
+        _resize.geometry = _resizeGeometry
+        _resize.updateEdges()
+        _border.geometry = _borderGeometry
+        _titleBar.geometry = _titleBarGeometry
+        _body.geometry = _bodyGeometry
+    }
+}
+
+public class BTitleBar: BView {
+    private var _window: BWindow
+    private var _pressed: Bool = false
+
+    init(_ window: BWindow) {
+        _window = window
+
+        super.init(surface: window, geometry: Rect(x: 0.0, y: 0.0, width: 10.0, height: 30.0))
+
+        self.color = Color(r: 0.5, g: 0.5, b: 0.5, a: 1.0)
+        self.radius = Radius(topLeft: 8.0, topRight: 8.0, bottomRight: 0.0, bottomLeft: 0.0)
+    }
+
+    public override func pointerPressEvent(_ event: PointerEvent) {
+        _pressed = true
+    }
+
+    public override func pointerMoveEvent(_ event: PointerEvent) {
+        if _pressed == true {
+            _window.move()
+            _pressed = false
+        }
+    }
+}
+
+public class BWindowBorder: BView {
+    public static var thickness: Float {
+        get { 1.0 }
+        set { return }
+    }
+
+    init(_ window: BWindow) {
+        super.init(surface: window, geometry: Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0))
+
+        self.color = Color(r: 0.0, g: 0.0, b: 0.0, a: 1.0)
+        self.radius = Radius(all: 8.0)
+    }
+}
+
+public class BWindowResize: BView {
+    class Edge: BView {
+        private let _edge: ResizeEdge
+        private let _cursorShape: CursorShape
+        private let _resize: BWindowResize
+
+        init(at edge: ResizeEdge, in resize: BWindowResize) {
+            _edge = edge
+            _cursorShape = switch edge {
+            case .topLeft: .nwseResize
+            case .top: .nsResize
+            case .topRight: .neswResize
+            case .right: .ewResize
+            case .bottomRight: .nwseResize
+            case .bottom: .nsResize
+            case .bottomLeft: .neswResize
+            case .left: .ewResize
+            }
+            _resize = resize
+
+            super.init(parent: resize, geometry: Rect(x: 0.0, y: 0.0, width: 0.0, height: 0.0))
+
+            self.cursorShape = _cursorShape
+
+            self.color = Color(r: 1.0, g: 0.0, b: 0.0, a: 0.5)
+        }
+
+        public override func pointerPressEvent(_ event: PointerEvent) {
+            _resize.window.resize(_edge)
+        }
+    }
+
+    public var window: BWindow
+    private var _topLeft: Edge!
+    private var _top: Edge!
+    private var _topRight: Edge!
+    private var _right: Edge!
+    private var _bottomRight: Edge!
+    private var _bottom: Edge!
+    private var _bottomLeft: Edge!
+    private var _left: Edge!
+
+    public static var thickness: Float {
+        get { 14.0 }
+        set { return }
+    }
+
+    init(_ window: BWindow) {
+        self.window = window
+
+        super.init(surface: window, geometry: Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0))
+
+        self.color = Color(r: 0.0, g: 1.0, b: 0.0, a: 0.5)
+
+        // Create edges.
+        _topLeft = Edge(at: .topLeft, in: self)
+        _top = Edge(at: .top, in: self)
+        _topRight = Edge(at: .topRight, in: self)
+        _right = Edge(at: .right, in: self)
+        _bottomRight = Edge(at: .bottomRight, in: self)
+        _bottom = Edge(at: .bottom, in: self)
+        _bottomLeft = Edge(at: .bottomLeft, in: self)
+        _left = Edge(at: .left, in: self)
+
+        updateEdges()
+    }
+
+    public func updateEdges() {
+        let thick: Float = Self.thickness
+
+        _topLeft.geometry = Rect(
+            x: 0.0, y: 0.0,
+            width: thick, height: thick
+        )
+        _top.geometry = Rect(
+            x: thick, y: 0.0,
+            width: self.size.width - (thick * 2), height: thick
+        )
+        _topRight.geometry = Rect(
+            x: self.size.width - thick, y: 0.0,
+            width: thick, height: thick
+        )
+        _right.geometry = Rect(
+            x: self.size.width - thick, y: thick,
+            width: thick, height: self.size.height - (thick * 2)
+        )
+        _bottomRight.geometry = Rect(
+            x: self.size.width - thick, y: self.size.height - thick,
+            width: thick, height: thick
+        )
+        _bottom.geometry = Rect(
+            x: thick, y: self.size.height - thick,
+            width: self.size.width - (thick * 2), height: thick
+        )
+        _bottomLeft.geometry = Rect(
+            x: 0.0, y: self.size.height - thick,
+            width: thick, height: thick
+        )
+        _left.geometry = Rect(
+            x: 0.0, y: thick,
+            width: thick, height: self.size.height - (thick * 2)
+        )
+    }
+}
+
+public class BWindowShadow: BView {
+    public static var thickness: Float {
+        get { 8.0 }
+        set { return }
+    }
+
+    init(_ window: BWindow) {
+        super.init(surface: window, geometry: Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0))
+
+        self.color = Color(r: 0.0, g: 0.0, b: 0.0, a: 0.5)
+    }
+}
