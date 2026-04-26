@@ -3,7 +3,7 @@ import Blusher
 let app = BApplication(CommandLine.arguments)
 
 let window = BWindow()
-window.size = SizeI(width: 500, height: 500)
+window.size = SizeI(width: 500, height: 400)
 
 let imageFile = FileSystem.File.open("swingby.png", "rb")
 let data = imageFile.readAll()

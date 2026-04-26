@@ -4,6 +4,23 @@ public class BWindow: BSurface {
         set { super.size = newValue }
     }
 
+    public override var size: SizeI {
+        get { super.size }
+        set {
+            super.size = newValue
+
+            _shadow.size = Size(
+                width: Float(surfaceSize.width),
+                height: Float(surfaceSize.height)
+            )
+            _resize.geometry = _resizeGeometry
+            _resize.updateEdges()
+            _border.geometry = _borderGeometry
+            _titleBar.geometry = _titleBarGeometry
+            _body.geometry = _bodyGeometry
+        }
+    }
+
     private var _shadow: BWindowShadow!
     private var _resize: BWindowResize!
     private var _border: BWindowBorder!
