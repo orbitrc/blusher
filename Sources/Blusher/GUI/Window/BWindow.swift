@@ -51,37 +51,37 @@ public class BWindow: BSurface {
 
     private var _resizeGeometry: Rect {
         Rect(
-            x: WindowShadow.thickness - WindowResize.thickness,
-            y: WindowShadow.thickness - WindowResize.thickness,
-            width: Float(surfaceSize.width) - (WindowShadow.thickness * 2) + (WindowResize.thickness * 2),
-            height: Float(surfaceSize.height) - (WindowShadow.thickness * 2) + (WindowResize.thickness * 2)
+            x: BWindowShadow.thickness - BWindowResize.thickness,
+            y: BWindowShadow.thickness - BWindowResize.thickness,
+            width: Float(surfaceSize.width) - (BWindowShadow.thickness * 2) + (BWindowResize.thickness * 2),
+            height: Float(surfaceSize.height) - (BWindowShadow.thickness * 2) + (BWindowResize.thickness * 2)
         )
     }
 
     private var _borderGeometry: Rect {
         Rect(
-            x: _resizeGeometry.x + WindowResize.thickness - WindowBorder.thickness,
-            y: _resizeGeometry.y + WindowResize.thickness - WindowBorder.thickness,
-            width: _resizeGeometry.width - (WindowResize.thickness * 2) + (WindowBorder.thickness * 2),
-            height: _resizeGeometry.height - (WindowResize.thickness * 2) + (WindowBorder.thickness * 2)
+            x: _resizeGeometry.x + BWindowResize.thickness - BWindowBorder.thickness,
+            y: _resizeGeometry.y + BWindowResize.thickness - BWindowBorder.thickness,
+            width: _resizeGeometry.width - (BWindowResize.thickness * 2) + (BWindowBorder.thickness * 2),
+            height: _resizeGeometry.height - (BWindowResize.thickness * 2) + (BWindowBorder.thickness * 2)
         )
     }
 
     private var _titleBarGeometry: Rect {
         Rect(
-            x: WindowShadow.thickness,
-            y: WindowShadow.thickness,
-            width: _bodyGeometry.size.width - (WindowResize.thickness * 2), // TODO: _body.size.width (X)
-            height: TitleBar.thickness
+            x: BWindowShadow.thickness,
+            y: BWindowShadow.thickness,
+            width: _bodyGeometry.size.width,
+            height: BTitleBar.thickness
         )
     }
 
     private var _bodyGeometry: Rect {
         Rect(
-            x: WindowShadow.thickness,
-            y: WindowShadow.thickness + TitleBar.thickness,
+            x: BWindowShadow.thickness,
+            y: BWindowShadow.thickness + BTitleBar.thickness,
             width: Float(surfaceSize.width) - (WindowShadow.thickness * 2),
-            height: Float(surfaceSize.height) - (WindowShadow.thickness * 2) - TitleBar.thickness
+            height: Float(surfaceSize.height) - (WindowShadow.thickness * 2) - BTitleBar.thickness
         )
     }
 
@@ -129,6 +129,10 @@ public class BWindow: BSurface {
 }
 
 public class BTitleBar: BView {
+    public static var thickness: Float {
+        30.0
+    }
+
     private var _window: BWindow
     private var _pressed: Bool = false
 
@@ -274,7 +278,7 @@ public class BWindowResize: BView {
 
 public class BWindowShadow: BView {
     public static var thickness: Float {
-        get { 8.0 }
+        get { 40.0 }
         set { return }
     }
 
