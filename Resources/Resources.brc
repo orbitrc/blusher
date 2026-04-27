@@ -1,0 +1,11 @@
+[options]
+compression = "zstd"
+
+[[resource]]
+prefix = "/org.blusher.Blusher"
+files = [
+    { path = "close.svg" },
+    { path = "maximize.svg" },
+    { path = "restore.svg" },
+    { path = "minimize.svg", compress = false },
+]
