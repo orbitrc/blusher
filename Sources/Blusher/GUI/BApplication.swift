@@ -32,7 +32,6 @@ public class BApplication {
             let resource = Resource(name, Bytes(fromStatic: addr, size: size))
             self.registerResource(resource)
         }
-        // print(ResourceManager.shared.getResource("/org.blusher.Blusher/close.svg"))
 
         addEventListeners()
 

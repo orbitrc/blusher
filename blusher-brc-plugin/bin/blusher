@@ -50,7 +50,7 @@ def rcc_c(resources: list[ResourceFile]) -> str:
     for resource in resources:
         hash = resource.hash.split(':')[1]
         # Declaration.
-        template += f'extern const unsigned char *brc_{hash}_addr;\n'
+        template += f'extern const unsigned char brc_{hash}_addr[];\n'
         template += f'extern const size_t brc_{hash}_size;\n'
         template += f'extern const char *brc_{hash}_name;\n'
         template += '\n'
@@ -139,7 +139,7 @@ def rc_gen_swift(resources: list[ResourceFile]) -> str:
         template +=  '            Bytes(\n'
         template += f'                fromStatic: brc_{hash}_get_addr(),\n'
         template += f'                size: brc_{hash}_get_size()\n'
-        template +=  '            )'
+        template +=  '            )\n'
         template +=  '        ),\n'
 
     template += '    ]\n'
