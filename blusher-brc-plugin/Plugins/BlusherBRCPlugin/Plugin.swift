@@ -18,6 +18,7 @@ struct BlusherBRCPlugin: BuildToolPlugin {
             cmd = context.package.directoryURL.appendingPathComponent("bin/blusher")
         }
 
+        let projectRoot = context.package.directoryURL
         let inputDir = target.directoryURL
         let outputDir = context.pluginWorkDirectoryURL
 
@@ -36,13 +37,18 @@ struct BlusherBRCPlugin: BuildToolPlugin {
             withIntermediateDirectories: true
         )
         try FileManager.default.createDirectory(
-            atPath: inputDir.deletingLastPathComponent().appendingPathComponent(".blusher/lib").path,
+            atPath: projectRoot.appendingPathComponent(".blusher/lib").path,
             withIntermediateDirectories: true
         )
         try FileManager.default.createDirectory(
             atPath: outputDir.appendingPathComponent("src").path,
             withIntermediateDirectories: true
         )
+
+        // TODO: describe why.
+        let noblusherFlags = context.package.displayName == "blusher"
+            ? ["--noblusher"]
+            : []
 
         // Make commands.
         let libCommands: [Command] = brcFiles.map { url in
@@ -53,7 +59,7 @@ struct BlusherBRCPlugin: BuildToolPlugin {
                 .appendingPathComponent(libPath)
 
             Diagnostics.warning(" inputDir: \(inputDir)")
-            let aDir = inputDir.deletingLastPathComponent().appendingPathComponent(".blusher/lib")
+            let aDir = projectRoot.appendingPathComponent(".blusher/lib")
 
             return .buildCommand(
                 displayName: "Blusher Resource Compiler Plugin - \(url)",
@@ -81,7 +87,7 @@ struct BlusherBRCPlugin: BuildToolPlugin {
                     "rc-gen",
                     "\(inputDir.path)/\(url.lastPathComponent)",
                     "-C", "\(outputDir.path)/src",
-                ],
+                ] + noblusherFlags,
                 inputFiles: [url],
                 outputFiles: [outputURL]
             )

@@ -9,7 +9,7 @@ import tomllib
 
 class ResourceFile:
     def __init__(self, url, abspath):
-        self.url = url
+        self.url = url  # TODO: NOT URL. Just a name (e.g. '/org.blusher.Blusher/helpme.txt')
         self.path = abspath
         self.compression = None
         self.hash = ''
@@ -74,7 +74,7 @@ def rcc_c(resources: list[ResourceFile]) -> str:
         template += '\n'
     return template
 
-def rc_gen_swift(resources: list[ResourceFile]) -> str:
+def rc_gen_swift_noblusher(resources: list[ResourceFile]) -> str:
     template = '''public struct InternalResource {
     public var address: UnsafePointer<UInt8>
     public var size: Int
@@ -108,6 +108,41 @@ def rc_gen_swift(resources: list[ResourceFile]) -> str:
         template += f'        ),\n'
 
     template += f'    ]\n'
+    template += '}\n'
+
+    return template
+
+def rc_gen_swift(resources: list[ResourceFile]) -> str:
+    template = 'import Blusher\n\n'
+
+    for resource in resources:
+        hash = resource.hash.split(':')[1]
+
+        template += f'@_silgen_name("brc_{hash}_get_addr")\n'
+        template += f'public func brc_{hash}_get_addr() -> UnsafePointer<UInt8>\n'
+        template += '\n'
+        template += f'@_silgen_name("brc_{hash}_get_size")\n'
+        template += f'public func brc_{hash}_get_size() -> Int\n'
+        template += '\n'
+        template += f'@_silgen_name("brc_{hash}_get_name")\n'
+        template += f'public func brc_{hash}_get_name() -> UnsafePointer<CChar>\n'
+        template += '\n'
+
+    template += 'public func getResources() -> [Resource] {\n'
+    template += '    return [\n'
+
+    for resource in resources:
+        hash = resource.hash.split(':')[1]
+
+        template +=  '        Resource(\n'
+        template += f'            String(cString: brc_{hash}_get_name()),\n'
+        template +=  '            Bytes(\n'
+        template += f'                fromStatic: brc_{hash}_get_addr(),\n'
+        template += f'                size: brc_{hash}_get_size()\n'
+        template +=  '            )'
+        template +=  '        ),\n'
+
+    template += '    ]\n'
     template += '}\n'
 
     return template
@@ -164,13 +199,17 @@ def rcc(input_file: Path, output_path: Path, work_directory: Path=None):
     subprocess.run(['/usr/bin/cc', '-fPIC', '-c', c_path, '-o', f'{c_path}.o'], check=True)
     os.system(f'ar -rcs {output_path} {asm_path}.o {c_path}.o')
 
-def rc_gen(input_file: Path, work_directory: Path='.'):
+def rc_gen(input_file: Path, work_directory: Path='.', noblusher=False):
     resource_list = get_resource_list(input_file)
 
     swift_path = f'{work_directory}/{input_file.stem}.swift'
 
-    with open(swift_path, 'w') as f:
-        f.write(rc_gen_swift(resource_list))
+    if noblusher is True:
+        with open(swift_path, 'w') as f:
+            f.write(rc_gen_swift_noblusher(resource_list))
+    else:
+        with open(swift_path, 'w') as f:
+            f.write(rc_gen_swift(resource_list))
 
 #==========
 # Main
@@ -199,10 +238,12 @@ if __name__ == '__main__':
     rc_gen_argp = sub_argp.add_parser('rc-gen', help='Generate Blusher BRC Code')
     rc_gen_argp.add_argument('input', type=Path, help='input .brc file')
     rc_gen_argp.add_argument('-C', type=Path, help='change to directory before doing anything', dest='DIRECTORY')
+    rc_gen_argp.add_argument('--noblusher', action='store_true',
+        help='do not import Blusher. this is for the internal implementation only')
 
     args = argp.parse_args()
 
     if args.subcommand == 'rcc':
         rcc(args.input, args.output, args.DIRECTORY)
     elif args.subcommand == 'rc-gen':
-        rc_gen(args.input, args.DIRECTORY)
+        rc_gen(args.input, args.DIRECTORY, noblusher=args.noblusher)
