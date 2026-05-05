@@ -343,12 +343,18 @@ public class BWindowShadow: BView {
             parent: self,
             geometry: Rect(
                 x: 20.0, y: 20.0,
-                width: Float(window.surfaceSize.width) - 20.0,
-                height: Float(window.surfaceSize.height) - 20.0
+                width: Float(window.surfaceSize.width) - 40.0,
+                height: Float(window.surfaceSize.height) - 40.0
             )
         )
         _shadowInner.color = Color(r: 0.0, g: 0.0, b: 0.0, a: 0.5)
         _shadowInner.addFilter(Blur(radius: 5.0))
+        self.onResize += { [weak self] event in
+            self?._shadowInner.size = Size(
+                width: Float(window.surfaceSize.width) - 40.0,
+                height: Float(window.surfaceSize.height) - 40.0
+            )
+        }
 
         self.color = .transparent
     }

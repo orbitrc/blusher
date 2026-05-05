@@ -34,6 +34,8 @@ open class BView {
     internal var _pointerClickHandler: ((PointerEvent) -> Void)? = nil
     internal var _resizeHandler: ((ResizeEvent) -> Void)? = nil
 
+    public var onResize: EventHandler<ResizeEvent>? = nil
+
     internal var cPointer: OpaquePointer? {
         _sbView
     }
@@ -516,5 +518,6 @@ open class BView {
 
     open func resizeEvent(_ event: ResizeEvent) {
         _resizeHandler?(event)
+        self.onResize?.invoke(event)
     }
 }
