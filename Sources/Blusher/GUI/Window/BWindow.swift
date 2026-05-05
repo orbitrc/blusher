@@ -247,7 +247,7 @@ public class BWindowResize: BView {
 
             self.cursorShape = _cursorShape
 
-            self.color = Color(r: 1.0, g: 0.0, b: 0.0, a: 0.5)
+            self.color = .transparent
         }
 
         public override func pointerPressEvent(_ event: PointerEvent) {
@@ -275,7 +275,7 @@ public class BWindowResize: BView {
 
         super.init(surface: window, geometry: Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0))
 
-        self.color = Color(r: 0.0, g: 1.0, b: 0.0, a: 0.5)
+        self.color = .transparent
 
         // Create edges.
         _topLeft = Edge(at: .topLeft, in: self)
@@ -334,9 +334,22 @@ public class BWindowShadow: BView {
         set { return }
     }
 
+    private var _shadowInner: BView!
+
     init(_ window: BWindow) {
         super.init(surface: window, geometry: Rect(x: 0.0, y: 0.0, width: 1.0, height: 1.0))
 
-        self.color = Color(r: 0.0, g: 0.0, b: 0.0, a: 0.5)
+        _shadowInner = BView(
+            parent: self,
+            geometry: Rect(
+                x: 20.0, y: 20.0,
+                width: Float(window.surfaceSize.width) - 20.0,
+                height: Float(window.surfaceSize.height) - 20.0
+            )
+        )
+        _shadowInner.color = Color(r: 0.0, g: 0.0, b: 0.0, a: 0.5)
+        _shadowInner.addFilter(Blur(radius: 5.0))
+
+        self.color = .transparent
     }
 }

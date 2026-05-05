@@ -24,6 +24,7 @@ open class BView {
     private var _pointerPressEventListener: EventListener!
     private var _pointerReleaseEventListener: EventListener!
     private var _pointerClickEventListener: EventListener!
+    private var _resizeEventListener: EventListener!
 
     internal var _pointerEnterHandler: ((PointerEvent) -> Void)? = nil
     internal var _pointerLeaveHandler: ((PointerEvent) -> Void)? = nil
@@ -31,6 +32,7 @@ open class BView {
     internal var _pointerPressHandler: ((PointerEvent) -> Void)? = nil
     internal var _pointerReleaseHandler: ((PointerEvent) -> Void)? = nil
     internal var _pointerClickHandler: ((PointerEvent) -> Void)? = nil
+    internal var _resizeHandler: ((ResizeEvent) -> Void)? = nil
 
     internal var cPointer: OpaquePointer? {
         _sbView
@@ -73,7 +75,9 @@ open class BView {
             return _color
         }
         set(newValue) {
-            if _color == newValue {
+            // TODO: Optimization.
+            if newValue == .transparent {
+            } else if _color == newValue {
                 return
             }
 
@@ -358,6 +362,17 @@ open class BView {
         } as EventListener
         sb_view_add_event_listener(_sbView, SB_EVENT_TYPE_POINTER_CLICK,
             _pointerClickEventListener, userData)
+
+        // Resize event.
+        _resizeEventListener = { sbEvent, userData in
+            if let userData = userData {
+                let instance = Unmanaged<BView>.fromOpaque(userData).takeUnretainedValue()
+
+                instance.callResizeEvent(sbEvent)
+            }
+        } as EventListener
+        sb_view_add_event_listener(_sbView, SB_EVENT_TYPE_RESIZE,
+            _resizeEventListener, userData)
     }
 
     private func callPointerEnterEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {
@@ -456,6 +471,16 @@ open class BView {
         pointerClickEvent(event)
     }
 
+    private func callResizeEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {
+        // TODO: Real values.
+        print("TODO: BView.resizeEvent values not set.")
+        let event = ResizeEvent(
+            oldSize: Size(width: 0.0, height: 0.0),
+            size: Size(width: 0.0, height: 0.0)
+        )
+        resizeEvent(event)
+    }
+
     open func pointerEnterEvent(_ event: PointerEvent) {
         ToplevelStorage._uiSurface = self._surface
         _pointerEnterHandler?(event)
@@ -487,5 +512,9 @@ open class BView {
         ToplevelStorage._uiSurface = self._surface
         _pointerClickHandler?(event)
         ToplevelStorage._uiSurface = nil
+    }
+
+    open func resizeEvent(_ event: ResizeEvent) {
+        _resizeHandler?(event)
     }
 }

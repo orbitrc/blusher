@@ -31,4 +31,8 @@ public extension Color {
     static var red: Color {
         Color(r: 1.0, g: 0.0, b: 0.0, a: 1.0)
     }
+
+    static var transparent: Color {
+        Color(r: 0.0, g: 0.0, b: 0.0, a: 0.0)
+    }
 }
