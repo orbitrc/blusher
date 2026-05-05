@@ -55,6 +55,12 @@ let package = Package(
             targets: ["Blusher"]
         ),
     ],
+    dependencies: [
+        .package(
+            // url: "file://../blusher-brc-plugin",
+            path: "./blusher-brc-plugin",
+        ),
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
@@ -64,7 +70,7 @@ let package = Package(
         ),
         .target(
             name: "Blusher",
-            dependencies: ["CSwingby"],
+            dependencies: ["CSwingby", "BlusherResources"],
             swiftSettings: [
                 .unsafeFlags(["-enable-library-evolution"]),
                 .unsafeFlags(swingbyConf.includePathFlags),
@@ -72,6 +78,17 @@ let package = Package(
             linkerSettings: [
                 .unsafeFlags(swingbyConf.libraryPathFlags),
                 .unsafeFlags(swingbyConf.runpathFlags),
+            ]
+        ),
+        .target(
+            name: "BlusherResources",
+            // path: "Resources/BlusherResources",
+            path: "Resources",
+            linkerSettings: [
+                .unsafeFlags(["-L.blusher/lib", "-lResources"]),
+            ],
+            plugins: [
+                .plugin(name: "BlusherBRCPlugin", package: "blusher-brc-plugin"),
             ]
         ),
         .testTarget(

@@ -1,4 +1,5 @@
 @_implementationOnly import Swingby
+@_implementationOnly import BlusherResources
 
 public class BApplication {
     nonisolated(unsafe) public static var shared: BApplication!
@@ -23,9 +24,22 @@ public class BApplication {
             _sbApplication = result
         }
 
+        // Register resources.
+        for resource in BlusherResources.getResources() {
+            let addr = resource.address
+            let size = resource.size
+            let name = resource.name
+            let resource = Resource(name, Bytes(fromStatic: addr, size: size))
+            self.registerResource(resource)
+        }
+
         addEventListeners()
 
         BApplication.shared = self
+    }
+
+    public func registerResource(_ resource: Resource) {
+        ResourceManager.shared.register(resource)
     }
 
     public func exec() -> Int {
