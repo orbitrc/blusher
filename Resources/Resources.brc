@@ -8,4 +8,9 @@ files = [
     { path = "maximize.svg" },
     { path = "restore.svg" },
     { path = "minimize.svg", compress = false },
+
+    { path = "close.png" },
+    { path = "maximize.png" },
+    { path = "restore.png" },
+    { path = "minimize.png" },
 ]
