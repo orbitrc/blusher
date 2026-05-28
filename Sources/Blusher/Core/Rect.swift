@@ -1,23 +1,23 @@
 public struct Rect: Equatable {
-    public var pos: Point = Point(x: 0.0, y: 0.0)
+    public var position: Point = Point(x: 0.0, y: 0.0)
     public var size: Size = Size(width: 0.0, height: 0.0)
 
     public init(x: Float, y: Float, width: Float, height: Float) {
-        pos.x = x
-        pos.y = y
+        position.x = x
+        position.y = y
         size.width = width
         size.height = height
     }
 
     public var x: Float {
         get {
-            return pos.x
+            return position.x
         }
     }
 
     public var y: Float {
         get {
-            return pos.y
+            return position.y
         }
     }
 
@@ -41,12 +41,12 @@ extension Rect: CustomStringConvertible {
 }
 
 public struct RectI: Equatable {
-    public var pos: PointI = PointI(x: 0, y: 0)
+    public var position: PointI = PointI(x: 0, y: 0)
     public var size: SizeI = SizeI(width: 0, height: 0)
 
     public init(x: Int64, y: Int64, width: UInt64, height: UInt64) {
-        pos.x = x
-        pos.y = y
+        position.x = x
+        position.y = y
         size.width = width
         size.height = height
     }

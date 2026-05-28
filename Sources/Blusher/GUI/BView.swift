@@ -116,8 +116,8 @@ open class BView {
     public var geometry: Rect {
         get {
             let sbRect = sb_view_geometry(_sbView)
-            let x = sbRect!.pointee.pos.x
-            let y = sbRect!.pointee.pos.y
+            let x = sbRect!.pointee.position.x
+            let y = sbRect!.pointee.position.y
             let width = sbRect!.pointee.size.width
             let height = sbRect!.pointee.size.height
 
@@ -131,7 +131,7 @@ open class BView {
             _geometry = newValue
 
             var sbRect = sb_rect_t(
-                pos: sb_point_t(x: newValue.pos.x, y: newValue.pos.y),
+                position: sb_point_t(x: newValue.position.x, y: newValue.position.y),
                 size: sb_size_t(width: newValue.size.width, height: newValue.size.height)
             )
 
@@ -145,7 +145,7 @@ open class BView {
 
     public var position: Point {
         get {
-            return Point(x: geometry.pos.x, y: geometry.pos.y)
+            return Point(x: geometry.position.x, y: geometry.position.y)
         }
         set {
             let geo = Rect(
@@ -162,7 +162,7 @@ open class BView {
         }
         set(newValue) {
             let geo = Rect(
-                x: geometry.pos.x, y: geometry.pos.y,
+                x: geometry.position.x, y: geometry.position.y,
                 width: newValue.width, height: newValue.height
             )
             geometry = geo
@@ -218,7 +218,7 @@ open class BView {
     public init(parent: BView, geometry: Rect) {
         let sbParent = parent._sbView
         var sbRect = sb_rect_t(
-            pos: sb_point_t(x: geometry.x, y: geometry.y),
+            position: sb_point_t(x: geometry.x, y: geometry.y),
             size: sb_size_t(width: geometry.width, height: geometry.height)
         )
 
@@ -237,7 +237,7 @@ open class BView {
 
     public init(surface: BSurface, geometry: Rect) {
         var sbRect = sb_rect_t(
-            pos: sb_point_t(x: geometry.x, y: geometry.y),
+            position: sb_point_t(x: geometry.x, y: geometry.y),
             size: sb_size_t(width: geometry.width, height: geometry.height)
         )
 

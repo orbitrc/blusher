@@ -99,7 +99,9 @@ public class BSurface {
 
             if _visible {
                 var sbRect = sb_rect_t(
-                    pos: sb_point_t(x: Float(newValue.pos.x), y: Float(newValue.pos.y)),
+                    position: sb_point_t(
+                        x: Float(newValue.position.x), y: Float(newValue.position.y)
+                    ),
                     size: sb_size_t(width: Float(newValue.size.width), height: Float(newValue.size.height))
                 )
 
@@ -117,7 +119,9 @@ public class BSurface {
         }
         set {
             var sbRect = sb_rect_t(
-                pos: sb_point_t(x: Float(newValue.pos.x), y: Float(newValue.pos.y)),
+                position: sb_point_t(
+                    x: Float(newValue.position.x), y: Float(newValue.position.y)
+                ),
                 size: sb_size_t(width: Float(newValue.size.width), height: Float(newValue.size.height))
             )
 
@@ -198,9 +202,9 @@ public class BSurface {
         // wmGeometry must set after .show() called.
         if _visible && _wmGeometry != nil {
             var sbRect = sb_rect_t(
-                pos: sb_point_t(
-                    x: Float(_wmGeometry!.pos.x),
-                    y: Float(_wmGeometry!.pos.y)
+                position: sb_point_t(
+                    x: Float(_wmGeometry!.position.x),
+                    y: Float(_wmGeometry!.position.y)
                 ),
                 size: sb_size_t(
                     width: Float(_wmGeometry!.size.width),
