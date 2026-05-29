@@ -38,4 +38,3 @@ public struct Program {
         let _ = app.exec()
     }
 }
-

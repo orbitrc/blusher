@@ -3,6 +3,8 @@
 public enum ViewRenderType {
     case singleColor
     case image
+    case text
+    case canvas
 }
 
 open class BView {
@@ -25,6 +27,7 @@ open class BView {
     private var _pointerReleaseEventListener: EventListener!
     private var _pointerClickEventListener: EventListener!
     private var _resizeEventListener: EventListener!
+    private var _paintEventListener: EventListener!
 
     internal var _pointerEnterHandler: ((PointerEvent) -> Void)? = nil
     internal var _pointerLeaveHandler: ((PointerEvent) -> Void)? = nil
@@ -33,6 +36,7 @@ open class BView {
     internal var _pointerReleaseHandler: ((PointerEvent) -> Void)? = nil
     internal var _pointerClickHandler: ((PointerEvent) -> Void)? = nil
     internal var _resizeHandler: ((ResizeEvent) -> Void)? = nil
+    internal var _paintHandler: ((Event) -> Void)? = nil
 
     public var onResize: EventHandler<ResizeEvent>? = nil
 
@@ -67,6 +71,8 @@ open class BView {
             let sbType = switch _renderType {
                 case .singleColor: SB_VIEW_RENDER_TYPE_SINGLE_COLOR
                 case .image: SB_VIEW_RENDER_TYPE_IMAGE
+                case .text: SB_VIEW_RENDER_TYPE_GLYPHS
+                case .canvas: SB_VIEW_RENDER_TYPE_CANVAS
             }
             sb_view_set_render_type(_sbView, sbType)
         }
@@ -111,6 +117,14 @@ open class BView {
                 sb_view_set_image(_sbView, nil)
             }
         }
+    }
+
+    public var canvas: Canvas? {
+        if let sbCanvas = sb_view_canvas(_sbView) {
+            let canvas = Canvas(sbCanvas)
+            return canvas
+        }
+        return nil
     }
 
     public var geometry: Rect {
@@ -375,6 +389,17 @@ open class BView {
         } as EventListener
         sb_view_add_event_listener(_sbView, SB_EVENT_TYPE_RESIZE,
             _resizeEventListener, userData)
+
+        // Paint event.
+        _paintEventListener = { sbEvent, userData in
+            if let userData = userData {
+                let instance = Unmanaged<BView>.fromOpaque(userData).takeUnretainedValue()
+
+                instance.callPaintEvent(sbEvent)
+            }
+        }
+        sb_view_add_event_listener(_sbView, SB_EVENT_TYPE_PAINT,
+            _paintEventListener, userData)
     }
 
     private func callPointerEnterEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {
@@ -483,6 +508,11 @@ open class BView {
         resizeEvent(event)
     }
 
+    private func callPaintEvent(_ sbEvent: UnsafeMutablePointer<sb_event_t>?) {
+        let event = Event(of: .paint)
+        paintEvent(event)
+    }
+
     open func pointerEnterEvent(_ event: PointerEvent) {
         ToplevelStorage._uiSurface = self._surface
         _pointerEnterHandler?(event)
@@ -519,5 +549,9 @@ open class BView {
     open func resizeEvent(_ event: ResizeEvent) {
         _resizeHandler?(event)
         self.onResize?.invoke(event)
+    }
+
+    open func paintEvent(_ event: Event) {
+        _paintHandler?(event)
     }
 }

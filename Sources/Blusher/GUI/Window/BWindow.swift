@@ -167,6 +167,29 @@ public class BTitleBar: BView {
         }
     }
 
+    public class Caption: BView {
+        init(_ titleBar: BTitleBar) {
+            let rect = Rect(x: 100.0, y: 0.0, width: 100.0, height: BTitleBar.thickness)
+            super.init(parent: titleBar, geometry: rect)
+
+            self.renderType = .canvas
+        }
+
+        public override func paintEvent(_ event: Event) {
+            var paint = Paint()
+            paint.strokeWidth = 2.0
+            paint.strokeColor = .black
+
+            self.canvas?.drawLine(
+                Point(x: 0.0, y: 10.0),
+                Point(x: 30.0, y: 10.0),
+                paint
+            )
+
+            super.paintEvent(event)
+        }
+    }
+
     public static var thickness: Float {
         30.0
     }
@@ -177,6 +200,8 @@ public class BTitleBar: BView {
     private var _closeButton: Button!
     private var _minimizeButton: Button!
     private var _maximizeOrRestoreButton: Button!
+
+    private var _caption: Caption!
 
     init(_ window: BWindow) {
         _window = window
@@ -192,6 +217,8 @@ public class BTitleBar: BView {
         _closeButton.position = Point(x: 10.0, y: 3.0)
         _minimizeButton.position = Point(x: 40.0, y: 3.0)
         _maximizeOrRestoreButton.position = Point(x: 70.0, y: 3.0)
+
+        _caption = Caption(self)
 
         self.color = Color(r: 0.5, g: 0.5, b: 0.5, a: 1.0)
         self.radius = Radius(topLeft: 8.0, topRight: 8.0, bottomRight: 0.0, bottomLeft: 0.0)

@@ -1,0 +1,51 @@
+@_implementationOnly import Swingby
+
+func colorToSbColor(_ color: Color) -> sb_color_t {
+    let sb_color_t = sb_color_t(r: color.r, g: color.g, b: color.b, a: color.a)
+
+    return sb_color_t
+}
+
+func paintToSbPaint(_ paint: Paint) -> sb_paint_t {
+    let sbPaint = sb_paint_t(
+        fill_color: colorToSbColor(paint.fillColor),
+        stroke_color: colorToSbColor(paint.strokeColor),
+        stroke_width: paint.strokeWidth
+    )
+
+    return sbPaint
+}
+
+public class Canvas {
+    private var _sbCanvas: OpaquePointer? = nil
+
+    internal init(_ sbCanvas: OpaquePointer) {
+        _sbCanvas = sbCanvas
+    }
+
+    public func drawRect(_ rect: Rect, _ paint: Paint) {
+        var sbRect = sb_rect_t(
+            position: sb_point_t(x: rect.x, y: rect.y),
+            size: sb_size_t(width: rect.width, height: rect.height)
+        )
+        var sbPaint = paintToSbPaint(paint)
+
+        if let sbCanvas = _sbCanvas {
+            sb_canvas_draw_rect(sbCanvas, &sbRect, &sbPaint)
+        }
+    }
+
+    public func drawLine(_ p1: Point, _ p2: Point, _ paint: Paint) {
+        if let sbCanvas = _sbCanvas {
+            var sbP1 = sb_point_t(x: p1.x, y: p1.y)
+            var sbP2 = sb_point_t(x: p2.x, y: p2.y)
+            var sbPaint = paintToSbPaint(paint)
+
+            sb_canvas_draw_line(sbCanvas, &sbP1, &sbP2, &sbPaint)
+        }
+    }
+
+    public func drawLine(_ x1: Float, _ y1: Float, _ x2: Float, _ y2: Float, _ paint: Paint) {
+        self.drawLine(Point(x: x1, y: y1), Point(x: x2, y: y2), paint)
+    }
+}

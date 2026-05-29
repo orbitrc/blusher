@@ -8,6 +8,7 @@ public enum EventType {
     case pointerPress
     case pointerRelease
     case pointerClick
+    case paint
     case resize
     case preferredScale
 }
