@@ -34,4 +34,22 @@ public class Bytes {
             _ptr?.deallocate()
         }
     }
+
+    public func decode(encoding: UTF8) -> String? {
+        var codec = encoding
+        var result = ""
+        result.reserveCapacity(Int(_len))
+
+        var iter = _ptr!.makeIterator()
+        while true {
+            switch codec.decode(&iter) {
+            case .scalarValue(let scalar):
+                result.unicodeScalars.append(scalar)
+            case .emptyInput:
+                return result
+            case .error:
+                return nil
+            }
+        }
+    }
 }

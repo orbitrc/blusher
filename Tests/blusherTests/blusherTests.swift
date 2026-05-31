@@ -26,3 +26,12 @@ import Testing
 
     let _ = bytes
 }
+
+@Test func bytes() async throws {
+    let file = FileSystem.File.open("Tests/blusherTests/valid-utf8.txt", "rb")
+    let bytes = file.readAll()
+    file.close()
+
+    let decoded = bytes.decode(encoding: UTF8())
+    #expect(decoded == "こんにちは！\n")
+}
