@@ -20,6 +20,14 @@ import Testing
 }
 
 @Test func fileSystem() async throws {
+    // Exists.
+    let here = FileSystem.fileExists(atPath: "/NO.txt")
+    #expect(here == false)
+
+    let there = FileSystem.fileExists(atPath: "Package.swift")
+    #expect(there == true)
+
+    // Open.
     let file = FileSystem.File.open("Package.swift", "rb")
     let bytes = file.readAll()
     file.close()

@@ -1,3 +1,7 @@
+//================
+// C Standards
+//================
+
 @_silgen_name("fopen")
 func fopen(_: UnsafePointer<CChar>, _: UnsafePointer<CChar>) -> OpaquePointer
 
@@ -12,6 +16,14 @@ func fread(_: UnsafeMutableRawPointer, _: UInt, _: UInt, _: OpaquePointer) -> UI
 
 @_silgen_name("fclose")
 func fclose(_: OpaquePointer) -> Int32
+
+//===================
+// Unix Standards
+//===================
+
+@_silgen_name("access")
+func access(_: UnsafePointer<CChar>, _: Int32) -> Int32
+
 
 public enum FileSystem {
     public class File {
@@ -60,6 +72,12 @@ public enum FileSystem {
             if let ptr = _filePtr {
                 let _ = fclose(ptr)
             }
+        }
+    }
+
+    public static func fileExists(atPath path: String) -> Bool {
+        path.withCString {
+            return access($0, 0 /* F_OK */) == 0 ? true : false
         }
     }
 }
