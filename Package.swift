@@ -57,8 +57,8 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            // url: "file://../blusher-brc-plugin",
-            path: "./blusher-brc-plugin",
+            url: "https://github.com/blusher-project/blusher-brc-plugin.git",
+            branch: "main"
         ),
     ],
     targets: [
@@ -75,7 +75,7 @@ let package = Package(
         .systemLibrary(
             name: "CPango",
             path: "Sources/CPango",
-            pkgConfig: "pango"
+            pkgConfig: "pangoft2"
         ),
         .target(
             name: "Blusher",
