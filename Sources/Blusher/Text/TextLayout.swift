@@ -1,13 +1,17 @@
 @_implementationOnly import CPango
 
 public struct TextLayout {
-    public struct Line {
+    public class Line {
+        private var _sbGlyphLine: OpaquePointer? = nil
         private var _runs: [GlyphRun]
     }
+
+    private var _sbGlyphLayout: OpaquePointer? = nil
 
     private var _pangoFontMap: UnsafeMutablePointer<PangoFontMap>?
     private var _pangoContext: OpaquePointer?
     private var _pangoLayout: OpaquePointer?
+
     private var _text: String = ""
     private var _lines: [Line] = []
 

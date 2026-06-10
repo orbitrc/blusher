@@ -18,13 +18,13 @@ public class GlyphRun {
         return Int(sb_glyph_run_count(_sbGlyphRun))
     }
 
-    public init(count: Int) {
-        var sbFont = sb_font_t(path: nil, ttc_index: 0, size: 16.0)
+    public init(count: Int, font: Font) {
+        var sbFont = sb_font_t(path: nil, ttc_index: font.ttcIndex, size: font.size)
         let path = "/usr/share/fonts/noto/NotoSans-Regular.ttf"
         path.withCString { cStr in
             sbFont.path = cStr
         }
-        sbFont.ttc_index = 0
+        // sbFont.ttc_index = 0
 
         _sbGlyphRun = sb_glyph_run_new(UInt32(count), &sbFont)
 
